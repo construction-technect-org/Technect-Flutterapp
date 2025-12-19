@@ -23,122 +23,121 @@ class ConnectorChatSystemView extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) =>
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  leading: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: MyColors.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.attach_file, color: MyColors.primary),
-                  ),
-                  title: const Text('Document'),
-                  subtitle: const Text('Share files'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    controller.sendFile();
-                  },
+      builder: (context) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                ListTile(
-                  leading: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: MyColors.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.image, color: MyColors.primary),
-                  ),
-                  title: const Text('Gallery'),
-                  subtitle: const Text('Choose from gallery'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    controller.sendImageFromGallery();
-                  },
+                child: const Icon(Icons.attach_file, color: MyColors.primary),
+              ),
+              title: const Text('Document'),
+              subtitle: const Text('Share files'),
+              onTap: () {
+                Navigator.pop(context);
+                controller.sendFile();
+              },
+            ),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                ListTile(
-                  leading: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: MyColors.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.camera_alt, color: MyColors.primary),
-                  ),
-                  title: const Text('Camera'),
-                  subtitle: const Text('Take a photo'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    controller.sendImageFromCamera();
-                  },
+                child: const Icon(Icons.image, color: MyColors.primary),
+              ),
+              title: const Text('Gallery'),
+              subtitle: const Text('Choose from gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                controller.sendImageFromGallery();
+              },
+            ),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                ListTile(
-                  leading: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: MyColors.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.videocam, color: MyColors.primary),
-                  ),
-                  title: const Text('Video'),
-                  subtitle: const Text('Record or choose video'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showVideoSourceOptions(context);
-                  },
+                child: const Icon(Icons.camera_alt, color: MyColors.primary),
+              ),
+              title: const Text('Camera'),
+              subtitle: const Text('Take a photo'),
+              onTap: () {
+                Navigator.pop(context);
+                controller.sendImageFromCamera();
+              },
+            ),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                ListTile(
-                  leading: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: MyColors.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.location_on_rounded, color: MyColors.primary),
-                  ),
-                  title: const Text('Location'),
-                  subtitle: const Text('Share your current location'),
-                  onTap: () async {
-                    Navigator.pop(context);
+                child: const Icon(Icons.videocam, color: MyColors.primary),
+              ),
+              title: const Text('Video'),
+              subtitle: const Text('Record or choose video'),
+              onTap: () {
+                Navigator.pop(context);
+                _showVideoSourceOptions(context);
+              },
+            ),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.location_on_rounded, color: MyColors.primary),
+              ),
+              title: const Text('Location'),
+              subtitle: const Text('Share your current location'),
+              onTap: () async {
+                Navigator.pop(context);
 
-                    final result = await Get.to(() => const ShareLocationScreen());
+                final result = await Get.to(() => const ShareLocationScreen());
 
-                    if (result != null) {
-                      final LatLng loc = result["location"];
-                      final String caption = result["caption"] ?? "";
+                if (result != null) {
+                  final LatLng loc = result["location"];
+                  final String caption = result["caption"] ?? "";
 
-                      controller.sendLocation(
-                        message: caption.isNotEmpty ? caption : "",
-                        type: "location",
-                        latitude: loc.latitude,
-                        longitude: loc.longitude,
-                      );
-                    }
-                  },
+                  controller.sendLocation(
+                    message: caption.isNotEmpty ? caption : "",
+                    type: "location",
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                  );
+                }
+              },
+            ),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                ListTile(
-                  leading: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: MyColors.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.event, color: MyColors.primary),
-                  ),
-                  title: const Text('Event'),
-                  subtitle: const Text('Send event invitation'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.dialog(
-                      CreateEventDialog(
-                        onSend:
-                            ({
+                child: const Icon(Icons.event, color: MyColors.primary),
+              ),
+              title: const Text('Event'),
+              subtitle: const Text('Send event invitation'),
+              onTap: () {
+                Navigator.pop(context);
+                Get.dialog(
+                  CreateEventDialog(
+                    onSend:
+                        ({
                           required String title,
                           required String date,
                           required String time,
@@ -151,13 +150,13 @@ class ConnectorChatSystemView extends StatelessWidget {
                             description: description,
                           );
                         },
-                      ),
-                    );
-                  },
-                ),
-              ],
+                  ),
+                );
+              },
             ),
-          ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -168,28 +167,27 @@ class ConnectorChatSystemView extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) =>
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.video_library, color: MyColors.primary),
-                title: const Text('Select from Gallery'),
-                onTap: () {
-                  Navigator.pop(context);
-                  controller.sendVideoFromGallery();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.videocam, color: MyColors.primary),
-                title: const Text('Record Video'),
-                onTap: () {
-                  Navigator.pop(context);
-                  controller.sendVideoFromCamera();
-                },
-              ),
-            ],
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.video_library, color: MyColors.primary),
+            title: const Text('Select from Gallery'),
+            onTap: () {
+              Navigator.pop(context);
+              controller.sendVideoFromGallery();
+            },
           ),
+          ListTile(
+            leading: const Icon(Icons.videocam, color: MyColors.primary),
+            title: const Text('Record Video'),
+            onTap: () {
+              Navigator.pop(context);
+              controller.sendVideoFromCamera();
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -232,11 +230,10 @@ class ConnectorChatSystemView extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Obx(
-                            () =>
-                            Text(
-                              controller.isOtherUserTyping.value ? 'Typing...' : "",
-                              style: MyTexts.regular12.copyWith(color: MyColors.primary),
-                            ),
+                        () => Text(
+                          controller.isOtherUserTyping.value ? 'Typing...' : "",
+                          style: MyTexts.regular12.copyWith(color: MyColors.primary),
+                        ),
                       ),
                     ],
                   ),
@@ -273,17 +270,15 @@ class ConnectorChatSystemView extends StatelessWidget {
                           final message = messages[messageIndex];
                           final isMine = controller.isMyMessage(message);
                           final isRead = message.status == MessageStatus.read;
-                          final String? profileImagePath =
-                          !isMine ? controller.getOpponentProfileImage(message) : null;
+                          final String? profileImagePath = !isMine
+                              ? controller.getOpponentProfileImage(message)
+                              : null;
                           return Align(
                             key: ValueKey('message_${message.id}'),
                             alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
-                                maxWidth: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 0.75,
+                                maxWidth: MediaQuery.of(context).size.width * 0.75,
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -315,20 +310,18 @@ class ConnectorChatSystemView extends StatelessWidget {
                                           GestureDetector(
                                             onTap: () {
                                               final imageUrl =
-                                              (message.mediaUrl?.startsWith('http') ?? false)
+                                                  (message.mediaUrl?.startsWith('http') ?? false)
                                                   ? message.mediaUrl!
-                                                  : 'https://constructiontechnect.com${message
-                                                  .mediaUrl ?? ''}';
+                                                  : 'https://constructiontechnect.com${message.mediaUrl ?? ''}';
 
                                               showDialog(
                                                 context: context,
                                                 barrierColor: Colors.black,
-                                                builder: (context) =>
-                                                    ChatImageViewer(
-                                                      imageUrl: imageUrl,
-                                                      senderName: isMine ? 'You' : controller.name,
-                                                      timestamp: message.createdAt,
-                                                    ),
+                                                builder: (context) => ChatImageViewer(
+                                                  imageUrl: imageUrl,
+                                                  senderName: isMine ? 'You' : controller.name,
+                                                  timestamp: message.createdAt,
+                                                ),
                                               );
                                             },
                                             child: ClipRRect(
@@ -336,28 +329,21 @@ class ConnectorChatSystemView extends StatelessWidget {
                                               child: ConstrainedBox(
                                                 constraints: BoxConstraints(
                                                   maxWidth:
-                                                  MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width * 0.65,
+                                                      MediaQuery.of(context).size.width * 0.65,
                                                   maxHeight: 300,
                                                   minHeight: 150,
                                                 ),
                                                 child: AspectRatio(
                                                   aspectRatio: 3 / 4,
                                                   child: getImageView(
-                                                    width: MediaQuery
-                                                        .of(context)
-                                                        .size
-                                                        .width * 0.65,
+                                                    width: MediaQuery.of(context).size.width * 0.65,
                                                     height: 300,
                                                     fit: BoxFit.cover,
                                                     finalUrl:
-                                                    (message.mediaUrl?.startsWith('http') ??
-                                                        false)
+                                                        (message.mediaUrl?.startsWith('http') ??
+                                                            false)
                                                         ? message.mediaUrl!
-                                                        : 'https://constructiontechnect.com${message
-                                                        .mediaUrl ?? ''}',
+                                                        : 'https://constructiontechnect.com${message.mediaUrl ?? ''}',
                                                   ),
                                                 ),
                                               ),
@@ -374,66 +360,104 @@ class ConnectorChatSystemView extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                        ] else
-                                          if (message.type == 'video') ...[
-                                            GestureDetector(
-                                              onTap: () {
-                                                final videoUrl =
-                                                (message.mediaUrl?.startsWith('http') ?? false)
-                                                    ? message.mediaUrl!
-                                                    : 'https://constructiontechnect.com${message
-                                                    .mediaUrl ?? ''}';
-                                                ChatUtils.openFile(videoUrl);
-                                              },
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  ClipRRect(
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    child: ChatUtils.buildVideoThumbnailView(
-                                                      message.mediaUrl,
-                                                    ),
-                                                  ),
-                                                  const Icon(
-                                                    Icons.play_circle_fill,
-                                                    size: 48,
-                                                    color: Colors.white,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            if (message.message.isNotEmpty &&
-                                                message.message.toLowerCase() != 'video' &&
-                                                !ChatUtils.isVideoFileName(message.message))
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 8),
-                                                child: Text(
-                                                  message.message,
-                                                  style: MyTexts.bold14.copyWith(
-                                                    color: isMine ? Colors.white : Colors.black,
+                                        ] else if (message.type == 'video') ...[
+                                          GestureDetector(
+                                            onTap: () {
+                                              final videoUrl =
+                                                  (message.mediaUrl?.startsWith('http') ?? false)
+                                                  ? message.mediaUrl!
+                                                  : 'https://constructiontechnect.com${message.mediaUrl ?? ''}';
+                                              ChatUtils.openFile(videoUrl);
+                                            },
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  child: ChatUtils.buildVideoThumbnailView(
+                                                    message.mediaUrl,
                                                   ),
                                                 ),
+                                                const Icon(
+                                                  Icons.play_circle_fill,
+                                                  size: 48,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          if (message.message.isNotEmpty &&
+                                              message.message.toLowerCase() != 'video' &&
+                                              !ChatUtils.isVideoFileName(message.message))
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 8),
+                                              child: Text(
+                                                message.message,
+                                                style: MyTexts.bold14.copyWith(
+                                                  color: isMine ? Colors.white : Colors.black,
+                                                ),
                                               ),
-                                          ] else
-                                            if (message.type == 'location') ...[
-                                              Builder(
-                                                builder: (context) {
-                                                  final location = jsonDecode(message.message);
-                                                  final lat = location['latitude'] as double?;
-                                                  final lng = location['longitude'] as double?;
-                                                  final address = location['address'] ?? '';
+                                            ),
+                                        ] else if (message.type == 'location') ...[
+                                          Builder(
+                                            builder: (context) {
+                                              final location = jsonDecode(message.message);
+                                              final lat = location['latitude'] as double?;
+                                              final lng = location['longitude'] as double?;
+                                              final address = location['address'] ?? '';
 
-                                                  if (lat == null || lng == null) {
-                                                    return const Text('Invalid location data');
-                                                  }
+                                              if (lat == null || lng == null) {
+                                                return const Text('Invalid location data');
+                                              }
 
-                                                  return Column(
-                                                    crossAxisAlignment: isMine
-                                                        ? CrossAxisAlignment.end
-                                                        : CrossAxisAlignment.start,
-                                                    children: [
-                                                      GestureDetector(
-                                                        onTap: () async {
+                                              return Column(
+                                                crossAxisAlignment: isMine
+                                                    ? CrossAxisAlignment.end
+                                                    : CrossAxisAlignment.start,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      final url =
+                                                          "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+                                                      if (await canLaunchUrl(Uri.parse(url))) {
+                                                        await launchUrl(
+                                                          Uri.parse(url),
+                                                          mode: LaunchMode.externalApplication,
+                                                        );
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      height: 180,
+                                                      width: 300,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        color: Colors.grey[200],
+                                                        border: Border.all(
+                                                          color: MyColors.primary.withValues(
+                                                            alpha: 0.2,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      clipBehavior: Clip.hardEdge,
+                                                      child: GoogleMap(
+                                                        initialCameraPosition: CameraPosition(
+                                                          target: LatLng(lat, lng),
+                                                          zoom: 15,
+                                                        ),
+                                                        markers: {
+                                                          Marker(
+                                                            markerId: const MarkerId(
+                                                              'shared_location',
+                                                            ),
+                                                            position: LatLng(lat, lng),
+                                                          ),
+                                                        },
+                                                        zoomControlsEnabled: false,
+                                                        scrollGesturesEnabled: false,
+                                                        tiltGesturesEnabled: false,
+                                                        rotateGesturesEnabled: false,
+                                                        myLocationButtonEnabled: false,
+                                                        onTap: (_) async {
                                                           final url =
                                                               "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
                                                           if (await canLaunchUrl(Uri.parse(url))) {
@@ -443,179 +467,125 @@ class ConnectorChatSystemView extends StatelessWidget {
                                                             );
                                                           }
                                                         },
-                                                        child: Container(
-                                                          height: 180,
-                                                          width: 300,
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(10),
-                                                            color: Colors.grey[200],
-                                                            border: Border.all(
-                                                              color: MyColors.primary.withValues(
-                                                                alpha: 0.2,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          clipBehavior: Clip.hardEdge,
-                                                          child: GoogleMap(
-                                                            initialCameraPosition: CameraPosition(
-                                                              target: LatLng(lat, lng),
-                                                              zoom: 15,
-                                                            ),
-                                                            markers: {
-                                                              Marker(
-                                                                markerId: const MarkerId(
-                                                                  'shared_location',
-                                                                ),
-                                                                position: LatLng(lat, lng),
-                                                              ),
-                                                            },
-                                                            zoomControlsEnabled: false,
-                                                            scrollGesturesEnabled: false,
-                                                            tiltGesturesEnabled: false,
-                                                            rotateGesturesEnabled: false,
-                                                            myLocationButtonEnabled: false,
-                                                            onTap: (_) async {
-                                                              final url =
-                                                                  "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
-                                                              if (await canLaunchUrl(
-                                                                  Uri.parse(url))) {
-                                                                await launchUrl(
-                                                                  Uri.parse(url),
-                                                                  mode: LaunchMode
-                                                                      .externalApplication,
-                                                                );
-                                                              }
-                                                            },
-                                                          ),
-                                                        ),
                                                       ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top: 8),
-                                                        child: Text(
-                                                          address,
-                                                          style: MyTexts.bold14.copyWith(
-                                                            color: isMine ? Colors.white : Colors
-                                                                .black,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              ),
-                                            ] else
-                                              if (message.type == 'file') ...[
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    final fileUrl =
-                                                    (message.mediaUrl?.startsWith('http') ?? false)
-                                                        ? message.mediaUrl!
-                                                        : 'https://constructiontechnect.com${message
-                                                        .mediaUrl ?? ''}';
-                                                    ChatUtils.openFile(fileUrl);
-                                                  },
-                                                  child: Container(
-                                                    padding: const EdgeInsets.all(12),
-                                                    decoration: BoxDecoration(
-                                                      color: isMine
-                                                          ? Colors.white.withValues(alpha: 0.2)
-                                                          : Colors.white,
-                                                      borderRadius: BorderRadius.circular(8),
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Icon(
-                                                          ChatUtils.getFileIcon(
-                                                            message.mediaUrl
-                                                                ?.split('/')
-                                                                .last ??
-                                                                message.message,
-                                                          ),
-                                                          size: 40,
-                                                          color: isMine ? Colors.white : MyColors
-                                                              .primary,
-                                                        ),
-                                                        const SizedBox(width: 12),
-                                                        Flexible(
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment
-                                                                .start,
-                                                            children: [
-                                                              Text(
-                                                                ChatUtils.extractFileName(
-                                                                  message.mediaUrl ?? '',
-                                                                ),
-                                                                style: MyTexts.bold14.copyWith(
-                                                                  color: isMine
-                                                                      ? Colors.white
-                                                                      : Colors.black,
-                                                                ),
-                                                                maxLines: 2,
-                                                                overflow: TextOverflow.ellipsis,
-                                                              ),
-                                                              const SizedBox(height: 4),
-                                                              Text(
-                                                                'Tap to open',
-                                                                style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: isMine
-                                                                      ? Colors.white70
-                                                                      : Colors.black54,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                                if (message.message.isNotEmpty &&
-                                                    !ChatUtils.isFileNameOnly(message.message))
                                                   Padding(
                                                     padding: const EdgeInsets.only(top: 8),
                                                     child: Text(
-                                                      message.message,
+                                                      address,
                                                       style: MyTexts.bold14.copyWith(
                                                         color: isMine ? Colors.white : Colors.black,
                                                       ),
                                                     ),
                                                   ),
-                                              ] else
-                                                if (message.type == 'audio') ...[
-                                                  AudioMessageWidget(
-                                                    audioUrl: message.mediaUrl ?? '',
-                                                    duration: message.message,
-                                                    isMine: isMine,
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        ] else if (message.type == 'file') ...[
+                                          GestureDetector(
+                                            onTap: () {
+                                              final fileUrl =
+                                                  (message.mediaUrl?.startsWith('http') ?? false)
+                                                  ? message.mediaUrl!
+                                                  : 'https://constructiontechnect.com${message.mediaUrl ?? ''}';
+                                              ChatUtils.openFile(fileUrl);
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(12),
+                                              decoration: BoxDecoration(
+                                                color: isMine
+                                                    ? Colors.white.withValues(alpha: 0.2)
+                                                    : Colors.white,
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    ChatUtils.getFileIcon(
+                                                      message.mediaUrl?.split('/').last ??
+                                                          message.message,
+                                                    ),
+                                                    size: 40,
+                                                    color: isMine ? Colors.white : MyColors.primary,
                                                   ),
-                                                ] else
-                                                  if (message.type == 'event') ...[
-                                                    Obx(
-                                                          () =>
-                                                          EventCardWidget(
-                                                            messageId: message.id,
-                                                            eventData: message.message,
-                                                            isMine: isMine,
-                                                            isResponding:
-                                                            controller.respondingEventId.value ==
-                                                                int.tryParse(message.id),
-                                                            onRespond: (response) {
-                                                              controller.respondToEvent(
-                                                                messageId: int.tryParse(
-                                                                    message.id) ?? 0,
-                                                                response: response,
-                                                              );
-                                                            },
+                                                  const SizedBox(width: 12),
+                                                  Flexible(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          ChatUtils.extractFileName(
+                                                            message.mediaUrl ?? '',
                                                           ),
+                                                          style: MyTexts.bold14.copyWith(
+                                                            color: isMine
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                          ),
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        ),
+                                                        const SizedBox(height: 4),
+                                                        Text(
+                                                          'Tap to open',
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: isMine
+                                                                ? Colors.white70
+                                                                : Colors.black54,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ] else
-                                                    Text(
-                                                      message.message,
-                                                      style: MyTexts.bold16.copyWith(
-                                                        color: isMine ? Colors.white : Colors.black,
-                                                      ),
-                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          if (message.message.isNotEmpty &&
+                                              !ChatUtils.isFileNameOnly(message.message))
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 8),
+                                              child: Text(
+                                                message.message,
+                                                style: MyTexts.bold14.copyWith(
+                                                  color: isMine ? Colors.white : Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                        ] else if (message.type == 'audio') ...[
+                                          AudioMessageWidget(
+                                            audioUrl: message.mediaUrl ?? '',
+                                            duration: message.message,
+                                            isMine: isMine,
+                                          ),
+                                        ] else if (message.type == 'event') ...[
+                                          Obx(
+                                            () => EventCardWidget(
+                                              messageId: message.id,
+                                              eventData: message.message,
+                                              isMine: isMine,
+                                              isResponding:
+                                                  controller.respondingEventId.value ==
+                                                  int.tryParse(message.id),
+                                              onRespond: (response) {
+                                                controller.respondToEvent(
+                                                  messageId: int.tryParse(message.id) ?? 0,
+                                                  response: response,
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ] else
+                                          Text(
+                                            message.message,
+                                            style: MyTexts.bold16.copyWith(
+                                              color: isMine ? Colors.white : Colors.black,
+                                            ),
+                                          ),
                                         const SizedBox(height: 4),
                                         Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -741,8 +711,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                           final minutes = duration.inMinutes;
                                           final seconds = duration.inSeconds % 60;
                                           return Text(
-                                            '${minutes.toString().padLeft(2, '0')}:${seconds
-                                                .toString().padLeft(2, '0')}',
+                                            '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
                                             style: const TextStyle(
                                               color: Colors.red,
                                               fontSize: 16,
