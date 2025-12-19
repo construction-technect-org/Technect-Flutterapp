@@ -1168,6 +1168,21 @@ class ConnectorChatSystemController extends GetxController {
       isLoading.value = false;
     }
   }
+  String? getOpponentProfileImage(CustomMessage message) {
+    final members = groupChatInfoModel.value.data?.members?.list;
+    if (members == null || members.isEmpty) return null;
+
+    final member = members.first;
+    if (message.senderTeamMemberId != null) {
+      return member.teamMember?.profilePhoto;
+    }
+    if (message.senderUserId != null) {
+      return member.user?.profileImage;
+    }
+
+    return null;
+  }
+
 }
 
 class CustomUser {

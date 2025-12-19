@@ -259,6 +259,7 @@ class MemberList {
   bool? isActive;
   String? userType;
   User? user;
+  TeamMember? teamMember;
   Connector? connector;
 
   MemberList(
@@ -269,6 +270,7 @@ class MemberList {
         this.isActive,
         this.userType,
         this.user,
+        this.teamMember,
         this.connector});
 
   MemberList.fromJson(Map<String, dynamic> json) {
@@ -279,6 +281,9 @@ class MemberList {
     isActive = json['isActive'];
     userType = json['userType'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
+    teamMember = json['teamMember'] != null
+        ? TeamMember.fromJson(json['teamMember'])
+        : null;
     connector = json['connector'] != null
         ? Connector.fromJson(json['connector'])
         : null;
@@ -294,6 +299,9 @@ class MemberList {
     data['userType'] = userType;
     if (user != null) {
       data['user'] = user!.toJson();
+    }
+    if (teamMember != null) {
+      data['teamMember'] = teamMember!.toJson();
     }
     if (connector != null) {
       data['connector'] = connector!.toJson();
@@ -343,6 +351,68 @@ class User {
     data['countryCode'] = countryCode;
     data['profileImage'] = profileImage;
     data['roleName'] = roleName;
+    return data;
+  }
+}
+
+class TeamMember {
+  int? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? mobileNumber;
+  String? profilePhoto;
+  Role? role;
+
+  TeamMember(
+      {this.id,
+        this.firstName,
+        this.lastName,
+        this.email,
+        this.mobileNumber,
+        this.profilePhoto,
+        this.role});
+
+  TeamMember.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    email = json['email'];
+    mobileNumber = json['mobileNumber'];
+    profilePhoto = json['profilePhoto'];
+    role = json['role'] != null ? Role.fromJson(json['role']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['email'] = email;
+    data['mobileNumber'] = mobileNumber;
+    data['profilePhoto'] = profilePhoto;
+    if (role != null) {
+      data['role'] = role!.toJson();
+    }
+    return data;
+  }
+}
+
+class Role {
+  String? title;
+  String? description;
+
+  Role({this.title, this.description});
+
+  Role.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    description = json['description'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['title'] = title;
+    data['description'] = description;
     return data;
   }
 }
