@@ -86,7 +86,7 @@ class SignUpService {
     try {
       final response = await apiManager.postObject(
         url: APIConstants.teamSendOtp,
-        body: { "mobileNumber": mobileNumber},
+        body: {"mobileNumber": mobileNumber},
       );
       return OtpModel.fromJson(response);
     } catch (e, st) {
@@ -109,7 +109,6 @@ class SignUpService {
     }
   }
 
-
   Future<OtpModel> teamResendOtp({
     required String mobileNumber,
     String? code,
@@ -117,13 +116,14 @@ class SignUpService {
     try {
       final response = await apiManager.postObject(
         url: APIConstants.teamResendOtp,
-        body: { "mobileNumber": mobileNumber},
+        body: {"mobileNumber": mobileNumber},
       );
       return OtpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in resendOtp: $e , $st');
     }
   }
+
   Future<OtpModel> verifyOtp({
     required String mobileNumber,
     required String otp,
@@ -153,25 +153,37 @@ class SignUpService {
     String? aadhaar,
     String? panCard,
     String? address,
+    String? fcmToken,
+    String? deviceType,
   }) async {
     try {
+      final Map<String, dynamic> body = {
+        "roleName": roleName,
+        "firstName": firstName,
+        "lastName": lastName,
+        "countryCode": countryCode,
+        "mobileNumber": mobileNumber,
+        "email": email,
+        "marketPlaceRole": marketPlaceRole,
+        "password": password,
+        "confirmPassword": confirmPassword,
+        if ((gst ?? "").isNotEmpty) "gstNumber": gst,
+        if ((aadhaar ?? "").isNotEmpty) "aadharNumber": aadhaar,
+        if ((panCard ?? "").isNotEmpty) "panCardNumber": panCard,
+        if ((address ?? "").isNotEmpty) "gstNumber": address,
+      };
+
+      // Add FCM token and device type if provided
+      if (fcmToken != null && fcmToken.isNotEmpty) {
+        body["fcmToken"] = fcmToken;
+      }
+      if (deviceType != null && deviceType.isNotEmpty) {
+        body["deviceType"] = deviceType;
+      }
+
       final response = await apiManager.postObject(
         url: APIConstants.signup,
-        body: {
-          "roleName": roleName,
-          "firstName": firstName,
-          "lastName": lastName,
-          "countryCode": countryCode,
-          "mobileNumber": mobileNumber,
-          "email": email,
-          "marketPlaceRole": marketPlaceRole,
-          "password": password,
-          "confirmPassword": confirmPassword,
-          if ((gst ?? "").isNotEmpty) "gstNumber": gst,
-          if ((aadhaar ?? "").isNotEmpty) "aadharNumber": aadhaar,
-          if ((panCard ?? "").isNotEmpty) "panCardNumber": panCard,
-          if ((address ?? "").isNotEmpty) "gstNumber": address,
-        },
+        body: body,
       );
       return SignUpModel.fromJson(response);
     } catch (e, st) {

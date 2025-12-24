@@ -8,15 +8,27 @@ class LoginService {
     required String countryCode,
     required String mobileNumber,
     required String password,
+    String? fcmToken,
+    String? deviceType,
   }) async {
     try {
+      final Map<String, dynamic> body = {
+        "countryCode": countryCode,
+        "mobileNumber": mobileNumber,
+        "password": password,
+      };
+
+      // Add FCM token and device type if provided
+      if (fcmToken != null && fcmToken.isNotEmpty) {
+        body["fcmToken"] = fcmToken;
+      }
+      if (deviceType != null && deviceType.isNotEmpty) {
+        body["deviceType"] = deviceType;
+      }
+
       final response = await apiManager.postObject(
         url: APIConstants.login,
-        body: {
-          "countryCode": countryCode,
-          "mobileNumber": mobileNumber,
-          "password": password,
-        },
+        body: body,
       );
 
       final result = LoginModel.fromJson(response);
@@ -39,15 +51,26 @@ class LoginService {
   Future<LoginModel> teamLogin({
     required String mobileNumber,
     required String otp,
+    String? fcmToken,
+    String? deviceType,
   }) async {
     try {
+      final Map<String, dynamic> body = {
+        "mobileNumber": mobileNumber,
+        "otp": otp,
+      };
+
+      // Add FCM token and device type if provided
+      if (fcmToken != null && fcmToken.isNotEmpty) {
+        body["fcmToken"] = fcmToken;
+      }
+      if (deviceType != null && deviceType.isNotEmpty) {
+        body["deviceType"] = deviceType;
+      }
+
       final response = await apiManager.postObject(
         url: APIConstants.teamLogIn,
-        body: {
-          // "countryCode": countryCode,
-          "mobileNumber": mobileNumber,
-          "otp": otp,
-        },
+        body: body,
       );
 
       final result = LoginModel.fromJson(response);
@@ -67,7 +90,6 @@ class LoginService {
     }
   }
 
-
   Future<LoginModel> socialLogin({
     required String provider,
     required String providerId,
@@ -76,6 +98,8 @@ class LoginService {
     required String email,
     required String profileImage,
     required String roleName,
+    String? fcmToken,
+    String? deviceType,
   }) async {
     try {
       final Map<String, dynamic> body = {
@@ -87,6 +111,14 @@ class LoginService {
         'profileImage': profileImage,
         'roleName': roleName,
       };
+
+      // Add FCM token and device type if provided
+      if (fcmToken != null && fcmToken.isNotEmpty) {
+        body['fcmToken'] = fcmToken;
+      }
+      if (deviceType != null && deviceType.isNotEmpty) {
+        body['deviceType'] = deviceType;
+      }
 
       final response = await apiManager.postObject(
         url: 'auth/social-login',

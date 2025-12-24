@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/firebase_options.dart';
@@ -17,6 +18,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  // Initialize FCM service
+  await FCMService.initialize();
+
   runApp(
     ResponsiveSizer(
       builder: (context, orientation, screenType) {
@@ -32,9 +36,7 @@ Future<void> main() async {
             initialBinding: InitialBinding(),
             builder: (context, child) {
               return MediaQuery(
-                data: MediaQuery.of(
-                  context,
-                ).copyWith(textScaler: TextScaler.noScaling),
+                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
                 child: child!,
               );
             },

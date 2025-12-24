@@ -140,32 +140,6 @@ The app uses a responsive design approach:
 - **Tablet (650px - 1100px)**: Two-column layout, no splash screen
 - **Desktop (> 1100px)**: Multi-column layout, no splash screen
 
-### Usage in Code
-
-```dart
-import 'package:construction_technect/utils/imports.dart';
-
-// Responsive sizing
-Container(
-  width: 100.w,    // 100% of screen width
-  height: 50.h,    // 50% of screen height
-  padding: EdgeInsets.all(16.w),
-)
-
-// Responsive text
-Text(
-  'Hello World',
-  style: MyTexts.h3,  // Responsive font size
-)
-
-// Responsive layout
-if (Device.screenType == ScreenType.mobile) {
-  // Mobile layout
-} else {
-  // Tablet/Web layout
-}
-```
-
 ## 🎯 Using GetX CLI
 
 ### Generate a new page

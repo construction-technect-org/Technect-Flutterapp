@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
+import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
@@ -83,10 +84,16 @@ class LoginController extends GetxController {
     loginError.value = ""; // Clear previous errors
 
     try {
+      // Get FCM token and device type
+      final fcmToken = await FCMService.getFCMToken();
+      final deviceType = FCMService.getDeviceType();
+
       final loginResponse = await loginService.login(
         countryCode: countryCode.value,
         mobileNumber: mobileController.text,
         password: passwordController.text,
+        fcmToken: fcmToken,
+        deviceType: deviceType,
       );
 
       if (loginResponse.success == true) {
@@ -100,13 +107,17 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
-        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() == "partner") {
+        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() ==
+            "partner") {
           myPref.setRole("partner");
         } else {
           myPref.setRole("connector");
         }
         if (rememberMe.value) {
-          myPref.saveCredentials(mobileController.text, passwordController.text);
+          myPref.saveCredentials(
+            mobileController.text,
+            passwordController.text,
+          );
         } else {
           myPref.clearCredentials();
         }
@@ -122,7 +133,8 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        loginError.value = loginResponse.message ?? 'Invalid mobile number or password';
+        loginError.value =
+            loginResponse.message ?? 'Invalid mobile number or password';
       }
     } catch (e) {
       loginError.value = "Invalid mobile number or password";
@@ -137,6 +149,10 @@ class LoginController extends GetxController {
 
       final nameParts = loginService.extractNameParts(user.displayName ?? '');
 
+      // Get FCM token and device type
+      final fcmToken = await FCMService.getFCMToken();
+      final deviceType = FCMService.getDeviceType();
+
       final loginResponse = await loginService.socialLogin(
         provider: 'google',
         providerId: user.uid,
@@ -145,6 +161,8 @@ class LoginController extends GetxController {
         email: user.email ?? '',
         profileImage: user.photoURL ?? '',
         roleName: 'Merchant',
+        fcmToken: fcmToken,
+        deviceType: deviceType,
       );
       if (loginResponse.success == true) {
         myPref.setIsTeamLogin(false);
@@ -157,13 +175,17 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
-        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() != "partner") {
+        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
+            "partner") {
           myPref.setRole("partner");
         } else {
           myPref.setRole("connector");
         }
         if (rememberMe.value) {
-          myPref.saveCredentials(mobileController.text, passwordController.text);
+          myPref.saveCredentials(
+            mobileController.text,
+            passwordController.text,
+          );
         } else {
           myPref.clearCredentials();
         }
@@ -221,7 +243,10 @@ class LoginController extends GetxController {
                 ),
               ),
               const Gap(24),
-              Text("Mobile Number", style: MyTexts.medium20.copyWith(color: Colors.black)),
+              Text(
+                "Mobile Number",
+                style: MyTexts.medium20.copyWith(color: Colors.black),
+              ),
               const Gap(5),
               CommonPhoneField(
                 controller: mobileNumberController,
@@ -308,7 +333,10 @@ class LoginController extends GetxController {
   final countdownController = CountdownController(autoStart: true);
 
   Future<String?> validateNumberAvailability(String number) async {
-    return await Validate.validateMobileNumberAsync(number, countryCode: countryCode.value);
+    return await Validate.validateMobileNumberAsync(
+      number,
+      countryCode: countryCode.value,
+    );
   }
 
   Future<bool> verifyMobileNumber() async {
@@ -334,7 +362,9 @@ class LoginController extends GetxController {
           otpSend.value = true;
           return true;
         } else {
-          SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
+          SnackBars.errorSnackBar(
+            content: otpResponse.message ?? 'Failed to send OTP',
+          );
           return false;
         }
       } else {
@@ -364,7 +394,9 @@ class LoginController extends GetxController {
           content: 'OTP resent successfully to ${mobileNumberController.text}',
         );
       } else {
-        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to resend OTP');
+        SnackBars.errorSnackBar(
+          content: otpResponse.message ?? 'Failed to resend OTP',
+        );
         otpSend.value = false;
       }
       startTimer();
@@ -396,9 +428,15 @@ class LoginController extends GetxController {
   // Verify OTP method
   Future<void> verifyOtp() async {
     try {
+      // Get FCM token and device type
+      final fcmToken = await FCMService.getFCMToken();
+      final deviceType = FCMService.getDeviceType();
+
       final loginResponse = await LoginService().teamLogin(
         mobileNumber: mobileNumberController.text,
         otp: otpController.text,
+        fcmToken: fcmToken,
+        deviceType: deviceType,
       );
 
       if (loginResponse.success == true) {
@@ -415,7 +453,9 @@ class LoginController extends GetxController {
         if (loginResponse.data?.user != null) {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
-        final permissionsValue = extractPermissions(loginResponse.data?.teamMember);
+        final permissionsValue = extractPermissions(
+          loginResponse.data?.teamMember,
+        );
         myPref.setPermissions(permissionsValue);
         //
         // if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
@@ -444,7 +484,9 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(content: loginResponse.message ?? 'Failed to verify OTP');
+        SnackBars.errorSnackBar(
+          content: loginResponse.message ?? 'Failed to verify OTP',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
@@ -452,9 +494,8 @@ class LoginController extends GetxController {
       }
     }
   }
-
-
 }
+
 String extractPermissions(TeamMemberModel? data) {
   if (data == null) return '';
    return data.roles
@@ -462,5 +503,4 @@ String extractPermissions(TeamMemberModel? data) {
         .where((e) => e.isNotEmpty)
         .join(',') ??
         '';
-
 }

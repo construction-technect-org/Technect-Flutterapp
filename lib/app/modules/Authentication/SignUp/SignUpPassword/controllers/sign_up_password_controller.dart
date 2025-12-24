@@ -117,6 +117,7 @@
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
+import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
@@ -168,6 +169,10 @@ class SignUpPasswordController extends GetxController {
         return;
       }
 
+      // Get FCM token and device type
+      final fcmToken = await FCMService.getFCMToken();
+      final deviceType = FCMService.getDeviceType();
+
       final signUpResponse = await signUpService.signup(
         roleName: userData!.roleName,
         firstName: userData!.firstName,
@@ -182,6 +187,8 @@ class SignUpPasswordController extends GetxController {
         address: userData!.address,
         aadhaar: userData!.aadhaar,
         panCard: userData!.panCard,
+        fcmToken: fcmToken,
+        deviceType: deviceType,
       );
 
       if (signUpResponse.success == true) {
