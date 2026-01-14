@@ -1,12 +1,16 @@
+import 'dart:io';
+
+import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/services/AddLeadService.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddLeadController extends GetxController {
   final formKey = GlobalKey<FormState>();
   RxBool isLoading = false.obs;
-
+  Rx<File?> selectedImage = Rx<File?>(null);
   VoidCallback? onLeadCreate;
 
   RxString selectedCustomerType = ''.obs;
@@ -30,6 +34,55 @@ class AddLeadController extends GetxController {
   final companyAddressCtrl = TextEditingController();
   final contactPersonCtrl = TextEditingController();
   final companyPhoneCtrl = TextEditingController();
+
+  final ImagePicker _picker = ImagePicker();
+
+  void pickImageBottomSheet(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt, color: MyColors.gray2E),
+              title: Text(
+                "Camera",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
+              onTap: () {
+                Get.back();
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo, color: MyColors.gray2E),
+              title: Text(
+                "Gallery",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
+              onTap: () {
+                Get.back();
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile == null) return;
+    final compressedFile = await CommonConstant().compressImage(
+      File(pickedFile.path),
+    );
+    selectedImage.value = File(compressedFile.path);
+  }
 
   RxString customerPhone = "".obs;
 
@@ -68,7 +121,10 @@ class AddLeadController extends GetxController {
                 ),
               ),
               const Gap(24),
-              Text("Mobile Number", style: MyTexts.medium20.copyWith(color: Colors.black)),
+              Text(
+                "Mobile Number",
+                style: MyTexts.medium20.copyWith(color: Colors.black),
+              ),
               const Gap(5),
               CommonPhoneField(
                 controller: mobileNumberController,
@@ -130,10 +186,13 @@ class AddLeadController extends GetxController {
                 "${result.data?.user?.firstName} ${result.data?.user?.lastName}";
             customerIdCtrl.text = "${result.data?.user?.id}";
             isCustomerIdVisible.value = true;
-            companyPhoneCtrl.text = result.data?.merchantProfile?.businessContactNumber ?? "";
-            companyNameCtrl.text = result.data?.merchantProfile?.businessName ?? "";
+            companyPhoneCtrl.text =
+                result.data?.merchantProfile?.businessContactNumber ?? "";
+            companyNameCtrl.text =
+                result.data?.merchantProfile?.businessName ?? "";
             gstNumberCtrl.text =
-                result.data?.user?.gstNumber ?? (result.data?.merchantProfile?.gstinNumber ?? "");
+                result.data?.user?.gstNumber ??
+                (result.data?.merchantProfile?.gstinNumber ?? "");
             siteLocationCtrl.text =
                 (result.data?.siteLocations ?? [])
                     .where((e) => e.isDefault == true)
@@ -178,14 +237,15 @@ class AddLeadController extends GetxController {
       "status": "new",
       "notes": noteCtrl.text,
     };
-
   }
 
   Future<void> createLead() async {
     isLoading.value = true;
 
     try {
-      final result = await AddLeadServices().addManualLead(data: buildLeadBody());
+      final result = await AddLeadServices().addManualLead(
+        data: buildLeadBody(),
+      );
 
       if (result.success == true) {
         onLeadCreate?.call();

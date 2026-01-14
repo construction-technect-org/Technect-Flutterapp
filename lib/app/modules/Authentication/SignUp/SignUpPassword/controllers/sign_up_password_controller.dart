@@ -162,12 +162,12 @@ class SignUpPasswordController extends GetxController {
     isLoading.value = true;
 
     try {
-      if (userData == null) {
+      /*  if (userData == null) {
         SnackBars.errorSnackBar(
           content: 'User data not found. Please try again.',
         );
         return;
-      }
+      } */
 
       // Get FCM token and device type
       final fcmToken = await FCMService.getFCMToken();
@@ -212,7 +212,7 @@ class SignUpPasswordController extends GetxController {
         Get.to(
           () => SuccessScreen(
             title: "Success!",
-            header: "Account created successfully !",
+            header: "New password set",
             image: Asset.forgetSImage,
             onTap: () {
               Get.find<CommonController>().fetchProfileData();

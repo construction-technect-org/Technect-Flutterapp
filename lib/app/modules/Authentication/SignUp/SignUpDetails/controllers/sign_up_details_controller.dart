@@ -4,9 +4,14 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
+import 'package:construction_technect/app/core/widgets/success_screen.dart';
+import 'package:construction_technect/app/core/widgets/verifying_otp_screen.dart';
+//import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
-import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
-import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
+//import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
+//import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/otp_verification_screen.dart';
+//import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
+//import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
@@ -21,6 +26,7 @@ class SignUpDetailsController extends GetxController {
   final otpSend = false.obs;
   final otpVerify = false.obs;
   RxBool isVerified = false.obs;
+  FocusNode emailFocusNode = FocusNode();
 
   RxInt isValid = (-1).obs;
   RxString countryCode = "+91".obs;
@@ -31,10 +37,19 @@ class SignUpDetailsController extends GetxController {
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
   RxBool isLoading = false.obs;
+  RxBool isOTPLoading = false.obs;
 
   // Email validation state
   RxString emailError = "".obs;
   RxBool isEmailValidating = false.obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    mobileNumberController.text = "";
+    emailController.text = "";
+  }
 
   void startTimer() {
     isResendVisible.value = false;
@@ -164,34 +179,42 @@ class SignUpDetailsController extends GetxController {
   // Verify OTP method
   Future<void> verifyOtp() async {
     try {
+      isOTPLoading.value = true;
+
       final otpResponse = await signUpService.verifyOtp(
         mobileNumber: mobileNumberController.text,
         otp: otpController.text,
       );
 
       if (otpResponse.success == true) {
-        if (otpResponse.data?.verified == true) {
-          otpVerify.value = true;
-          SnackBars.successSnackBar(content: 'OTP verified successfully!');
-          final cont = Get.find<SignUpRoleController>();
-          final userData = UserDataModel(
-            marketPlaceRole: cont.selectedFinalRole.value,
-            roleName: cont.selectedRoleName.value,
-            firstName: firstNameController.text,
-            lastName: lastNameController.text,
-            countryCode: countryCode.value,
-            mobileNumber: mobileNumberController.text,
-            email: emailController.text,
-            gst: gstController.text,
-            aadhaar: aadhaarController.text,
-            panCard: "",
-            address: "",
-          );
-          Get.back();
-          Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
-        } else {
-          SnackBars.errorSnackBar(
-            content: 'OTP verification failed. Please try again.',
+        if (isOTPLoading.value) {
+          Get.offAll(
+            () => VerifyingOtpScreen(
+              header: "Verifying the OTP",
+              onTap: () {
+                if (otpResponse.data?.verified == true) {
+                  otpVerify.value = true;
+                  SnackBars.successSnackBar(
+                    content: 'OTP verified successfully!',
+                  );
+
+                  Get.back();
+                  Get.to(
+                    () => SuccessScreen(
+                      title: "Success!",
+                      header: "OTP Verified Successfully",
+                      onTap: () {
+                        Get.offAllNamed(Routes.SIGN_UP_ROLE);
+                      },
+                    ),
+                  );
+                } else {
+                  SnackBars.errorSnackBar(
+                    content: 'OTP verification failed. Please try again.',
+                  );
+                }
+              },
+            ),
           );
         }
       } else {
@@ -203,6 +226,8 @@ class SignUpDetailsController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
+    } finally {
+      isOTPLoading.value = false;
     }
   }
 

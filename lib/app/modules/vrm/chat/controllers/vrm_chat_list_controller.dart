@@ -28,6 +28,7 @@ class VRMChatListController extends GetxController {
         chatListModel.value = result;
       }
     } catch (e) {
+      print("Hello Error $e");
       if (kDebugMode) log('Error fetching VRM chat list: $e');
     } finally {
       isLoading.value = false;
@@ -84,10 +85,10 @@ class VRMChatListController extends GetxController {
 
       if (index != -1) {
         final conversation = conversations[index];
-        conversation.lastMessage= lastMessage;
-        conversation.lastMessageTime= lastMessageTime;
-        conversation.lastMessage= lastMessage;
-        conversation.unreadCount= unreadCount;
+        conversation.lastMessage = lastMessage;
+        conversation.lastMessageTime = lastMessageTime;
+        conversation.lastMessage = lastMessage;
+        conversation.unreadCount = unreadCount;
         conversations.removeAt(index);
         conversations.insert(0, conversation);
         chatListModel.refresh();

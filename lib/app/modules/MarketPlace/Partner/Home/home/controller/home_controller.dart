@@ -14,6 +14,7 @@ class HomeController extends GetxController {
   Rx<CategoryModel> categoryHierarchyData = CategoryModel().obs;
   Rx<ServiceCategoryModel> categoryHierarchyDataCM = ServiceCategoryModel().obs;
   Rx<CategoryModel> categoryHierarchyData2 = CategoryModel().obs;
+  RxBool isGridView = true.obs;
 
   @override
   void onInit() {
@@ -59,7 +60,8 @@ class HomeController extends GetxController {
       }
 
       // Fetch fresh data from API
-      final apiCategoryHierarchy = await homeService.getCategoryServiceHierarchy();
+      final apiCategoryHierarchy = await homeService
+          .getCategoryServiceHierarchy();
       categoryHierarchyDataCM.value = apiCategoryHierarchy;
 
       // Store in local storage
@@ -94,9 +96,12 @@ class HomeController extends GetxController {
         return;
       }
 
-      if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
         final Position position = await Geolocator.getCurrentPosition(
-          locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.high,
+          ),
         );
 
         currentLatitude.value = position.latitude;
@@ -120,10 +125,16 @@ class HomeController extends GetxController {
       WillPopScope(
         onWillPop: () async => false,
         child: AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           backgroundColor: Colors.white,
           titlePadding: const EdgeInsets.all(20),
-          contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          contentPadding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: 16,
+          ),
           title: Container(
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xFFF9D0CB)),
@@ -160,7 +171,8 @@ class HomeController extends GetxController {
 
                 for (int attempt = 0; attempt < maxAttempts; attempt++) {
                   await Future.delayed(interval);
-                  final LocationPermission after = await Geolocator.checkPermission();
+                  final LocationPermission after =
+                      await Geolocator.checkPermission();
 
                   if (after == LocationPermission.always ||
                       after == LocationPermission.whileInUse) {
@@ -184,7 +196,8 @@ class HomeController extends GetxController {
                 if (Get.isDialogOpen ?? false) Get.back();
                 isLocationDialogShowing.value = false;
                 Future.delayed(const Duration(milliseconds: 200), () {
-                  if (!isLocationDialogShowing.value) _showMandatoryLocationDialog();
+                  if (!isLocationDialogShowing.value)
+                    _showMandatoryLocationDialog();
                 });
               },
               buttonName: 'Continue',
@@ -208,7 +221,11 @@ class HomeController extends GetxController {
     {"title": "ERP", "icon": Asset.erp, "available": false},
     {"title": "Project Management", "icon": Asset.project, "available": false},
     {"title": "HRMS", "icon": Asset.hrms, "available": false},
-    {"title": "Portfolio Management", "icon": Asset.portfolio, "available": false},
+    {
+      "title": "Portfolio Management",
+      "icon": Asset.portfolio,
+      "available": false,
+    },
     {"title": "OVP", "icon": Asset.ovp, "available": false},
     {"title": "Construction Taxi", "icon": Asset.taxi, "available": false},
   ];

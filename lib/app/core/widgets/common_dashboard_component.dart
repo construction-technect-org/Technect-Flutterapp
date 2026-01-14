@@ -4,7 +4,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/con
 
 class CommonDashboard extends StatelessWidget {
   CommonDashboard({super.key});
-  final CommonDashboardController controller = Get.put(CommonDashboardController());
+  final CommonDashboardController controller = Get.put(
+    CommonDashboardController(),
+  );
   final CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,10 @@ class CommonDashboard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Features", style: MyTexts.extraBold18.copyWith(color: MyColors.black)),
+            Text(
+              "Features",
+              style: MyTexts.extraBold18.copyWith(color: MyColors.black),
+            ),
             const Gap(16),
             LayoutBuilder(
               builder: (context, constraints) {
@@ -33,7 +38,8 @@ class CommonDashboard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = controller.features[index];
                     return Obx(() {
-                      final isSelected = controller.selectedIndex.value == index;
+                      final isSelected =
+                          controller.selectedIndex.value == index;
                       return BuildFeatureCard(
                         isSelected: isSelected,
                         item: item,
@@ -48,7 +54,9 @@ class CommonDashboard extends StatelessWidget {
                               const Duration(seconds: 1);
                             }
 
-                            controller.onSecondScreenTap(item["value"].toString());
+                            controller.onSecondScreenTap(
+                              item["value"].toString(),
+                            );
                           }
                         },
                       );
@@ -58,8 +66,11 @@ class CommonDashboard extends StatelessWidget {
               },
             ),
             SizedBox(height: 1.h),
-            SizedBox(height: 1.h),
-            Text("Statics", style: MyTexts.bold18.copyWith(color: MyColors.black)),
+            //SizedBox(height: 1.h),
+            /*Text(
+              "Statics",
+              style: MyTexts.bold18.copyWith(color: MyColors.black),
+            ), */
             SizedBox(height: 1.h),
             Row(
               children: [
@@ -74,7 +85,8 @@ class CommonDashboard extends StatelessWidget {
                             ?.totalMerchantProfilesCreated
                             ?.toString() ??
                         "0",
-                    Asset.role1,
+                    "Verified",
+                    Asset.mer,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -89,7 +101,8 @@ class CommonDashboard extends StatelessWidget {
                             ?.totalConnectorProfilesCreated
                             ?.toString() ??
                         "0",
-                    Asset.contractor,
+                    "Active",
+                    Asset.conn,
                   ),
                 ),
               ],
@@ -101,11 +114,11 @@ class CommonDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value, String icon) {
+  Widget _buildStatCard(String title, String value, String type, String icon) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFFFFDEA)),
+        border: Border.all(color: const Color(0xFFCCCCCC), width: 1.0),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -116,21 +129,51 @@ class CommonDashboard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                Image.asset(icon, height: 31, width: 31),
+                //Image.asset(icon, height: 31, width: 31),
                 const Gap(7),
-                Text(title, style: MyTexts.medium14.copyWith(color: MyColors.fontBlack)),
+                Text(
+                  title,
+                  style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                ),
+                Text(
+                  type,
+                  style: MyTexts.regular12.copyWith(
+                    color: const Color(0xFF058200),
+                    fontSize: 10,
+                  ),
+                ),
+                const Gap(16),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        const Color(0xFFFFED29).withValues(alpha: 0),
+                        const Color(0xFFFFED29),
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "32",
+                      style: MyTexts.medium14.copyWith(
+                        color: const Color(0xFF2E2E2E),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           const SizedBox(width: 10),
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFDEA),
-              border: Border.all(color: const Color(0xFFFFFDEA)),
-              borderRadius: BorderRadius.circular(43),
-            ),
-            child: Text(value, style: MyTexts.bold18.copyWith(color: MyColors.primary)),
+          SizedBox(
+            height: 100,
+            width: 60,
+            child: Image.asset(icon, fit: BoxFit.contain),
           ),
         ],
       ),
@@ -140,7 +183,12 @@ class CommonDashboard extends StatelessWidget {
 
 class CommonDashboardController extends GetxController {
   final features = [
-    {"title": "Marketplace", "icon": Asset.role1, "available": true, "value": "marketplace"},
+    {
+      "title": "Marketplace",
+      "icon": Asset.role1,
+      "available": true,
+      "value": "marketplace",
+    },
     {"title": "CRM", "icon": Asset.crm, "available": true, "value": "crm"},
     {"title": "ERP", "icon": Asset.erp, "available": false, "value": "erp"},
     {
@@ -163,6 +211,7 @@ class CommonDashboardController extends GetxController {
       "available": false,
       "value": "construction_taxi",
     },
+    {"title": "VDC", "icon": Asset.vdc, "available": false, "value": "vdc"},
   ];
   final RxInt selectedIndex = 0.obs;
 
@@ -171,7 +220,9 @@ class CommonDashboardController extends GetxController {
     super.onInit();
     final savedValue = myPref.dashboard.val;
 
-    final index = features.indexWhere((feature) => feature['value'] == savedValue);
+    final index = features.indexWhere(
+      (feature) => feature['value'] == savedValue,
+    );
 
     if (index != -1) {
       selectedIndex.value = index;
@@ -228,21 +279,18 @@ class BuildFeatureCard extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              border: isSelected ? null : BoxBorder.all(width: 2, color: MyColors.grayEA),
-              gradient: isSelected
-                  ? LinearGradient(
-                      begin: AlignmentGeometry.topCenter,
-                      end: AlignmentGeometry.bottomCenter,
-                      colors: [
-                        const Color(0xFFE9EBF8).withValues(alpha: 0),
-                        const Color(0xFFE9EBF8),
-                      ],
-                    )
-                  : null,
+              border: isSelected
+                  ? null
+                  : BoxBorder.all(width: 2, color: MyColors.grayEA),
+              gradient: const LinearGradient(
+                begin: AlignmentGeometry.topCenter,
+                end: AlignmentGeometry.bottomCenter,
+                colors: [Color(0xFFFFFCDF), Color(0xFFFFFFFF)],
+              ),
             ),
             child: Column(
               children: [
-                if (item["available"] == false)
+                /* if (item["available"] == false)
                   Align(
                     alignment: AlignmentGeometry.topRight,
                     child: Container(
@@ -257,10 +305,12 @@ class BuildFeatureCard extends StatelessWidget {
                       ),
                       child: Text(
                         "Coming Soon",
-                        style: MyTexts.medium13.copyWith(color: MyColors.gray2E),
+                        style: MyTexts.medium13.copyWith(
+                          color: MyColors.gray2E,
+                        ),
                       ),
                     ),
-                  ),
+                  ), */
                 const Spacer(),
                 Image.asset(item['icon'].toString(), height: itemWidth * 0.50),
                 const SizedBox(height: 6),
@@ -273,7 +323,12 @@ class BuildFeatureCard extends StatelessWidget {
               ],
             ),
           ),
-          if (isSelected) const Icon(Icons.check_circle_rounded, color: MyColors.primary, size: 20),
+          if (isSelected)
+            const Icon(
+              Icons.check_circle_rounded,
+              color: MyColors.primary,
+              size: 20,
+            ),
         ],
       ),
     );

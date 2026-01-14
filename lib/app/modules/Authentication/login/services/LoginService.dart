@@ -25,12 +25,12 @@ class LoginService {
       if (deviceType != null && deviceType.isNotEmpty) {
         body["deviceType"] = deviceType;
       }
-
+      print("YEs done");
       final response = await apiManager.postObject(
         url: APIConstants.login,
         body: body,
       );
-
+      print("Not  done");
       final result = LoginModel.fromJson(response);
 
       if (result.success == true) {

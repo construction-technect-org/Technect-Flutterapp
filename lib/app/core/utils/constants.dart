@@ -28,6 +28,13 @@ class Asset {
   static const String pdf = '${png}pdf.png';
   static const String comingSoon = '${png}comingSoon.png';
 
+  static const String industrial = '${png}Industrial.png';
+  static const String infrastructure = '${png}Infrastructure.png';
+  static const String commercial = '${png}Commercial.png';
+  static const String renovation = '${png}Renovation.png';
+  static const String residential = '${png}Residential.png';
+  static const String building = '${png}building.png';
+
   static const String back = '${svg}back.svg';
   static const String chat = '${svg}chat.svg';
   static const String block = '${svg}block.svg';
@@ -69,12 +76,13 @@ class Asset {
 
   /// feature
   static const String crm = '${feature}crm.png';
-  static const String erp = '${feature}erp.png';
-  static const String hrms = '${feature}hrms.png';
-  static const String ovp = '${feature}ovp.png';
-  static const String portfolio = '${feature}portfolio.png';
-  static const String project = '${feature}project.png';
-  static const String taxi = '${feature}taxi.png';
+  static const String erp = '${feature}erp-main.png';
+  static const String hrms = '${feature}hrms-main.png';
+  static const String ovp = '${feature}ovp-main.png';
+  static const String portfolio = '${feature}portfolio-managment.png';
+  static const String project = '${feature}project-management-main.png';
+  static const String taxi = '${feature}construction-taxi-main.png';
+  static const String vdc = '${feature}vdc-main.png';
 
   /// role
   static const String houseOwner = '${roles}houseOwner.png';
@@ -82,6 +90,8 @@ class Asset {
   static const String design = '${roles}design.png';
   static const String architect = '${roles}architect.png';
   static const String other = '${roles}other.png';
+  static const String mer = '${roles}mer.png';
+  static const String conn = '${roles}conn.png';
 
   static const String explore = '${newPng}explore.png';
 
@@ -144,11 +154,14 @@ class Asset {
   static const String users = '${newIcons}users.svg';
   static const String TEM = '${newIcons}TEM.svg';
   static const String CM = '${newIcons}CM.svg';
+  static const String failure = '${newIcons}failure.svg';
 }
 
 class Constants {
-  static const String privacyPolicy = 'https://constructiontechnect.com/privacy-policy';
-  static const String termsCondition = 'https://constructiontechnect.com/terms-and-conditions';
+  static const String privacyPolicy =
+      'https://constructiontechnect.com/privacy-policy';
+  static const String termsCondition =
+      'https://constructiontechnect.com/terms-and-conditions';
   static const String aboutUS = 'https://constructiontechnect.com/about-us';
   static const String tutorial = 'https://www.youtube.com/watch?v=QI8dFfsZoC0';
 }

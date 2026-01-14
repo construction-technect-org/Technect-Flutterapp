@@ -148,6 +148,7 @@ class CommonTextField extends StatelessWidget {
   final Color? bgColor;
   final List<TextInputFormatter>? inputFormatters;
   final BoxConstraints? suffixIconConstraints;
+  final TextStyle? style;
 
   const CommonTextField({
     super.key,
@@ -179,7 +180,8 @@ class CommonTextField extends StatelessWidget {
     this.autofillHints,
     this.headerText,
     this.suffixIconConstraints,
-    this.showDivider = false, // default false
+    this.showDivider = false,
+    this.style, // default false
   });
 
   @override
@@ -193,7 +195,9 @@ class CommonTextField extends StatelessWidget {
                 children: [
                   Text(
                     headerText ?? "",
-                    style: MyTexts.medium14.copyWith(color: MyColors.gra54),
+                    style:
+                        style ??
+                        MyTexts.medium14.copyWith(color: MyColors.gra54),
                   ),
                   if (isRed == true)
                     Text(

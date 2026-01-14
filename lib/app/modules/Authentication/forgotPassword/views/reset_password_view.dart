@@ -50,7 +50,7 @@ class ResetPasswordView extends StatelessWidget {
                       headerText: "New Password",
                       controller: controller.newPasswordController,
                       obscureText: !controller.isNewPasswordVisible.value,
-                      hintText: "Eg: one uppercase, one number and lowercase",
+                      hintText: "Enter Your new password",
                       showDivider: true,
                       suffixIcon: GestureDetector(
                         onTap: () => controller.toggleNewPasswordVisibility(),
@@ -74,7 +74,7 @@ class ResetPasswordView extends StatelessWidget {
                       headerText: "Confirm Password",
                       controller: controller.confirmPasswordController,
                       obscureText: !controller.isConfirmPasswordVisible.value,
-                      hintText: "Eg: one uppercase, one number and lowercase",
+                      hintText: "Re-enter new password",
                       showDivider: true,
                       suffixIcon: GestureDetector(
                         onTap: () =>

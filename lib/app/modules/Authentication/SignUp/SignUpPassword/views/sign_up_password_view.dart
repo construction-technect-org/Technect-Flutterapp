@@ -24,7 +24,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.all(24.0),
               child: RoundedButton(
-                buttonName: 'Submit',
+                buttonName: 'Continue',
                 onTap: controller.isLoading.value
                     ? null
                     : () {
@@ -89,8 +89,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                   controller: controller.passwordController,
                                   obscureText:
                                       !controller.isPasswordVisible.value,
-                                  hintText:
-                                      "Eg: one uppercase, one number and lowercase",
+                                  hintText: "Enter new password",
                                   showDivider: true,
                                   suffixIcon: GestureDetector(
                                     onTap: () =>
@@ -118,8 +117,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                   obscureText: !controller
                                       .isConfirmPasswordVisible
                                       .value,
-                                  hintText:
-                                      "Eg: one uppercase, one number and lowercase",
+                                  hintText: "Re-enter new password",
                                   showDivider: true,
                                   suffixIcon: GestureDetector(
                                     onTap: () => controller

@@ -85,17 +85,22 @@ class AddProductController extends GetxController {
 
   final AddProductService _service = AddProductService();
   bool isEdit = false;
-  final VoidCallback? onApiCall = Get.arguments != null ? Get.arguments['onApiCall'] : () {};
+  final VoidCallback? onApiCall = Get.arguments != null
+      ? Get.arguments['onApiCall']
+      : () {};
 
   Future<void> _fetchSiteAddresses() async {
-    siteLocations.value = Get.find<CommonController>().profileData.value.data?.addresses ?? [];
+    siteLocations.value =
+        Get.find<CommonController>().profileData.value.data?.addresses ?? [];
     // Sync selected site address after loading
     _syncSelectedSiteAddress();
   }
 
   void _syncSelectedSiteAddress() {
     if (selectedSiteAddressId.value > 0) {
-      final site = siteLocations.firstWhereOrNull((s) => s.id == selectedSiteAddressId.value);
+      final site = siteLocations.firstWhereOrNull(
+        (s) => s.id == selectedSiteAddressId.value,
+      );
       selectedSiteAddress.value = site;
       if (site != null) {
         selectedSiteAddressName.value = site.addressName ?? '';
@@ -159,7 +164,8 @@ class AddProductController extends GetxController {
       selectedMainCategoryId.value = (product.mainCategoryId ?? 0).toString();
       selectedSubCategoryId.value = (product.subCategoryId ?? 0).toString();
       selectedProductId.value = (product.categoryProductId ?? 0).toString();
-      selectedSubProductId.value = (product.productSubCategoryId ?? 0).toString();
+      selectedSubProductId.value = (product.productSubCategoryId ?? 0)
+          .toString();
     }
   }
 
@@ -197,6 +203,7 @@ class AddProductController extends GetxController {
 
   void removeImageAt(int index) {
     if (imageSlots[index] != null) {
+      print("Removed");
       removedImages["remove_image_${index + 1}"] = "remove";
       imageSlots[index] = null;
     }
@@ -235,7 +242,9 @@ class AddProductController extends GetxController {
 
     selectedMainCategory.value = categoryName;
 
-    final selected = mainCategories.firstWhereOrNull((c) => c.name == categoryName);
+    final selected = mainCategories.firstWhereOrNull(
+      (c) => c.name == categoryName,
+    );
     selectedMainCategoryId.value = '${selected?.id ?? 0}';
     if (selected != null) {
       fetchSubCategories(selected.id ?? 0);
@@ -257,7 +266,9 @@ class AddProductController extends GetxController {
 
     selectedSubCategory.value = subCategoryName;
 
-    final selectedSub = subCategories.firstWhereOrNull((s) => s.name == subCategoryName);
+    final selectedSub = subCategories.firstWhereOrNull(
+      (s) => s.name == subCategoryName,
+    );
     selectedSubCategoryId.value = '${selectedSub?.id ?? 0}';
 
     if (selectedSub != null) {
@@ -274,7 +285,11 @@ class AddProductController extends GetxController {
       if ((result.success) == true) {
         productsList.value = result.data ?? [];
         productNames.value =
-            result.data?.map((e) => e.name).where((name) => name != null).cast<String>().toList() ??
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
             [];
         if ((result.data ?? []).isNotEmpty) {
           subProductsList.value = result.data?.first.productSubCategories ?? [];
@@ -325,11 +340,14 @@ class AddProductController extends GetxController {
           } else if (filter.filterType == 'dropdown_multiple') {
             multiDropdownValues[filter.filterName ?? ''] = <String>[].obs;
           } else {
-            dynamicControllers[filter.filterName ?? ''] = TextEditingController();
+            dynamicControllers[filter.filterName ?? ''] =
+                TextEditingController();
           }
         }
 
-        if (isEdit && _storedFilterValues != null && _storedFilterValues!.isNotEmpty) {
+        if (isEdit &&
+            _storedFilterValues != null &&
+            _storedFilterValues!.isNotEmpty) {
           _populateFilterControllers();
         }
       } else {
@@ -396,14 +414,18 @@ class AddProductController extends GetxController {
 
   Future<void> onProductSelected(String? productName) async {
     selectedProduct.value = productName;
-    final selectedCategorySub = productsList.firstWhereOrNull((s) => s.name == productName);
+    final selectedCategorySub = productsList.firstWhereOrNull(
+      (s) => s.name == productName,
+    );
     selectedProductId.value = '${selectedCategorySub?.id ?? 0}';
     await getFilter(selectedCategorySub?.id ?? 0);
   }
 
   Future<void> onSubProductSelected(String? productName) async {
     selectedSubProduct.value = productName;
-    final selectedCategorySub = subProductsList.firstWhereOrNull((s) => s.name == productName);
+    final selectedCategorySub = subProductsList.firstWhereOrNull(
+      (s) => s.name == productName,
+    );
     selectedSubProductId.value = '${selectedCategorySub?.id ?? 0}';
   }
 
@@ -414,7 +436,11 @@ class AddProductController extends GetxController {
       if ((result.success) == true) {
         mainCategories.value = result.data ?? [];
         mainCategoryNames.value =
-            result.data?.map((e) => e.name).where((name) => name != null).cast<String>().toList() ??
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
             [];
       } else {
         mainCategories.clear();
@@ -435,7 +461,11 @@ class AddProductController extends GetxController {
       if ((result.success) == true) {
         subCategories.value = result.data ?? [];
         subCategoryNames.value =
-            result.data?.map((e) => e.name).where((name) => name != null).cast<String>().toList() ??
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
             [];
       } else {
         subCategories.clear();
@@ -469,7 +499,9 @@ class AddProductController extends GetxController {
 
   void gstCalculate() {
     final double amount =
-        double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
+        double.parse(
+          priceController.text.isEmpty ? '0.0' : priceController.text,
+        ) *
         double.parse(
           selectedGST.value.toString().replaceAll("%", "").isEmpty
               ? '0.0'
@@ -477,20 +509,37 @@ class AddProductController extends GetxController {
         ) /
         100;
     gstPriceController.text = amount.toStringAsFixed(2);
-    amountController.text = (amount + double.parse(priceController.text)).toStringAsFixed(2);
+    amountController.text = (amount + double.parse(priceController.text))
+        .toStringAsFixed(2);
   }
 
   Future<void> pickImage() async {
+    List<XFile> results = [];
     try {
       final remainingSlots = 5 - pickedFilePathList.length;
+      print("RS $remainingSlots PFL ${pickedFilePathList.length}");
       if (remainingSlots <= 0) {
         SnackBars.errorSnackBar(content: "You can only upload up to 5 images");
         return;
       }
 
-      final List<XFile> results = await ImagePicker().pickMultiImage(limit: remainingSlots);
+      if (remainingSlots == 1) {
+        // 🔴 Android requires single picker
+        final XFile? file = await ImagePicker().pickImage(
+          source: ImageSource.gallery,
+        );
+        if (file != null) {
+          results.add(file);
+        }
+      } else {
+        // ✅ Multi image picker (limit >= 2)
+        results = await ImagePicker().pickMultiImage(limit: remainingSlots);
+      }
+
       if (results.length > remainingSlots) {
-        SnackBars.errorSnackBar(content: "You can only upload up to $remainingSlots images");
+        SnackBars.errorSnackBar(
+          content: "You can only upload up to $remainingSlots images",
+        );
         return;
       }
 
@@ -498,27 +547,49 @@ class AddProductController extends GetxController {
         pickedFilePathList.addAll(results.map((e) => e.path));
       }
     } catch (e) {
+      print("Failed pick");
       SnackBars.errorSnackBar(content: 'Failed to pick images: $e', time: 3);
     }
   }
 
   Future<void> pickImageEdit() async {
+    List<XFile> pickedFiles = [];
     try {
-      final emptySlots = imageSlots.where((e) => e == null).length;
-      if (emptySlots <= 0) {
+      final empSlots = imageSlots.where((e) => e == null).length;
+      print("Empty $empSlots");
+
+      if (empSlots <= 0) {
         SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
         return;
       }
 
-      final List<XFile> pickedFiles = await ImagePicker().pickMultiImage(
-        limit: emptySlots == 1 ? null : emptySlots,
-      );
+      if (empSlots == 1) {
+        // 🔴 Android requires single picker
+        final XFile? file = await ImagePicker().pickImage(
+          source: ImageSource.gallery,
+        );
+        if (file != null) {
+          pickedFiles.add(file);
+        }
+      } else {
+        // ✅ Multi image picker (limit >= 2)
+        pickedFiles = await ImagePicker().pickMultiImage(limit: empSlots);
+      }
 
+      if (pickedFiles.length > empSlots) {
+        SnackBars.errorSnackBar(
+          content: "You can only select up to $empSlots more images.",
+        );
+        // You must exit the function here to prevent processing the excess images.
+        return;
+      }
       if (pickedFiles.isNotEmpty) {
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
-          if (index >= 0 && index < imageSlots.length && imageSlots[index] != null) {
+          if (index >= 0 &&
+              index < imageSlots.length &&
+              imageSlots[index] != null) {
             toRemove.add(key);
           }
         });
@@ -538,7 +609,9 @@ class AddProductController extends GetxController {
         if (hasAnyImage) {
           removedImages.removeWhere((key, _) {
             final index = int.parse(key.split('_').last) - 1;
-            return index >= 0 && index < imageSlots.length && imageSlots[index] != null;
+            return index >= 0 &&
+                index < imageSlots.length &&
+                imageSlots[index] != null;
           });
         }
       }
@@ -621,7 +694,10 @@ class AddProductController extends GetxController {
           "value": value,
           "display_value": value == filter.unit
               ? value
-              : value + (filter.unit != null && filter.unit!.isNotEmpty ? " ${filter.unit}" : ""),
+              : value +
+                    (filter.unit != null && filter.unit!.isNotEmpty
+                        ? " ${filter.unit}"
+                        : ""),
           "unit": filter.unit,
           "label": filter.filterLabel ?? _formatKeyName(filterName),
           "type": filter.filterType ?? "text",
@@ -637,8 +713,9 @@ class AddProductController extends GetxController {
         .replaceAll('_', ' ')
         .split(' ')
         .map(
-          (word) =>
-              word.isNotEmpty ? word[0].toUpperCase() + word.substring(1).toLowerCase() : word,
+          (word) => word.isNotEmpty
+              ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+              : word,
         )
         .join(' ');
   }
@@ -652,7 +729,13 @@ class AddProductController extends GetxController {
       images: productImages,
       gstAmount: gstPriceController.text,
       merchantGstNumber:
-          Get.find<CommonController>().profileData.value.data?.merchantProfile?.gstinNumber ?? '',
+          Get.find<CommonController>()
+              .profileData
+              .value
+              .data
+              ?.merchantProfile
+              ?.gstinNumber ??
+          '',
       stockYardAddress: selectedSiteAddress.value?.fullAddress,
       warehouseType: selectedWareHouseType.value,
       mainCategoryName: selectedMainCategory.value,
@@ -674,7 +757,9 @@ class AddProductController extends GetxController {
       gstPercentage: (selectedGST.value ?? "").replaceAll("%", ""),
       termsAndConditions: termsController.text,
       outOfStock: false,
-      stockQty: int.parse(stockController.text.isEmpty ? "0" : stockController.text),
+      stockQty: int.parse(
+        stockController.text.isEmpty ? "0" : stockController.text,
+      ),
       filterValues: buildFilterValues2(),
     );
     Get.toNamed(
@@ -726,7 +811,9 @@ class AddProductController extends GetxController {
       "product_note": noteController.text,
       "gst_percentage": (selectedGST.value ?? "").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,
-      "stock_qty": isOutStock.value == true ? int.parse(stockController.text) : 0,
+      "stock_qty": isOutStock.value == true
+          ? int.parse(stockController.text)
+          : 0,
       "outofstock": !isOutStock.value,
       "brand": brandNameController.text,
       // "is_active": isEnabled.value,
@@ -735,7 +822,10 @@ class AddProductController extends GetxController {
       "filter_values": jsonEncode(buildFilterValues()),
     });
     try {
-      final addTeamResponse = await _service.createProduct(fields: fields, files: selectedFiles);
+      final addTeamResponse = await _service.createProduct(
+        fields: fields,
+        files: selectedFiles,
+      );
       if (addTeamResponse.success == true) {
         // await controller.fetchProducts();
         isLoading.value = false;
@@ -744,15 +834,18 @@ class AddProductController extends GetxController {
             title: "Success!",
             header: "Product added successfully!",
             onTap: () {
-              Get.back();
-              Get.back();
-              Get.back();
+              // Get.back();
+              // Get.back();
+              // Get.back();
+              Get.toNamed(Routes.MAIN);
             },
           ),
         );
       } else {
         isLoading.value = false;
-        SnackBars.errorSnackBar(content: addTeamResponse.message ?? 'Something went wrong!!');
+        SnackBars.errorSnackBar(
+          content: addTeamResponse.message ?? 'Something went wrong!!',
+        );
       }
     } catch (e) {
       isLoading.value = false;
@@ -828,7 +921,9 @@ class AddProductController extends GetxController {
         Get.back();
         Get.back();
       } else {
-        SnackBars.errorSnackBar(content: res.message ?? 'Something went wrong!');
+        SnackBars.errorSnackBar(
+          content: res.message ?? 'Something went wrong!',
+        );
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Update failed: $e');
@@ -911,7 +1006,9 @@ class AddProductController extends GetxController {
     if (videoPlayerController != null) {
       final size = videoPlayerController!.value.size;
       isVideoPortrait.value = size.height > size.width;
-      log('Video Size: ${size.width}x${size.height}, Is Portrait: ${isVideoPortrait.value}');
+      log(
+        'Video Size: ${size.width}x${size.height}, Is Portrait: ${isVideoPortrait.value}',
+      );
     }
   }
 
@@ -1001,7 +1098,11 @@ class AddProductController extends GetxController {
                                       ),
                                     ],
                                   ),
-                                  child: const Icon(Icons.close, color: Colors.white, size: 20),
+                                  child: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
                                 ),
                               ),
                             ),

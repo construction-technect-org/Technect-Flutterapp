@@ -7,6 +7,7 @@ import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/LoginModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
@@ -81,13 +82,14 @@ class LoginController extends GetxController {
 
   Future<void> login() async {
     isLoading.value = true;
-    loginError.value = ""; // Clear previous errors
+    loginError.value = ""; //
+    print("Login Done Started"); // Clear previous errors
 
     try {
       // Get FCM token and device type
       final fcmToken = await FCMService.getFCMToken();
       final deviceType = FCMService.getDeviceType();
-
+      print("Login Done Started1234");
       final loginResponse = await loginService.login(
         countryCode: countryCode.value,
         mobileNumber: mobileController.text,
@@ -95,7 +97,7 @@ class LoginController extends GetxController {
         fcmToken: fcmToken,
         deviceType: deviceType,
       );
-
+      print("Login Done Started123456");
       if (loginResponse.success == true) {
         myPref.setIsTeamLogin(false);
         loginError.value = "";
@@ -138,9 +140,21 @@ class LoginController extends GetxController {
       }
     } catch (e) {
       loginError.value = "Invalid mobile number or password";
+      print("Login NOt done123");
     } finally {
       isLoading.value = false;
+      print("Login NOt done");
     }
+  }
+
+  void showBottomSheet() {
+    Get.bottomSheet(
+      SignUpDetailsView(),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+    ).whenComplete(() {
+      FocusManager.instance.primaryFocus?.unfocus();
+    });
   }
 
   Future<void> callSocialLoginAPI(User user) async {
@@ -372,7 +386,7 @@ class LoginController extends GetxController {
         return true;
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error sending OTP: $e');
+      SnackBars.errorSnackBar(content: 'Error sending OTP');
       log("verifyMobileNumber: $e");
       return false;
     }
@@ -498,9 +512,9 @@ class LoginController extends GetxController {
 
 String extractPermissions(TeamMemberModel? data) {
   if (data == null) return '';
-   return data.roles
-        ?.map((r) => r.functionalities ?? '')
-        .where((e) => e.isNotEmpty)
-        .join(',') ??
-        '';
+  return data.roles
+          ?.map((r) => r.functionalities ?? '')
+          .where((e) => e.isNotEmpty)
+          .join(',') ??
+      '';
 }

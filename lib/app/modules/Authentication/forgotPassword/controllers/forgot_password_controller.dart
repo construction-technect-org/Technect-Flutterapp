@@ -1,5 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
+import 'package:construction_technect/app/core/widgets/verifying_otp_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/services/ForgotPasswordService.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/reset_password_view.dart';
 import 'package:timer_count_down/timer_controller.dart';
@@ -10,6 +12,9 @@ class ForgotPasswordController extends GetxController {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final RxString mobileValidationError = "".obs;
+  final emailController = TextEditingController();
+  RxString emailError = "".obs;
+  RxBool isEmailValidating = false.obs;
 
   RxInt isValid = (-1).obs;
   RxString countryCode = "".obs;
@@ -32,8 +37,20 @@ class ForgotPasswordController extends GetxController {
   final isLoading = false.obs;
   final isNewPasswordVisible = false.obs;
   final isConfirmPasswordVisible = false.obs;
+  FocusNode emailFocusNode = FocusNode();
 
   ForgotPasswordService forgotPasswordService = ForgotPasswordService();
+
+  Future<void> validateEmailAvailability(String email) async {
+    // First check format validation - if format is invalid, don't check API
+    final formatError = Validate.validateEmail(email);
+    if (formatError != null) {
+      // Format error - clear API error, format error will be shown by validator
+      emailError.value = "";
+      isEmailValidating.value = false;
+      return;
+    }
+  }
 
   void toggleNewPasswordVisibility() {
     isNewPasswordVisible.value = !isNewPasswordVisible.value;
@@ -47,7 +64,7 @@ class ForgotPasswordController extends GetxController {
     if (!_validateMobileNumber()) return;
 
     isLoading.value = true;
-
+    otpController.text = "";
     try {
       final otpResponse = await forgotPasswordService.sendOtp(
         countryCode: countryCode.value,
@@ -98,11 +115,39 @@ class ForgotPasswordController extends GetxController {
         otp: otpController.text,
       );
 
-      if (otpResponse.success == true && otpResponse.data?.verified == true) {
-        otpVerify.value = true;
-        Get.back();
-        Get.to(() => ResetPasswordView());
-        SnackBars.successSnackBar(content: 'OTP verified successfully');
+      if (otpResponse.success == true) {
+        if (isLoading.value) {
+          Get.to(
+            () => VerifyingOtpScreen(
+              header: "Verifying the OTP",
+              onTap: () {
+                if (otpResponse.data?.verified == true) {
+                  otpVerify.value = true;
+                  SnackBars.successSnackBar(
+                    content: 'OTP verified successfully!',
+                  );
+
+                  Get.back();
+
+                  Get.to(
+                    () => SuccessScreen(
+                      title: "Success!",
+                      header: "OTP verified successfully",
+                      onTap: () {
+                        Get.close(3);
+                        Get.off(() => ResetPasswordView());
+                      },
+                    ),
+                  );
+                } else {
+                  SnackBars.errorSnackBar(
+                    content: 'OTP verification failed. Please try again.',
+                  );
+                }
+              },
+            ),
+          );
+        }
       } else {
         SnackBars.errorSnackBar(
           content: otpResponse.message ?? 'OTP verification failed',

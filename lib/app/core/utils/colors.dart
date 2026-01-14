@@ -103,8 +103,7 @@ class MyColors {
   static const Color pendingBtn = Color(0xFFFEF7E8);
   static const Color rejectBtn = Color(0xFFFCECE9);
   static const Color grayCD = Color(0xFFCDCDCD);
-
-
+  static const Color blueBorder = Color(0xFF0B1429);
 
   // Text field colors
   static const Color textFieldBorder = Color(0xFFA0A0A0);

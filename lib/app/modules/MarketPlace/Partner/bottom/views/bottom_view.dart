@@ -6,8 +6,11 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/merchant_home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -21,8 +24,14 @@ class BottomBarView extends GetView<BottomController> {
     return OfflineBuilder(
       child: _buildUpgradeAlert(context),
       connectivityBuilder:
-          (BuildContext context, List<ConnectivityResult> connectivity, Widget child) {
-            final bool connected = !connectivity.contains(ConnectivityResult.none);
+          (
+            BuildContext context,
+            List<ConnectivityResult> connectivity,
+            Widget child,
+          ) {
+            final bool connected = !connectivity.contains(
+              ConnectivityResult.none,
+            );
 
             if (!connected && !controller.isBottomSheetOpen.value) {
               controller.isBottomSheetOpen.value = true;
@@ -34,9 +43,12 @@ class BottomBarView extends GetView<BottomController> {
                   isScrollControlled: true,
                   backgroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16.0),
+                    ),
                   ),
-                  builder: (_) => PopScope(canPop: false, child: NoInternetBottomSheet()),
+                  builder: (_) =>
+                      PopScope(canPop: false, child: NoInternetBottomSheet()),
                 ).whenComplete(() {
                   controller.isBottomSheetOpen.value = false;
                 });
@@ -48,7 +60,8 @@ class BottomBarView extends GetView<BottomController> {
               WidgetsBinding.instance.addPostFrameCallback((val) async {
                 await Get.find<CommonController>().fetchProfileData();
                 await Get.find<HomeController>().fetchCategoryHierarchy();
-                await Get.find<HomeController>().fetchCategoryServiceHierarchy();
+                await Get.find<HomeController>()
+                    .fetchCategoryServiceHierarchy();
               });
             }
 
@@ -78,7 +91,9 @@ class BottomBarView extends GetView<BottomController> {
       case 0:
         return Dashboard();
       case 1:
-        return HomeView();
+        return myPref.getRole() == "connector"
+            ? HomeView()
+            : MerchantHomeView();
       case 2:
         return ConnectionInboxView();
       case 3:
@@ -92,64 +107,121 @@ class BottomBarView extends GetView<BottomController> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: Colors.white,
-            boxShadow: const [
-              BoxShadow(color: Color(0x19000000), blurRadius: 30, offset: Offset(5, 0)),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              bottomBar(
-                Asset.home,
-                Asset.home1,
-                'Home',
-                onTap: () {
-                  controller.currentIndex.value = 0;
-                },
-                index: 0,
-              ),
-              bottomBar(
-                Asset.category,
-                Asset.category1,
-                'Product',
-                onTap: () {
-                  controller.currentIndex.value = 1;
-                },
-                index: 1,
-              ),
-              if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
-                bottomBar(
-                  Asset.add,
-                  Asset.add,
-                  myPref.role.val != "connector" ? "Sell" : 'Request',
-                  onTap: onSellTap,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Container(
+                //margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 12,
                 ),
-                bottomBar(
-                  Asset.connection,
-                  Asset.connection1,
-                  'Connection',
-                  onTap: () {
-                    controller.currentIndex.value = 2;
-                  },
-                  index: 2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.white, Color(0xFFFFFCE5)],
+                  ),
+                  //color: Colors.white,
+                  /*boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x19000000),
+                      blurRadius: 30,
+                      offset: Offset(5, 0),
+                    ),
+                  ], */
                 ),
-              bottomBar(
-                Asset.more,
-                Asset.more1,
-                'More',
-                onTap: () {
-                  controller.currentIndex.value = 3;
-                },
-                index: 3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    bottomBar(
+                      Asset.home,
+                      Asset.home1,
+                      '',
+                      onTap: () {
+                        controller.currentIndex.value = 0;
+                      },
+                      index: 0,
+                    ),
+                    //Gap(5.5.w),
+                    bottomBar(
+                      Asset.category,
+                      Asset.category1,
+                      '',
+                      onTap: () {
+                        controller.currentIndex.value = 1;
+                      },
+                      index: 1,
+                    ),
+                    //Gap(5.5.w),
+                    if (PermissionLabelUtils.canShow(
+                      PermissionKeys.catalogManager,
+                    ))
+                      bottomBar(
+                        Asset.add,
+                        Asset.add,
+                        myPref.role.val != "connector" ? "" : '',
+                        onTap: onSellTap,
+                      ),
+                    //Gap(5.5.w),
+                    bottomBar(
+                      Asset.connection,
+                      Asset.connection1,
+                      '',
+                      onTap: () {
+                        controller.currentIndex.value = 2;
+                      },
+                      index: 2,
+                    ),
+                    //Gap(5.5.w),
+                    bottomBar(
+                      Asset.more,
+                      Asset.more1,
+                      '',
+                      onTap: () {
+                        controller.currentIndex.value = 3;
+                      },
+                      index: 3,
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            if (myPref.getIsTeamLogin() == false)
+              GestureDetector(
+                onTap: () {
+                  Get.put<SwitchAccountController>(SwitchAccountController());
+                  showSwitchAccountBottomSheet();
+                  // Get.to(() => const ExploreView());
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 20, right: 10),
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF1B2F62),
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.autorenew,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      Text(
+                        myPref.getRole() == "partner"
+                            ? "Merchant"
+                            : "Connector",
+                        style: MyTexts.medium12.copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
         ),
       ],
     );
@@ -160,7 +232,13 @@ class BottomBarView extends GetView<BottomController> {
       if (myPref.role.val != "connector") {
         if (!commonController.hasProfileComplete.value) {
           _showProfileIncompleteDialog();
-        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
+        } else if ((Get.find<CommonController>()
+                    .profileData
+                    .value
+                    .data
+                    ?.addresses ??
+                [])
+            .isEmpty) {
           _showAddAddressDialog();
         } else {
           _showProductOptions();
@@ -172,7 +250,13 @@ class BottomBarView extends GetView<BottomController> {
       if (myPref.role.val != "connector") {
         if (!commonController.hasProfileComplete.value) {
           _showProfileIncompleteDialog();
-        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
+        } else if ((Get.find<CommonController>()
+                    .profileData
+                    .value
+                    .data
+                    ?.addresses ??
+                [])
+            .isEmpty) {
           _showAddAddressDialog();
         } else {
           _showServiceOptions();
@@ -209,7 +293,9 @@ class BottomBarView extends GetView<BottomController> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: const Text("Complete Now"),
           ),
@@ -243,7 +329,9 @@ class BottomBarView extends GetView<BottomController> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: const Text("Add Address"),
           ),
@@ -348,7 +436,13 @@ class BottomBarView extends GetView<BottomController> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           padding: const EdgeInsets.all(16),
-          child: Center(child: Image.asset(Asset.comingSoon, height: 316, fit: BoxFit.cover)),
+          child: Center(
+            child: Image.asset(
+              Asset.comingSoon,
+              height: 316,
+              fit: BoxFit.cover,
+            ),
+          ),
         );
       },
     );
@@ -360,12 +454,21 @@ class BottomBarView extends GetView<BottomController> {
         width: 50,
         height: 5,
         margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(5)),
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
     );
   }
 
-  Widget bottomBar(String icon, String icon2, String name, {void Function()? onTap, int? index}) {
+  Widget bottomBar(
+    String icon,
+    String icon2,
+    String name, {
+    void Function()? onTap,
+    int? index,
+  }) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
@@ -398,7 +501,10 @@ class HearderText extends StatelessWidget {
       text,
       style:
           textStyle ??
-          MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
+          MyTexts.medium18.copyWith(
+            color: MyColors.black,
+            fontFamily: MyTexts.SpaceGrotesk,
+          ),
     );
   }
 }

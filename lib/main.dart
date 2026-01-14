@@ -36,7 +36,10 @@ Future<void> main() async {
             initialBinding: InitialBinding(),
             builder: (context, child) {
               return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                data: MediaQuery.of(context).copyWith(
+                  textScaler: TextScaler.noScaling,
+                  viewInsets: EdgeInsets.zero,
+                ),
                 child: child!,
               );
             },

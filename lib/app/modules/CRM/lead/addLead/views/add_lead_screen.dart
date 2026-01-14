@@ -29,7 +29,11 @@ class AddLeadScreen extends GetView<AddLeadController> {
                       onTap: () => Get.back(),
                       child: const Padding(
                         padding: EdgeInsets.zero,
-                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
+                        child: Icon(
+                          Icons.arrow_back_ios_new_sharp,
+                          color: Colors.black,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -42,6 +46,57 @@ class AddLeadScreen extends GetView<AddLeadController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Gap(20),
+                            GestureDetector(
+                              onTap: () =>
+                                  controller.pickImageBottomSheet(context),
+                              child: Obx(() {
+                                if (controller.selectedImage.value != null) {
+                                  return ClipOval(
+                                    child: Image.file(
+                                      controller.selectedImage.value!,
+                                      width: 78,
+                                      height: 78,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                }
+                                return CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: MyColors.grayEA,
+                                  child: SvgPicture.asset(
+                                    Asset.add,
+                                    height: 24,
+                                    width: 24,
+                                  ),
+                                );
+
+                                /* final imagePath = eController.image.value;
+                                final imageUrl = imagePath.isNotEmpty
+                                    ? "${APIConstants.bucketUrl}$imagePath"
+                                    : null;
+                                if (imageUrl == null) {
+                                  return CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: MyColors.grayEA,
+                                    child: SvgPicture.asset(
+                                      Asset.add,
+                                      height: 24,
+                                      width: 24,
+                                    ),
+                                  );
+                                } */
+
+                                /*  return ClipOval(
+                                  child: getImageView(
+                                    finalUrl: imageUrl,
+                                    height: 78,
+                                    width: 78,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ); */
+                              }),
+                            ),
+                            const Gap(20),
                             CommonTextField(
                               controller: controller.customerPhoneCtrl,
                               headerText: "Customer Phone no",
@@ -53,13 +108,14 @@ class AddLeadScreen extends GetView<AddLeadController> {
                               },
                               validator: (val) {
                                 if (controller.customerPhone.value.isEmpty) {
-
-
                                   return "Please enter customer phone number";
                                 }
                                 return null;
                               },
-                              suffixIcon: const Icon(Icons.add_circle_outline, color: Colors.black54),
+                              suffixIcon: const Icon(
+                                Icons.add_circle_outline,
+                                color: Colors.black54,
+                              ),
                             ),
                             Obx(() {
                               return Visibility(
@@ -143,7 +199,9 @@ class AddLeadScreen extends GetView<AddLeadController> {
                               hintText: "Enter product quantity",
                               maxLine: 1,
                               keyboardType: TextInputType.number,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
                                   return "Please enter product quantity";
@@ -176,7 +234,10 @@ class AddLeadScreen extends GetView<AddLeadController> {
                               controller: controller.eDateCtrl,
                               headerText: "Estimated Delivery Date",
                               hintText: "Select estimate delivery date",
-                              suffixIcon: const Icon(Icons.calendar_today, color: Colors.black),
+                              suffixIcon: const Icon(
+                                Icons.calendar_today,
+                                color: Colors.black,
+                              ),
                               maxLine: 1,
                               readOnly: true,
                               validator: (val) {
@@ -186,16 +247,17 @@ class AddLeadScreen extends GetView<AddLeadController> {
                                 return null;
                               },
                               onTap: () async {
-                                final DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
+                                final DateTime? pickedDate =
+                                    await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2100),
+                                    );
 
                                 if (pickedDate != null) {
-                          controller.eDateCtrl.text =
-                                  "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+                                  controller.eDateCtrl.text =
+                                      "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
                                 }
                               },
                             ),
@@ -208,7 +270,9 @@ class AddLeadScreen extends GetView<AddLeadController> {
                               hintText: "Enter radius",
                               maxLine: 1,
                               keyboardType: TextInputType.number,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
                                   return "Please enter radius";
@@ -355,7 +419,10 @@ class AddLeadScreen extends GetView<AddLeadController> {
                               },
                             ),
                             const Gap(30),
-                            RoundedButton(buttonName: "Add Lead", onTap: controller.onSubmit),
+                            RoundedButton(
+                              buttonName: "Add Lead",
+                              onTap: controller.onSubmit,
+                            ),
                             const Gap(40),
                           ],
                         ),

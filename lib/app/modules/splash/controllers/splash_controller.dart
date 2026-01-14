@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class SplashController extends GetxController {
@@ -8,6 +9,7 @@ class SplashController extends GetxController {
   void onInit() {
     super.onInit();
     _checkInternetAndNavigate();
+    hideKeyboard();
   }
 
   Future<void> _checkInternetAndNavigate() async {
@@ -33,7 +35,9 @@ class SplashController extends GetxController {
     Get.dialog(
       AlertDialog(
         title: const Text('No Internet Connection'),
-        content: const Text('Please check your internet connection and try again.'),
+        content: const Text(
+          'Please check your internet connection and try again.',
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -65,7 +69,7 @@ class SplashController extends GetxController {
   void _startSplashTimer() {
     Future.delayed(const Duration(seconds: 3), () {
       // Get.toNamed(Routes.ON_BOARDING);
-      Get.offAllNamed(Routes.LOGIN);
+      Get.offAllNamed(Routes.ON_BOARDING);
     });
   }
 }

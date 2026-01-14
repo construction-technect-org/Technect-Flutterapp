@@ -6,7 +6,13 @@ class SuccessScreen extends StatefulWidget {
   final String? image;
   final Function()? onTap;
 
-  const SuccessScreen({super.key, this.title, this.header, this.onTap, this.image});
+  const SuccessScreen({
+    super.key,
+    this.title,
+    this.header,
+    this.onTap,
+    this.image,
+  });
 
   @override
   State<SuccessScreen> createState() => _SuccessScreenState();
@@ -45,10 +51,24 @@ class _SuccessScreenState extends State<SuccessScreen> {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: MyColors.grayEA),
             ),
-            child: Text(
-              widget.header ?? "",
-              style: MyTexts.bold18.copyWith(color: const Color(0xFF058200)),
-              textAlign: TextAlign.center,
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.check_circle_outline,
+                  color: Color(0xFF058200),
+                  size: 28,
+                ),
+                const Gap(16),
+                Expanded(
+                  child: Text(
+                    widget.header ?? "",
+                    style: MyTexts.bold18.copyWith(
+                      color: const Color(0xFF058200),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

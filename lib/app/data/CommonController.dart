@@ -56,7 +56,10 @@ class CommonController extends GetxController {
     if (myPref.role.val == "partner") {
       if (profileData.value.data?.addresses?.isNotEmpty == true) {
         final int index =
-            profileData.value.data?.addresses?.indexWhere((e) => e.isDefault == true) ?? 0;
+            profileData.value.data?.addresses?.indexWhere(
+              (e) => e.isDefault == true,
+            ) ??
+            0;
         final address = profileData.value.data?.addresses?[index];
 
         return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
@@ -65,7 +68,10 @@ class CommonController extends GetxController {
     } else {
       if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
         final int index =
-            profileData.value.data?.siteLocations?.indexWhere((e) => e.isDefault == true) ?? 0;
+            profileData.value.data?.siteLocations?.indexWhere(
+              (e) => e.isDefault == true,
+            ) ??
+            0;
         final address = profileData.value.data?.siteLocations?[index];
 
         return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
@@ -77,7 +83,10 @@ class CommonController extends GetxController {
   RxString getDeliveryLocation() {
     if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
       final int index =
-          profileData.value.data?.siteLocations?.indexWhere((e) => e.isDefault == true) ?? 0;
+          profileData.value.data?.siteLocations?.indexWhere(
+            (e) => e.isDefault == true,
+          ) ??
+          0;
       final address = profileData.value.data?.siteLocations?[index];
 
       return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
@@ -88,7 +97,10 @@ class CommonController extends GetxController {
   RxString getManufacturerAddress() {
     if (profileData.value.data?.addresses?.isNotEmpty == true) {
       final int index =
-          profileData.value.data?.addresses?.indexWhere((e) => e.isDefault == true) ?? 0;
+          profileData.value.data?.addresses?.indexWhere(
+            (e) => e.isDefault == true,
+          ) ??
+          0;
       final address = profileData.value.data?.addresses?[index];
 
       return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
@@ -102,30 +114,35 @@ class CommonController extends GetxController {
     try {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
-
-      if (profileResponse.success == true && profileResponse.data?.user != null) {
+      print("Fetching");
+      if (profileResponse.success == true &&
+          profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
-        if(profileData.value.data?.isTeamLogin==true){
+        if (profileData.value.data?.isTeamLogin == true) {
           myPref.setIsTeamLogin(true);
-          final permissionsValue = extractPermissions(profileResponse.data?.teamMember);
+          final permissionsValue = extractPermissions(
+            profileResponse.data?.teamMember,
+          );
           myPref.setPermissions(permissionsValue);
         }
-        if ((profileData.value.data?.merchantProfile?.website ?? "").isNotEmpty) {
+        if ((profileData.value.data?.merchantProfile?.website ?? "")
+            .isNotEmpty) {
           Get.find<CommonController>().hasProfileComplete.value = true;
         } else {
           Get.find<CommonController>().hasProfileComplete.value = false;
         }
-        print(profileData.value );
+        print(profileData.value);
         // if(myPref.getIsTeamLogin()==false){
-          loadTeamFromStorage();
+        loadTeamFromStorage();
         // }
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');
     } finally {
       isLoading.value = false;
+      print("Fetched");
     }
   }
 
@@ -133,7 +150,7 @@ class CommonController extends GetxController {
 
   Future<void> loadTeamFromStorage() async {
     // await fetchTeamList();
-
+    print("Team");
     final cachedTeamModel = myPref.getTeamModelData();
     if (cachedTeamModel != null &&
         cachedTeamModel.data != null &&
@@ -144,6 +161,7 @@ class CommonController extends GetxController {
       }
     } else {
       await fetchTeamList();
+      print("Team123");
     }
   }
 
@@ -151,6 +169,7 @@ class CommonController extends GetxController {
 
   Future<void> fetchTeamList() async {
     try {
+      print("Fetching Team");
       isLoading.value = true;
       final TeamListModel result = await roleService.fetchAllTeam();
       teamList.clear();
@@ -164,6 +183,7 @@ class CommonController extends GetxController {
       // ignore: avoid_print
     } finally {
       isLoading.value = false;
+      print("Fetching Team123");
     }
   }
 
@@ -179,11 +199,15 @@ class CommonController extends GetxController {
     try {
       final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
       if (res.success == true) {
-        SnackBars.successSnackBar(content: "You’ll be notified when it’s restocked!");
+        SnackBars.successSnackBar(
+          content: "You’ll be notified when it’s restocked!",
+        );
         if (onSuccess != null) onSuccess();
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: "Something went wrong. Please try again.");
+      SnackBars.errorSnackBar(
+        content: "Something went wrong. Please try again.",
+      );
     } finally {}
   }
 
@@ -234,7 +258,9 @@ class CommonController extends GetxController {
       );
       if (res.success == true) {
         if (onSuccess != null) onSuccess();
-        SnackBars.successSnackBar(content: "Connection request sent successfully!");
+        SnackBars.successSnackBar(
+          content: "Connection request sent successfully!",
+        );
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Unable to send connection request.");
@@ -261,9 +287,12 @@ class CommonController extends GetxController {
   }
 
   void editAddress(String addressId) {
-    final address = Get.find<CommonController>().profileData.value.data?.siteLocations?.firstWhere(
-      (addr) => addr.id.toString() == addressId,
-    );
+    final address = Get.find<CommonController>()
+        .profileData
+        .value
+        .data
+        ?.siteLocations
+        ?.firstWhere((addr) => addr.id.toString() == addressId);
 
     if (address != null) {
       Get.toNamed(
@@ -288,7 +317,10 @@ class CommonController extends GetxController {
         backgroundColor: Colors.white,
         titlePadding: const EdgeInsets.all(20),
         contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        actionsPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         title: Container(
           decoration: BoxDecoration(
             border: Border.all(color: const Color(0xFFF9D0CB)),
@@ -351,9 +383,14 @@ class CommonController extends GetxController {
     }
   }
 
-  Future<void> setDefaultAddress(String addressId, {VoidCallback? onSuccess}) async {
+  Future<void> setDefaultAddress(
+    String addressId, {
+    VoidCallback? onSuccess,
+  }) async {
     try {
-      await DeliveryAddressService.updateDeliveryAddress(addressId, {"is_default": true});
+      await DeliveryAddressService.updateDeliveryAddress(addressId, {
+        "is_default": true,
+      });
 
       await Get.find<CommonController>().fetchProfileData();
 
@@ -371,7 +408,7 @@ class CommonController extends GetxController {
     if (savedToken.isNotEmpty) {
       fetchProfileData();
       // if(myPref.getIsTeamLogin()==false){
-        loadTeamFromStorage();
+      loadTeamFromStorage();
       // }
     }
   }
