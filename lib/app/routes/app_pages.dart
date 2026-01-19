@@ -152,7 +152,7 @@ class AppPages {
     GetPage(
       name: _Paths.LOGIN,
       page: () => LoginView(),
-      bindings: [LoginBinding(), SignUpDetailsBinding()],
+      bindings: [LoginBinding()],
     ),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
@@ -333,7 +333,7 @@ class AppPages {
     GetPage(
       name: Routes.ON_BOARDING,
       page: () => const OnboardingScreen(),
-      bindings: [OnBoardingBinding(), SignUpDetailsBinding()],
+      bindings: [OnBoardingBinding(), LoginBinding(), SignUpDetailsBinding()],
     ),
     GetPage(
       name: Routes.ACCOUNT,

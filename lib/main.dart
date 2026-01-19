@@ -38,7 +38,7 @@ Future<void> main() async {
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(
                   textScaler: TextScaler.noScaling,
-                  viewInsets: EdgeInsets.zero,
+                  //viewInsets: EdgeInsets.zero,
                 ),
                 child: child!,
               );

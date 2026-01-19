@@ -259,7 +259,7 @@ class BottomBarView extends GetView<BottomController> {
             .isEmpty) {
           _showAddAddressDialog();
         } else {
-          _showServiceOptions();
+          // _showServiceOptions();
         }
       } else {
         Get.toNamed(Routes.ADD_SERVICE_REQUIREMENT);
@@ -359,15 +359,15 @@ class BottomBarView extends GetView<BottomController> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            ListTile(
+            /* ListTile(
               leading: SvgPicture.asset(Asset.add),
               title: const Text("Add New Product"),
               onTap: () {
                 Get.back();
                 Get.toNamed(Routes.ADD_PRODUCT);
               },
-            ),
-            const Divider(),
+            ), */
+            //const Divider(),
             ListTile(
               leading: SvgPicture.asset(Asset.inventory),
               title: const Text("Manage Products"),

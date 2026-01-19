@@ -150,7 +150,7 @@ class CommonController extends GetxController {
 
   Future<void> loadTeamFromStorage() async {
     // await fetchTeamList();
-    print("Team");
+
     final cachedTeamModel = myPref.getTeamModelData();
     if (cachedTeamModel != null &&
         cachedTeamModel.data != null &&
@@ -161,7 +161,6 @@ class CommonController extends GetxController {
       }
     } else {
       await fetchTeamList();
-      print("Team123");
     }
   }
 

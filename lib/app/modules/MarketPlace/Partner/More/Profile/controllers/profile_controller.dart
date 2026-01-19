@@ -24,6 +24,9 @@ class ProfileController extends GetxController {
   final TextEditingController titleController = TextEditingController();
   RxString filePath = "".obs;
 
+  RxString selectedDD = ''.obs;
+  RxString selectedValue = "Manufacturer".obs;
+
   Future<void> pickFiles() async {
     final path = await pickFile();
     if (path != null) {

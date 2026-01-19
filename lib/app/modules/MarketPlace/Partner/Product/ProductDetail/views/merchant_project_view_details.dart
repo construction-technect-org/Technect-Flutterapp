@@ -194,7 +194,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 14.h),
+              SizedBox(height: 18.h),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18,

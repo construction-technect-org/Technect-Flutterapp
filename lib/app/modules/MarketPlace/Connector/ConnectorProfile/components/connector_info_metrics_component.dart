@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/add_kyc_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 
@@ -51,7 +52,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'KYC Details',
+                'Aadhaar details',
                 style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
               ),
             ],
@@ -79,6 +80,33 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           ),
         ],
         SizedBox(height: 2.h),
+
+        // ---------- Project Section ----------
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Project details',
+                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => EditProjectView());
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: SvgPicture.asset(Asset.edit),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 1.h),
+        _buildProjectDetails(),
       ],
     );
   }
@@ -143,7 +171,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
   }
 
   // ------------------- KYC DISPLAY CARD -------------------
-  Widget _buildExistingKycDetails( ConnectorProfile connectorProfile) {
+  Widget _buildExistingKycDetails(ConnectorProfile connectorProfile) {
     return Padding(
       padding: EdgeInsets.zero,
       child: Container(
@@ -168,6 +196,34 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildProjectDetails() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: MyColors.white,
+        border: Border.all(color: MyColors.grayEA),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildRow(title: "Project Name", data: "Adarsh" ?? "-"),
+          const Gap(6),
+          buildRow(title: "Project Code", data: "CT-PRJ001" ?? "-"),
+          const Gap(6),
+          buildRow(title: "Area", data: "1600 sqft" ?? "-"),
+          const Gap(6),
+          buildRow(title: "Project Type", data: "Residential Project" ?? "-"),
+          const Gap(6),
+          buildRow(title: "No. of floor", data: "2" ?? "-"),
+          const Gap(6),
+          buildRow(title: "Project Status", data: "Ongoing" ?? "-"),
+        ],
       ),
     );
   }

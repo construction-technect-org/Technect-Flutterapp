@@ -65,6 +65,9 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                         focusNode: FocusNode(),
                         isValid: controller.isValid,
                         isRed: true,
+                        onTap: () async {
+                          await controller.getPhoneNumber();
+                        },
                         customErrorMessage: controller.mobileValidationError,
                         onCountryCodeChanged: (code) {
                           controller.countryCode.value = code;

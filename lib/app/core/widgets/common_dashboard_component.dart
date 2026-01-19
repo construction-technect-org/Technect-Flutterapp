@@ -19,21 +19,38 @@ class CommonDashboard extends StatelessWidget {
               "Features",
               style: MyTexts.extraBold18.copyWith(color: MyColors.black),
             ),
-            const Gap(16),
+            const Gap(12),
             LayoutBuilder(
               builder: (context, constraints) {
-                final double itemWidth = (constraints.maxWidth - (2 * 10)) / 3;
-                final double itemHeight = itemWidth + 10;
+                final isTablet = constraints.maxWidth >= 550;
+                print("Con ${constraints.maxWidth}, $isTablet");
+                const crossAxisCount = 3;
+                const spacing = 8.0;
+
+                // 1️⃣ Total spacing
+                const totalSpacing = spacing * (crossAxisCount - 1);
+
+                // 2️⃣ Item width
+                final itemWidth =
+                    (constraints.maxWidth - totalSpacing) / crossAxisCount;
+
+                // 3️⃣ Responsive height (based on width)
+                final itemHeight = itemWidth * 1.3; // 👈 tweak ratio here
+
+                // 4️⃣ Aspect ratio
+                final childAspectRatio = itemWidth / itemHeight;
+                //final double itemWidth = (constraints.maxWidth - (2 * 10)) / 3;
+                //final double itemHeight = itemWidth + 10;
                 return GridView.builder(
                   padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: controller.features.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 17,
-                    childAspectRatio: itemWidth / itemHeight,
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: isTablet ? 16 : 16,
+                    mainAxisSpacing: isTablet ? 4 : 16,
+                    childAspectRatio: isTablet ? .99 : .88,
                   ),
                   itemBuilder: (context, index) {
                     final item = controller.features[index];
@@ -43,7 +60,7 @@ class CommonDashboard extends StatelessWidget {
                       return BuildFeatureCard(
                         isSelected: isSelected,
                         item: item,
-                        itemWidth: itemWidth,
+                        //itemWidth: itemWidth,
                         onTap: () {
                           if (item["available"] == true) {
                             final index = controller.features.indexOf(item);
@@ -65,13 +82,13 @@ class CommonDashboard extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 1.h),
+
             //SizedBox(height: 1.h),
             /*Text(
               "Statics",
               style: MyTexts.bold18.copyWith(color: MyColors.black),
             ), */
-            SizedBox(height: 1.h),
+            SizedBox(height: 2.h),
             Row(
               children: [
                 Expanded(
@@ -92,7 +109,7 @@ class CommonDashboard extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildStatCard(
-                    "Connectors",
+                    "Connector",
                     commonController
                             .profileData
                             .value
@@ -107,7 +124,6 @@ class CommonDashboard extends StatelessWidget {
                 ),
               ],
             ),
-            const Gap(24),
           ],
         ),
       ),
@@ -146,13 +162,13 @@ class CommonDashboard extends StatelessWidget {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        const Color(0xFFFFED29).withValues(alpha: 0),
+                        const Color(0x00FFED29),
                         const Color(0xFFFFED29),
                       ],
                     ),
@@ -213,25 +229,24 @@ class CommonDashboardController extends GetxController {
     },
     {"title": "VDC", "icon": Asset.vdc, "available": false, "value": "vdc"},
   ];
-  final RxInt selectedIndex = 0.obs;
+  final RxInt selectedIndex = 20.obs;
 
   @override
   void onInit() {
     super.onInit();
+  }
+
+  void onFeatureTap(String value) {
     final savedValue = myPref.dashboard.val;
 
     final index = features.indexWhere(
       (feature) => feature['value'] == savedValue,
     );
-
     if (index != -1) {
       selectedIndex.value = index;
     } else {
       selectedIndex.value = 0;
     }
-  }
-
-  void onFeatureTap(String value) {
     switch (value) {
       case "marketplace":
         Get.offAllNamed(Routes.MAIN);
@@ -243,6 +258,16 @@ class CommonDashboardController extends GetxController {
   }
 
   void onSecondScreenTap(String value) {
+    final savedValue = myPref.dashboard.val;
+
+    final index = features.indexWhere(
+      (feature) => feature['value'] == savedValue,
+    );
+    if (index != -1) {
+      selectedIndex.value = index;
+    } else {
+      selectedIndex.value = 0;
+    }
     switch (value) {
       case "marketplace":
         Get.lazyPut(() => BottomController());
@@ -259,13 +284,13 @@ class BuildFeatureCard extends StatelessWidget {
   const BuildFeatureCard({
     required this.isSelected,
     required this.item,
-    required this.itemWidth,
+    //required this.itemWidth,
     required this.onTap,
   });
 
   final bool isSelected;
   final Map<String, Object> item;
-  final double itemWidth;
+  //final double itemWidth;
   final void Function() onTap;
 
   @override
@@ -280,8 +305,8 @@ class BuildFeatureCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               border: isSelected
-                  ? null
-                  : BoxBorder.all(width: 2, color: MyColors.grayEA),
+                  ? BoxBorder.all(width: 1, color: MyColors.primary)
+                  : null,
               gradient: const LinearGradient(
                 begin: AlignmentGeometry.topCenter,
                 end: AlignmentGeometry.bottomCenter,
@@ -312,7 +337,7 @@ class BuildFeatureCard extends StatelessWidget {
                     ),
                   ), */
                 const Spacer(),
-                Image.asset(item['icon'].toString(), height: itemWidth * 0.50),
+                Image.asset(item['icon'].toString(), height: 6.h),
                 const SizedBox(height: 6),
                 Text(
                   item["title"].toString(),
@@ -323,12 +348,12 @@ class BuildFeatureCard extends StatelessWidget {
               ],
             ),
           ),
-          if (isSelected)
+          /* if (isSelected)
             const Icon(
               Icons.check_circle_rounded,
               color: MyColors.primary,
               size: 20,
-            ),
+            ), */
         ],
       ),
     );

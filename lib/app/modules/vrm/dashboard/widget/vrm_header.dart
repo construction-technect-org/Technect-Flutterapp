@@ -13,8 +13,13 @@ class VrmHeader extends StatelessWidget {
           onTap: () => Get.toNamed(Routes.ACCOUNT),
           behavior: HitTestBehavior.translucent,
           child: Obx(() {
-            return (commonController.profileData.value.data?.user?.image ?? "").isEmpty
-                ? const Icon(Icons.account_circle_sharp, color: Colors.black, size: 48)
+            return (commonController.profileData.value.data?.user?.image ?? "")
+                    .isEmpty
+                ? const Icon(
+                    Icons.account_circle_sharp,
+                    color: Colors.black,
+                    size: 48,
+                  )
                 : ClipOval(
                     child: getImageView(
                       finalUrl:
@@ -36,7 +41,9 @@ class VrmHeader extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   text: TextSpan(
-                    style: MyTexts.medium14.copyWith(color: MyColors.custom('545454')),
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.custom('545454'),
+                    ),
                     children: [
                       TextSpan(
                         text:
@@ -67,9 +74,15 @@ class VrmHeader extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           text: TextSpan(
-                            style: MyTexts.medium14.copyWith(color: MyColors.custom('545454')),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.custom('545454'),
+                            ),
                             children: [
-                              TextSpan(text: commonController.getDeliveryLocation().value),
+                              TextSpan(
+                                text: commonController
+                                    .getDeliveryLocation()
+                                    .value,
+                              ),
                               const WidgetSpan(
                                 alignment: PlaceholderAlignment.middle,
                                 child: Padding(
@@ -93,7 +106,7 @@ class VrmHeader extends StatelessWidget {
           ),
         ),
         const Gap(10),
-        GestureDetector(
+        /*GestureDetector(
           onTap: () => _showCrmVrmSwitchSheet(context, commonController),
           child: Stack(
             alignment: AlignmentGeometry.center,
@@ -102,24 +115,7 @@ class VrmHeader extends StatelessWidget {
               Text('Switch', style: MyTexts.medium14.copyWith(color: MyColors.white)),
             ],
           ),
-        ),
-        const Gap(10),
-        GestureDetector(
-          onTap: () {
-            Get.toNamed(Routes.NEWS);
-          },
-          child: Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: MyColors.white,
-              border: Border.all(color: MyColors.custom('EAEAEA')),
-              shape: BoxShape.circle,
-            ),
-            child: SvgPicture.asset(Asset.info, width: 24, height: 24,
-              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
-            ),
-          ),
-        ),
+        ), */
         const Gap(10),
         GestureDetector(
           onTap: () {
@@ -135,11 +131,55 @@ class VrmHeader extends StatelessWidget {
             child: SvgPicture.asset(Asset.notification, width: 24, height: 24),
           ),
         ),
+        const Gap(10),
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.NEWS);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: MyColors.white,
+              border: Border.all(color: MyColors.custom('EAEAEA')),
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(
+              Asset.info,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+            ),
+          ),
+        ),
+        const Gap(10),
+
+        GestureDetector(
+          onTap: () {
+            //Get.toNamed(Routes.NEWS);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: MyColors.white,
+              border: Border.all(color: MyColors.custom('EAEAEA')),
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(
+              Asset.chat,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  void _showCrmVrmSwitchSheet(BuildContext context, CommonController commonController) {
+  void _showCrmVrmSwitchSheet(
+    BuildContext context,
+    CommonController commonController,
+  ) {
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(20),
@@ -214,9 +254,15 @@ class VrmHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: MyTexts.bold16.copyWith(color: MyColors.fontBlack)),
+                  Text(
+                    title,
+                    style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
+                  ),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: MyTexts.regular12.copyWith(color: MyColors.grey)),
+                  Text(
+                    subtitle,
+                    style: MyTexts.regular12.copyWith(color: MyColors.grey),
+                  ),
                 ],
               ),
             ),

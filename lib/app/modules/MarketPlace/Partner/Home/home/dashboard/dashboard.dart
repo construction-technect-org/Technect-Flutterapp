@@ -245,7 +245,7 @@ class Dashboard extends StatelessWidget {
                     const Gap(10),
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.NEWS);
+                        //Get.toNamed(Routes.NEWS);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(6),

@@ -395,9 +395,10 @@ class MerchantHomeView extends StatelessWidget {
       itemCount: 10,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: myPref.role.val == "connector" ? 0.36 : 0.45,
-        crossAxisSpacing: 3.w,
-        mainAxisSpacing: 3.w,
+
+        childAspectRatio: .45,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 20,
       ),
       itemBuilder: (context, index) {
         return Stack(
@@ -508,7 +509,7 @@ class MerchantHomeView extends StatelessWidget {
                     ),
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: Text("₹ 1600", style: MyTexts.medium15),
+                      child: Text("₹ 1600 Sqft", style: MyTexts.medium15),
                     ),
                   ),
                   const Gap(6),
@@ -642,7 +643,7 @@ class MerchantHomeView extends StatelessWidget {
                       ),
                       child: Align(
                         alignment: Alignment.topLeft,
-                        child: Text("₹ 1600", style: MyTexts.medium15),
+                        child: Text("₹ 1600 Sqft", style: MyTexts.medium15),
                       ),
                     ),
                     const Gap(6),

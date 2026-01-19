@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/widgets/verifying_otp_screen.dart
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/services/ForgotPasswordService.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/reset_password_view.dart';
 import 'package:timer_count_down/timer_controller.dart';
+import 'package:phone_number_hint/phone_number_hint.dart';
 
 class ForgotPasswordController extends GetxController {
   final phoneEmailController = TextEditingController();
@@ -15,6 +16,8 @@ class ForgotPasswordController extends GetxController {
   final emailController = TextEditingController();
   RxString emailError = "".obs;
   RxBool isEmailValidating = false.obs;
+  RxInt phonTap = 0.obs;
+  final _phoneNumberHintPlugin = PhoneNumberHint();
 
   RxInt isValid = (-1).obs;
   RxString countryCode = "".obs;
@@ -160,6 +163,23 @@ class ForgotPasswordController extends GetxController {
     }
   }
 
+  Future<void> getPhoneNumber() async {
+    String? result;
+    phonTap.value++;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
+    try {
+      if (phonTap.value < 2) {
+        result = await _phoneNumberHintPlugin.requestHint() ?? '';
+        if (result.isNotEmpty) {
+          phoneEmailController.text = result.substring(3);
+        }
+      }
+    } on PlatformException {
+      result = 'Failed to get hint.';
+    }
+  }
+
   bool _validateOtp() {
     if (otpController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Please enter OTP');
@@ -205,8 +225,8 @@ class ForgotPasswordController extends GetxController {
             image: Asset.forgetSImage,
             header: "Password reset successfully !",
             onTap: () {
-              Get.offAllNamed(Routes.LOGIN);
-              Get.back();
+              Get.offAllNamed(Routes.ON_BOARDING);
+              //Get.back();
             },
           ),
         );

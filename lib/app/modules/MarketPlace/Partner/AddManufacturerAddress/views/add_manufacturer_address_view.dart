@@ -193,6 +193,76 @@ class AddManufacturerAddressView
                 ),
               ),
               SizedBox(height: 2.h),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Shipping Address",
+                  style: MyTexts.medium14.copyWith(color: Colors.black),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Chip(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(45),
+                        ),
+                        side: const BorderSide(
+                          color: MyColors.grey,
+                          width: 1.0,
+                        ),
+
+                        label: Text(
+                          "Manufacturing Unit",
+                          style: MyTexts.medium14.copyWith(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Chip(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(45),
+                        ),
+                        side: const BorderSide(
+                          color: MyColors.grey,
+                          width: 1.0,
+                        ),
+
+                        label: Text(
+                          "Stockyard",
+                          style: MyTexts.medium14.copyWith(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Chip(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(45),
+                        ),
+                        side: const BorderSide(
+                          color: MyColors.grey,
+                          width: 1.0,
+                        ),
+
+                        label: Text(
+                          "Warehouse",
+                          style: MyTexts.medium14.copyWith(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Obx(
                 () => controller.selectedAddress.value.isNotEmpty
                     ? Padding(

@@ -27,6 +27,7 @@ class Asset {
   static const String totalProduct = '${png}totalProduct.png';
   static const String pdf = '${png}pdf.png';
   static const String comingSoon = '${png}comingSoon.png';
+  static const String imageUploadIcon = '${png}image_upload_icon.png';
 
   static const String industrial = '${png}Industrial.png';
   static const String infrastructure = '${png}Infrastructure.png';
@@ -95,6 +96,8 @@ class Asset {
 
   static const String explore = '${newPng}explore.png';
 
+  static const String connFlow = '${newPng}conn_flow.png';
+  static const String connGraph = '${newPng}conn_graph.png';
   static const String googleIcon = 'assets/images/google.png';
   static const String facebookIcon = 'assets/images/facebook.png';
   static const String eyeIcon = 'assets/images/eye.svg';
@@ -155,6 +158,13 @@ class Asset {
   static const String TEM = '${newIcons}TEM.svg';
   static const String CM = '${newIcons}CM.svg';
   static const String failure = '${newIcons}failure.svg';
+  static const String construction = '${newIcons}construction.svg';
+  static const String design1 = '${newIcons}design.svg';
+  static const String equipment = '${newIcons}equipment.svg';
+  static const String fleet = '${newIcons}fleet.svg';
+  static const String material = '${newIcons}material.svg';
+  static const String ppe = '${newIcons}ppe.svg';
+  static const String tools = '${newIcons}tools.svg';
 }
 
 class Constants {

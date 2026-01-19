@@ -27,7 +27,7 @@ class ManufacturerAddressView extends GetView<ManufacturerAddressController> {
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: const Text('Manufacturer Address'),
+                  title: const Text('Shipping Address'),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () {
@@ -73,7 +73,7 @@ class ManufacturerAddressView extends GetView<ManufacturerAddressController> {
                                   SvgPicture.asset(Asset.add),
                                   const Gap(8),
                                   Text(
-                                    "Add Manufacturer Address",
+                                    "Add Shipping Address",
                                     style: MyTexts.medium15.copyWith(
                                       color: MyColors.gray2E,
                                     ),
@@ -86,7 +86,7 @@ class ManufacturerAddressView extends GetView<ManufacturerAddressController> {
                           ),
                           const Gap(16),
                           Text(
-                            "Saved Manufacturer Address",
+                            "Saved Shipping Address",
                             style: MyTexts.medium16.copyWith(
                               color: MyColors.gray2E,
                             ),

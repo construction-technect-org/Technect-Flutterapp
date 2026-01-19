@@ -112,7 +112,7 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                   RoundedButton(
                     buttonName: 'Login',
                     onTap: () {
-                      Get.toNamed(Routes.LOGIN);
+                      controller.showLoginBottomSheet();
                     },
                   ),
                   Gap(1.5.h),

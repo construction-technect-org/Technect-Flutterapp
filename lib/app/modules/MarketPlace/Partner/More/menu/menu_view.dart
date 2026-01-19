@@ -28,7 +28,10 @@ class MenuView extends StatelessWidget {
                   children: [
                     SizedBox(height: 1.h),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24),
                         color: const Color(0xFFFFED29).withValues(alpha: 0.5),
@@ -91,7 +94,7 @@ class MenuView extends StatelessWidget {
                 const Gap(16),
                 CommonContainer(
                   icon: Asset.cart,
-                  title: "Connect",
+                  title: "Connector Inventory",
                   onTap: () {
                     Get.toNamed(Routes.CART_LIST);
                   },
@@ -130,16 +133,17 @@ class MenuView extends StatelessWidget {
                     icon: Asset.team,
                     title: "Team",
                     onTap: () {
-                      if (!Get.find<CommonController>().hasProfileComplete.value) {
+                      if (!Get.find<CommonController>()
+                          .hasProfileComplete
+                          .value) {
                         _showProfileIncompleteDialog();
-                      }
-                      else{
+                      } else {
                         Get.toNamed(Routes.ROLE_MANAGEMENT);
-
                       }
                     },
                   ),
-                if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager)) const Gap(16),
+                if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
+                  const Gap(16),
                 if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
                   CommonContainer(
                     icon: Asset.inventory,
@@ -181,6 +185,7 @@ class MenuView extends StatelessWidget {
       ),
     );
   }
+
   void _showProfileIncompleteDialog() {
     Get.dialog(
       AlertDialog(
@@ -205,7 +210,9 @@ class MenuView extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: const Text("Complete Now"),
           ),
@@ -221,7 +228,12 @@ class CommonContainer extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const CommonContainer({super.key, required this.icon, required this.title, required this.onTap});
+  const CommonContainer({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -236,9 +248,15 @@ class CommonContainer extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
 
                 boxShadow: [
-                  BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4),
+                  BoxShadow(
+                    color: MyColors.grayEA.withValues(alpha: 0.32),
+                    blurRadius: 4,
+                  ),
                 ],
-                image: const DecorationImage(image: AssetImage(Asset.moreBg), fit: BoxFit.cover),
+                image: const DecorationImage(
+                  image: AssetImage(Asset.moreBg),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -252,13 +270,19 @@ class CommonContainer extends StatelessWidget {
                   width: 20,
                   child: SvgPicture.asset(
                     icon,
-                    colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                    colorFilter: const ColorFilter.mode(
+                      Colors.black,
+                      BlendMode.srcIn,
+                    ),
                     height: 20,
                     width: 20,
                   ),
                 ),
                 const Gap(12),
-                Text(title, style: MyTexts.medium15.copyWith(color: MyColors.primary)),
+                Text(
+                  title,
+                  style: MyTexts.medium15.copyWith(color: MyColors.primary),
+                ),
               ],
             ),
           ),

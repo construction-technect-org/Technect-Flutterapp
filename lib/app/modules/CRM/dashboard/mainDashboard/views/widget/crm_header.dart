@@ -19,12 +19,12 @@ class CrmHeader extends StatelessWidget {
 
             final profileImage = isTeamLogin
                 ? Get.find<CommonController>()
-                .profileData
-                .value
-                .data
-                ?.teamMember
-                ?.profilePhoto ??
-                ''
+                          .profileData
+                          .value
+                          .data
+                          ?.teamMember
+                          ?.profilePhoto ??
+                      ''
                 : commonController.profileData.value.data?.user?.image ?? '';
 
             if (profileImage.isEmpty) {
@@ -54,12 +54,31 @@ class CrmHeader extends StatelessWidget {
                 final isTeamLogin = myPref.getIsTeamLogin();
 
                 final firstName = isTeamLogin
-                    ? commonController.profileData.value.data?.teamMember?.firstName ?? ''
-                    : commonController.profileData.value.data?.user?.firstName ?? '';
+                    ? commonController
+                              .profileData
+                              .value
+                              .data
+                              ?.teamMember
+                              ?.firstName ??
+                          ''
+                    : commonController
+                              .profileData
+                              .value
+                              .data
+                              ?.user
+                              ?.firstName ??
+                          '';
 
                 final lastName = isTeamLogin
-                    ? commonController.profileData.value.data?.teamMember?.lastName ?? ''
-                    : commonController.profileData.value.data?.user?.lastName ?? '';
+                    ? commonController
+                              .profileData
+                              .value
+                              .data
+                              ?.teamMember
+                              ?.lastName ??
+                          ''
+                    : commonController.profileData.value.data?.user?.lastName ??
+                          '';
 
                 return RichText(
                   overflow: TextOverflow.ellipsis,
@@ -68,7 +87,7 @@ class CrmHeader extends StatelessWidget {
                     children: [
                       TextSpan(
                         text:
-                        '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}!',
+                            '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}!',
                         style: MyTexts.medium16.copyWith(
                           color: MyColors.fontBlack,
                           fontFamily: MyTexts.SpaceGrotesk,
@@ -79,7 +98,9 @@ class CrmHeader extends StatelessWidget {
                 );
               }),
               GestureDetector(
-                onTap:myPref.getIsTeamLogin()? null: () => Get.toNamed(Routes.MANUFACTURER_ADDRESS),
+                onTap: myPref.getIsTeamLogin()
+                    ? null
+                    : () => Get.toNamed(Routes.MANUFACTURER_ADDRESS),
                 child: Row(
                   children: [
                     SvgPicture.asset(
@@ -95,9 +116,15 @@ class CrmHeader extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           text: TextSpan(
-                            style: MyTexts.medium14.copyWith(color: MyColors.custom('545454')),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.custom('545454'),
+                            ),
                             children: [
-                              TextSpan(text: commonController.getManufacturerAddress().value),
+                              TextSpan(
+                                text: commonController
+                                    .getManufacturerAddress()
+                                    .value,
+                              ),
                               const WidgetSpan(
                                 alignment: PlaceholderAlignment.middle,
                                 child: Padding(
@@ -121,7 +148,7 @@ class CrmHeader extends StatelessWidget {
           ),
         ),
         const Gap(10),
-        if(myPref.getIsTeamLogin()==false)
+        /* if(myPref.getIsTeamLogin()==false)
         GestureDetector(
           onTap: () => _showCrmVrmSwitchSheet(context, commonController),
           child: Stack(
@@ -131,24 +158,7 @@ class CrmHeader extends StatelessWidget {
               Text('Switch', style: MyTexts.medium14.copyWith(color: MyColors.white)),
             ],
           ),
-        ),
-        const Gap(10),
-        GestureDetector(
-          onTap: () {
-            Get.toNamed(Routes.NEWS);
-          },
-          child: Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: MyColors.white,
-              border: Border.all(color: MyColors.custom('EAEAEA')),
-              shape: BoxShape.circle,
-            ),
-            child: SvgPicture.asset(Asset.info, width: 24, height: 24,
-            colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
-            ),
-          ),
-        ),
+        ), */
         const Gap(10),
         GestureDetector(
           onTap: () {
@@ -164,11 +174,55 @@ class CrmHeader extends StatelessWidget {
             child: SvgPicture.asset(Asset.notification, width: 24, height: 24),
           ),
         ),
+        const Gap(10),
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.NEWS);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: MyColors.white,
+              border: Border.all(color: MyColors.custom('EAEAEA')),
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(
+              Asset.info,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+            ),
+          ),
+        ),
+        const Gap(10),
+
+        GestureDetector(
+          onTap: () {
+            //Get.toNamed(Routes.NEWS);
+          },
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: MyColors.white,
+              border: Border.all(color: MyColors.custom('EAEAEA')),
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(
+              Asset.chat,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  void _showCrmVrmSwitchSheet(BuildContext context, CommonController commonController) {
+  void _showCrmVrmSwitchSheet(
+    BuildContext context,
+    CommonController commonController,
+  ) {
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(20),
@@ -242,9 +296,15 @@ class CrmHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: MyTexts.bold16.copyWith(color: MyColors.fontBlack)),
+                  Text(
+                    title,
+                    style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
+                  ),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: MyTexts.regular12.copyWith(color: MyColors.grey)),
+                  Text(
+                    subtitle,
+                    style: MyTexts.regular12.copyWith(color: MyColors.grey),
+                  ),
                 ],
               ),
             ),

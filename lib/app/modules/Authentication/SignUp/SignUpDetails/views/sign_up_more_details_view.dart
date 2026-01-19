@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
+//import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
 
 class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
@@ -400,7 +401,9 @@ class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
             buttonName: 'Continue',
             onTap: () async {
               if (!formKey.currentState!.validate()) return;
+
               Get.toNamed(Routes.SIGN_UP_PASSWORD);
+
               /*await controller.validateEmailAvailability(
                 controller.emailController.text,
               );

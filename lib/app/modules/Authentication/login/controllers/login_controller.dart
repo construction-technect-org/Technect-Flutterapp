@@ -15,6 +15,8 @@ import 'package:construction_technect/app/modules/Authentication/login/services/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:timer_count_down/timer_controller.dart';
+import 'package:phone_number_hint/phone_number_hint.dart';
+import 'package:flutter/material.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -26,17 +28,40 @@ class LoginController extends GetxController {
   FocusNode passwordFocusNode = FocusNode();
   final rememberMe = false.obs;
   final RxString loginError = "".obs;
+  //RxString _result = 'Unknown'.obs;
   final RxString mobileValidationError = "".obs;
   RxInt isValid = (-1).obs;
   RxString countryCode = "+91".obs;
   HomeService homeService = HomeService();
-
+  final _phoneNumberHintPlugin = PhoneNumberHint();
   LoginService loginService = LoginService();
   final isLoading = false.obs;
   final isPasswordVisible = false.obs;
+  RxInt phonTap = 0.obs;
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
+  }
+
+  Future<void> getPhoneNumber() async {
+    String? result;
+    phonTap.value++;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
+    try {
+      if (phonTap.value < 2) {
+        result = await _phoneNumberHintPlugin.requestHint() ?? '';
+        if (result.isNotEmpty) {
+          mobileController.text = result.substring(3);
+        }
+      }
+    } on PlatformException {
+      result = 'Failed to get hint.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
   }
 
   @override

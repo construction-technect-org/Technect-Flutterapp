@@ -23,7 +23,7 @@ class AddRequirementView extends StatelessWidget {
             title: Text(
               controller.requirementId != null
                   ? "Edit product requirement"
-                  : "Add product requirement",
+                  : "Raise RFQ",
             ),
           ),
           bottomNavigationBar: Column(
@@ -228,7 +228,10 @@ class AddRequirementView extends StatelessWidget {
                       }
                       return null;
                     },
-                    suffixIcon: const Icon(Icons.calendar_today,color: Colors.black,),
+                    suffixIcon: const Icon(
+                      Icons.calendar_today,
+                      color: Colors.black,
+                    ),
                   ),
                   SizedBox(height: 2.h),
                   CommonTextField(
@@ -249,9 +252,7 @@ class AddRequirementView extends StatelessWidget {
                       }
                       return null;
                     },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                   SizedBox(height: 2.h),
                   CommonTextField(

@@ -16,11 +16,11 @@ class InventoryController extends GetxController {
   RxList<Service> filteredService = <Service>[].obs;
   RxString searchQuery = ''.obs;
 
-  RxString selectedStatus =
-      (Get.find<CommonController>().marketPlace.value == 0
+  RxString selectedStatus = "product".obs;
+  /*  (Get.find<CommonController>().marketPlace.value == 0
               ? "product"
               : "service")
-          .obs;
+          .obs; */
 
   TextEditingController searchController = TextEditingController();
 

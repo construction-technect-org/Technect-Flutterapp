@@ -670,7 +670,7 @@ class SelectedProductView extends StatelessWidget {
             );
           },
           onConnectTap: () {
-            final bool isConnect =
+            /*final bool isConnect =
                 item.leadCreated == true && item.status != null;
             ConnectionDialogs.showSendConnectionDialog(
               context,
@@ -692,7 +692,7 @@ class SelectedProductView extends StatelessWidget {
                   },
                 );
               },
-            );
+            );*/
           },
         );
       },

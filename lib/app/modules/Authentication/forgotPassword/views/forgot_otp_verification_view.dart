@@ -155,7 +155,7 @@ class _ForgotOtpVerificationViewState extends State<ForgotOtpVerificationView> {
               if (widget.isBackToLogin == true)
                 TextButton(
                   onPressed: () {
-                    Get.offAllNamed(Routes.LOGIN);
+                    Get.offAllNamed(Routes.ON_BOARDING);
                   },
                   child: Text(
                     "Back to login",

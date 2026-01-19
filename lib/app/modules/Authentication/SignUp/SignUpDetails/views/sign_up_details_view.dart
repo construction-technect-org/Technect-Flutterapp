@@ -54,6 +54,9 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
               focusNode: FocusNode(),
               isValid: controller.isValid,
               customErrorMessage: controller.numberError,
+              onTap: () async {
+                await controller.getPhoneNumber();
+              },
               onCountryCodeChanged: (code) {
                 controller.countryCode.value = code;
               },

@@ -11,6 +11,7 @@ class CommonPhoneField extends StatelessWidget {
   final String? initialCountryCode;
   final void Function(String countryCode)? onCountryCodeChanged;
   final Function(String countryCode)? onSubmitted;
+  final VoidCallback? onTap;
   final String? headerText;
   final bool showDivider;
   final Color? bgColor;
@@ -38,6 +39,7 @@ class CommonPhoneField extends StatelessWidget {
     this.enableRealTimeValidation = true,
     this.style,
     this.isRed = false,
+    this.onTap,
   });
 
   @override
@@ -188,12 +190,14 @@ class CommonPhoneField extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: () {
-                // Clear error when user taps to edit
-                if (customErrorMessage?.value.isNotEmpty == true) {
-                  customErrorMessage?.value = "";
-                }
-              },
+              onTap:
+                  onTap ??
+                  () {
+                    // Clear error when user taps to edit
+                    if (customErrorMessage?.value.isNotEmpty == true) {
+                      customErrorMessage?.value = "";
+                    }
+                  },
               onChanged: (phone) {
                 if (onCountryCodeChanged != null) {
                   onCountryCodeChanged!(phone.countryCode);

@@ -130,7 +130,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             const Spacer(),
             TextButton(
               onPressed: () {
-                Get.offAllNamed(Routes.LOGIN);
+                Get.offAllNamed(Routes.ON_BOARDING);
               },
               child: Text(
                 "Back to login",

@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
+import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,17 @@ class OnBoardingController extends GetxController {
   void showBottomSheet() {
     Get.bottomSheet(
       SignUpDetailsView(),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      useRootNavigator: false,
+      isDismissible: true,
+      enableDrag: true,
+    );
+  }
+
+  void showLoginBottomSheet() {
+    Get.bottomSheet(
+      LoginView(),
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       useRootNavigator: false,

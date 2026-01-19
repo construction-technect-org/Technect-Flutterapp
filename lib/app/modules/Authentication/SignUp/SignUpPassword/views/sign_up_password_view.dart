@@ -21,7 +21,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
           key: formKey,
           child: Scaffold(
             backgroundColor: Colors.white,
-            bottomNavigationBar: Padding(
+            /* bottomNavigationBar: Padding(
               padding: const EdgeInsets.all(24.0),
               child: RoundedButton(
                 buttonName: 'Continue',
@@ -33,7 +33,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                         }
                       },
               ),
-            ),
+            ),*/
             body: Stack(
               children: [
                 Container(
@@ -137,7 +137,21 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                 onChanged: (val) =>
                                     controller.rememberMe.value = val,
                               ),
-                              SizedBox(height: 5.h),
+                              SizedBox(height: 2.h),
+                              Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: RoundedButton(
+                                  buttonName: 'Continue',
+                                  onTap: controller.isLoading.value
+                                      ? null
+                                      : () {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            controller.completeSignUp();
+                                          }
+                                        },
+                                ),
+                              ),
                             ],
                           ),
                         ),

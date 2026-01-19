@@ -71,307 +71,284 @@ class LoginView extends GetView<LoginController> {
       isLoading: controller.isLoading,
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 25),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.loginBg),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 6.sw),
-                child: Form(
-                  key: controller.formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Gap(50),
-
-                        /*Center(
-                          child: Text(
-                            'India’s Fastest Growing\nConstruction Network',
-                            style: MyTexts.medium18.copyWith(color: Colors.black),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),*/
-                        const Gap(24),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'Login',
-                            style: MyTexts.medium20.copyWith(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        const Gap(16),
-
-                        /// 📱 Phone Field
-                        CommonPhoneField(
-                          headerText: "Mobile Number",
-                          controller: controller.mobileController,
-                          focusNode: controller.mobileFocusNode,
-                          isValid: controller.isValid,
-                          customErrorMessage: controller.mobileValidationError,
-                          onCountryCodeChanged: (code) {
-                            controller.countryCode.value = code;
-                          },
-                          onSubmitted: (val) {
-                            FocusScope.of(
-                              context,
-                            ).requestFocus(controller.passwordFocusNode);
-                          },
-                        ),
-                        const Gap(16),
-
-                        /// 🔒 Password
-                        Obx(() {
-                          return CommonTextField(
-                            textInputAction: TextInputAction.done,
-                            headerText: "Password",
-                            focusNode: controller.passwordFocusNode,
-                            controller: controller.passwordController,
-                            obscureText: !controller.isPasswordVisible.value,
-                            hintText: "Password",
-                            validator: (val) {
-                              if ((val ?? "").isEmpty) {
-                                return "Please enter your password";
-                              }
-                              return null;
-                            },
-                            showDivider: true,
-                            suffixIcon: GestureDetector(
-                              onTap: () =>
-                                  controller.togglePasswordVisibility(),
-                              child: Icon(
-                                controller.isPasswordVisible.value
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: MyColors.primary,
-                              ),
-                            ),
-                          );
-                        }),
-                        const Gap(8),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SavePassWidget(
-                              state: controller.rememberMe,
-                              onChanged: (val) =>
-                                  controller.rememberMe.value = val,
-                            ),
-                            TextButton(
-                              onPressed: () =>
-                                  Get.toNamed(Routes.FORGOT_PASSWORD),
-                              child: Text(
-                                'Forgot Password?',
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.gra54,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: MyColors.gra54,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const Gap(24),
-                        Obx(
-                          () => RoundedButton(
-                            buttonName: 'Login',
-                            onTap: controller.isLoading.value
-                                ? null
-                                : () {
-                                    controller.loginError.value = "";
-                                    controller.mobileValidationError.value = "";
-                                    controller.isValid.value = -1;
-                                    print(
-                                      "IsValid123 ${controller.isValid.value}",
-                                    );
-
-                                    final mobileNumber = controller
-                                        .mobileController
-                                        .text
-                                        .trim();
-                                    if (!controller.formKey.currentState!
-                                        .validate()) {
-                                      if (mobileNumber.isEmpty) {
-                                        controller.isValid.value = 0;
-                                        return;
-                                      }
-
-                                      final mobileError =
-                                          ValidationUtils.validateMobileNumber(
-                                            mobileNumber,
-                                          );
-                                      if (mobileError != null) {
-                                        controller.mobileValidationError.value =
-                                            mobileError;
-                                        controller.isValid.value = 1;
-                                        return;
-                                      }
-                                      print(
-                                        "IsValid ${controller.isValid.value}",
-                                      );
-                                    }
-
-                                    if (controller.formKey.currentState
-                                            ?.validate() ??
-                                        false) {
-                                      print(controller.isValid.value);
-                                      hideKeyboard();
-                                      controller.login();
-                                    }
-                                  },
-                          ),
-                        ),
-
-                        const Gap(12),
-                        RoundedButton(
-                          color: Colors.white,
-                          fontColor: MyColors.primary,
-                          borderColor: MyColors.primary,
-                          buttonName: 'Login as team member',
-                          onTap: () {
-                            controller.openPhoneNumberBottomSheet();
-                          },
-                        ),
-                        const Gap(24),
-
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: MyColors.grayD4,
-                                indent: 10.sw,
-                                thickness: 1,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 2.w),
-                              child: Text(
-                                'Or',
-                                style: MyTexts.medium13.copyWith(
-                                  color: MyColors.greySecond,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: MyColors.grayD4,
-                                endIndent: 10.sw,
-                                thickness: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const Gap(24),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: MyColors.grayD4),
-                                ),
-                                height: 4.sh,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Image.asset(Asset.googleIcon),
-                                ),
-                              ),
-                              onTap: () async {
-                                try {
-                                  final user =
-                                      await GoogleSignInService.signInWithGoogle();
-                                  if (user != null) {
-                                    await controller.callSocialLoginAPI(user);
-                                  } else {
-                                    SnackBars.errorSnackBar(
-                                      content:
-                                          'Google Sign-In was cancelled by user',
-                                    );
-                                  }
-                                } catch (e) {
-                                  SnackBars.errorSnackBar(
-                                    content: 'Google Sign-In failed: $e',
-                                  );
-                                }
-                              },
-                            ),
-                            SizedBox(width: 10.sw),
-                            GestureDetector(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: MyColors.grayD4),
-                                ),
-                                height: 4.sh,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Image.asset(Asset.facebookIcon),
-                                ),
-                              ),
-                              onTap: () {},
-                            ),
-                          ],
-                        ),
-
-                        //const Gap(24),
-                        /*GestureDetector(
-                          onTap: () {
-                            controller.showBottomSheet();
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Don't have an account? ",
-                                style: MyTexts.regular16.copyWith(
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                              Text(
-                                "Sign-up",
-                                style: MyTexts.bold16.copyWith(
-                                  color: MyColors.primary,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ), */
-                        const Gap(32),
-                        Container(
-                          height: 180,
-                          width: 234,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(Asset.auth),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ],
+        child: Form(
+          key: controller.formKey,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            width: double.maxFinite,
+            padding: const EdgeInsets.all(16),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /*Center(
+                      child: Text(
+                        'India’s Fastest Growing\nConstruction Network',
+                        style: MyTexts.medium18.copyWith(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),*/
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Login',
+                      style: MyTexts.medium20.copyWith(color: Colors.black),
                     ),
                   ),
-                ),
+                  const Gap(16),
+
+                  /// 📱 Phone Field
+                  CommonPhoneField(
+                    headerText: "Mobile Number",
+                    controller: controller.mobileController,
+                    focusNode: controller.mobileFocusNode,
+                    onTap: () async {
+                      await controller.getPhoneNumber();
+                    },
+                    isValid: controller.isValid,
+                    customErrorMessage: controller.mobileValidationError,
+                    onCountryCodeChanged: (code) {
+                      controller.countryCode.value = code;
+                    },
+                    onSubmitted: (val) {
+                      FocusScope.of(
+                        context,
+                      ).requestFocus(controller.passwordFocusNode);
+                    },
+                  ),
+                  const Gap(16),
+
+                  /// 🔒 Password
+                  Obx(() {
+                    return CommonTextField(
+                      textInputAction: TextInputAction.done,
+                      headerText: "Password",
+                      focusNode: controller.passwordFocusNode,
+                      controller: controller.passwordController,
+                      obscureText: !controller.isPasswordVisible.value,
+                      hintText: "Password",
+                      validator: (val) {
+                        if ((val ?? "").isEmpty) {
+                          return "Please enter your password";
+                        }
+                        return null;
+                      },
+                      showDivider: true,
+                      suffixIcon: GestureDetector(
+                        onTap: () => controller.togglePasswordVisibility(),
+                        child: Icon(
+                          controller.isPasswordVisible.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: MyColors.primary,
+                        ),
+                      ),
+                    );
+                  }),
+                  const Gap(8),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SavePassWidget(
+                        state: controller.rememberMe,
+                        onChanged: (val) => controller.rememberMe.value = val,
+                      ),
+                      TextButton(
+                        onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
+                        child: Text(
+                          'Forgot Password?',
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.gra54,
+                            decoration: TextDecoration.underline,
+                            decorationColor: MyColors.gra54,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const Gap(24),
+                  Obx(
+                    () => RoundedButton(
+                      buttonName: 'Login',
+                      onTap: controller.isLoading.value
+                          ? null
+                          : () {
+                              controller.loginError.value = "";
+                              controller.mobileValidationError.value = "";
+                              controller.isValid.value = -1;
+                              print("IsValid123 ${controller.isValid.value}");
+
+                              final mobileNumber = controller
+                                  .mobileController
+                                  .text
+                                  .trim();
+                              if (!controller.formKey.currentState!
+                                  .validate()) {
+                                if (mobileNumber.isEmpty) {
+                                  controller.isValid.value = 0;
+                                  return;
+                                }
+
+                                final mobileError =
+                                    ValidationUtils.validateMobileNumber(
+                                      mobileNumber,
+                                    );
+                                if (mobileError != null) {
+                                  controller.mobileValidationError.value =
+                                      mobileError;
+                                  controller.isValid.value = 1;
+                                  return;
+                                }
+                                print("IsValid ${controller.isValid.value}");
+                              }
+
+                              if (controller.formKey.currentState?.validate() ??
+                                  false) {
+                                print(controller.isValid.value);
+                                hideKeyboard();
+                                controller.login();
+                              }
+                            },
+                    ),
+                  ),
+
+                  const Gap(12),
+                  /* RoundedButton(
+                      color: Colors.white,
+                      fontColor: MyColors.primary,
+                      borderColor: MyColors.primary,
+                      buttonName: 'Login as team member',
+                      onTap: () {
+                        controller.openPhoneNumberBottomSheet();
+                      },
+                    ), */
+                  const Gap(24),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: MyColors.grayD4,
+                          indent: 10.sw,
+                          thickness: 1,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 2.w),
+                        child: Text(
+                          'Or',
+                          style: MyTexts.medium13.copyWith(
+                            color: MyColors.greySecond,
+                            fontFamily: MyTexts.SpaceGrotesk,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: MyColors.grayD4,
+                          endIndent: 10.sw,
+                          thickness: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const Gap(24),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: MyColors.grayD4),
+                          ),
+                          height: 4.sh,
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Image.asset(Asset.googleIcon),
+                          ),
+                        ),
+                        onTap: () async {
+                          try {
+                            final user =
+                                await GoogleSignInService.signInWithGoogle();
+                            if (user != null) {
+                              await controller.callSocialLoginAPI(user);
+                            } else {
+                              SnackBars.errorSnackBar(
+                                content: 'Google Sign-In was cancelled by user',
+                              );
+                            }
+                          } catch (e) {
+                            SnackBars.errorSnackBar(
+                              content: 'Google Sign-In failed: $e',
+                            );
+                          }
+                        },
+                      ),
+                      SizedBox(width: 10.sw),
+                      GestureDetector(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: MyColors.grayD4),
+                          ),
+                          height: 4.sh,
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Image.asset(Asset.facebookIcon),
+                          ),
+                        ),
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+
+                  //const Gap(24),
+                  /*GestureDetector(
+                      onTap: () {
+                        controller.showBottomSheet();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Don't have an account? ",
+                            style: MyTexts.regular16.copyWith(
+                              fontFamily: MyTexts.SpaceGrotesk,
+                            ),
+                          ),
+                          Text(
+                            "Sign-up",
+                            style: MyTexts.bold16.copyWith(
+                              color: MyColors.primary,
+                              fontFamily: MyTexts.SpaceGrotesk,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ), */
+                  /* const Gap(32),
+                    Container(
+                      height: 180,
+                      width: 234,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(Asset.auth),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),*/
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
