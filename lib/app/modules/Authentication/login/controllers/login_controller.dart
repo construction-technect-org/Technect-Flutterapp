@@ -7,6 +7,7 @@ import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/LoginModel.dart';
@@ -14,6 +15,7 @@ import 'package:construction_technect/app/modules/Authentication/login/models/Us
 import 'package:construction_technect/app/modules/Authentication/login/services/LoginService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:phone_number_hint/phone_number_hint.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +36,7 @@ class LoginController extends GetxController {
   RxString countryCode = "+91".obs;
   HomeService homeService = HomeService();
   final _phoneNumberHintPlugin = PhoneNumberHint();
-  LoginService loginService = LoginService();
+  final LoginService loginService = Get.find<LoginService>();
   final isLoading = false.obs;
   final isPasswordVisible = false.obs;
   RxInt phonTap = 0.obs;
@@ -98,10 +100,10 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    mobileController.dispose();
-    passwordController.dispose();
-    mobileFocusNode.dispose();
-    passwordFocusNode.dispose();
+    //mobileController.dispose();
+    //passwordController.dispose();
+    //mobileFocusNode.dispose();
+    //passwordFocusNode.dispose();
     super.onClose();
   }
 
@@ -126,16 +128,19 @@ class LoginController extends GetxController {
       if (loginResponse.success == true) {
         myPref.setIsTeamLogin(false);
         loginError.value = "";
-        if (loginResponse.data?.token != null) {
-          myPref.setToken(loginResponse.data?.token ?? '');
+        if (loginResponse.token != null) {
+          myPref.setToken(loginResponse.token ?? '');
+        }
+        if (loginResponse.tokenType != null) {
+          myPref.setTokenType(loginResponse.tokenType ?? '');
         }
 
-        if (loginResponse.data?.user != null) {
-          myPref.setUserModel(loginResponse.data?.user ?? UserModel());
+        if (loginResponse.user != null) {
+          myPref.setUserModel(loginResponse.user ?? UserMainModel());
+          print("LAst ${loginResponse.user?.firstName}");
         }
 
-        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() ==
-            "partner") {
+        if ((loginResponse.user?.role ?? "").toLowerCase() == "merchant") {
           myPref.setRole("partner");
         } else {
           myPref.setRole("connector");
@@ -153,9 +158,14 @@ class LoginController extends GetxController {
             title: "Success!",
             header: "Thanks for Connecting !",
             onTap: () {
-              Get.find<CommonController>().fetchProfileData();
-              Get.find<CommonController>().loadTeamFromStorage();
-              Get.offAllNamed(Routes.MAIN);
+              //Get.find<CommonController>().fetchProfileData();
+              //Get.find<CommonController>().loadTeamFromStorage();
+              if (Get.isBottomSheetOpen == true) {
+                Get.back();
+              }
+              Future.delayed(const Duration(seconds: 3), () {
+                Get.offAllNamed(Routes.MAIN);
+              });
             },
           ),
         );
@@ -182,7 +192,7 @@ class LoginController extends GetxController {
     });
   }
 
-  Future<void> callSocialLoginAPI(User user) async {
+  /* Future<void> callSocialLoginAPI(User user) async {
     try {
       final loginService = LoginService();
 
@@ -211,7 +221,7 @@ class LoginController extends GetxController {
         }
 
         if (loginResponse.data?.user != null) {
-          myPref.setUserModel(loginResponse.data?.user ?? UserModel());
+          myPref.setUserModel(loginResponse.data?.user ?? UserMainModel());
         }
 
         if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
@@ -245,7 +255,7 @@ class LoginController extends GetxController {
     } catch (e) {
       loginError.value = "Something went wrong";
     }
-  }
+  } */
 
   final mobileNumberController = TextEditingController();
   RxInt isValidd = (-1).obs;
@@ -342,7 +352,7 @@ class LoginController extends GetxController {
                         isResendVisible: isResendVisible,
                         otpController: otpController,
                         onCompleted: (value) {
-                          verifyOtp();
+                          //verifyOtp();
                         },
                         onFinished: () {
                           onCountdownFinish();
@@ -465,7 +475,7 @@ class LoginController extends GetxController {
   RxBool isResendVisible = false.obs;
 
   // Verify OTP method
-  Future<void> verifyOtp() async {
+  /* Future<void> verifyOtp() async {
     try {
       // Get FCM token and device type
       final fcmToken = await FCMService.getFCMToken();
@@ -490,7 +500,7 @@ class LoginController extends GetxController {
         }
 
         if (loginResponse.data?.user != null) {
-          myPref.setUserModel(loginResponse.data?.user ?? UserModel());
+          myPref.setUserModel(loginResponse.data?.user ?? UserMainModel());
         }
         final permissionsValue = extractPermissions(
           loginResponse.data?.teamMember,
@@ -532,7 +542,7 @@ class LoginController extends GetxController {
         print(e);
       }
     }
-  }
+  } */
 }
 
 String extractPermissions(TeamMemberModel? data) {

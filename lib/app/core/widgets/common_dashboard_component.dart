@@ -22,23 +22,26 @@ class CommonDashboard extends StatelessWidget {
             const Gap(12),
             LayoutBuilder(
               builder: (context, constraints) {
-                final isTablet = constraints.maxWidth >= 550;
-                print("Con ${constraints.maxWidth}, $isTablet");
-                const crossAxisCount = 3;
-                const spacing = 8.0;
+                // final isTablet = constraints.maxWidth >= 550;
+                // print("Con ${constraints.maxWidth}, $isTablet");
+                // const crossAxisCount = 3;
+                // const spacing = 8.0;
+                //
+                // // 1️⃣ Total spacing
+                // const totalSpacing = spacing * (crossAxisCount - 1);
+                //
+                // // 2️⃣ Item width
+                // final itemWidth =
+                //     (constraints.maxWidth - totalSpacing) / crossAxisCount;
+                //
+                // // 3️⃣ Responsive height (based on width)
+                // final itemHeight = itemWidth * 1.3; // 👈 tweak ratio here
 
-                // 1️⃣ Total spacing
-                const totalSpacing = spacing * (crossAxisCount - 1);
-
-                // 2️⃣ Item width
-                final itemWidth =
-                    (constraints.maxWidth - totalSpacing) / crossAxisCount;
-
-                // 3️⃣ Responsive height (based on width)
-                final itemHeight = itemWidth * 1.3; // 👈 tweak ratio here
+                final double itemWidth = (constraints.maxWidth - (2 * 10)) / 3;
+                final double itemHeight = itemWidth + 10;
 
                 // 4️⃣ Aspect ratio
-                final childAspectRatio = itemWidth / itemHeight;
+
                 //final double itemWidth = (constraints.maxWidth - (2 * 10)) / 3;
                 //final double itemHeight = itemWidth + 10;
                 return GridView.builder(
@@ -47,10 +50,10 @@ class CommonDashboard extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: controller.features.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: isTablet ? 16 : 16,
-                    mainAxisSpacing: isTablet ? 4 : 16,
-                    childAspectRatio: isTablet ? .99 : .88,
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 17,
+                    childAspectRatio: itemWidth / itemHeight,
                   ),
                   itemBuilder: (context, index) {
                     final item = controller.features[index];

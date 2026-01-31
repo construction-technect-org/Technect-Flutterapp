@@ -171,7 +171,7 @@ class Validate {
     }
 
     // Only check availability if format is valid
-    try {
+    /* try {
       final isAvailable = await SignUpService().checkAvailability(
         mobileNumber: mobileNumber?.trim(),
         countryCode: countryCode ?? "+91",
@@ -183,7 +183,7 @@ class Validate {
       }
     } catch (e) {
       return "Error checking mobile number availability";
-    }
+    } */
   }
 
   // ==================== GST Validation ====================

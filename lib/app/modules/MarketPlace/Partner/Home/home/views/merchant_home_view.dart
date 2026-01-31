@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
@@ -28,24 +29,64 @@ class MerchantHomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoaderWrapper(
       isLoading: controller.isLoading,
-      child: Scaffold(
-        backgroundColor: MyColors.white,
-        body: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Asset.categoryBg),
-                  fit: BoxFit.cover,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: MyColors.white,
+          appBar: CommonAppBar(
+            title: Text(
+              "Project Details",
+              style: MyTexts.medium18.copyWith(color: Colors.black),
+            ),
+            isCenter: false,
+            action: [
+              GestureDetector(
+                onTap: () {
+                  //Get.toNamed(Routes.NOTIFICATIONS);
+                },
+                child: SvgPicture.asset(
+                  Asset.location,
+                  width: 24,
+                  height: 24,
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF2E2E2E),
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
-            ),
-            SafeArea(
-              child: Column(
+              const Gap(20),
+              GestureDetector(
+                onTap: () {
+                  //Get.toNamed(Routes.NOTIFICATIONS);
+                },
+                child: SvgPicture.asset(
+                  Asset.searchIcon,
+                  width: 24,
+                  height: 24,
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF2E2E2E),
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+              const Gap(20),
+            ],
+          ),
+          body: Stack(
+            children: [
+              Container(
+                color: Colors.white,
+                /*decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(Asset.categoryBg),
+                    fit: BoxFit.cover,
+                  ),
+                ), */
+              ),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
+                  /*Row(
                     children: [
                       GestureDetector(
                         onTap: () {
@@ -54,7 +95,7 @@ class MerchantHomeView extends StatelessWidget {
                         behavior: HitTestBehavior.translucent,
                         child: Obx(() {
                           final isTeamLogin = myPref.getIsTeamLogin();
-
+              
                           final profileImage = isTeamLogin
                               ? Get.find<CommonController>()
                                         .profileData
@@ -70,7 +111,7 @@ class MerchantHomeView extends StatelessWidget {
                                         ?.user
                                         ?.image ??
                                     '';
-
+              
                           if (profileImage.isEmpty) {
                             return const Icon(
                               Icons.account_circle_sharp,
@@ -78,7 +119,7 @@ class MerchantHomeView extends StatelessWidget {
                               size: 48,
                             );
                           }
-
+              
                           return ClipOval(
                             child: getImageView(
                               finalUrl:
@@ -90,7 +131,7 @@ class MerchantHomeView extends StatelessWidget {
                           );
                         }),
                       ),
-
+              
                       SizedBox(width: 1.h),
                       Flexible(
                         child: Column(
@@ -98,7 +139,7 @@ class MerchantHomeView extends StatelessWidget {
                           children: [
                             Obx(() {
                               final isTeamLogin = myPref.getIsTeamLogin();
-
+              
                               final firstName = isTeamLogin
                                   ? commonController
                                             .profileData
@@ -114,7 +155,7 @@ class MerchantHomeView extends StatelessWidget {
                                             ?.user
                                             ?.firstName ??
                                         '';
-
+              
                               final lastName = isTeamLogin
                                   ? commonController
                                             .profileData
@@ -130,7 +171,7 @@ class MerchantHomeView extends StatelessWidget {
                                             ?.user
                                             ?.lastName ??
                                         '';
-
+              
                               return RichText(
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -148,7 +189,7 @@ class MerchantHomeView extends StatelessWidget {
                                 ),
                               );
                             }),
-
+              
                             GestureDetector(
                               onTap: myPref.getIsTeamLogin()
                                   ? null
@@ -233,7 +274,7 @@ class MerchantHomeView extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                         child: Container(
                           width: 15.h,
-
+              
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(50),
@@ -271,7 +312,7 @@ class MerchantHomeView extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
+                  ),*/
                   const Divider(thickness: 1.0, color: MyColors.gra54EA),
                   Expanded(
                     child: Row(
@@ -302,8 +343,8 @@ class MerchantHomeView extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -391,164 +432,178 @@ class MerchantHomeView extends StatelessWidget {
 
   Widget _buildServicesGrid(BuildContext context) {
     // final controller = Get.find<ConstructionServiceController>();
-    return GridView.builder(
-      itemCount: 10,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        print("Max Height ${constraints.maxHeight}");
+        final double itemWidth = (constraints.maxWidth - (2 * 10)) / 2;
+        final double itemHeight = constraints.maxHeight > 640
+            ? (itemWidth + 126)
+            : (itemWidth + 165);
+        return GridView.builder(
+          itemCount: 10,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
 
-        childAspectRatio: .45,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 20,
-      ),
-      itemBuilder: (context, index) {
-        return Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.all(3.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(2.w)),
-                border: Border.all(color: MyColors.gra54EA, width: 1.0),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
+            childAspectRatio: itemWidth / itemHeight,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 17,
+          ),
+          itemBuilder: (context, index) {
+            return Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(3.w),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(2.w)),
+                    border: Border.all(color: MyColors.gra54EA, width: 1.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 12.h,
-                        width: double.infinity,
-                        child: ClipRRect(
-                          child: Image.asset(Asset.building, fit: BoxFit.cover),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(11),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Container(
-                          height: 13,
-                          width: 40,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(4),
-                              topLeft: Radius.circular(4),
+                      Stack(
+                        children: [
+                          SizedBox(
+                            height: 12.h,
+                            width: double.infinity,
+                            child: ClipRRect(
+                              child: Image.asset(
+                                Asset.building,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(11),
+                              ),
                             ),
                           ),
-                          child: Center(
-                            child: Text(
-                              "32 KM",
-                              style: MyTexts.regular12.copyWith(fontSize: 11),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              height: 13,
+                              width: 40,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(4),
+                                  topLeft: Radius.circular(4),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "32 KM",
+                                  style: MyTexts.regular12.copyWith(
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 1.5.h),
-                  Text(
-                    "Luna;s Traquil Project",
-                    style: MyTexts.bold12.copyWith(fontSize: 13.sp),
-                  ),
-                  SizedBox(height: 0.8.h),
-                  Row(
-                    children: [
-                      ClipOval(
-                        child: Image.asset(
-                          Asset.renovation,
-                          width: 6.w,
-                          height: 6.w,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const Gap(2),
-                      Text(
-                        "Saanvi Kumari",
-                        style: MyTexts.medium12.copyWith(
-                          color: const Color(0xFF545454),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 1.h),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on_outlined,
-                        color: const Color(0xFF545454),
-                        size: 12.sp,
-                      ),
-                      SizedBox(width: 1.w),
-                      Expanded(
-                        child: Text(
-                          "Jayanagar ,bng 560078 ",
-                          style: MyTexts.regular12.copyWith(
-                            color: const Color(0xFF545454),
-                            fontSize: 10.sp,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Gap(7),
-                  Container(
-                    height: 38,
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: AlignmentGeometry.topCenter,
-                        end: AlignmentGeometry.bottomCenter,
-                        colors: [
-                          const Color(0xFFFFF9BD).withValues(alpha: 0),
-                          const Color(0xFFFFF9BD),
                         ],
                       ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text("₹ 1600 Sqft", style: MyTexts.medium15),
-                    ),
-                  ),
-                  const Gap(6),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: RoundedButton(
-                      buttonName: "Connect",
-                      onTap: () {},
-                      height: 4.h,
-                      fontSize: 13.sp,
-                      borderRadius: 1.5.w,
-                      style: MyTexts.medium13.copyWith(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                height: 13,
-                width: 60,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFC1FFC3),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.0),
-                    topRight: Radius.circular(12.0),
-                    bottomLeft: Radius.circular(5.0),
+                      SizedBox(height: 1.5.h),
+                      Text(
+                        "Luna;s Traquil Project",
+                        style: MyTexts.bold12.copyWith(fontSize: 13.sp),
+                      ),
+                      SizedBox(height: 0.8.h),
+                      Row(
+                        children: [
+                          ClipOval(
+                            child: Image.asset(
+                              Asset.renovation,
+                              width: 6.w,
+                              height: 6.w,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const Gap(2),
+                          Text(
+                            "Saanvi Kumari",
+                            style: MyTexts.medium12.copyWith(
+                              color: const Color(0xFF545454),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 1.h),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: const Color(0xFF545454),
+                            size: 12.sp,
+                          ),
+                          SizedBox(width: 1.w),
+                          Expanded(
+                            child: Text(
+                              "Jayanagar ,bng 560078 ",
+                              style: MyTexts.regular12.copyWith(
+                                color: const Color(0xFF545454),
+                                fontSize: 10.sp,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(7),
+                      Container(
+                        height: 38,
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: AlignmentGeometry.topCenter,
+                            end: AlignmentGeometry.bottomCenter,
+                            colors: [
+                              const Color(0xFFFFF9BD).withValues(alpha: 0),
+                              const Color(0xFFFFF9BD),
+                            ],
+                          ),
+                        ),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("₹ 1600 Sqft", style: MyTexts.medium15),
+                        ),
+                      ),
+                      const Gap(6),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: RoundedButton(
+                          buttonName: "Connect",
+                          onTap: () {},
+                          height: 4.h,
+                          fontSize: 13.sp,
+                          borderRadius: 1.5.w,
+                          style: MyTexts.medium13.copyWith(color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Center(
-                  child: Text(
-                    "Ongoing",
-                    style: MyTexts.regular12.copyWith(fontSize: 8),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    height: 13,
+                    width: 60,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFC1FFC3),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        topRight: Radius.circular(12.0),
+                        bottomLeft: Radius.circular(5.0),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Ongoing",
+                        style: MyTexts.regular12.copyWith(fontSize: 8),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         );
       },
     );
@@ -697,65 +752,76 @@ class MerchantHomeView extends StatelessWidget {
       child: ListView.separated(
         //shrinkWrap: true,
         itemBuilder: (context, index) {
-          return Container(
-            height: _itemHeight,
-            color: _itemBgColor,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: _selectionBarWidth,
-                      height: _imageHeight,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.horizontal(
-                          right: Radius.circular(10),
-                        ),
-                        color: MyColors.primary,
-                      ),
-                    ),
-                    const SizedBox(width: _selectionBarWidth),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        height: _imageHeight,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          gradient: LinearGradient(
-                            end: Alignment.bottomCenter,
-                            begin: Alignment.topCenter,
-                            colors: [
-                              MyColors.custom('EAEAEA').withValues(alpha: 0),
-                              MyColors.custom('EAEAEA'),
+          print("Index $index");
+          print("Sel Index ${controller.selectedIndex.value}");
+          return GestureDetector(
+            onTap: () {
+              controller.selectedIndex.value = index;
+            },
+            child: Container(
+              height: _itemHeight,
+              color: _itemBgColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Obx(() {
+                        return Container(
+                          width: _selectionBarWidth,
+                          height: _imageHeight,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.horizontal(
+                              right: Radius.circular(10),
+                            ),
+                            color: controller.selectedIndex.value == index
+                                ? MyColors.primary
+                                : Colors.transparent,
+                          ),
+                        );
+                      }),
+                      const SizedBox(width: _selectionBarWidth),
+                      Expanded(
+                        child: Container(
+                          width: double.infinity,
+                          height: _imageHeight,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24),
+                            gradient: LinearGradient(
+                              end: Alignment.bottomCenter,
+                              begin: Alignment.topCenter,
+                              colors: [
+                                MyColors.custom('EAEAEA').withValues(alpha: 0),
+                                MyColors.custom('EAEAEA'),
+                              ],
+                            ),
+                          ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: _horizontalPadding,
+                                ),
+                                child: Image.asset(_imageURL[index]),
+                              ),
                             ],
                           ),
                         ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: _horizontalPadding,
-                              ),
-                              child: Image.asset(_imageURL[index]),
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                  ],
-                ).paddingOnly(right: _horizontalPadding),
-                const SizedBox(height: _itemSpacing),
-                Text(
-                  _imageNames[index],
-                  style: MyTexts.medium13,
-                  textAlign: TextAlign.center,
-                ).paddingOnly(
-                  right: _horizontalPadding,
-                  left: _horizontalPadding,
-                ),
-              ],
+                    ],
+                  ).paddingOnly(right: _horizontalPadding),
+                  const SizedBox(height: _itemSpacing),
+                  Text(
+                    _imageNames[index],
+                    style: MyTexts.medium13,
+                    textAlign: TextAlign.center,
+                  ).paddingOnly(
+                    right: _horizontalPadding,
+                    left: _horizontalPadding,
+                  ),
+                ],
+              ),
             ),
           );
         },

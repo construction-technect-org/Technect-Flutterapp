@@ -120,7 +120,12 @@ import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/sign_up_service.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SignUpPasswordController extends GetxController {
   final passwordController = TextEditingController();
@@ -129,18 +134,34 @@ class SignUpPasswordController extends GetxController {
   final isConfirmPasswordVisible = false.obs;
   final rememberMe = false.obs;
 
+  final MainSignUpService _mainSignUpService = Get.find<MainSignUpService>();
+
   SignUpService signUpService = SignUpService();
   final isLoading = false.obs;
 
   UserDataModel? userData;
+  String? firstName;
+  String? lastName;
+  String? role;
+  String? phone;
+  String? email;
+  String? cc;
+  Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
 
   @override
   void onInit() {
     super.onInit();
-    final arguments = Get.arguments;
-    if (arguments != null && arguments is UserDataModel) {
-      userData = arguments;
-    }
+    final arguments = Get.arguments as Map;
+
+    firstName = arguments['firstName'];
+    lastName = arguments['lastName'];
+    phone = myPref.getPhone();
+    email = myPref.getEmail();
+    role = myPref.getRole();
+    cc = myPref.getCC();
+    // if (arguments != null && arguments is UserDataModel) {
+    //   userData = arguments;
+    // }
   }
 
   void togglePasswordVisibility() {
@@ -158,7 +179,122 @@ class SignUpPasswordController extends GetxController {
     super.onClose();
   }
 
-  Future<void> completeSignUp() async {
+  Future<void> _getCurrentLocation() async {
+    try {
+      //isLoading.value = true;
+
+      final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        SnackBars.errorSnackBar(
+          content:
+              'Location services are disabled. Please enable location services.',
+        );
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          SnackBars.errorSnackBar(content: 'Location permissions are denied.');
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        SnackBars.errorSnackBar(
+          content: 'Location permissions are permanently denied.',
+        );
+        return;
+      }
+
+      final Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+
+      currentPosition.value = LatLng(position.latitude, position.longitude);
+      //_getAddressFromCoordinates(position.latitude, position.longitude);
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error getting current location: $e');
+    }
+  }
+
+  Future<void> signUpComplete() async {
+    isLoading.value = true;
+
+    try {
+      final fcmToken = await FCMService.getFCMToken();
+      final deviceType = FCMService.getDeviceType();
+      await _getCurrentLocation();
+      print("YEs Done ${currentPosition.value}");
+      final response = await _mainSignUpService.completeSignUp(
+        roleName: role == "connector" ? "connector" : "merchant",
+        firstName: firstName!,
+        lastName: lastName!,
+        //countryCode: cc!,
+        //mobileNumber: phone!,
+        //email: email!,
+        password: passwordController.text.trim(),
+        confirmPassword: confirmPasswordController.text.trim(),
+        fcmToken: fcmToken,
+        deviceType: deviceType,
+        address: {
+          "latitude": currentPosition.value.latitude,
+          "longitude": currentPosition.value.longitude,
+        },
+        referralCode: "",
+      );
+      print("NotDone");
+      if (response.success == true) {
+        SnackBars.successSnackBar(content: "Password set Successfully");
+        if (response.token != null) {
+          myPref.setToken(response.token!);
+          myPref.setTokenType(response.tokenType!);
+        }
+        if (response.user != null) {
+          myPref.setUserModel(response.user ?? UserMainModel());
+          print("LAst ${response.user?.firstName}");
+        }
+        //if (response.user != null) {
+
+        //}
+
+        if (rememberMe.value) {
+          myPref.saveCredentials(phone!, passwordController.text.trim());
+        } else {
+          myPref.clearCredentials();
+        }
+
+        Get.to(
+          () => SuccessScreen(
+            title: "Success!",
+            header: "New password set",
+            image: Asset.forgetSImage,
+            onTap: () {
+              //et.find<CommonController>().fetchProfileData();
+              //Get.find<CommonController>().loadTeamFromStorage();
+              print("Sone signup");
+              Future.delayed(const Duration(seconds: 3), () {
+                Get.offAllNamed(Routes.MAIN);
+              });
+            },
+          ),
+        );
+      } else {
+        SnackBars.errorSnackBar(
+          content: response.message ?? 'Failed to create account',
+        );
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /* Future<void> completeSignUp() async {
     isLoading.value = true;
 
     try {
@@ -233,5 +369,5 @@ class SignUpPasswordController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }
+  } */
 }

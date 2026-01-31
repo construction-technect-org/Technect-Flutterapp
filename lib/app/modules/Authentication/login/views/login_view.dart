@@ -280,7 +280,7 @@ class LoginView extends GetView<LoginController> {
                             final user =
                                 await GoogleSignInService.signInWithGoogle();
                             if (user != null) {
-                              await controller.callSocialLoginAPI(user);
+                              //await controller.callSocialLoginAPI(user);
                             } else {
                               SnackBars.errorSnackBar(
                                 content: 'Google Sign-In was cancelled by user',

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
@@ -13,12 +14,18 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
 import 'package:construction_technect/app/modules/vrm/bottom/controllers/bottom_controller.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CommonController extends GetxController {
   final hasProfileComplete = false.obs;
   final isLoading = false.obs;
   Rx<ProfileModel> profileData = ProfileModel().obs;
   RxBool isCrm = true.obs;
+  UserMainModel? userMainModel;
+  Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
+  RxString selectedAddress = ''.obs;
 
   void switchToCrm(bool inScreen) {
     if (isCrm.value) {
@@ -36,6 +43,65 @@ class CommonController extends GetxController {
         Get.find<VRMBottomController>().changeTab(1);
       }
       log('Navigated to VRM Main');
+    }
+  }
+
+  Future<void> _getCurrentLocation() async {
+    try {
+      isLoading.value = true;
+
+      final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        SnackBars.errorSnackBar(
+          content:
+              'Location services are disabled. Please enable location services.',
+        );
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          SnackBars.errorSnackBar(content: 'Location permissions are denied.');
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        SnackBars.errorSnackBar(
+          content: 'Location permissions are permanently denied.',
+        );
+        return;
+      }
+
+      final Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      currentPosition.value = LatLng(position.latitude, position.longitude);
+      _getAddressFromCoordinates(position.latitude, position.longitude);
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error getting current location: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> _getAddressFromCoordinates(double lat, double lng) async {
+    try {
+      final List<Placemark> placemarks = await placemarkFromCoordinates(
+        lat,
+        lng,
+      );
+      if (placemarks.isNotEmpty) {
+        final Placemark place = placemarks[0];
+        final String address =
+            '${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
+        selectedAddress.value = address;
+      }
+    } catch (e) {
+      selectedAddress.value = 'Address not found';
     }
   }
 
@@ -108,7 +174,7 @@ class CommonController extends GetxController {
     return 'No manufacturer address found'.obs;
   }
 
-  HomeService homeService = HomeService();
+  final HomeService homeService = Get.find<HomeService>();
 
   Future<void> fetchProfileData() async {
     try {
@@ -119,7 +185,7 @@ class CommonController extends GetxController {
           profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
-        myPref.setUserModel(profileResponse.data!.user!);
+        //myPref.setUserModel(profileResponse.data!.user!);
         if (profileData.value.data?.isTeamLogin == true) {
           myPref.setIsTeamLogin(true);
           final permissionsValue = extractPermissions(
@@ -391,7 +457,7 @@ class CommonController extends GetxController {
         "is_default": true,
       });
 
-      await Get.find<CommonController>().fetchProfileData();
+      //await Get.find<CommonController>().fetchProfileData();
 
       if (onSuccess != null) onSuccess();
     } catch (e) {
@@ -404,11 +470,18 @@ class CommonController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     final savedToken = myPref.getToken();
-    if (savedToken.isNotEmpty) {
-      fetchProfileData();
-      // if(myPref.getIsTeamLogin()==false){
-      loadTeamFromStorage();
-      // }
+    final savedTokenType = myPref.getTokenType();
+    if (savedTokenType == "ACCESS") {
+      userMainModel = myPref.getUserModel();
+      print("First Name ${userMainModel?.firstName}");
+
+      if (savedToken.isNotEmpty) {
+        _getCurrentLocation();
+        //fetchProfileData();
+        // if(myPref.getIsTeamLogin()==false){
+        //loadTeamFromStorage();
+        // }
+      }
     }
   }
 }

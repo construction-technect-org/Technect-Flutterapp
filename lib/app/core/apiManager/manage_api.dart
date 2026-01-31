@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/apiManager/api_exception.dart';
+import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/error_model.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/error_sheet.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
-class ApiManager {
+class ManageApi extends GetxService {
   // Local
   // static const String baseUrl = "http://localhost:3000/api/";
   // Live
-  static const String baseUrl = "https://constructiontechnect.com/api/";
+  static const String baseUrl = Endpoints.baseUrl;
 
   /// Check if response contains invalid/expired token
   void _checkTokenValidity(dynamic response) {
@@ -79,7 +80,7 @@ class ApiManager {
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token
-      // _checkTokenValidity(map);
+      //_checkTokenValidity(map);
 
       Get.printInfo(info: '✅ Parsed Response: $map');
       return map;
@@ -123,7 +124,7 @@ class ApiManager {
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
-      // _checkTokenValidity(map);
+      //_checkTokenValidity(map);
 
       Get.printInfo(info: '✅ Parsed Response: $map');
       return map;
@@ -162,7 +163,7 @@ class ApiManager {
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
-      // _checkTokenValidity(map);
+      //_checkTokenValidity(map);
 
       Get.printInfo(info: '✅ Parsed Response: $map');
       return map;
@@ -202,7 +203,7 @@ class ApiManager {
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
-      // _checkTokenValidity(map);
+      //_checkTokenValidity(map);
 
       Get.printInfo(info: '✅ Parsed Response: $map');
       return map;
@@ -286,7 +287,7 @@ class ApiManager {
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
-      // _checkTokenValidity(map);
+      //_checkTokenValidity(map);
 
       Get.printInfo(info: '✅ Parsed Response: $map');
       return map;
@@ -370,7 +371,7 @@ class ApiManager {
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
-      // _checkTokenValidity(map);
+      //_checkTokenValidity(map);
 
       Get.printInfo(info: '✅ Parsed Response: $map');
       return map;
@@ -409,7 +410,7 @@ class ApiManager {
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
-      // _checkTokenValidity(map);
+      //_checkTokenValidity(map);
 
       Get.printInfo(info: '✅ Parsed Response: $map');
       return map;

@@ -8,6 +8,7 @@ import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/core/widgets/verifying_otp_screen.dart';
 //import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/sign_up_service.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/otp_verification_screen.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
@@ -24,6 +25,7 @@ class SignUpDetailsController extends GetxController {
   final gstController = TextEditingController();
   final aadhaarController = TextEditingController();
   SignUpService signUpService = SignUpService();
+  final MainSignUpService _mainSignUpService = Get.find<MainSignUpService>();
   final otpSend = false.obs;
   final otpVerify = false.obs;
   RxBool isVerified = false.obs;
@@ -71,8 +73,11 @@ class SignUpDetailsController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    print("Init called again");
     mobileNumberController.text = "";
     emailController.text = "";
+    //emailError.value = "";
+    //numberError.value = "";
   }
 
   void startTimer() {
@@ -205,9 +210,10 @@ class SignUpDetailsController extends GetxController {
     try {
       isOTPLoading.value = true;
 
-      final otpResponse = await signUpService.verifyOtp(
+      final otpResponse = await _mainSignUpService.verifyOtp(
         mobileNumber: mobileNumberController.text,
         otp: otpController.text,
+        countryCode: countryCode.value,
       );
 
       if (otpResponse.success == true) {
@@ -216,8 +222,13 @@ class SignUpDetailsController extends GetxController {
             () => VerifyingOtpScreen(
               header: "Verifying the OTP",
               onTap: () {
-                if (otpResponse.data?.verified == true) {
+                if (otpResponse.user?.phoneVerified == true) {
                   otpVerify.value = true;
+                  myPref.setToken(otpResponse.token!);
+                  myPref.setTokenType(otpResponse.tokenType!);
+                  myPref.setPhone(mobileNumberController.text.trim());
+                  myPref.setEmail(emailController.text.trim());
+                  myPref.setCC(countryCode.value);
                   SnackBars.successSnackBar(
                     content: 'OTP verified successfully!',
                   );

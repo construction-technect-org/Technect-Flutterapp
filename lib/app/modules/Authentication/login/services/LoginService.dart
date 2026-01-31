@@ -1,10 +1,16 @@
+import 'package:construction_technect/app/core/apiManager/endpoints.dart';
+import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/LoginModel.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginService {
+class LoginService extends GetxService {
   ApiManager apiManager = ApiManager();
+  final ManageApi _manageApi = Get.find<ManageApi>();
+  final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
-  Future<LoginModel> login({
+  Future<CompleteSignUpModel> login({
     required String countryCode,
     required String mobileNumber,
     required String password,
@@ -14,7 +20,7 @@ class LoginService {
     try {
       final Map<String, dynamic> body = {
         "countryCode": countryCode,
-        "mobileNumber": mobileNumber,
+        "phone": mobileNumber,
         "password": password,
       };
 
@@ -25,24 +31,13 @@ class LoginService {
       if (deviceType != null && deviceType.isNotEmpty) {
         body["deviceType"] = deviceType;
       }
-      print("YEs done");
-      final response = await apiManager.postObject(
-        url: APIConstants.login,
+      print("YEs strange");
+      final response = await _manageApi.postObject(
+        url: Endpoints.loginAPI,
         body: body,
       );
-      print("Not  done");
-      final result = LoginModel.fromJson(response);
-
-      if (result.success == true) {
-        return result;
-      } else {
-        // Return generic error message for all login failures
-        return LoginModel(
-          success: false,
-          message: "Invalid mobile number or password",
-          code: result.code,
-        );
-      }
+      print("Started");
+      return CompleteSignUpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in login: $e , $st');
     }

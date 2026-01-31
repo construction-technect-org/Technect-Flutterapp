@@ -42,7 +42,8 @@ class ForgotPasswordController extends GetxController {
   final isConfirmPasswordVisible = false.obs;
   FocusNode emailFocusNode = FocusNode();
 
-  ForgotPasswordService forgotPasswordService = ForgotPasswordService();
+  final ForgotPasswordService forgotPasswordService =
+      Get.find<ForgotPasswordService>();
 
   Future<void> validateEmailAvailability(String email) async {
     // First check format validation - if format is invalid, don't check API
@@ -71,18 +72,21 @@ class ForgotPasswordController extends GetxController {
     try {
       final otpResponse = await forgotPasswordService.sendOtp(
         countryCode: countryCode.value,
-        mobileNumber: phoneEmailController.text,
+        mobileNumber: phoneEmailController.text.trim(),
+        email: emailController.text.trim(),
       );
 
       if (otpResponse.success == true) {
         otpSend.value = true;
         SnackBars.successSnackBar(content: 'OTP sent successfully');
       } else {
+        otpSend.value = false;
         SnackBars.errorSnackBar(
           content: otpResponse.message ?? 'Failed to send OTP',
         );
       }
     } catch (e) {
+      otpSend.value = false;
       if (kDebugMode) {
         print(e);
       }
@@ -114,8 +118,8 @@ class ForgotPasswordController extends GetxController {
     try {
       final otpResponse = await forgotPasswordService.verifyOtp(
         countryCode: countryCode.value,
-        mobileNumber: phoneEmailController.text,
-        otp: otpController.text,
+        mobileNumber: phoneEmailController.text.trim(),
+        otp: otpController.text.trim(),
       );
 
       if (otpResponse.success == true) {
@@ -124,29 +128,23 @@ class ForgotPasswordController extends GetxController {
             () => VerifyingOtpScreen(
               header: "Verifying the OTP",
               onTap: () {
-                if (otpResponse.data?.verified == true) {
-                  otpVerify.value = true;
-                  SnackBars.successSnackBar(
-                    content: 'OTP verified successfully!',
-                  );
+                otpVerify.value = true;
+                SnackBars.successSnackBar(
+                  content: 'OTP verified successfully!',
+                );
 
-                  Get.back();
+                Get.back();
 
-                  Get.to(
-                    () => SuccessScreen(
-                      title: "Success!",
-                      header: "OTP verified successfully",
-                      onTap: () {
-                        Get.close(3);
-                        Get.off(() => ResetPasswordView());
-                      },
-                    ),
-                  );
-                } else {
-                  SnackBars.errorSnackBar(
-                    content: 'OTP verification failed. Please try again.',
-                  );
-                }
+                Get.to(
+                  () => SuccessScreen(
+                    title: "Success!",
+                    header: "OTP verified successfully",
+                    onTap: () {
+                      Get.close(3);
+                      Get.off(() => ResetPasswordView());
+                    },
+                  ),
+                );
               },
             ),
           );
@@ -205,9 +203,9 @@ class ForgotPasswordController extends GetxController {
     try {
       final resetResponse = await forgotPasswordService.resetPassword(
         countryCode: countryCode.value,
-        mobileNumber: phoneEmailController.text,
-        password: newPasswordController.text,
-        confirmPassword: confirmPasswordController.text,
+        mobileNumber: phoneEmailController.text.trim(),
+        password: newPasswordController.text.trim(),
+        confirmPassword: confirmPasswordController.text.trim(),
       );
 
       if (resetResponse.success == true) {

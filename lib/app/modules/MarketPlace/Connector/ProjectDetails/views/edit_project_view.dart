@@ -49,8 +49,8 @@ class EditProjectView extends StatelessWidget {
                     CommonTextField(
                       hintText: "Enter project code",
                       headerText: "Project Code",
-                      controller: controller.pNameController,
-                      autofillHints: const [AutofillHints.givenName],
+                      controller: controller.pCodeController,
+                      //autofillHints: const [AutofillHints.givenName],
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(30),
                         NameInputFormatter(),
@@ -62,8 +62,8 @@ class EditProjectView extends StatelessWidget {
                     CommonTextField(
                       hintText: "Enter project area",
                       headerText: "Project Area",
-                      controller: controller.pNameController,
-                      autofillHints: const [AutofillHints.givenName],
+                      controller: controller.pAreaController,
+                      //autofillHints: const [AutofillHints.givenName],
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(30),
                         NameInputFormatter(),
@@ -75,8 +75,8 @@ class EditProjectView extends StatelessWidget {
                     CommonTextField(
                       hintText: "Enter the address",
                       headerText: "Address",
-                      controller: controller.pNameController,
-                      autofillHints: const [AutofillHints.givenName],
+                      controller: controller.pAddressController,
+                      //autofillHints: const [AutofillHints.givenName],
                       maxLine: 5,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(30),
@@ -89,8 +89,8 @@ class EditProjectView extends StatelessWidget {
                     CommonTextField(
                       hintText: "Enter floor numbers",
                       headerText: "No. of Floors",
-                      controller: controller.pNameController,
-                      autofillHints: const [AutofillHints.givenName],
+                      controller: controller.pFloorsController,
+                      //autofillHints: const [AutofillHints.givenName],
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(30),
                         NameInputFormatter(),
@@ -102,8 +102,8 @@ class EditProjectView extends StatelessWidget {
                     CommonTextField(
                       hintText: "Enter Project  Type",
                       headerText: "Project Type",
-                      controller: controller.pNameController,
-                      autofillHints: const [AutofillHints.givenName],
+                      controller: controller.pTypeController,
+                      //autofillHints: const [AutofillHints.givenName],
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(30),
                         NameInputFormatter(),
@@ -124,7 +124,7 @@ class EditProjectView extends StatelessWidget {
                     CommonTextField(
                       hintText: "Description",
                       headerText: "Description",
-                      controller: controller.pNameController,
+                      controller: controller.pDescController,
                       maxLine: 5,
                       autofillHints: const [AutofillHints.givenName],
                       inputFormatters: [

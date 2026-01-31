@@ -1,6 +1,8 @@
+import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -54,6 +56,8 @@ class InitialBinding implements Bindings {
   @override
   void dependencies() {
     myPref = Get.find();
+    Get.put<ManageApi>(ManageApi(), permanent: true);
+    Get.put<HomeService>(HomeService(), permanent: true);
     Get.put(CommonController());
   }
 }

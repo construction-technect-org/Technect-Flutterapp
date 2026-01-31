@@ -147,7 +147,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                       : () {
                                           if (formKey.currentState!
                                               .validate()) {
-                                            controller.completeSignUp();
+                                            controller.signUpComplete();
                                           }
                                         },
                                 ),

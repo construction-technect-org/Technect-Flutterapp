@@ -3,11 +3,14 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:construction_technect/app/modules/vrm/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/vrm/chat/views/vrm_chat_list_screen.dart';
 import 'package:construction_technect/app/modules/vrm/dashboard/views/vrm_dashboard_screen.dart';
 import 'package:construction_technect/app/modules/vrm/home/views/vrm_home_view.dart';
 import 'package:construction_technect/app/modules/vrm/more/views/more_screen.dart';
+import 'package:construction_technect/app/modules/vrm/switchAccount/switchVRMAccount.dart';
+import 'package:construction_technect/app/modules/vrm/switchAccount/switchVRMAccountController.dart';
 import 'package:construction_technect/app/modules/vrm/task/views/vrm_task_screen.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
@@ -99,46 +102,94 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
     CommonController commonController,
   ) {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 60,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(4),
-                ),
+      myPref.getRole() != "connector"
+          ? Container(
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 60,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'Switch Account',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 16),
+                  _switchTile(
+                    title: 'Connector',
+                    subtitle: 'Switch to Connector',
+                    asset: Asset.contractor,
+                    onTap: () {
+                      Get.back();
+                      Get.put<SwitchAccountController>(
+                        SwitchAccountController(),
+                      ).switchAccount();
+                      print("what123 ${myPref.getRole()}");
+                      Get.offAllNamed(Routes.VRM_MAIN);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 60,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'Switch Account',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 16),
+                  _switchTile(
+                    title: 'Merchant',
+                    subtitle: 'Switch to Merchant',
+                    asset: Asset.role1,
+                    onTap: () {
+                      Get.back();
+                      Get.put<SwitchAccountController>(
+                        SwitchAccountController(),
+                      ).switchAccount();
+                      print("what ${myPref.getRole()}");
+                      Get.offAllNamed(Routes.CRM_MAIN);
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
               ),
             ),
-            const Text(
-              'Switch Account',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            _switchTile(
-              title: 'Merchant',
-              subtitle: 'Switch to Merchant',
-              asset: Asset.role1,
-              onTap: () {
-                Get.offAllNamed(Routes.CRM_MAIN);
-                Get.back();
-              },
-            ),
-
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
     );
   }
 
@@ -191,6 +242,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
   }
 
   Widget _buildBottomBar(BuildContext context) {
+    print("Cont123 ${controller.myRole.value}");
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -267,7 +319,13 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
             ),
             if (myPref.getIsTeamLogin() == false)
               GestureDetector(
-                onTap: () => _showCrmVrmSwitchSheet(context, commonController),
+                onTap: () {
+                  Get.put<SwitchVRMAccountController>(
+                    SwitchVRMAccountController(),
+                  );
+                  showSwitchVRMAccountBottomSheet();
+                  //_showCrmVrmSwitchSheet(context, commonController);
+                },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 20, right: 10),
                   padding: const EdgeInsets.all(16),
@@ -283,10 +341,11 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
                         color: Colors.white,
                         size: 30,
                       ),
+
                       Text(
-                        myPref.getRole() == "partner"
-                            ? "Merchant"
-                            : "Connector",
+                        myPref.getRole() == "connector"
+                            ? "Connector"
+                            : "Merchant",
                         style: MyTexts.medium12.copyWith(color: Colors.white),
                       ),
                     ],

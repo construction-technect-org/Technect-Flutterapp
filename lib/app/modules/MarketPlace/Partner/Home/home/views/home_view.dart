@@ -285,6 +285,10 @@ class HomeView extends StatelessWidget {
                               Asset.notification,
                               width: 24,
                               height: 24,
+                              colorFilter: ColorFilter.mode(
+                                MyColors.black,
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                         ),

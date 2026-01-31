@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
-class SwitchAccountController extends GetxController {
+class SwitchCRMAccountController extends GetxController {
   RxString currentRole = ''.obs;
 
   RxBool hasPartnerAccount = false.obs;
@@ -15,7 +15,11 @@ class SwitchAccountController extends GetxController {
     myPref.role.val = currentRole.value;
     print("Roleach ${myPref.role.val}");
     Get.back();
-    Get.offAllNamed(Routes.MAIN);
+    if (myPref.role.val == 'connector') {
+      Get.offAllNamed(Routes.VRM_MAIN);
+    } else {
+      Get.offAllNamed(Routes.CRM_MAIN);
+    }
   }
 
   void addPartnerAccount() {

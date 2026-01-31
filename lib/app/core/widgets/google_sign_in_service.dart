@@ -19,14 +19,14 @@ class GoogleSignInService {
   static Future<User?> signInWithGoogle() async {
     try {
       await _initialize();
-
+      print("Start google sign");
       // Simple sign-out to clear any existing state
-      await _googleSignIn.signOut();
-
+      //await _googleSignIn.signOut();
+      print("google Sign In");
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-
+      print("Done Auth");
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-
+      print("ID token ${googleAuth.idToken}");
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );

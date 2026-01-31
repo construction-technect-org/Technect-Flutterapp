@@ -174,26 +174,28 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                     controller.isValid.value = 0;
                   } else {
                     await controller.sendOtp().then((val) {
-                      Get.to(
-                        () => ForgotOtpVerificationView(
-                          isLoading: controller.isLoading,
-                          onTap: () async {
-                            await controller.sendOtp().then((val) {
-                              controller.startTimer();
-                            });
-                          },
-                          countdownController: controller.countdownController,
-                          isResendVisible: controller.isResendVisible,
-                          otpController: controller.otpController,
-                          /* onCompleted: (value) {
+                      if (controller.otpSend.value) {
+                        Get.to(
+                          () => ForgotOtpVerificationView(
+                            isLoading: controller.isLoading,
+                            onTap: () async {
+                              await controller.sendOtp().then((val) {
+                                controller.startTimer();
+                              });
+                            },
+                            countdownController: controller.countdownController,
+                            isResendVisible: controller.isResendVisible,
+                            otpController: controller.otpController,
+                            /* onCompleted: (value) {
                             controller.verifyOtp();
                           }, */
-                          onFinished: () {
-                            controller.onCountdownFinish();
-                          },
-                        ),
-                      );
-                      controller.startTimer();
+                            onFinished: () {
+                              controller.onCountdownFinish();
+                            },
+                          ),
+                        );
+                        controller.startTimer();
+                      }
                     });
                   }
 

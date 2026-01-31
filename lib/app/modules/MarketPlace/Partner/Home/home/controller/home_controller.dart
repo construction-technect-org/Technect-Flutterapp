@@ -15,6 +15,7 @@ class HomeController extends GetxController {
   Rx<ServiceCategoryModel> categoryHierarchyDataCM = ServiceCategoryModel().obs;
   Rx<CategoryModel> categoryHierarchyData2 = CategoryModel().obs;
   RxBool isGridView = true.obs;
+  RxInt selectedIndex = 0.obs;
 
   @override
   void onInit() {

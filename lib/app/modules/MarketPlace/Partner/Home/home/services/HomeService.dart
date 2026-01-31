@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
+import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
@@ -8,12 +9,17 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchat_model.dart';
 
-class HomeService {
+class HomeService extends GetxService {
   final ApiManager _apiManager = ApiManager();
+  final ManageApi _manageApi = Get.find<ManageApi>();
 
   Future<ProfileModel> getProfile() async {
     try {
-      final response = await _apiManager.get(url: myPref.isTeamLogin.val==true ?APIConstants.teamProfile : APIConstants.profile);
+      final response = await _apiManager.get(
+        url: myPref.isTeamLogin.val == true
+            ? APIConstants.teamProfile
+            : APIConstants.profile,
+      );
 
       return ProfileModel.fromJson(response);
     } catch (e) {
@@ -64,7 +70,9 @@ class HomeService {
 
   Future<ServiceCategoryModel> getCategoryServiceHierarchy() async {
     try {
-      final response = await _apiManager.get(url: 'service-categories/hierarchy');
+      final response = await _apiManager.get(
+        url: 'service-categories/hierarchy',
+      );
       return ServiceCategoryModel.fromJson(response);
     } catch (e) {
       rethrow;

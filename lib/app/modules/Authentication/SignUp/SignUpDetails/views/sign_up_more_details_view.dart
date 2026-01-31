@@ -182,7 +182,7 @@ class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
                                 suffixPadding: 0,
                                 isRed: true,
                                 suffixIcon: GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
                                     final value = controller
                                         .aadhaarController
                                         .text
@@ -203,8 +203,14 @@ class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
                                     }
                                     controller.isVerified.value = true;
                                     SnackBars.successSnackBar(
-                                      content: "Aadhaar verified successfully!",
+                                      content:
+                                          "Aadhaar validated successfully!",
                                     );
+                                    await controller.sendOTPAadhar();
+                                    if (controller.otpSend.value) {
+                                      controller.showBottomSheet();
+                                    }
+                                    //await controller.sendOTPAadhar();
                                   },
                                   child: Container(
                                     width: 100,
@@ -247,8 +253,10 @@ class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
                                 isRed: true,
                                 suffixPadding: 0,
                                 suffixIcon: GestureDetector(
-                                  onTap: () async => await controller
-                                      .validateGSTAvailability(),
+                                  onTap: () async {
+                                    await controller.validateGSTAvailability();
+                                    await controller.verifyGSTDetails();
+                                  },
                                   child: Container(
                                     width: 100,
                                     decoration: const BoxDecoration(
@@ -291,7 +299,8 @@ class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
 
                             SizedBox(height: 2.h),
                             Obx(() {
-                              if (!controller.isVerified.value) {
+                              if (!controller.isVerified.value ||
+                                  !controller.isGSTValid.value) {
                                 return const SizedBox.shrink();
                               }
                               return Container(
@@ -357,7 +366,12 @@ class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
                                             ),
                                             const Gap(4),
                                             Text(
-                                              "XYZ Company",
+                                              controller
+                                                      .detailsGST
+                                                      .value
+                                                      .gstDetails
+                                                      ?.tradeName ??
+                                                  "XYZ Company",
                                               style: MyTexts.medium16.copyWith(
                                                 color: MyColors.black,
                                               ),
@@ -372,7 +386,19 @@ class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
                                           ),
                                           const Gap(4),
                                           Text(
-                                            "Flat No. 305, Block B, Prestige Lakeview Apartments",
+                                            myPref.getRole() == "connector"
+                                                ? controller
+                                                          .detailsAadhar
+                                                          .value
+                                                          .aadharDetails
+                                                          ?.address ??
+                                                      "Flat No. 305, Block B, Prestige Lakeview Apartment"
+                                                : controller
+                                                          .detailsGST
+                                                          .value
+                                                          .gstDetails
+                                                          ?.address ??
+                                                      "Flat No. 305, Block B, Prestige Lakeview Apartments",
                                             style: MyTexts.medium16.copyWith(
                                               color: MyColors.black,
                                             ),
@@ -401,8 +427,17 @@ class SignUpMoreDetailsView extends GetView<SignUpRoleController> {
             buttonName: 'Continue',
             onTap: () async {
               if (!formKey.currentState!.validate()) return;
-
-              Get.toNamed(Routes.SIGN_UP_PASSWORD);
+              if (controller.isGSTValid.value) {
+                Get.toNamed(
+                  Routes.SIGN_UP_PASSWORD,
+                  arguments: {
+                    'firstName': controller.firstNameController.text.trim(),
+                    'lastName': controller.lastNameController.text.trim(),
+                  },
+                );
+              } else {
+                SnackBars.errorSnackBar(content: 'Please verify the GST first');
+              }
 
               /*await controller.validateEmailAvailability(
                 controller.emailController.text,

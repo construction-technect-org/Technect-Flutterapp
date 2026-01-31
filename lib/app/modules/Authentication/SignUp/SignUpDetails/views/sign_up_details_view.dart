@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/sign_up_service.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
 
 //import 'package:carousel_slider/carousel_slider.dart';
@@ -17,12 +18,16 @@ class SignUpDetailsView extends StatefulWidget {
 class _SignUpDetailsViewState extends State<SignUpDetailsView> {
   final SignUpDetailsController controller =
       Get.find<SignUpDetailsController>();
+  final MainSignUpService _mainSignUpService = Get.find<MainSignUpService>();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("Onit state called");
     controller.emailController.text = "";
     controller.mobileNumberController.text = "";
+    controller.numberError.value = "";
+    controller.emailError.value = "";
   }
 
   final formKey = GlobalKey<FormState>();
@@ -171,7 +176,11 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
 
                   // Use named route to avoid duplicates
                   controller.resetOtpState();
-                  Get.toNamed(Routes.OTP_Verification);
+                  await _mainSignUpService.tempSignUp(
+                    mobileNumber,
+                    controller.emailController.text.trim(),
+                    controller.countryCode.value.trim(),
+                  );
                 }
               },
             ),

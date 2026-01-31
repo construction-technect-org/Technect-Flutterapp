@@ -7,6 +7,8 @@ import 'package:construction_technect/app/modules/CRM/chat/views/crm_chat_list_s
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/crm_dashboard_screen.dart';
 import 'package:construction_technect/app/modules/CRM/home/views/crm_home_view.dart';
 import 'package:construction_technect/app/modules/CRM/more/views/more_screen.dart';
+import 'package:construction_technect/app/modules/CRM/switchAccount/switchCRMAccount.dart';
+import 'package:construction_technect/app/modules/CRM/switchAccount/switchCRMAccountController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -81,46 +83,95 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
     BuildContext context,
     CommonController commonController,
   ) {
+    print("Role ${myPref.getRole()}");
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 60,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(4),
-                ),
+      myPref.getRole() != "connector"
+          ? Container(
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 60,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'Switch Account',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 16),
+                  _switchTile(
+                    title: 'Connector',
+                    subtitle: 'Switch to Connector',
+                    asset: Asset.contractor,
+                    onTap: () {
+                      Get.back();
+                      Get.put<SwitchAccountController>(
+                        SwitchAccountController(),
+                      ).switchAccount();
+                      print("what567 ${myPref.getRole()}");
+                      Get.offAllNamed(Routes.VRM_MAIN);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 60,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'Switch Account',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 16),
+                  _switchTile(
+                    title: 'Merchant',
+                    subtitle: 'Switch to Merchant',
+                    asset: Asset.contractor,
+                    onTap: () {
+                      Get.back();
+                      Get.put<SwitchAccountController>(
+                        SwitchAccountController(),
+                      ).switchAccount();
+                      print("what879 ${myPref.getRole()}");
+                      Get.offAllNamed(Routes.CRM_MAIN);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
               ),
             ),
-            const Text(
-              'Switch Account',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-            _switchTile(
-              title: 'Connector',
-              subtitle: 'Switch to Connector',
-              asset: Asset.contractor,
-              onTap: () {
-                Get.back();
-                Get.offAllNamed(Routes.VRM_MAIN);
-              },
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
     );
   }
 
@@ -188,6 +239,7 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
   }
 
   Widget _buildBottomBar(BuildContext context) {
+    print("Cont ${controller.myRole.value}");
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -262,7 +314,14 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
             ),
             if (myPref.getIsTeamLogin() == false)
               GestureDetector(
-                onTap: () => _showCrmVrmSwitchSheet(context, commonController),
+                onTap: () {
+                  Get.put<SwitchCRMAccountController>(
+                    SwitchCRMAccountController(),
+                  );
+                  showSwitchCRMAccountBottomSheet();
+                  // Get.put<SwitchAccountController>(SwitchAccountController());
+                  // _showCrmVrmSwitchSheet(context, commonController);
+                },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 20, right: 10),
                   padding: const EdgeInsets.all(16),
@@ -278,10 +337,11 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                         color: Colors.white,
                         size: 30,
                       ),
+
                       Text(
-                        myPref.getRole() == "partner"
-                            ? "Merchant"
-                            : "Connector",
+                        myPref.getRole() == "connector"
+                            ? "Connector"
+                            : "Merchant",
                         style: MyTexts.medium12.copyWith(color: Colors.white),
                       ),
                     ],

@@ -72,58 +72,22 @@ class Dashboard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Obx(() {
-                            final isTeamLogin = myPref.getIsTeamLogin();
-
-                            final firstName = isTeamLogin
-                                ? commonController
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.teamMember
-                                          ?.firstName ??
-                                      ''
-                                : commonController
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.user
-                                          ?.firstName ??
-                                      '';
-
-                            final lastName = isTeamLogin
-                                ? commonController
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.teamMember
-                                          ?.lastName ??
-                                      ''
-                                : commonController
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.user
-                                          ?.lastName ??
-                                      '';
-
-                            return RichText(
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}!',
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.fontBlack,
-                                      fontFamily: MyTexts.SpaceGrotesk,
-                                    ),
+                          RichText(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text:
+                                      '${commonController.userMainModel?.firstName?.capitalizeFirst ?? ''} ${commonController.userMainModel?.lastName?.capitalizeFirst ?? ''}!',
+                                  style: MyTexts.medium16.copyWith(
+                                    color: MyColors.fontBlack,
+                                    fontFamily: MyTexts.SpaceGrotesk,
                                   ),
-                                ],
-                              ),
-                            );
-                          }),
+                                ),
+                              ],
+                            ),
+                          ),
 
                           GestureDetector(
                             onTap: myPref.getIsTeamLogin()
@@ -156,7 +120,7 @@ class Dashboard extends StatelessWidget {
                                         children: [
                                           TextSpan(
                                             text: commonController
-                                                .getCurrentAddress()
+                                                .selectedAddress
                                                 .value,
                                           ),
                                           const WidgetSpan(
@@ -216,6 +180,10 @@ class Dashboard extends StatelessWidget {
                           Asset.notification,
                           width: 24,
                           height: 24,
+                          colorFilter: ColorFilter.mode(
+                            MyColors.black,
+                            BlendMode.srcIn,
+                          ),
                         ),
                       ),
                     ),

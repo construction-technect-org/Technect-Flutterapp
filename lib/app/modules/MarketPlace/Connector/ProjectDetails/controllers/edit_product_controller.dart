@@ -10,6 +10,12 @@ class EditProductController extends GetxController {
   final isEditLoading = false.obs;
   final formKey = GlobalKey<FormState>();
   final TextEditingController pNameController = TextEditingController();
+  final TextEditingController pCodeController = TextEditingController();
+  final TextEditingController pAreaController = TextEditingController();
+  final TextEditingController pAddressController = TextEditingController();
+  final TextEditingController pFloorsController = TextEditingController();
+  final TextEditingController pTypeController = TextEditingController();
+  final TextEditingController pDescController = TextEditingController();
   RxString selectedValue = "".obs;
 
   final ImagePicker _picker = ImagePicker();
