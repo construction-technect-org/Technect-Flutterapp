@@ -1,12 +1,13 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 
 class Dashboard extends StatelessWidget {
-  final DashBoardController controller = Get.put(DashBoardController());
   final CommonController commonController = Get.find<CommonController>();
+  final DashBoardController _controller = Get.find<DashBoardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +80,7 @@ class Dashboard extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text:
-                                      '${commonController.userMainModel?.firstName?.capitalizeFirst ?? ''} ${commonController.userMainModel?.lastName?.capitalizeFirst ?? ''}!',
+                                      '${_controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${_controller.userMainModel?.lastName?.capitalizeFirst ?? ''}!',
                                   style: MyTexts.medium16.copyWith(
                                     color: MyColors.fontBlack,
                                     fontFamily: MyTexts.SpaceGrotesk,
@@ -119,8 +120,8 @@ class Dashboard extends StatelessWidget {
                                         ),
                                         children: [
                                           TextSpan(
-                                            text: commonController
-                                                .selectedAddress
+                                            text: _controller
+                                                .addressImmediate
                                                 .value,
                                           ),
                                           const WidgetSpan(

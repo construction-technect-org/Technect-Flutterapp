@@ -115,6 +115,8 @@
 
 // }
 
+import 'package:construction_technect/app/core/services/app_service.dart';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/core/services/fcm_service.dart';
@@ -135,6 +137,7 @@ class SignUpPasswordController extends GetxController {
   final rememberMe = false.obs;
 
   final MainSignUpService _mainSignUpService = Get.find<MainSignUpService>();
+  final AppHiveService _appHiveService = Get.find<AppHiveService>();
 
   SignUpService signUpService = SignUpService();
   final isLoading = false.obs;
@@ -250,10 +253,13 @@ class SignUpPasswordController extends GetxController {
       if (response.success == true) {
         SnackBars.successSnackBar(content: "Password set Successfully");
         if (response.token != null) {
+          await _appHiveService.setToken(response.token!);
+          await _appHiveService.setTokenType(response.tokenType!);
           myPref.setToken(response.token!);
           myPref.setTokenType(response.tokenType!);
         }
         if (response.user != null) {
+          await _appHiveService.setUser(response.user ?? UserMainModel());
           myPref.setUserModel(response.user ?? UserMainModel());
           print("LAst ${response.user?.firstName}");
         }
@@ -276,9 +282,8 @@ class SignUpPasswordController extends GetxController {
               //et.find<CommonController>().fetchProfileData();
               //Get.find<CommonController>().loadTeamFromStorage();
               print("Sone signup");
-              Future.delayed(const Duration(seconds: 3), () {
-                Get.offAllNamed(Routes.MAIN);
-              });
+
+              Get.offAllNamed(Routes.MAIN);
             },
           ),
         );

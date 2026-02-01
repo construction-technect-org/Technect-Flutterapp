@@ -262,9 +262,9 @@ class UserMainModel {
       lastName: json["lastName"],
       phone: json["phone"],
       email: json["email"],
-      address: json["address"] == null
-          ? null
-          : Address.fromJson(json["address"]),
+      address: json["address"] is Map
+          ? Address.fromJson(Map<String, dynamic>.from(json["address"]))
+          : null,
       referralCode: json["referralCode"],
       myReferralCode: json["myReferralCode"],
       fcmToken: json["fcmToken"],

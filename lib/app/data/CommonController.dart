@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:construction_technect/app/core/services/app_service.dart';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
@@ -19,6 +21,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CommonController extends GetxController {
+  final AppHiveService _appHiveService = Get.find<AppHiveService>();
   final hasProfileComplete = false.obs;
   final isLoading = false.obs;
   Rx<ProfileModel> profileData = ProfileModel().obs;
@@ -46,7 +49,7 @@ class CommonController extends GetxController {
     }
   }
 
-  Future<void> _getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     try {
       isLoading.value = true;
 
@@ -469,14 +472,21 @@ class CommonController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    final savedToken = myPref.getToken();
-    final savedTokenType = myPref.getTokenType();
+    print("Oninit");
+    getCurrentLocation();
+    final savedToken = _appHiveService.token;
+    //myPref.getToken();
+    final savedTokenType = _appHiveService.tokenType;
+    //myPref.getTokenType();
+    print("Saved $savedTokenType");
     if (savedTokenType == "ACCESS") {
-      userMainModel = myPref.getUserModel();
+      print("HeyToke");
+      userMainModel = _appHiveService.user;
+      //myPref.getUserModel();
       print("First Name ${userMainModel?.firstName}");
 
       if (savedToken.isNotEmpty) {
-        _getCurrentLocation();
+
         //fetchProfileData();
         // if(myPref.getIsTeamLogin()==false){
         //loadTeamFromStorage();

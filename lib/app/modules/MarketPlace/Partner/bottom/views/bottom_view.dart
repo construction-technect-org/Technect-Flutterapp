@@ -15,7 +15,7 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
 
 class BottomBarView extends GetView<BottomController> {
-  final CommonController commonController = Get.put(CommonController());
+  final CommonController commonController = Get.find<CommonController>();
 
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,13 @@
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
+import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 late AppSharedPreference myPref;
 
@@ -22,7 +25,14 @@ Future<void> main() async {
 
   // Initialize FCM service
   await FCMService.initialize();
+  await Hive.initFlutter();
+  await Hive.openBox('appBox');
 
+  await Get.putAsync<AppHiveService>(() async {
+    final service = AppHiveService();
+    await service.init();
+    return service;
+  });
   runApp(
     ResponsiveSizer(
       builder: (context, orientation, screenType) {
@@ -55,9 +65,9 @@ Future<void> main() async {
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    myPref = Get.find();
     Get.put<ManageApi>(ManageApi(), permanent: true);
     Get.put<HomeService>(HomeService(), permanent: true);
-    Get.put(CommonController());
+    Get.put<CommonController>(CommonController(), permanent: true);
+    myPref = Get.find();
   }
 }

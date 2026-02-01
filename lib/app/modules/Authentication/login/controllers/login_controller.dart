@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
@@ -25,6 +27,8 @@ class LoginController extends GetxController {
 
   final mobileController = TextEditingController();
   final passwordController = TextEditingController();
+
+  final AppHiveService _appHiveService = Get.find<AppHiveService>();
 
   FocusNode mobileFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
@@ -129,14 +133,17 @@ class LoginController extends GetxController {
         myPref.setIsTeamLogin(false);
         loginError.value = "";
         if (loginResponse.token != null) {
-          myPref.setToken(loginResponse.token ?? '');
+          await _appHiveService.setToken(loginResponse.token!);
+          //myPref.setToken(loginResponse.token ?? '');
         }
         if (loginResponse.tokenType != null) {
-          myPref.setTokenType(loginResponse.tokenType ?? '');
+          await _appHiveService.setTokenType(loginResponse.tokenType!);
+          //myPref.setTokenType(loginResponse.tokenType ?? '');
         }
 
         if (loginResponse.user != null) {
-          myPref.setUserModel(loginResponse.user ?? UserMainModel());
+          await _appHiveService.setUser(loginResponse.user ?? UserMainModel());
+          //myPref.setUserModel(loginResponse.user ?? UserMainModel());
           print("LAst ${loginResponse.user?.firstName}");
         }
 
@@ -163,9 +170,8 @@ class LoginController extends GetxController {
               if (Get.isBottomSheetOpen == true) {
                 Get.back();
               }
-              Future.delayed(const Duration(seconds: 3), () {
-                Get.offAllNamed(Routes.MAIN);
-              });
+
+              Get.offAllNamed(Routes.MAIN);
             },
           ),
         );

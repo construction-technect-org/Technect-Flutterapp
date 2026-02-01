@@ -63,6 +63,8 @@ dependencies:
   step_progress: ^2.7.1
   sms_autofill: ^2.4.1
   phone_number_hint: ^0.0.6
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 
   
