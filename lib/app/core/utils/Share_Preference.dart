@@ -78,6 +78,7 @@ class AppSharedPreference {
   final serviceRequirementListData = <String, dynamic>{}.val(
     'serviceRequirementListData',
   );
+  final profileId= ''.val('profileId');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -837,5 +838,8 @@ class AppSharedPreference {
 
   void clearServiceRequirementListData() {
     serviceRequirementListData.val = {};
+  }
+  void setProfileId(String Id) {
+    profileId.val = Id;
   }
 }

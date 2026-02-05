@@ -12,7 +12,7 @@ class ApiManager {
   // Local
   // static const String baseUrl = "http://localhost:3000/api/";
   // Live
-  static const String baseUrl = "https://constructiontechnect.com/api/";
+  static const String baseUrl = "https://api.constructiontechnect.com";
 
   /// Check if response contains invalid/expired token
   void _checkTokenValidity(dynamic response) {
@@ -137,6 +137,53 @@ class ApiManager {
       throw FetchDataException('Unexpected error: $e');
     }
   }
+  ///PATCH Method for JSON body requests
+  Future<dynamic> patchObject({
+    required String url,
+    required Object body,
+  }) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${myPref.getToken()}',
+      };
+
+      Get.printInfo(info: '🌐 API PATCH Request:');
+      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   Headers: $headers');
+      Get.printInfo(info: '   Body: $body');
+
+      final request = http.Request(
+        'PATCH',
+        Uri.parse(baseUrl + url),
+      );
+
+      request.body = json.encode(body);
+      request.headers.addAll(headers);
+
+      final http.StreamedResponse response = await request.send();
+
+      Get.printInfo(info: '📡 API Response:');
+      Get.printInfo(info: '   Status: ${response.statusCode}');
+      Get.printInfo(info: '   Headers: ${response.headers}');
+
+      final map = await _returnResponse(response);
+
+      // Optional token validation
+      // _checkTokenValidity(map);
+
+      Get.printInfo(info: '✅ Parsed Response: $map');
+      return map;
+    } on SocketException {
+      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      SnackBars.errorSnackBar(content: 'No Internet Connection');
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      Get.printInfo(info: '❌ Unexpected Error: $e');
+      throw FetchDataException('Unexpected error: $e');
+    }
+  }
+
 
   /// PUT method for JSON body requests
   Future<dynamic> put({required String url}) async {

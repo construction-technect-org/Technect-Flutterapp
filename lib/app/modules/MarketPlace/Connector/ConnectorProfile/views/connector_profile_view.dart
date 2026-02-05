@@ -164,7 +164,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
       Widget content;
 
       if (index == 0) {
-        content = const ConnectorInfoMetricsComponent();
+        content =  const ConnectorInfoMetricsComponent();
       } else {
         content = ConnectorMetrics();
       }

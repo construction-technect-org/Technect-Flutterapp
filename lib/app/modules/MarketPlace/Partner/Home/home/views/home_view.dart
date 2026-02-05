@@ -195,7 +195,7 @@ class HomeView extends StatelessWidget {
                                           Get.toNamed(
                                             Routes.MANUFACTURER_ADDRESS,
                                           );
-                                        } else {
+                                          } else {
                                           Get.toNamed(Routes.DELIVERY_LOCATION);
                                         }
                                       },

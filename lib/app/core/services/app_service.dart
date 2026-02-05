@@ -43,6 +43,11 @@ class AppHiveService extends GetxService {
   bool get kycValid => _box.get('kyc', defaultValue: false) as bool;
   Future<void> setKyc(bool value) async => await _box.put('kyc', value);
 
+
+  String get connectorProfileId => _box.get('isProfileId',defaultValue: '')as String;
+  Future<void> setProfileId(String value)async {
+    await _box.put('isProfile', value);
+  }
   // ================= USER =================
 
   UserMainModel? get user {
