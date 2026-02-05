@@ -1,21 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/document_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/edit_profile_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 
 class ProfileController extends GetxController {
   final formKey = GlobalKey<FormState>();
-
+  UserMainModel? userMainModel;
   final isSwitch = false.obs;
   Rx<File?> selectedImage = Rx<File?>(null);
 
@@ -26,6 +32,8 @@ class ProfileController extends GetxController {
 
   RxString selectedDD = ''.obs;
   RxString selectedValue = "Manufacturer".obs;
+  Rx<MerchantProfileModel> profileResponse = MerchantProfileModel().obs;
+  RxList<Cert> certs = <Cert>[].obs;
 
   Future<void> pickFiles() async {
     final path = await pickFile();
@@ -38,8 +46,57 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
     selectedTabIndex.value = 0;
+    userMainModel = storage.user;
     if (Get.arguments != null) {
       isSwitch.value = true;
+    }
+    final merProfile = storage.bizMetrics;
+
+    if (dashboardController.profileResponse.value.merchant != null) {
+      businessModel1.value.gstinNumber = storage.getNumber ?? '';
+      businessModel1.value.website = merProfile?["businessWebsite"] ?? '';
+      businessModel1.value.businessEmail = merProfile?["businessEmail"] ?? '';
+      businessModel1.value.year =
+          merProfile?['yearOfEstablish'].toString() ?? '';
+      businessModel1.value.businessContactNumber =
+          merProfile?['businessPhone'] ?? '';
+
+      businessModel1.value.businessName = merProfile?["businessName"] ?? '';
+      businessModel1.value.alternativeBusinessEmail =
+          merProfile?["alternateBusinessPhone"] ?? '';
+      //businessModel1.value.image =
+      //  dashboardController.profileResponse.value.merchant!.logoKey ?? "";
+
+      _merBizHours?.value =
+          storage.merchnatBizHours ??
+          //dashboardController.profileResponse.value.merchant!.businessHours ??
+          null;
+      if (dashboardController.profileResponse.value.merchant!.businessHours !=
+          null) {
+        print("Sunday ${_merBizHours?.value?.sunday}");
+        businessHoursData1.add({6: _merBizHours?.value?.sunday});
+        businessHoursData1.add({0: _merBizHours?.value?.monday});
+        businessHoursData1.add({1: _merBizHours?.value?.tuesday});
+        businessHoursData1.add({2: _merBizHours?.value?.wednesday});
+        businessHoursData1.add({3: _merBizHours?.value?.thursday});
+        businessHoursData1.add({4: _merBizHours?.value?.friday});
+        businessHoursData1.add({5: _merBizHours?.value?.saturday});
+      }
+      if (dashboardController.profileResponse.value.merchant!.certifications !=
+          null) {
+        if (dashboardController
+            .profileResponse
+            .value
+            .merchant!
+            .certifications!
+            .isNotEmpty) {
+          print("certs in");
+          certs.addAll(
+            dashboardController.profileResponse.value.merchant!.certifications!,
+          );
+          print("Certs $certs");
+        }
+      }
     }
     businessModel.value.gstinNumber =
         homeController.profileData.value.data?.user?.gst ?? "";
@@ -86,8 +143,32 @@ class ProfileController extends GetxController {
       if (merchantProfile?.documents != null) {
         loadCertificatesFromDocuments(merchantProfile!.documents!);
       }
+      if (certs.isNotEmpty) {
+        merCert.addAll(certs);
+        print("MErcert $merCert");
+        for (int i = 0; i < merCert.length; i++) {
+          jsonCert.add(
+            AllCertificateModel(
+              title: merCert[i].originalName!,
+              filePath: merCert[i].url!,
+            ),
+          );
+        }
+      }
 
       businessModel.refresh();
+    }
+  }
+
+  RxList<Cert> merCert = <Cert>[].obs;
+
+  void loadMerchantCertificates() {
+    for (int i = 0; i < certs.length; i++) {
+      final title = certs[i].title;
+      final path = certs[i].url;
+      if (title != null) {
+        if (title.toLowerCase().contains("gst")) {}
+      }
     }
   }
 
@@ -126,8 +207,15 @@ class ProfileController extends GetxController {
   final isLoading = false.obs;
 
   final DocumentService _documentService = DocumentService();
+  final Rx<MerchantBusninessHours?>? _merBizHours =
+      MerchantBusninessHours().obs;
+
+  final HomeService _homeService = Get.find<HomeService>();
 
   CommonController get homeController => Get.find<CommonController>();
+
+  DashBoardController get dashboardController =>
+      Get.find<DashBoardController>();
 
   ProfileModel get profileData => homeController.profileData.value;
 
@@ -164,6 +252,19 @@ class ProfileController extends GetxController {
       await _documentService.viewDocument(document);
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error opening document: $e');
+    }
+  }
+
+  Future<void> updateCert() async {
+    final response = await _homeService.updateCertificates(
+      fileName: filePath.value,
+      title: titleController.text.trim(),
+      profileID: storage.merchantID,
+    );
+    if (response) {
+      SnackBars.successSnackBar(content: 'Document uploading successful');
+    } else {
+      SnackBars.errorSnackBar(content: 'Error uploading document');
     }
   }
 
@@ -204,6 +305,8 @@ class ProfileController extends GetxController {
     );
   }
 
+  RxList<AllCertificateModel> jsonCert = <AllCertificateModel>[].obs;
+
   final certificates = <CertificateModel>[
     CertificateModel(title: "GST Certificate", isDefault: true),
     CertificateModel(title: "MSME/Udyam Certificate", isDefault: true),
@@ -220,13 +323,29 @@ class ProfileController extends GetxController {
     certificates.refresh();
   }
 
-  void removeCertificate(int index) {
-    if (index >= 3) {
-      certificates.removeAt(index);
-      certificates.refresh();
-    } else {
-      certificates[index].filePath = null;
-      certificates.refresh();
+  Future<void> removeCertificate(int index) async {
+    try {
+      final response = await _homeService.deleteCertificate(
+        profileType: "merchant",
+        profileID: storage.merchantID,
+        certKey: certs[index].key!,
+      );
+      if (response) {
+        SnackBars.successSnackBar(
+          content: "Successfully deleted the certificate",
+        );
+      } else {
+        SnackBars.errorSnackBar(content: "Deletion of certificate failed");
+      }
+      if (index >= 3) {
+        certs.removeAt(index);
+        certs.refresh();
+      } else {
+        certs[index].url = null;
+        certs.refresh();
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -296,7 +415,9 @@ class ProfileController extends GetxController {
             return;
           }
         }
-
+        jsonCert[index].title = basename(file.path ?? "");
+        jsonCert[index].filePath = file.path!;
+        jsonCert.refresh();
         certificates[index].filePath = file.path;
         certificates[index].name = basename(file.path ?? "");
         certificates.refresh();
@@ -383,12 +504,15 @@ class ProfileController extends GetxController {
     return null;
   }
 
+  Rx<BusinessModel> businessModel1 = BusinessModel().obs;
   Rx<BusinessModel> businessModel = BusinessModel().obs;
 
   void handleBusinessHoursData(List<Map<String, dynamic>> data) {
     businessHoursData.value = data;
   }
 
+  RxList<Map<int, MerchantDay?>> businessHoursData1 =
+      <Map<int, MerchantDay?>>[].obs;
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
   EditProfileService editProfileService = EditProfileService();
 
@@ -611,6 +735,13 @@ class CertificateModel {
     this.name,
     this.isDefault = false,
   });
+}
+
+class AllCertificateModel {
+  String title;
+  String filePath;
+
+  AllCertificateModel({required this.title, required this.filePath});
 }
 
 class BusinessModel {

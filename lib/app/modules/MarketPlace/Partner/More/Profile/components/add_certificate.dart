@@ -30,7 +30,11 @@ class AddCertificate extends StatelessWidget {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
+                      child: Icon(
+                        Icons.arrow_back_ios_new_sharp,
+                        color: Colors.black,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
@@ -53,13 +57,17 @@ class AddCertificate extends StatelessWidget {
                                 LengthLimitingTextInputFormatter(30),
                                 NameInputFormatter(),
                               ],
-                              validator: (value) =>
-                                  validateName(value, fieldName: "certificate name"),
+                              validator: (value) => validateName(
+                                value,
+                                fieldName: "certificate name",
+                              ),
                             ),
                             const Gap(20),
                             Text(
                               "Add File",
-                              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
+                              style: MyTexts.bold16.copyWith(
+                                color: MyColors.gray2E,
+                              ),
                             ),
                             const Gap(10),
                             GestureDetector(
@@ -78,7 +86,9 @@ class AddCertificate extends StatelessWidget {
                                             Container(
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                border: Border.all(color: MyColors.grey),
+                                                border: Border.all(
+                                                  color: MyColors.grey,
+                                                ),
                                               ),
                                               padding: const EdgeInsets.all(14),
                                               child: const Icon(
@@ -97,7 +107,9 @@ class AddCertificate extends StatelessWidget {
                                             const Gap(10),
                                             Text(
                                               "Upload Certification",
-                                              style: MyTexts.bold16.copyWith(color: MyColors.black),
+                                              style: MyTexts.bold16.copyWith(
+                                                color: MyColors.black,
+                                              ),
                                             ),
                                           ],
                                         )
@@ -122,17 +134,19 @@ class AddCertificate extends StatelessWidget {
           padding: const EdgeInsets.all(24.0),
           child: RoundedButton(
             buttonName: "Add",
-            onTap: () {
+            onTap: () async {
               if (controller.filePath.value.isEmpty) {
                 SnackBars.errorSnackBar(content: "Please upload certificate");
               }
               if (controller.formKey.currentState!.validate()) {
-                if (controller.filePath.value.isNotEmpty) {
-                  final cert = CertificateModel(
+                if (controller.filePath.value.isNotEmpty &&
+                    controller.titleController.text.isNotEmpty) {
+                  final cert = AllCertificateModel(
                     title: controller.titleController.text,
                     filePath: controller.filePath.value,
-                    name: basename(controller.filePath.value),
+                    // name: basename(controller.filePath.value),
                   );
+                  await controller.updateCert();
                   Get.back(result: cert);
                 }
               }
@@ -153,7 +167,10 @@ class CommonBgImage extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       decoration: const BoxDecoration(
-        image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
+        image: DecorationImage(
+          image: AssetImage(Asset.moreIBg),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

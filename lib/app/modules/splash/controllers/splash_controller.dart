@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class SplashController extends GetxController {
@@ -23,7 +24,8 @@ class SplashController extends GetxController {
   }
 
   void _checkTokenAndNavigate() {
-    final savedToken = myPref.getToken();
+    //final savedToken = myPref.getToken();
+    final savedToken = storage.token;
     if (savedToken.isNotEmpty) {
       _navigateToHome();
     } else {

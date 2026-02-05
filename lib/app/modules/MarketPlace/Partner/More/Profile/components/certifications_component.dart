@@ -15,9 +15,10 @@ class CertificationsComponent extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...controller.certificates.asMap().entries.map((entry) {
+          ...controller.certs.asMap().entries.map((entry) {
             final index = entry.key;
             final cert = entry.value;
+            print("Index $index, Entry $entry");
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,37 +26,20 @@ class CertificationsComponent extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      cert.title,
+                      cert.title ?? "",
                       style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                     ),
                     const Spacer(),
                     GestureDetector(
                       onTap: () async {
-                        final url = cert.filePath;
+                        final url = cert.url;
                         if (url != null && url.isNotEmpty) {
-                          if (url.startsWith("merchant")) {
-                            final uri = Uri.parse(APIConstants.bucketUrl + url);
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(
-                                uri,
-                                mode: LaunchMode.externalApplication,
-                              );
-                            }
-                          } else if (url.startsWith("/") ||
-                              url.contains("file://") ||
-                              url.contains("storage/") ||
-                              url.contains("CoreSimulator") ||
-                              url.contains("tmp/")) {
-                            OpenFilex.open(url);
-                          } else if (url.startsWith("http://") ||
-                              url.startsWith("https://")) {
-                            final uri = Uri.parse(url);
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(
-                                uri,
-                                mode: LaunchMode.externalApplication,
-                              );
-                            }
+                          final uri = Uri.parse(url);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
                           }
                         }
                       },
@@ -64,7 +48,7 @@ class CertificationsComponent extends StatelessWidget {
                         color: MyColors.primary,
                       ),
                     ),
-                    if (cert.filePath != null)
+                    if (cert.url != null)
                       Row(
                         children: [
                           const Gap(10),
@@ -91,7 +75,7 @@ class CertificationsComponent extends StatelessWidget {
                     padding: const EdgeInsets.all(17),
                     child: Column(
                       children: [
-                        if (cert.filePath == null) ...[
+                        if (cert.url == null) ...[
                           Column(
                             children: [
                               Container(
@@ -129,7 +113,7 @@ class CertificationsComponent extends StatelessWidget {
                             children: [
                               const Gap(14),
                               FileIconWidget(
-                                fileName: cert.name ?? '',
+                                fileName: cert.originalName ?? '',
                                 showFileName: true,
                               ),
                             ],

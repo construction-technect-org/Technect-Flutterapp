@@ -24,7 +24,7 @@ class RoleManagementController extends GetxController {
     if (Get.arguments != null) {
       showRoles.value = Get.arguments["isRole"] ?? true;
     }
-    loadRoles();
+    //loadRoles();
   }
 
   Future<void> loadRoles() async {

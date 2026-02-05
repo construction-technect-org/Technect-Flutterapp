@@ -46,7 +46,7 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                     // controller.isValid.value = 1;
                     return;
                   }
-                  controller.updateProfile();
+                  controller.updateMetrcis();
                 },
               ).paddingOnly(bottom: 30, right: 20, left: 20),
             ],

@@ -14,4 +14,12 @@ class Endpoints {
   static const String verifyPwdApi = "/v1/api/auth/user/forgot-password/verify";
   static const String resetPwdApi = "/v1/api/auth/user/forgot-password/reset";
   static const String getUserApi = "/v1/api/user/me";
+  static const String personaApi = "/v1/api/auth/profiles";
+  static const String merchantProfileApi = "/v1/api/business/merchant/";
+  static const String bizHoursApi = "/v1/api/business/merchant/business-hours/";
+  static const String pocApi = "/v1/api/business/merchant/poc-details/";
+  static const String bizDetailsApi =
+      "/v1/api/business/merchant/business-details/";
+  static const String certApi = "/v1/api/upload/certificate/";
+  static const String delCertAPi = "/v1/api/upload/certificate";
 }

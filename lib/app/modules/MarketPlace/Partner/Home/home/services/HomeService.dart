@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
+import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
@@ -7,7 +8,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchat_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/persona_profile_model.dart';
 
 class HomeService extends GetxService {
   final ApiManager _apiManager = ApiManager();
@@ -24,6 +27,27 @@ class HomeService extends GetxService {
       return ProfileModel.fromJson(response);
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<PersonaProfileModel> getPersona() async {
+    try {
+      final response = await _manageApi.get(url: Endpoints.personaApi);
+      return PersonaProfileModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting Persona: $e , $st');
+    }
+  }
+
+  Future<MerchantProfileModel> getMerchantProfile(String profileID) async {
+    try {
+      final response = await _manageApi.get(
+        url: '${Endpoints.merchantProfileApi}$profileID',
+      );
+
+      return MerchantProfileModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting Merchant Profile: $e , $st');
     }
   }
 
@@ -76,6 +100,142 @@ class HomeService extends GetxService {
       return ServiceCategoryModel.fromJson(response);
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<bool> updateBusinessHours(
+    String profileID,
+    Map<String, dynamic> bizHours,
+  ) async {
+    try {
+      final json = {"businessHours": bizHours};
+      print(json);
+      final response = await _manageApi.patch(
+        url: '${Endpoints.bizHoursApi}$profileID',
+        body: json,
+      );
+      if (response["success"] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, st) {
+      throw Exception('Error in updating Business Hours: $e , $st');
+    }
+  }
+
+  Future<bool> updatePOCDetails({
+    required String profileID,
+    required String pocName,
+    required String pocDesignation,
+    required String pocPhone,
+    required String pocAlternatePhone,
+    required String pocEmail,
+  }) async {
+    try {
+      final json = {
+        "pocName": pocName,
+        "pocDesignation": pocDesignation,
+        "pocPhone": pocPhone,
+        "pocAlternatePhone": pocAlternatePhone,
+        "pocEmail": pocEmail,
+      };
+      final response = await _manageApi.patch(
+        url: '${Endpoints.pocApi}$profileID',
+        body: json,
+      );
+      if (response["success"] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, st) {
+      throw Exception('Error in updating POC Details: $e , $st');
+    }
+  }
+
+  Future<bool> updateCertificates({
+    required String fileName,
+    required String title,
+    required String profileID,
+  }) async {
+    try {
+      final fileJson = {"file": fileName};
+      final json = {"title": title};
+      final response = await _manageApi.postMultipart(
+        url: '${Endpoints.certApi}merchant/$profileID',
+        fields: json,
+        files: fileJson,
+      );
+      if (response["success"] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, st) {
+      throw Exception('Error in updating Uploading Certificates: $e , $st');
+    }
+  }
+
+  Future<bool> updateBizMetrics({
+    required String profileID,
+    required String bizName,
+    required String bizType,
+    required String bizEmail,
+    required String bizPhone,
+    String? businessWebsite,
+    String? alternateBizPhone,
+    required String yearOfEstablish,
+    required String fileName,
+  }) async {
+    try {
+      final fileJson = {"file": fileName};
+      final json = {
+        "businessName": bizName,
+        "businessType": bizType,
+        "businessEmail": bizEmail,
+        "businessPhone": bizPhone,
+        "businessWebsite": businessWebsite ?? "",
+        "alternateBusinessPhone": alternateBizPhone ?? "",
+        "yearOfEstablish": yearOfEstablish,
+      };
+      final response = await _manageApi.patchMultipart(
+        url: '${Endpoints.bizDetailsApi}$profileID',
+        fields: json,
+        files: fileJson,
+      );
+      if (response["success"] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, st) {
+      throw Exception('Error in updating Updating Metrics: $e , $st');
+    }
+  }
+
+  Future<bool> deleteCertificate({
+    required String profileType,
+    required String profileID,
+    required String certKey,
+  }) async {
+    try {
+      final json = {
+        "profileType": profileType,
+        "profileId": profileID,
+        "certificateKey": certKey,
+      };
+      final response = await _manageApi.deleteObject(
+        url: Endpoints.delCertAPi,
+        body: json,
+      );
+      if (response["success"] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, st) {
+      throw Exception('Error in deleting: $e , $st');
     }
   }
 }

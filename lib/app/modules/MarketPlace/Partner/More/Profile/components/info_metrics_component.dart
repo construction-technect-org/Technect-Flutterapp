@@ -1,6 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/model/all_chat_list_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:readmore/readmore.dart';
@@ -125,23 +127,20 @@ class InfoMetricsComponent extends StatelessWidget {
                           buildRow(
                             title: "Name",
                             data:
-                                '${(userData?.firstName ?? '').capitalizeFirst} ${(userData?.lastName ?? '').capitalizeFirst}'
-                                    .trim()
-                                    .isEmpty
-                                ? 'User Name'
-                                : '${(userData?.firstName ?? '').capitalizeFirst} ${(userData?.lastName ?? '').capitalizeFirst}'
-                                      .trim(),
+                                // '${(userData?.firstName ?? '').capitalizeFirst} ${(userData?.lastName ?? '').capitalizeFirst}'
+                                //     .trim()
+                                //     .isEmpty
+                                '${controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${controller.userMainModel?.lastName?.capitalizeFirst ?? ''}!',
                           ),
                           const Gap(6),
                           buildRow(
                             title: "Mobile Number",
-                            data:
-                                "${userData?.countryCode} ${userData?.mobileNumber}",
+                            data: "${controller.userMainModel?.phone ?? ""}",
                           ),
                           const Gap(6),
                           buildRow(
                             title: "Email ID",
-                            data: "${userData?.email}",
+                            data: "${controller.userMainModel?.email ?? ""}",
                           ),
                           const Gap(8),
                           Row(
@@ -201,12 +200,31 @@ class InfoMetricsComponent extends StatelessWidget {
 
   Widget _buildBusinessMetricsContent() {
     return Obx(() {
-      final home = Get.find<CommonController>();
-      final merchant = home.profileData.value.data?.merchantProfile;
-      final modelGstin = controller.businessModel.value.gstinNumber ?? '';
-      final merchantGstin = merchant?.gstinNumber ?? '';
+      // final home = Get.find<CommonController>();
+      // final merchant = home.profileData.value.data?.merchantProfile;
+      // final modelGstin = controller.businessModel.value.gstinNumber ?? '';
+      // final merchantGstin = merchant?.gstinNumber ?? '';
 
-      if (modelGstin.isEmpty && merchantGstin.isEmpty) {
+      if (controller.businessModel1.value.gstinNumber == null) {
+        return GestureDetector(
+          onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: MyColors.white,
+              border: Border.all(color: MyColors.grayEA),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                " + Add Business Details",
+                style: MyTexts.bold16.copyWith(color: MyColors.grey),
+              ),
+            ),
+          ),
+        );
+      } else if (controller.businessModel1.value.gstinNumber!.isEmpty) {
         return GestureDetector(
           onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
           child: Container(
@@ -238,78 +256,45 @@ class InfoMetricsComponent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(() {
-                final name = controller.businessModel.value.businessName;
-                return buildRow(
-                  title: "Company name",
-                  data: (name != null && name.isNotEmpty)
-                      ? name
-                      : (merchant?.businessName ?? "-"),
-                );
+                final name = controller.businessModel1.value.businessName;
+                return buildRow(title: "Company name", data: name);
               }),
               const Gap(6),
               Obx(() {
                 final modelGstin =
-                    controller.businessModel.value.gstinNumber ?? '';
+                    controller.businessModel1.value.gstinNumber ?? '';
                 final userGstin = controller.userData?.gst ?? '-';
-                return buildRow(
-                  title: "GSTIN",
-                  data: modelGstin.isNotEmpty ? modelGstin : userGstin,
-                );
+                return buildRow(title: "GSTIN", data: modelGstin);
               }),
               const Gap(6),
 
               Obx(() {
                 final contact =
-                    controller.businessModel.value.businessContactNumber ?? '';
-                return buildRow(
-                  title: "Mobile Number",
-                  data: contact.isNotEmpty
-                      ? contact
-                      : (merchant?.businessContactNumber ?? "-"),
-                );
+                    controller.businessModel1.value.businessContactNumber ?? '';
+                return buildRow(title: "Mobile Number", data: contact);
               }),
               const Gap(6),
               Obx(() {
-                final website = controller.businessModel.value.website ?? '';
-                return buildRow(
-                  title: "Website",
-                  data: website.isNotEmpty
-                      ? website
-                      : (merchant?.website ?? "-"),
-                );
+                final website = controller.businessModel1.value.website ?? '';
+                return buildRow(title: "Website", data: website);
               }),
               const Gap(6),
               Obx(() {
                 final email =
-                    controller.businessModel.value.businessEmail ?? '';
-                return buildRow(
-                  title: "Email id",
-                  data: email.isNotEmpty
-                      ? email
-                      : (merchant?.businessEmail ?? "-"),
-                );
+                    controller.businessModel1.value.businessEmail ?? '';
+                return buildRow(title: "Email id", data: email);
               }),
               const Gap(6),
               Obx(() {
                 final alt =
-                    controller.businessModel.value.alternativeBusinessEmail ??
+                    controller.businessModel1.value.alternativeBusinessEmail ??
                     '';
-                return buildRow(
-                  title: "Alternative number",
-                  data: alt.isNotEmpty
-                      ? alt
-                      : (merchant?.alternativeBusinessContactNumber ?? "-"),
-                );
+                return buildRow(title: "Alternative number", data: alt);
               }),
               const Gap(6),
               Obx(() {
-                final year = controller.businessModel.value.year ?? '';
-                return buildRow(
-                  title: "Year of establish",
-                  data: year.isNotEmpty
-                      ? year
-                      : (merchant?.yearsInBusiness?.toString() ?? "-"),
-                );
+                final year = controller.businessModel1.value.year ?? '';
+                return buildRow(title: "Year of establish", data: year);
               }),
 
               const Gap(6),
@@ -328,30 +313,72 @@ class InfoMetricsComponent extends StatelessWidget {
   }
 
   Widget _buildBusinessHourContent() {
-    final data = controller.businessHoursData;
+    final data = controller.businessHoursData1;
+    final List<MerchantDay> openDays = [];
+    final List<MerchantDay> closedDays = [];
     return Obx(() {
-      if (data.isEmpty) {
+      if (controller.businessHoursData1.isEmpty) {
         return Text(
           "No business hours set",
           style: MyTexts.medium16.copyWith(color: MyColors.gray54),
         );
       }
-      data.sort(
+      controller.businessHoursData1.sort((a, b) {
+        final keyA = a.keys.first;
+        final keyB = b.keys.first;
+        return keyA.compareTo(keyB);
+      });
+      if (controller.businessHoursData1[0].keys == 0) {
+        print("Values ${controller.businessHoursData1[0].values}");
+      }
+      /*data.sort(
         (a, b) => (a['day_of_week'] as int).compareTo(b['day_of_week'] as int),
       );
 
       final openDays = data.where((d) => d['is_open'] == true).toList();
-      final closedDays = data.where((d) => d['is_open'] == false).toList();
+      final closedDays = data.where((d) => d['is_open'] == false).toList(); */
 
       final List<Widget> items = [];
-
-      for (final day in openDays) {
+      items.add(
+        _buildBusinessHourItem("Monday", controller.businessHoursData1[0]![0]!),
+      );
+      items.add(
+        _buildBusinessHourItem(
+          "Tuesday",
+          controller.businessHoursData1[1]![1]!,
+        ),
+      );
+      items.add(
+        _buildBusinessHourItem(
+          "Wednesday",
+          controller.businessHoursData1[2]![2]!,
+        ),
+      );
+      items.add(
+        _buildBusinessHourItem(
+          "Thursday",
+          controller.businessHoursData1[3]![3]!,
+        ),
+      );
+      items.add(
+        _buildBusinessHourItem("Friday", controller.businessHoursData1[4]![4]!),
+      );
+      items.add(
+        _buildBusinessHourItem(
+          "Saturday",
+          controller.businessHoursData1[5]![5]!,
+        ),
+      );
+      items.add(
+        _buildBusinessHourItem("Sunday", controller.businessHoursData1[6]![6]!),
+      );
+      /*for (final day in openDays) {
         items.add(_buildBusinessHourItem([day], isOpen: true));
       }
 
       if (closedDays.isNotEmpty) {
         items.add(_buildBusinessHourItem(closedDays, isOpen: false));
-      }
+      } */
 
       return Container(
         decoration: BoxDecoration(
@@ -374,27 +401,23 @@ class InfoMetricsComponent extends StatelessWidget {
     });
   }
 
-  Widget _buildBusinessHourItem(
-    List<Map<String, dynamic>> days, {
-    required bool isOpen,
-  }) {
-    String dayLabel = "";
-    if (days.length == 1) {
-      dayLabel = days.first['day_name'];
-    } else {
-      dayLabel = days.map((d) => d['day_name']).join(", ");
-    }
+  Widget _buildBusinessHourItem(String dayofWeek, MerchantDay days) {
+    String dayLabel = dayofWeek;
 
-    final String openTime = isOpen ? (days.first['open_time'] ?? "") : "";
-    final String closeTime = isOpen ? (days.first['close_time'] ?? "") : "";
+    final String openTime = !days.closed! ? (days.open ?? "") : "";
+    final String closeTime = !days.closed! ? (days.close ?? "") : "";
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: isOpen ? const Color(0xFFEAF0FF) : const Color(0xFFFFEEEE),
+        color: !days.closed!
+            ? const Color(0xFFEAF0FF)
+            : const Color(0xFFFFEEEE),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isOpen ? const Color(0xFFCAD6FF) : const Color(0xFFF5C8C8),
+          color: !days.closed!
+              ? const Color(0xFFCAD6FF)
+              : const Color(0xFFF5C8C8),
         ),
       ),
       child: Column(
@@ -407,7 +430,7 @@ class InfoMetricsComponent extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    isOpen
+                    !days.closed!
                         ? "$dayLabel ${openTime.isNotEmpty ? '$openTime - $closeTime' : ''}"
                         : dayLabel,
                     style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
@@ -429,7 +452,7 @@ class InfoMetricsComponent extends StatelessWidget {
                 ),
               ),
               child: Text(
-                isOpen ? "Open" : "Closed",
+                !days.closed! ? "Open" : "Closed",
                 style: MyTexts.medium14.copyWith(
                   color: MyColors.gray2E,
                   fontWeight: FontWeight.w600,

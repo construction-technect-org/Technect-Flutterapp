@@ -10,7 +10,11 @@ class BusinessDetailsStep extends StatelessWidget {
   final EditProfileControllerr controller;
   final GlobalKey<FormState> formKey;
 
-  const BusinessDetailsStep({super.key, required this.controller, required this.formKey});
+  const BusinessDetailsStep({
+    super.key,
+    required this.controller,
+    required this.formKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +33,19 @@ class BusinessDetailsStep extends StatelessWidget {
               LengthLimitingTextInputFormatter(150),
               // NameInputFormatter(),
             ],
-            validator: (value) => Validate.validateBusinessName(value, fieldName: "company name"),
+            validator: (value) =>
+                Validate.validateBusinessName(value, fieldName: "company name"),
           ),
           SizedBox(height: 2.h),
           Focus(
             onFocusChange: (hasFocus) async {
               if (!hasFocus) {
                 final web = controller.businessWebsiteController.text;
-                if (Get.find<ProfileController>().businessModel.value.website == web) {
-                  controller.websiteError.value = "";
-                  return;
-                }
+                // if (Get.find<ProfileController>().businessModel.value.website ==
+                //     web) {
+                //   controller.websiteError.value = "";
+                //   return;
+                // }
                 final formatError = ValidationUtils.validateWebsiteUrl(web);
                 if (formatError == null) {
                   await controller.validateUrlAvailability();
@@ -111,8 +117,13 @@ class BusinessDetailsStep extends StatelessWidget {
             headerText: "GSTIN Number",
             controller: controller.gstNumberController,
             keyboardType: TextInputType.text,
+            enable: false,
+            readOnly: true,
             textCapitalization: TextCapitalization.characters,
-            inputFormatters: [LengthLimitingTextInputFormatter(15), UpperCaseTextFormatter()],
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(15),
+              UpperCaseTextFormatter(),
+            ],
             validator: ValidationUtils.validateGSTINNumber,
           ),
           SizedBox(height: 2.h),
@@ -166,7 +177,8 @@ class BusinessDetailsStep extends StatelessWidget {
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(10),
             ],
-            validator: (val) => Validate.validateMobileNumber(val, isOptional: true),
+            validator: (val) =>
+                Validate.validateMobileNumber(val, isOptional: true),
           ),
           SizedBox(height: 2.h),
           CommonTextField(
@@ -196,12 +208,16 @@ class BusinessDetailsStep extends StatelessWidget {
                               padding: EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
                                 "Select Year of Establishment",
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                             TextButton(
                               onPressed: () {
-                                controller.yearsInBusinessController.text = selectedYear.toString();
+                                controller.yearsInBusinessController.text =
+                                    selectedYear.toString();
                                 Navigator.pop(context);
                               },
                               child: const Text(
@@ -227,12 +243,18 @@ class BusinessDetailsStep extends StatelessWidget {
                             onSelectedItemChanged: (int index) {
                               selectedYear = 1900 + index;
                             },
-                            children: List<Widget>.generate(currentYear - 1900 + 1, (int index) {
-                              final year = 1900 + index;
-                              return Center(
-                                child: Text(year.toString(), style: const TextStyle(fontSize: 20)),
-                              );
-                            }),
+                            children: List<Widget>.generate(
+                              currentYear - 1900 + 1,
+                              (int index) {
+                                final year = 1900 + index;
+                                return Center(
+                                  child: Text(
+                                    year.toString(),
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ],

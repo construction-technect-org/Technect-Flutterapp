@@ -18,7 +18,6 @@ class AddRoleController extends GetxController {
   final List<PermissionItem> functionalities =
       PermissionLabelUtils.permissionItems;
 
-
   @override
   void onInit() {
     super.onInit();
@@ -46,6 +45,7 @@ class AddRoleController extends GetxController {
         .map((e) => e.trim())
         .toList();
   }
+
   void toggleFunctionality(String key) {
     if (selectedFunctionalities.contains(key)) {
       selectedFunctionalities.remove(key);
@@ -53,10 +53,10 @@ class AddRoleController extends GetxController {
       selectedFunctionalities.add(key);
     }
   }
+
   bool isFunctionalitySelected(String key) {
     return selectedFunctionalities.contains(key);
   }
-
 
   Future<void> saveRole() async {
     if (selectedFunctionalities.isEmpty) {
