@@ -1,5 +1,7 @@
 import 'package:construction_technect/app/core/utils/permission_utils.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/permissions_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/AddRoleService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/role_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +12,115 @@ class AddRoleController extends GetxController {
   final roleController = TextEditingController();
   final roleDescription = TextEditingController();
   final RxList<String> selectedFunctionalities = <String>[].obs;
+
+  final RxList<String> selectedPermissions = <String>[].obs;
   final isLoading = false.obs;
   Rx<GetAllRole> dataModel = GetAllRole().obs;
+
+  final AddRoleService _addRoleService = Get.find<AddRoleService>();
+
+  List<UserPermissions?> userPer = <UserPermissions?>[];
+  RxList<UserPermissions?> allPermissions = <UserPermissions?>[].obs;
+
+  /// grouped by category
+  RxMap<String, List<UserPermissions?>> groupedPermissions =
+      <String, List<UserPermissions?>>{}.obs;
+
+  /// selected permission ids
+  RxMap<String, bool> selected = <String, bool>{}.obs;
+  List<String> finalSelectedIds = <String>[];
+  List<String> finalSelectedCode = <String>[];
 
   int? roleId;
   RxBool isEdit = false.obs;
   final List<PermissionItem> functionalities =
       PermissionLabelUtils.permissionItems;
+
+  Future<void> fetchAllPermissions() async {
+    try {
+      isLoading.value = true;
+      final res = await _addRoleService.getPermisssions("merchant");
+      if (res.success == true) {
+        userPer.addAll(res.permissions!);
+        setPermissions(userPer);
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void setPermissions(List<UserPermissions?> list) {
+    allPermissions.value = list;
+
+    groupByCategory(list);
+
+    /// default unselected
+    for (var item in list) {
+      selected[item?.id ?? ""] = false;
+    }
+  }
+
+  void groupByCategory(List<UserPermissions?> list) {
+    final Map<String, List<UserPermissions?>> grouped = {};
+
+    for (var item in list) {
+      final String key = item?.category ?? "Other";
+
+      if (grouped.containsKey(key)) {
+        grouped[key]!.add(item);
+      } else {
+        grouped[key] = [item];
+      }
+    }
+
+    groupedPermissions.value = grouped;
+  }
+
+  /// 🔵 toggle single permission
+  void togglePermission(String id, bool value) {
+    selected[id] = value;
+  }
+
+  /// 🔵 get selected ids for API
+  List<String> getSelectedIds() {
+    finalSelectedIds = selected.entries
+        .where((e) => e.value == true)
+        .map((e) => e.key)
+        .toList();
+    return finalSelectedIds;
+  }
+
+  List<String> getCodeID() {
+    finalSelectedCode.clear();
+    for (int j = 0; j < userPer.length; j++) {
+      for (int i = 0; i < finalSelectedIds.length; i++) {
+        if (finalSelectedIds[i] == userPer[j]!.id) {
+          finalSelectedCode.add(userPer[j]!.code!);
+          break;
+        }
+      }
+    }
+    return finalSelectedCode;
+  }
+
+  /// 🔵 select all in category
+  void selectAllCategory(String category, bool value) {
+    var list = groupedPermissions[category];
+    if (list == null) return;
+
+    for (var item in list) {
+      selected[item!.id ?? ""] = value;
+    }
+  }
+
+  /// 🔵 select all global
+  void selectAll(bool value) {
+    for (var item in allPermissions) {
+      selected[item?.id ?? ""] = value;
+    }
+  }
 
   @override
   void onInit() {
@@ -26,6 +130,7 @@ class AddRoleController extends GetxController {
       isEdit.value = argument['isEdit'] ?? false;
       dataModel.value = argument['data'] ?? GetAllRole();
     }
+    fetchAllPermissions();
     if (isEdit.value) {
       loadRoleData(dataModel.value);
     }
@@ -47,15 +152,15 @@ class AddRoleController extends GetxController {
   }
 
   void toggleFunctionality(String key) {
-    if (selectedFunctionalities.contains(key)) {
-      selectedFunctionalities.remove(key);
+    if (selectedPermissions.contains(key)) {
+      selectedPermissions.remove(key);
     } else {
-      selectedFunctionalities.add(key);
+      selectedPermissions.add(key);
     }
   }
 
   bool isFunctionalitySelected(String key) {
-    return selectedFunctionalities.contains(key);
+    return selectedPermissions.contains(key);
   }
 
   Future<void> saveRole() async {

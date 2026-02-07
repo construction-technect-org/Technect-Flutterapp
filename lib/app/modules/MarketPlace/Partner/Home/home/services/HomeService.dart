@@ -8,13 +8,77 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/main_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchat_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/module_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/persona_profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/subcategory_model.dart';
 
 class HomeService extends GetxService {
   final ApiManager _apiManager = ApiManager();
   final ManageApi _manageApi = Get.find<ManageApi>();
+
+  Future<MainCategoryModel> getMainCategories({
+    required String moduleID,
+  }) async {
+    try {
+      final response = await _manageApi.get(
+        url: '${Endpoints.mainCatApi}$moduleID&includeInactive=false',
+      );
+      return MainCategoryModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting Main Categories: $e , $st');
+    }
+  }
+
+  Future<FullCategoryModel> getCategories({required String mainCatID}) async {
+    try {
+      final response = await _manageApi.get(
+        url: '${Endpoints.catApi}$mainCatID&includeInactive=false',
+      );
+      return FullCategoryModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting Main Categories: $e , $st');
+    }
+  }
+
+  Future<FullSubCategoryModel> getSubCategories({required String catID}) async {
+    try {
+      final response = await _manageApi.get(
+        url: '${Endpoints.subCatApi}$catID&includeInactive=false',
+      );
+      return FullSubCategoryModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting Sub Categories: $e , $st');
+    }
+  }
+
+  Future<CategoryProductModel> getCategoriesProduct({
+    required String subCatID,
+  }) async {
+    try {
+      final response = await _manageApi.get(
+        url: '${Endpoints.catProdApi}$subCatID&includeInactive=false',
+      );
+      return CategoryProductModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting  Categories Product: $e , $st');
+    }
+  }
+
+  Future<ModuleModel> getAllModules({required String mFor}) async {
+    try {
+      final response = await _manageApi.get(
+        url: '${Endpoints.moduleApi}$mFor&includeInactive=false',
+      );
+      return ModuleModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting Modules: $e , $st');
+    }
+  }
 
   Future<ProfileModel> getProfile() async {
     try {

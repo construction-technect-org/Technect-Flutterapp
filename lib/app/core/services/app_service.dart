@@ -2,8 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/main_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/module_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/persona_profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/subcategory_model.dart';
 
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
@@ -209,7 +214,7 @@ class AppHiveService extends GetxService {
 
   Map? get bizMetrics {
     try {
-      final data = _box.get('bm') as Map;
+      final data = _box.get('bm') as Map?;
       if (data == null) return null;
       return data;
     } catch (e) {
@@ -237,6 +242,135 @@ class AppHiveService extends GetxService {
       }
     } catch (e) {
       print("Error in POC, $e");
+    }
+  }
+
+  // ================= Modules =================
+  ModuleModel? get moduleDetails {
+    try {
+      final data = _box.get('module');
+      if (data == null) return null;
+      return ModuleModel.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      print("Error parsing POC: $e");
+      return null;
+    }
+  }
+
+  Future<void> setModuleDetails(ModuleModel? mm) async {
+    try {
+      if (mm == null) {
+        await _box.delete('module');
+      } else {
+        await _box.put('module', mm.toJson());
+        await _box.flush();
+      }
+    } catch (e) {
+      print("Error in Module, $e");
+    }
+  }
+
+  // ================= Main Category =================
+
+  MainCategoryModel? get mainCategoryDetails {
+    try {
+      final data = _box.get('mCat');
+      if (data == null) return null;
+      return MainCategoryModel.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      print("Error parsing POC: $e");
+      return null;
+    }
+  }
+
+  Future<void> setMainCategory(MainCategoryModel? mm) async {
+    try {
+      if (mm == null) {
+        await _box.delete('mCat');
+      } else {
+        await _box.put('mCat', mm.toJson());
+        await _box.flush();
+      }
+    } catch (e) {
+      print("Error in Module, $e");
+    }
+  }
+
+  // =================  Category =================
+
+  FullCategoryModel? get categoryDetails {
+    try {
+      final data = _box.get('cat');
+      if (data == null) return null;
+      return FullCategoryModel.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      print("Error parsing POC: $e");
+      return null;
+    }
+  }
+
+  Future<void> setCategory(FullCategoryModel? mm) async {
+    try {
+      if (mm == null) {
+        await _box.delete('cat');
+      } else {
+        await _box.put('cat', mm.toJson());
+        await _box.flush();
+      }
+    } catch (e) {
+      print("Error in Module, $e");
+    }
+  }
+
+  // =================  Sub Category =================
+
+  FullSubCategoryModel? get subCategoryDetails {
+    try {
+      final data = _box.get('subCat');
+      if (data == null) return null;
+      return FullSubCategoryModel.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      print("Error parsing POC: $e");
+      return null;
+    }
+  }
+
+  Future<void> setSubCategory(FullSubCategoryModel? mm) async {
+    try {
+      if (mm == null) {
+        await _box.delete('subCat');
+      } else {
+        await _box.put('subCat', mm.toJson());
+        await _box.flush();
+      }
+    } catch (e) {
+      print("Error in Module, $e");
+    }
+  }
+
+  // =================  Sub Category =================
+
+  CategoryProductModel? get categoryProdDetails {
+    try {
+      final data = _box.get('catProd');
+      if (data == null) return null;
+      return CategoryProductModel.fromJson(Map<String, dynamic>.from(data));
+    } catch (e) {
+      print("Error parsing POC: $e");
+      return null;
+    }
+  }
+
+  Future<void> setCategoryProd(CategoryProductModel? mm) async {
+    try {
+      if (mm == null) {
+        await _box.delete('catProd');
+      } else {
+        await _box.put('catProd', mm.toJson());
+        await _box.flush();
+      }
+    } catch (e) {
+      print("Error in Module, $e");
     }
   }
 

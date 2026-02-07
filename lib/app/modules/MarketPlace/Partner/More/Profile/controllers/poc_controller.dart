@@ -30,6 +30,10 @@ class PointOfContactController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    loadPOC();
+  }
+
+  void loadPOC() {
     pointOfContact?.value = storage.pocDetails;
     fNameController.text = pointOfContact?.value?.pocName ?? "";
     emailController.text = pointOfContact?.value?.pocEmail ?? "";
@@ -80,9 +84,6 @@ class PointOfContactController extends GetxController {
       );
 
       if (response) {
-        SnackBars.successSnackBar(
-          content: "Successfully updated Point of Contact",
-        );
         pointOfContact?.value?.pocName = fNameController.text.trim();
         pointOfContact?.value?.pocDesignation = designationController.text
             .trim();
@@ -92,11 +93,13 @@ class PointOfContactController extends GetxController {
             .trim();
         pointOfContact?.value?.pocEmail = emailController.text.trim();
         await storage.setPOC(pointOfContact?.value);
+        Get.back(result: true);
+        SnackBars.successSnackBar(
+          content: "Successfully updated Point of Contact",
+        );
       } else {
         SnackBars.errorSnackBar(content: "Point of Contact updation Failed");
       }
-
-      Get.back();
     } catch (e) {
       print(e);
       SnackBars.errorSnackBar(content: "Point of Contact updation Failed");

@@ -10,7 +10,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/views/merchant_project_view_details.dart';
 
 class MerchantHomeView extends StatelessWidget {
-  final CommonController commonController = Get.find();
+  //final CommonController commonController = Get.find();
   final HomeController controller = Get.put(HomeController());
 
   static const double _selectionBarWidth = 5.0;
@@ -741,6 +741,7 @@ class MerchantHomeView extends StatelessWidget {
     "Renovation",
     "Manufacturer",
   ];
+
   Widget buildSideBar(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * _leftPanelWidth,
@@ -750,10 +751,12 @@ class MerchantHomeView extends StatelessWidget {
         border: Border(right: BorderSide(color: _borderColor)),
       ),
       child: ListView.separated(
-        //shrinkWrap: true,
+        shrinkWrap: true,
         itemBuilder: (context, index) {
           print("Index $index");
           print("Sel Index ${controller.selectedIndex.value}");
+          print("Mod Names ${controller.modules[index]?.name}");
+          print("Mod Images ${controller.modules[index]?.image?.url}");
           return GestureDetector(
             onTap: () {
               controller.selectedIndex.value = index;
@@ -803,7 +806,13 @@ class MerchantHomeView extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: _horizontalPadding,
                                 ),
-                                child: Image.asset(_imageURL[index]),
+                                child:
+                                    controller.modules[index]?.image?.url !=
+                                        null
+                                    ? Image.network(
+                                        controller.modules[index]!.image!.url!,
+                                      )
+                                    : Image.asset(Asset.renovation),
                               ),
                             ],
                           ),
@@ -813,7 +822,7 @@ class MerchantHomeView extends StatelessWidget {
                   ).paddingOnly(right: _horizontalPadding),
                   const SizedBox(height: _itemSpacing),
                   Text(
-                    _imageNames[index],
+                    controller.modules[index]?.name ?? "",
                     style: MyTexts.medium13,
                     textAlign: TextAlign.center,
                   ).paddingOnly(
@@ -827,7 +836,7 @@ class MerchantHomeView extends StatelessWidget {
         },
         separatorBuilder: (context, index) =>
             const Divider(height: 1, color: _dividerColor, thickness: 1),
-        itemCount: 6,
+        itemCount: controller.modules.length,
       ),
     );
   }

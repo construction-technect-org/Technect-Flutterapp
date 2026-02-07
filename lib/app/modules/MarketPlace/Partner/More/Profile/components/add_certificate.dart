@@ -146,8 +146,11 @@ class AddCertificate extends StatelessWidget {
                     filePath: controller.filePath.value,
                     // name: basename(controller.filePath.value),
                   );
-                  await controller.updateCert();
-                  Get.back(result: cert);
+                  await controller.updateCert(
+                    controller.titleController.text.trim(),
+                    controller.filePath.value,
+                  );
+                  //Get.back(result: cert);
                 }
               }
             },

@@ -18,7 +18,7 @@ class DashBoardController extends GetxController {
   final isLoading = false.obs;
   final HomeService homeService = Get.find<HomeService>();
   Rx<MerchantProfileModel> profileResponse = MerchantProfileModel().obs;
-
+  Rx<MerchantProfileModel> profileResponse1 = MerchantProfileModel().obs;
   RxBool getLoading() {
     return (commonController.isLoading.value && isLoading.value).obs;
   }

@@ -158,7 +158,7 @@ class SignUpDetailsController extends GetxController {
         return true;
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error sending OTP: $e');
+      SnackBars.errorSnackBar(content: 'Error sending OTP');
       log("verifyMobileNumber: $e");
       return false;
     }

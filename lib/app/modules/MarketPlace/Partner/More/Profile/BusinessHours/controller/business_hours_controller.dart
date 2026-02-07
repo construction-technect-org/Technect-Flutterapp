@@ -9,7 +9,9 @@ class BusinessHoursController extends GetxController {
 
   final DashBoardController _dashBoardController =
       Get.find<DashBoardController>();
-  Rx<MerchantBusninessHours?>? busninessHours1 = MerchantBusninessHours().obs;
+  Rx<MerchantBusninessHours?>? busninessHours1 = Rx<MerchantBusninessHours?>(
+    null,
+  );
   final HomeService _homeService = Get.find<HomeService>();
 
   Map<String, RxBool> daysEnabled = {
@@ -131,6 +133,7 @@ class BusinessHoursController extends GetxController {
       toControllers["Sunday"]!.text =
           convert24hToAmPm(busninessHours1?.value?.sunday?.close) ?? "";
     }
+    busninessHours1?.refresh();
   }
 
   String? convert24hToAmPm(String? time) {
@@ -294,6 +297,8 @@ class BusinessHoursController extends GetxController {
           MerchantBusninessHours.fromJson(_addDays),
         );
         loadPreviousHours();
+        //Get.toNamed(Routes.PROFILE);
+        Get.back(result: true);
         SnackBars.successSnackBar(
           content: "Successfully updated Busniness Hours",
         );

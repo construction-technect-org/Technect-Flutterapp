@@ -14,7 +14,7 @@ class PermissionKeys {
     marketingLeadManager,
     salesLeadManager,
     accountLeadManager,
-    crmAddLead
+    crmAddLead,
   ];
 }
 
@@ -28,15 +28,10 @@ class PermissionLabelUtils {
     PermissionKeys.crmAddLead: 'CRM Add Lead',
   };
 
-  static List<PermissionItem> get permissionItems =>
-      _permissionLabels.entries
-          .map(
-            (e) => PermissionItem(
-          key: e.key,
-          label: e.value,
-        ),
-      )
-          .toList();
+  static List<PermissionItem> get permissionItems => _permissionLabels.entries
+      .map((e) => PermissionItem(key: e.key, label: e.value))
+      .toList();
+
   static String format(String? apiValue) {
     if (apiValue == null || apiValue.isEmpty) return '';
 
@@ -61,11 +56,10 @@ class PermissionLabelUtils {
     return permissions.every(myPref.getPermissionList().contains);
   }
 }
+
 class PermissionItem {
   final String label;
   final String key;
 
   PermissionItem({required this.label, required this.key});
 }
-
-

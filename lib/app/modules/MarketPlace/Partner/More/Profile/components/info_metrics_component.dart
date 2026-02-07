@@ -73,13 +73,14 @@ class InfoMetricsComponent extends StatelessWidget {
             const Spacer(),
             GestureDetector(
               onTap: () async {
-                final previousData = controller.businessHoursData.toList();
+                //final previousData = controller.businessHoursData.toList();
                 final result = await Get.toNamed(
                   Routes.BUSINESS_HOURS,
-                  arguments: previousData.isNotEmpty ? previousData : null,
+                  //arguments: previousData.isNotEmpty ? previousData : null,
                 );
-                if (result != null && result is List<Map<String, dynamic>>) {
-                  controller.handleBusinessHoursData(result);
+                if (result != null && result == true) {
+                  print("Result, $result");
+                  controller.handleBusinessHoursData();
                 }
               },
               behavior: HitTestBehavior.translucent,
@@ -313,9 +314,6 @@ class InfoMetricsComponent extends StatelessWidget {
   }
 
   Widget _buildBusinessHourContent() {
-    final data = controller.businessHoursData1;
-    final List<MerchantDay> openDays = [];
-    final List<MerchantDay> closedDays = [];
     return Obx(() {
       if (controller.businessHoursData1.isEmpty) {
         return Text(

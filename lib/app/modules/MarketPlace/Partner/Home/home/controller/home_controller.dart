@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/module_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -9,6 +10,8 @@ class HomeController extends GetxController {
 
   HomeService homeService = HomeService();
 
+  final HomeService _homeService = Get.find<HomeService>();
+
   final isLoading = false.obs;
 
   Rx<CategoryModel> categoryHierarchyData = CategoryModel().obs;
@@ -16,12 +19,31 @@ class HomeController extends GetxController {
   Rx<CategoryModel> categoryHierarchyData2 = CategoryModel().obs;
   RxBool isGridView = true.obs;
   RxInt selectedIndex = 0.obs;
+  RxList<Modules?> modules = <Modules?>[].obs;
 
   @override
   void onInit() {
     super.onInit();
+    fetchSideBarList();
     fetchCategoryHierarchy();
     fetchCategoryServiceHierarchy();
+  }
+
+  Future<void> fetchSideBarList() async {
+    try {
+      isLoading(true);
+      final response = await _homeService.getAllModules(mFor: "merchant");
+      if (response.success == true) {
+        if (response.data?.modules != null) {
+          modules.addAll(response.data!.modules!);
+          print("Modules ${modules?.value}");
+        }
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading(false);
+    }
   }
 
   Future<void> fetchCategoryHierarchy() async {

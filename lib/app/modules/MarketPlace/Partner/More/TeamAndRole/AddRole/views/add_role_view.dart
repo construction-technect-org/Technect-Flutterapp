@@ -3,115 +3,261 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/controllers/add_role_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/permissions_model.dart';
 
 class AddRoleView extends GetView<AddRoleController> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: hideKeyboard,
-      child: Scaffold(
-        backgroundColor: MyColors.white,
-        body: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
-              ),
-            ),
-
-            Column(
-              children: [
-                CommonAppBar(
-                  backgroundColor: Colors.transparent,
-                  title: Text(controller.isEdit.value ? "Edit Role" : "Add  Role"),
-                  isCenter: false,
-                  leading: GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.zero,
-                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
-                    ),
+    return LoaderWrapper(
+      isLoading: controller.isLoading,
+      child: GestureDetector(
+        onTap: hideKeyboard,
+        child: Scaffold(
+          backgroundColor: MyColors.white,
+          body: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(Asset.moreIBg),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Form(
-                        key: controller.formKey,
+              ),
+
+              Column(
+                children: [
+                  CommonAppBar(
+                    backgroundColor: Colors.transparent,
+                    title: Text(
+                      controller.isEdit.value ? "Edit Role" : "Add  Role",
+                    ),
+                    isCenter: false,
+                    leading: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.zero,
+                        child: Icon(
+                          Icons.arrow_back_ios_new_sharp,
+                          color: Colors.black,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CommonTextField(
-                              headerText: 'Role Title',
-                              hintText: "Enter the role",
-                              controller: controller.roleController,
-                              validator: (val) {
-                                if ((val ?? "").isEmpty) {
-                                  return "Please enter the role";
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 2.h),
-                            CommonTextField(
-                              headerText: 'Role Description',
-                              hintText: "Please add description",
-                              maxLine: 4,
-                              validator: (val) {
-                                if ((val ?? "").isEmpty) {
-                                  return "Please enter the description";
-                                }
-                                return null;
-                              },
-                              controller: controller.roleDescription,
+                            Form(
+                              key: controller.formKey,
+                              child: Column(
+                                children: [
+                                  CommonTextField(
+                                    headerText: 'Role Title',
+                                    hintText: "Enter the role",
+                                    controller: controller.roleController,
+                                    validator: (val) {
+                                      if ((val ?? "").isEmpty) {
+                                        return "Please enter the role";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  SizedBox(height: 2.h),
+                                  CommonTextField(
+                                    headerText: 'Role Description',
+                                    hintText: "Please add description",
+                                    maxLine: 4,
+                                    validator: (val) {
+                                      if ((val ?? "").isEmpty) {
+                                        return "Please enter the description";
+                                      }
+                                      return null;
+                                    },
+                                    controller: controller.roleDescription,
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(height: 2.h),
                             Text(
                               'Functionalities',
-                              style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+                              style: MyTexts.medium15.copyWith(
+                                color: MyColors.gray2E,
+                              ),
                             ),
                             SizedBox(height: 1.2.h),
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: controller.functionalities.map((item) {
-                                return _buildFunctionalityChip(
-                                  label: item.label,
-                                  keyValue: item.key,
-                                  controller: controller,
+                            /*Obx(() {
+                              return Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: controller.groupedPermissions.entries.map((
+                                  item,
+                                ) {
+                                  return _buildFunctionalityChip(
+                                    label: item!.value!.,
+                                    keyValue: item!.key!,
+                                    controller: controller,
+                                  );
+                                }).toList(),
+                              );
+                            }),*/
+                            Obx(() {
+                              if (controller.groupedPermissions.isEmpty) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
                                 );
-                              }).toList(),
+                              }
 
-                            ),
+                              return Flexible(
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  padding: const EdgeInsets.all(12),
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  children: controller.groupedPermissions.entries.map((
+                                    entry,
+                                  ) {
+                                    String category = entry.key;
+                                    final List<UserPermissions?> permissions =
+                                        entry.value;
+
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        /// 🔵 category header with select all
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              category.toUpperCase(),
+                                              style: const TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+
+                                            Row(
+                                              children: [
+                                                const Text("Select All"),
+                                                Obx(() {
+                                                  bool allSelected = permissions
+                                                      .every(
+                                                        (p) =>
+                                                            controller
+                                                                .selected[p!
+                                                                .id] ==
+                                                            true,
+                                                      );
+
+                                                  return Checkbox(
+                                                    value: allSelected,
+                                                    onChanged: (val) {
+                                                      controller
+                                                          .selectAllCategory(
+                                                            category,
+                                                            val!,
+                                                          );
+                                                    },
+                                                  );
+                                                }),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+
+                                        const SizedBox(height: 6),
+
+                                        /// 🔵 grid checkboxes 2 per row
+                                        GridView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: permissions.length,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                childAspectRatio: 4,
+                                              ),
+                                          itemBuilder: (context, index) {
+                                            var perm = permissions[index];
+                                            String nm = perm!.code!;
+                                            var parts = nm.split(".");
+                                            String finalName = parts.last
+                                                .toUpperCase();
+
+                                            return Obx(
+                                              () => Row(
+                                                children: [
+                                                  Checkbox(
+                                                    value:
+                                                        controller
+                                                            .selected[perm!
+                                                            .id] ??
+                                                        false,
+                                                    onChanged: (val) {
+                                                      controller
+                                                          .togglePermission(
+                                                            perm.id ?? "",
+                                                            val!,
+                                                          );
+                                                    },
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      finalName ?? "",
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+
+                                        const Divider(height: 25),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
+                              );
+                            }),
                           ],
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Obx(() {
-            return RoundedButton(
-              buttonName: controller.isEdit.value ? 'Update' : 'Add',
-              onTap: controller.isLoading.value
-                  ? null
-                  : () {
-                      if (controller.formKey.currentState!.validate()) {
-                        controller.saveRole();
-                      }
-                    },
-            );
-          }),
+                ],
+              ),
+            ],
+          ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Obx(() {
+              return RoundedButton(
+                buttonName: controller.isEdit.value ? 'Update' : 'Add',
+                onTap: controller.isLoading.value
+                    ? null
+                    : () {
+                        if (controller.formKey.currentState!.validate()) {
+                          print("roles saved ${controller.getSelectedIds()}");
+                          print("Code saved ${controller.getCodeID()}");
+
+                          //controller.saveRole();
+                        }
+                      },
+              );
+            }),
+          ),
         ),
       ),
     );
@@ -125,8 +271,12 @@ class AddRoleView extends GetView<AddRoleController> {
     return Obx(() {
       final isSelected = controller.isFunctionalitySelected(keyValue);
 
-      final backgroundColor = isSelected ? const Color(0xFFE1FFD4) : const Color(0xFFF7F7F7);
-      final borderColor = isSelected ? const Color(0xFFC3E7C2) : const Color(0xFFEAEAEA);
+      final backgroundColor = isSelected
+          ? const Color(0xFFE1FFD4)
+          : const Color(0xFFF7F7F7);
+      final borderColor = isSelected
+          ? const Color(0xFFC3E7C2)
+          : const Color(0xFFEAEAEA);
 
       return GestureDetector(
         onTap: () => controller.toggleFunctionality(keyValue),
@@ -148,9 +298,7 @@ class AddRoleView extends GetView<AddRoleController> {
               const SizedBox(width: 6),
               Text(
                 label,
-                style: MyTexts.medium15.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+                style: MyTexts.medium15.copyWith(fontWeight: FontWeight.w500),
               ),
             ],
           ),

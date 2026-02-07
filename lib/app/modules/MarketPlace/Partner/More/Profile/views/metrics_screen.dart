@@ -27,7 +27,10 @@ class MetricsScreen extends StatelessWidget {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Get.to(() => PointOfContentScreen());
+                Get.to(() => PointOfContentScreen())?.then((_) {
+                  print("Value ert123");
+                  _controller.loadPOC();
+                });
               },
               behavior: HitTestBehavior.translucent,
               child: Padding(
@@ -103,7 +106,11 @@ class MetricsScreen extends StatelessWidget {
       if (_controller.pointOfContact?.value?.pocName == null) {
         return GestureDetector(
           onTap: () {
-            Get.to(() => PointOfContentScreen());
+            Get.to(() => PointOfContentScreen())?.then((_) {
+              print("Value ert123");
+              _controller.loadPOC();
+            });
+            ;
           },
           child: Container(
             width: double.infinity,

@@ -6,12 +6,12 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 class BusinessHoursView extends GetView<BusinessHoursController> {
   @override
   Widget build(BuildContext context) {
-    final arguments = Get.arguments;
+    /*final arguments = Get.arguments;
     if (arguments != null && arguments is List<Map<String, dynamic>>) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.loadPreviousBusinessHours(arguments);
       });
-    }
+    } */
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -173,7 +173,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                   padding: const EdgeInsets.only(bottom: 18),
                                   child: Obx(() {
                                     final bool enabled =
-                                        !controller.daysEnabled[day]!.value;
+                                        controller.daysEnabled[day]!.value;
                                     return Row(
                                       children: [
                                         CustomSwitch(

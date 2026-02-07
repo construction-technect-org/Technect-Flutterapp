@@ -18,7 +18,9 @@ class CertificationsComponent extends StatelessWidget {
           ...controller.certs.asMap().entries.map((entry) {
             final index = entry.key;
             final cert = entry.value;
-            print("Index $index, Entry $entry");
+            print(
+              "Index $index, Entry ${entry.value.title}, ${entry.value.url}",
+            );
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,8 +55,8 @@ class CertificationsComponent extends StatelessWidget {
                         children: [
                           const Gap(10),
                           GestureDetector(
-                            onTap: () {
-                              controller.removeCertificate(index);
+                            onTap: () async {
+                              await controller.removeCertificate(index);
                             },
                             child: SvgPicture.asset(Asset.delete),
                           ),
@@ -130,10 +132,9 @@ class CertificationsComponent extends StatelessWidget {
           Align(
             child: GestureDetector(
               onTap: () {
-                Get.to(() => AddCertificate())?.then((val) {
-                  if (val != null) {
-                    controller.certificates.add(val);
-                  }
+                Get.to(() => AddCertificate())?.then((_) {
+                  controller.loadMerchantCertificates();
+                  print("Certsres ${controller.certs.last.title}");
                 });
               },
               child: RoundedButton(
