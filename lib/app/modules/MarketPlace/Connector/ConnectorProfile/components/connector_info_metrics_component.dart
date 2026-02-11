@@ -1,9 +1,11 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/add_kyc_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/poc_edit_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ConnectorInfoMetricsComponent extends StatelessWidget {
   const ConnectorInfoMetricsComponent({super.key});
@@ -11,9 +13,12 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
   ConnectorProfileController get controller =>
       Get.find<ConnectorProfileController>();
 
+  // final  ConnectorProfileController controllers = Get.put(ConnectorProfileController());
+
   @override
   Widget build(BuildContext context) {
     final connectorProfile = controller.connectorProfile;
+    final connectorProfileData = controller.profileDatas;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,6 +112,54 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         ),
         SizedBox(height: 1.h),
         _buildProjectDetails(),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Point of contact',
+                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => EditPocProfile());
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: SvgPicture.asset(Asset.edit),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 1.h),
+        Obx(() {
+          if (controller.profileDatas.value?.success != true) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final profile = controller.profileDatas.value;
+
+          if (profile == null) {
+            return const Text("No Data Found");
+          }
+
+          final poc = profile.connector?.pocDetails;
+          return _buildProjectDetailsPoint([
+            {"title": "POC Name", "value": poc?.pocName ?? "Null"},
+            {"title": "Designation", "value": poc?.pocDesignation ?? "Null"},
+            {"title": "Phone Number", "value": poc?.pocPhone ?? "Null"},
+            {
+              "title": "Alternative Number",
+              "value": poc?.pocAlternatePhone ?? "Null",
+            },
+            {"title": "Email", "value": poc?.pocEmail ?? "Null"},
+          ]);
+        }),
+        SizedBox(height: 2.h),
       ],
     );
   }
@@ -223,6 +276,48 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           buildRow(title: "No. of floor", data: "2" ?? "-"),
           const Gap(6),
           buildRow(title: "Project Status", data: "Ongoing" ?? "-"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProjectDetailsPoint(List<Map<dynamic, dynamic>> allData) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: MyColors.white,
+        border: Border.all(color: MyColors.grayEA),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListView.separated(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: allData.length,
+            itemBuilder: (context, index) {
+              final item = allData[index];
+              return buildRow(
+                title: item["title"]?.toString() ?? "-",
+                data: item["value"]?.toString() ?? "-",
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(height: 6),
+          ),
+          // buildRow(title: "Project Name", data: "Adarsh" ?? "-"),
+          // const Gap(6),
+          // buildRow(title: "Project Code", data: "CT-PRJ001" ?? "-"),
+          // const Gap(6),
+          // buildRow(title: "Area", data: "1600 sqft" ?? "-"),
+          // const Gap(6),
+          // buildRow(title: "Project Type", data: "Residential Project" ?? "-"),
+          // const Gap(6),
+          // buildRow(title: "No. of floor", data: "2" ?? "-"),
+          // const Gap(6),
+          // buildRow(title: "Project Status", data: "Ongoing" ?? "-"),
         ],
       ),
     );

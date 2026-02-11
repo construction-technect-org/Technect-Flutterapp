@@ -62,6 +62,11 @@ class AppHiveService extends GetxService {
     await _box.flush();
   }
 
+
+  String get connectorProfileId => _box.get('isProfileId',defaultValue: '')as String;
+  Future<void> setProfileId(String value)async {
+    await _box.put('isProfile', value);
+  }
   // ================= USER =================
 
   UserMainModel? get user {

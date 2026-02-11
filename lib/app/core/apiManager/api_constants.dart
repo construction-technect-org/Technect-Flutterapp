@@ -63,9 +63,18 @@ class APIConstants {
   static const String createService = "service/create";
   // static const String updateService = "service/merchant/";
 
+
   static const String deleteService = "service/merchant/";
   static const String getServiceTypes = "service/types";
   static const String getServices = "service/types";
+
+  // Service Persona List APIs
+  static const String getPersonaList="v1/api/auth/profiles";
+
+  // Service Connector ProfileId APIs
+  static const String getConnectorProfile="v1/api/business/connector";
+  static const String updateConnectorPocDetails="v1/api/business/connector/poc-details";
+
 
   // Service SupportTicket API
   static const String getSupportTicketCategories = "support-ticket/categories";
