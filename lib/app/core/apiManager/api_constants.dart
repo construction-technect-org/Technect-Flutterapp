@@ -75,6 +75,14 @@ class APIConstants {
   static const String getConnectorProfile="v1/api/business/connector";
   static const String updateConnectorPocDetails="v1/api/business/connector/poc-details";
 
+  //Service Connector Module
+  static const String getConnectorModule="v1/api/marketplace/modules";
+  static const String getMainCategory="v1/api/marketplace/main-categories";
+  static const String getCategory="v1/api/marketplace/categories";
+  static const String getSubCategory="v1/api/marketplace/sub-categories";
+  static const String getSubCategoryItem="v1/api/marketplace/category-products";
+
+
 
   // Service SupportTicket API
   static const String getSupportTicketCategories = "support-ticket/categories";

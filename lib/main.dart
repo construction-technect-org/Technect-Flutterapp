@@ -3,6 +3,9 @@ import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/controller/sub_category_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/controller/sub_category_item_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/main_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/firebase_options.dart';
@@ -69,6 +72,9 @@ class InitialBinding implements Bindings {
     Get.put<ManageApi>(ManageApi(), permanent: true);
     Get.put<HomeService>(HomeService(), permanent: true);
     Get.put<CommonController>(CommonController(), permanent: true);
+    Get.put<ConnectorHomeController>(ConnectorHomeController(), permanent: true);
+    Get.put<SubCategoryController>(SubCategoryController(), permanent: true);
+    Get.put<SubCategoryItemController>(SubCategoryItemController(), permanent: true);
     Get.put<MainHomeController>(MainHomeController(), permanent: true);
     myPref = Get.find();
   }

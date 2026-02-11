@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
@@ -92,7 +93,7 @@ class BottomBarView extends GetView<BottomController> {
         return Dashboard();
       case 1:
         return myPref.getRole() == "connector"
-            ? HomeView()
+            ? ConnectorHomeView()
             : MerchantHomeView();
       case 2:
         return ConnectionInboxView();
