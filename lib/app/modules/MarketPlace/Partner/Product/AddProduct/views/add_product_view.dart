@@ -5,12 +5,13 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/main_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:video_player/video_player.dart';
 
-class AddProductView extends GetView<AddProductController> {
+class AddProductView extends GetView<MainHomeController> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -331,16 +332,16 @@ class AddProductView extends GetView<AddProductController> {
                           },
                         ),
                         SizedBox(height: 2.h),
-                        if (controller.isEdit)
-                          CommonTextField(
-                            headerText: 'Product Code',
-                            readOnly: true,
-                            hintText: "CTPC01",
-                            bgColor: Colors.grey.shade100,
-                            controller: controller.productCodeController,
-                          ),
-                        if (controller.isEdit) SizedBox(height: 2.h),
 
+                        // if (controller.isEdit)
+                        //   CommonTextField(
+                        //     headerText: 'Product Code',
+                        //     readOnly: true,
+                        //     hintText: "CTPC01",
+                        //     bgColor: Colors.grey.shade100,
+                        //     controller: controller.productCodeController,
+                        //   ),
+                        // if (controller.isEdit) SizedBox(height: 2.h),
                         CommonDropdown<String>(
                           headerText: 'Details of warehouse',
                           validator: (val) {
@@ -411,47 +412,96 @@ class AddProductView extends GetView<AddProductController> {
                               : const SizedBox();
                         }),
                         SizedBox(height: 2.h),
-                        CommonDropdown<String>(
-                          headerText: 'Main Category',
-                          validator: (val) {
-                            if (val == null || val.isEmpty) {
-                              return "Please select a main category";
-                            }
-                            return null;
-                          },
-                          hintText: "Select product main category",
-                          items: controller.mainCategoryNames,
-                          selectedValue: controller.selectedMainCategory,
-                          itemLabel: (item) => item,
-                          onChanged: controller.isEdit
-                              ? null
-                              : (value) {
-                                  controller.onMainCategorySelected(value);
-                                },
-                          enabled: !controller.isEdit,
-                        ),
-                        SizedBox(height: 2.h),
-                        CommonDropdown<String>(
-                          headerText: 'Sub-category',
-                          validator: (val) {
-                            if (val == null || val.isEmpty) {
-                              return "Please select a sub category";
-                            }
-                            return null;
-                          },
-                          hintText: "Select product sub-category",
-                          items: controller.subCategoryNames,
-                          selectedValue: controller.selectedSubCategory,
-                          itemLabel: (item) => item,
-                          onChanged: controller.isEdit
-                              ? null
-                              : (value) {
-                                  controller.onSubCategorySelected(value);
-                                },
-                          enabled: !controller.isEdit,
-                        ),
+                        Obx(() {
+                          return CommonDropdown<String>(
+                            headerText: 'Main Category',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return "Please select a main category";
+                              }
+                              return null;
+                            },
+                            hintText: "Select product main category",
+                            items: controller.mainCatListNames.value,
+                            selectedValue: controller.selectedMainCatName,
+                            itemLabel: (item) => item,
+                            onChanged: controller.isEdit
+                                ? null
+                                : (value) {
+                                    controller.onMainCategorySelected(value);
+                                  },
+                            enabled: !controller.isEdit,
+                          );
+                        }),
                         SizedBox(height: 2.h),
                         Obx(() {
+                          return CommonDropdown<String>(
+                            headerText: 'Category',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return "Please select a category";
+                              }
+                              return null;
+                            },
+                            hintText: "Select product category",
+                            items: controller.catListNames.value,
+                            selectedValue: controller.selectedCatName,
+                            itemLabel: (item) => item,
+                            onChanged: controller.isEdit
+                                ? null
+                                : (value) {
+                                    controller.onCategorySelected(value);
+                                  },
+                            enabled: !controller.isEdit,
+                          );
+                        }),
+
+                        SizedBox(height: 2.h),
+                        Obx(() {
+                          return CommonDropdown<String>(
+                            headerText: 'Sub-category',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return "Please select a sub category";
+                              }
+                              return null;
+                            },
+                            hintText: "Select product sub-category",
+                            items: controller.subCatListNames.value,
+                            selectedValue: controller.selectedSubCatName,
+                            itemLabel: (item) => item,
+                            onChanged: controller.isEdit
+                                ? null
+                                : (value) {
+                                    controller.onSubCategorySelected(value);
+                                  },
+                            enabled: !controller.isEdit,
+                          );
+                        }),
+                        SizedBox(height: 2.h),
+                        Obx(() {
+                          return CommonDropdown<String>(
+                            headerText: 'Product Category',
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return "Please select a product category";
+                              }
+                              return null;
+                            },
+                            hintText: "Select product category",
+                            items: controller.catProdListNames.value,
+                            selectedValue: controller.selectedCatProdName,
+                            itemLabel: (item) => item,
+                            // onChanged: controller.isEdit
+                            //     ? null
+                            //     : (value) {
+                            //         controller.onMainCategorySelected(value);
+                            //       },
+                            enabled: !controller.isEdit,
+                          );
+                        }),
+                        SizedBox(height: 2.h),
+                        /* Obx(() {
                           if (controller.productNames.isNotEmpty) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,8 +531,8 @@ class AddProductView extends GetView<AddProductController> {
                           } else {
                             return const SizedBox.shrink();
                           }
-                        }),
-                        Obx(() {
+                        }), */
+                        /* Obx(() {
                           if (controller.subProductNames.isNotEmpty) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -512,7 +562,7 @@ class AddProductView extends GetView<AddProductController> {
                           } else {
                             return const SizedBox.shrink();
                           }
-                        }),
+                        }), */
                         Column(
                           children: [
                             Container(
@@ -793,22 +843,24 @@ class AddProductView extends GetView<AddProductController> {
                                           onTap: () {
                                             controller.openVideoDialog(
                                               context,
-                                              (controller
-                                                              .selectedVideo
-                                                              .value
-                                                              ?.path ??
-                                                          "") ==
-                                                      "abc"
-                                                  ? (APIConstants.bucketUrl +
-                                                        controller
-                                                            .product
-                                                            .productVideo
-                                                            .toString())
-                                                  : (controller
-                                                            .selectedVideo
-                                                            .value
-                                                            ?.path ??
-                                                        ""),
+                                              // (controller
+                                              //                 .selectedVideo
+                                              //                 .value
+                                              //                 ?.path ??
+                                              //             "") ==
+                                              //         "abc"
+                                              //     ?
+                                              // (APIConstants.bucketUrl +
+                                              //           controller
+                                              //               .product
+                                              //               .productVideo
+                                              //               .toString())
+                                              //     :
+                                              controller
+                                                      .selectedVideo
+                                                      .value
+                                                      ?.path ??
+                                                  "",
                                               controller
                                                       .selectedVideo
                                                       .value
@@ -1423,7 +1475,7 @@ class AddProductView extends GetView<AddProductController> {
 
                               if (!allValid) return;
 
-                              controller.submitProduct(controller.formKey1);
+                              //controller.submitProduct(controller.formKey1);
                             },
                           ),
                         ),

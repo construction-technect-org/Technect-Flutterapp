@@ -6,12 +6,12 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 class BusinessHoursView extends GetView<BusinessHoursController> {
   @override
   Widget build(BuildContext context) {
-    final arguments = Get.arguments;
+    /*final arguments = Get.arguments;
     if (arguments != null && arguments is List<Map<String, dynamic>>) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.loadPreviousBusinessHours(arguments);
       });
-    }
+    } */
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -24,7 +24,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
           child: RoundedButton(
             buttonName: 'Submit',
             onTap: () {
-              controller.onSubmit();
+              controller.onHoursSubmit();
             },
           ),
         ),
@@ -200,17 +200,59 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                               style: MyTexts.bold16.copyWith(
                                                 color: Colors.black,
                                               ),
+                                              readOnly: true,
+                                              onTap: () async {
+                                                final TimeOfDay?
+                                                pickedTime = await showTimePicker(
+                                                  context: context,
+                                                  initialTime: TimeOfDay.now(),
+                                                  builder: (context, child) {
+                                                    return MediaQuery(
+                                                      data:
+                                                          MediaQuery.of(
+                                                            context,
+                                                          ).copyWith(
+                                                            alwaysUse24HourFormat:
+                                                                false, // 👈 force 12-hour
+                                                          ),
+                                                      child: child!,
+                                                    );
+                                                  },
+                                                );
+
+                                                if (pickedTime != null) {
+                                                  final int hour12 =
+                                                      pickedTime.hourOfPeriod ==
+                                                          0
+                                                      ? 12
+                                                      : pickedTime.hourOfPeriod;
+
+                                                  final String hour = hour12
+                                                      .toString()
+                                                      .padLeft(2, '0');
+
+                                                  final String minute =
+                                                      pickedTime.minute
+                                                          .toString()
+                                                          .padLeft(2, '0');
+
+                                                  controller
+                                                          .fromControllers[day]
+                                                          ?.text =
+                                                      '$hour:$minute';
+                                                }
+                                              },
                                               controller: controller
                                                   .fromControllers[day],
                                               keyboardType:
                                                   TextInputType.number,
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter
-                                                    .digitsOnly,
-                                                LengthLimitingTextInputFormatter(
-                                                  2,
-                                                ),
-                                              ],
+                                              // inputFormatters: [
+                                              //   FilteringTextInputFormatter
+                                              //       .digitsOnly,
+                                              //   LengthLimitingTextInputFormatter(
+                                              //     2,
+                                              //   ),
+                                              // ],
                                               decoration: InputDecoration(
                                                 hintText: "From",
                                                 hintStyle: MyTexts.bold14
@@ -276,11 +318,11 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                     ),
                                               ),
                                               onChanged: (value) {
-                                                controller.validateTimeInput(
-                                                  value,
-                                                  day,
-                                                  'from',
-                                                );
+                                                // controller.validateTimeInput(
+                                                //   value,
+                                                //   day,
+                                                //   'from',
+                                                // );
                                               },
                                             ),
                                           ),
@@ -320,17 +362,58 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                               style: MyTexts.bold16.copyWith(
                                                 color: Colors.black,
                                               ),
+                                              readOnly: true,
+                                              onTap: () async {
+                                                final TimeOfDay?
+                                                pickedTime = await showTimePicker(
+                                                  context: context,
+                                                  initialTime: TimeOfDay.now(),
+                                                  builder: (context, child) {
+                                                    return MediaQuery(
+                                                      data:
+                                                          MediaQuery.of(
+                                                            context,
+                                                          ).copyWith(
+                                                            alwaysUse24HourFormat:
+                                                                false, // 👈 force 12-hour
+                                                          ),
+                                                      child: child!,
+                                                    );
+                                                  },
+                                                );
+
+                                                if (pickedTime != null) {
+                                                  final int hour12 =
+                                                      pickedTime.hourOfPeriod ==
+                                                          0
+                                                      ? 12
+                                                      : pickedTime.hourOfPeriod;
+
+                                                  final String hour = hour12
+                                                      .toString()
+                                                      .padLeft(2, '0');
+
+                                                  final String minute =
+                                                      pickedTime.minute
+                                                          .toString()
+                                                          .padLeft(2, '0');
+                                                  controller
+                                                          .toControllers[day]
+                                                          ?.text =
+                                                      '$hour:$minute';
+                                                }
+                                              },
                                               controller:
                                                   controller.toControllers[day],
                                               keyboardType:
                                                   TextInputType.number,
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter
-                                                    .digitsOnly,
-                                                LengthLimitingTextInputFormatter(
-                                                  2,
-                                                ),
-                                              ],
+                                              // inputFormatters: [
+                                              //   FilteringTextInputFormatter
+                                              //       .digitsOnly,
+                                              //   LengthLimitingTextInputFormatter(
+                                              //     2,
+                                              //   ),
+                                              // ],
                                               decoration: InputDecoration(
                                                 hintText: "To",
                                                 hintStyle: MyTexts.bold14
@@ -396,11 +479,11 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                     ),
                                               ),
                                               onChanged: (value) {
-                                                controller.validateTimeInput(
-                                                  value,
-                                                  day,
-                                                  'to',
-                                                );
+                                                // controller.validateTimeInput(
+                                                //   value,
+                                                //   day,
+                                                //   'to',
+                                                // );
                                               },
                                             ),
                                           ),

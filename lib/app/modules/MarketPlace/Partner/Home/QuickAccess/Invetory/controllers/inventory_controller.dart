@@ -1,12 +1,20 @@
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/services/InventoryService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/main_category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/subcategory_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/service/product_management_service.dart';
 
 class InventoryController extends GetxController {
   final ProductManagementService _productService = ProductManagementService();
+
+  final HomeService _homeService = Get.find<HomeService>();
 
   RxBool isLoading = false.obs;
   Rx<ProductListModel> productListModel = ProductListModel().obs;
@@ -28,7 +36,7 @@ class InventoryController extends GetxController {
   void onInit() {
     super.onInit();
     _loadProductsFromStorage();
-    fetchProducts();
+    //fetchProducts();
   }
 
   Future<void> _loadProductsFromStorage() async {

@@ -1,9 +1,14 @@
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/point_of_contact.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/poc_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 
 class MetricsScreen extends StatelessWidget {
+  final PointOfContactController _controller =
+      Get.find<PointOfContactController>();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,7 +27,10 @@ class MetricsScreen extends StatelessWidget {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Get.to(() => PointOfContentScreen());
+                Get.to(() => PointOfContentScreen())?.then((_) {
+                  print("Value ert123");
+                  _controller.loadPOC();
+                });
               },
               behavior: HitTestBehavior.translucent,
               child: Padding(
@@ -89,16 +97,20 @@ class MetricsScreen extends StatelessWidget {
 
   Widget _buildPointOfViewContent() {
     return Obx(() {
-      final pointOfContact = Get.find<CommonController>()
-          .profileData
-          .value
-          .data
-          ?.merchantProfile
-          ?.pointOfContact;
-      if (pointOfContact?.name?.isEmpty ?? true) {
+      // Get.find<CommonController>()
+      // .profileData
+      // .value
+      // .data
+      // ?.merchantProfile
+      // ?.pointOfContact;
+      if (_controller.pointOfContact?.value?.pocName == null) {
         return GestureDetector(
           onTap: () {
-            Get.to(() => PointOfContentScreen());
+            Get.to(() => PointOfContentScreen())?.then((_) {
+              print("Value ert123");
+              _controller.loadPOC();
+            });
+            ;
           },
           child: Container(
             width: double.infinity,
@@ -128,24 +140,31 @@ class MetricsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildRow(title: "Name", data: pointOfContact?.name ?? "-"),
+              buildRow(
+                title: "Name",
+                data: _controller.pointOfContact?.value?.pocName ?? "-",
+              ),
               const Gap(6),
               buildRow(
                 title: "Designation",
-                data: pointOfContact?.relation ?? "-",
+                data: _controller.pointOfContact?.value?.pocDesignation ?? "-",
               ),
               const Gap(6),
               buildRow(
                 title: "Phone number",
-                data: pointOfContact?.phoneNumber ?? "-",
+                data: _controller.pointOfContact?.value?.pocPhone ?? "-",
               ),
               const Gap(6),
               buildRow(
                 title: "Alternative number",
-                data: pointOfContact?.alternativePhoneNumber ?? "-",
+                data:
+                    _controller.pointOfContact?.value?.pocAlternatePhone ?? "-",
               ),
               const Gap(6),
-              buildRow(title: "Email id", data: pointOfContact?.email ?? "-"),
+              buildRow(
+                title: "Email id",
+                data: _controller.pointOfContact?.value?.pocEmail ?? "-",
+              ),
               const Gap(6),
             ],
           ),

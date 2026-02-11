@@ -1,12 +1,15 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 class EditProfileControllerr extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -30,6 +33,7 @@ class EditProfileControllerr extends GetxController {
   RxBool isNumValidating = false.obs;
   RxString numberError = "".obs;
 
+  RxString filePath = "".obs;
   RxString businessHours = "".obs;
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
 
@@ -42,20 +46,23 @@ class EditProfileControllerr extends GetxController {
   void _populateExistingData() {
     try {
       final homeController = Get.find<CommonController>();
-      final merchantProfile = homeController.profileData.value.data?.merchantProfile;
+      // final merchantProfile = homeController.profileData.value.data?.merchantProfile;
+      final merProfile = storage.bizMetrics;
 
-      if (merchantProfile != null) {
-        Get.find<ProfileController>().image.value = merchantProfile.merchantLogo ?? "";
-        businessNameController.text = merchantProfile.businessName ?? '';
-        gstNumberController.text = merchantProfile.gstinNumber ?? '';
-        businessEmailController.text = merchantProfile.businessEmail ?? '';
-        businessWebsiteController.text = merchantProfile.website ?? '';
-        alternativeContactController.text = merchantProfile.alternativeBusinessContactNumber ?? '';
-        businessContactController.text = merchantProfile.businessContactNumber ?? '';
-        yearsInBusinessController.text = merchantProfile.yearsInBusiness?.toString() ?? '';
-        projectsCompletedController.text = merchantProfile.projectsCompleted?.toString() ?? '';
+      if (merProfile != null) {
+        filePath.value = merProfile["image"] ?? "";
+        businessNameController.text = merProfile["businessName"] ?? '';
+        gstNumberController.text = storage.getNumber ?? '';
+        businessEmailController.text = merProfile["businessEmail"] ?? '';
+        businessWebsiteController.text = merProfile["businessWebsite"] ?? '';
+        alternativeContactController.text =
+            merProfile["alternateBusinessPhone"] ?? '';
+        businessContactController.text = merProfile['businessPhone'] ?? '';
+        yearsInBusinessController.text = merProfile['yearOfEstablish'] ?? '';
+        //projectsCompletedController.text =
+        //  merchantProfile.projectsCompleted?.toString() ?? '';
 
-        if (merchantProfile.businessHours?.isNotEmpty == true) {
+        /*  if (merchantProfile.businessHours?.isNotEmpty == true) {
           final hoursList = merchantProfile.businessHours!
               .map(
                 (hour) => {
@@ -68,17 +75,21 @@ class EditProfileControllerr extends GetxController {
               )
               .toList();
           businessHoursData.value = hoursList;
-        }
+        } */
       }
       final cont = Get.find<ProfileController>();
 
       if ((cont.businessModel.value.gstinNumber ?? "").isNotEmpty) {
-        businessNameController.text = cont.businessModel.value.businessName ?? "";
+        businessNameController.text =
+            cont.businessModel.value.businessName ?? "";
         gstNumberController.text = cont.businessModel.value.gstinNumber ?? "";
-        businessEmailController.text = cont.businessModel.value.businessEmail ?? "";
+        businessEmailController.text =
+            cont.businessModel.value.businessEmail ?? "";
         businessWebsiteController.text = cont.businessModel.value.website ?? "";
-        businessContactController.text = cont.businessModel.value.businessContactNumber ?? "";
-        alternativeContactController.text = cont.businessModel.value.alternativeBusinessEmail ?? "";
+        businessContactController.text =
+            cont.businessModel.value.businessContactNumber ?? "";
+        alternativeContactController.text =
+            cont.businessModel.value.alternativeBusinessEmail ?? "";
         yearsInBusinessController.text = cont.businessModel.value.year ?? "";
       }
     } catch (e) {
@@ -102,7 +113,9 @@ class EditProfileControllerr extends GetxController {
             ? Get.find<ProfileController>().selectedImage.value?.path
             : Get.find<ProfileController>().image.value,
       );
-      log("AlternativeContactController : ${alternativeContactController.text}");
+      log(
+        "AlternativeContactController : ${alternativeContactController.text}",
+      );
       Get.find<ProfileController>().businessModel.refresh();
       Get.back();
     } else {
@@ -126,7 +139,10 @@ class EditProfileControllerr extends GetxController {
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt, color: MyColors.gray2E),
-              title: Text("Camera", style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
+              title: Text(
+                "Camera",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.camera);
@@ -134,7 +150,10 @@ class EditProfileControllerr extends GetxController {
             ),
             ListTile(
               leading: const Icon(Icons.photo, color: MyColors.gray2E),
-              title: Text("Gallery", style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
+              title: Text(
+                "Gallery",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.gallery);
@@ -147,10 +166,17 @@ class EditProfileControllerr extends GetxController {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await Get.find<ProfileController>().picker.pickImage(source: source);
+    final pickedFile = await Get.find<ProfileController>().picker.pickImage(
+      source: source,
+    );
     if (pickedFile == null) return;
-    final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
-    Get.find<ProfileController>().selectedImage.value = File(compressedFile.path);
+    final compressedFile = await CommonConstant().compressImage(
+      File(pickedFile.path),
+    );
+    Get.find<ProfileController>().selectedImage.value = File(
+      compressedFile.path,
+    );
+    filePath.value = compressedFile.path;
   }
 
   Future<void> validateEmailAvailability() async {
@@ -172,11 +198,38 @@ class EditProfileControllerr extends GetxController {
   Future<void> validateUrlAvailability() async {
     final website = businessWebsiteController.text;
 
-    final bool isAvailable = await SignUpService().checkAvailability(website: website);
+    final bool isAvailable = await SignUpService().checkAvailability(
+      website: website,
+    );
     if (!isAvailable) {
       websiteError.value = "Website url is already connect with other business";
     } else {
       websiteError.value = "";
+    }
+  }
+
+  final HomeService _homeService = Get.find<HomeService>();
+  Future<void> updateMetrcis() async {
+    try {
+      print(basename(filePath.value));
+      final response = await _homeService.updateBizMetrics(
+        profileID: storage.merchantID,
+        bizName: businessNameController.text.trim(),
+        bizType: "Manufacturer",
+        bizEmail: businessEmailController.text.trim(),
+        bizPhone: businessContactController.text.trim(),
+        alternateBizPhone: alternativeContactController.text.trim(),
+        businessWebsite: businessWebsiteController.text.trim(),
+        yearOfEstablish: yearsInBusinessController.text.trim(),
+        fileName: filePath.value,
+      );
+      if (response) {
+        SnackBars.successSnackBar(content: 'Metrics update successful');
+      } else {
+        SnackBars.errorSnackBar(content: 'Error in metrics update');
+      }
+    } catch (e) {
+      Get.printError(info: 'Error fetching profile: $e');
     }
   }
 }

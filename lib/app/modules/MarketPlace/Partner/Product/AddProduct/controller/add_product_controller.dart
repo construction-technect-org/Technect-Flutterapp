@@ -1,14 +1,23 @@
+/*
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/main_category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/subcategory_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart'
+    hide ProductSubCategory;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart'
+    hide SubCategory;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
@@ -19,6 +28,14 @@ class AddProductController extends GetxController {
   final formKey1 = GlobalKey<FormState>();
   final formKey2 = GlobalKey<FormState>();
   final formKey3 = GlobalKey<FormState>();
+
+  final HomeService _homeService = Get.find<HomeService>();
+
+  RxList<MainCategoryData?> mainCatList = <MainCategoryData?>[].obs;
+
+  RxList<CategoryData?> catList = <CategoryData?>[].obs;
+  RxList<SubCategoryData?> subCatList = <SubCategoryData?>[].obs;
+  RxList<CategoryProductData?> catProdList = <CategoryProductData?>[].obs;
 
   final pageController = PageController();
   Product product = Product();
@@ -40,14 +57,14 @@ class AddProductController extends GetxController {
   final noteStockController = TextEditingController();
   final noteController = TextEditingController();
   final amountController = TextEditingController();
-
+  final brandNameController = TextEditingController();
   final productNameController = TextEditingController();
   final stockController = TextEditingController();
   final priceController = TextEditingController();
   final gstController = TextEditingController();
   final gstPriceController = TextEditingController();
   final termsController = TextEditingController();
-  final brandNameController = TextEditingController();
+
   final stockYardAddressController = TextEditingController();
 
   // ---------------- DropDown Data ----------------
@@ -55,6 +72,9 @@ class AddProductController extends GetxController {
   RxList<SubCategory> subCategories = <SubCategory>[].obs;
   RxList<CategoryProduct> productsList = <CategoryProduct>[].obs;
   RxList<ProductSubCategory> subProductsList = <ProductSubCategory>[].obs;
+
+  // ------------------ Drop Down Selection ---------------
+
   RxList<FilterData> filters = <FilterData>[].obs;
 
   // Reactive name lists for dropdowns
@@ -292,7 +312,8 @@ class AddProductController extends GetxController {
                 .toList() ??
             [];
         if ((result.data ?? []).isNotEmpty) {
-          subProductsList.value = result.data?.first.productSubCategories ?? [];
+          subProductsList.value =
+              result.data?.first.productSubCategories ?? <ProductSubCategory>[];
           final firstProduct = result.data!.first;
           subProductNames.value =
               firstProduct.productSubCategories
@@ -459,7 +480,7 @@ class AddProductController extends GetxController {
       isLoading(true);
       final result = await _service.subCategory(mainCategoryId);
       if ((result.success) == true) {
-        subCategories.value = result.data ?? [];
+        subCategories.value = result.data ?? <SubCategory>[];
         subCategoryNames.value =
             result.data
                 ?.map((e) => e.name)
@@ -1127,3 +1148,4 @@ class AddProductController extends GetxController {
     });
   }
 }
+*/

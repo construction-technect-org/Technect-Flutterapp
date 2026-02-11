@@ -486,7 +486,6 @@ class CommonController extends GetxController {
       print("First Name ${userMainModel?.firstName}");
 
       if (savedToken.isNotEmpty) {
-
         //fetchProfileData();
         // if(myPref.getIsTeamLogin()==false){
         //loadTeamFromStorage();

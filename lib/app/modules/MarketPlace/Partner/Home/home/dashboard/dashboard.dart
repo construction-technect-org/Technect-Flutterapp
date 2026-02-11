@@ -12,7 +12,7 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading: commonController.isLoading,
+      isLoading: _controller.isLoading,
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
@@ -80,7 +80,7 @@ class Dashboard extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text:
-                                      '${_controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${_controller.userMainModel?.lastName?.capitalizeFirst ?? ''}!',
+                                      '${_controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${_controller.userMainModel?.lastName?.capitalizeFirst ?? ''}',
                                   style: MyTexts.medium16.copyWith(
                                     color: MyColors.fontBlack,
                                     fontFamily: MyTexts.SpaceGrotesk,
@@ -121,7 +121,7 @@ class Dashboard extends StatelessWidget {
                                         children: [
                                           TextSpan(
                                             text: _controller
-                                                .addressImmediate
+                                                .selectedAddress
                                                 .value,
                                           ),
                                           const WidgetSpan(

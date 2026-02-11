@@ -3,8 +3,8 @@ class CompleteSignUpModel {
     this.success,
     this.message,
     this.user,
-    this.merchantProfile,
-    this.connectorProfile,
+    // this.merchantProfile,
+    //this.connectorProfile,
     this.token,
     this.tokenType,
   });
@@ -12,8 +12,8 @@ class CompleteSignUpModel {
   bool? success;
   String? message;
   UserMainModel? user;
-  MerchantProfile? merchantProfile;
-  ConnectorProfile? connectorProfile;
+  //MerchantProfile? merchantProfile;
+  //ConnectorProfile? connectorProfile;
   String? token;
   String? tokenType;
 
@@ -22,12 +22,12 @@ class CompleteSignUpModel {
       success: json["success"],
       message: json["message"],
       user: json["user"] == null ? null : UserMainModel.fromJson(json["user"]),
-      merchantProfile: json["merchantProfile"] == null
+      /* merchantProfile: json["merchantProfile"] == null
           ? null
           : MerchantProfile.fromJson(json["merchantProfile"]),
       connectorProfile: json["connectorProfile"] == null
           ? null
-          : ConnectorProfile.fromJson(json["connectorProfile"]),
+          : ConnectorProfile.fromJson(json["connectorProfile"]), */
       token: json["token"],
       tokenType: json["tokenType"],
     );
@@ -37,14 +37,14 @@ class CompleteSignUpModel {
     "success": success,
     "message": message,
     "user": user?.toJson(),
-    "merchantProfile": merchantProfile?.toJson(),
-    "connectorProfile": connectorProfile?.toJson(),
+    // "merchantProfile": merchantProfile?.toJson(),
+    // "connectorProfile": connectorProfile?.toJson(),
     "token": token,
     "tokenType": tokenType,
   };
 }
 
-class ConnectorProfile {
+/*class ConnectorProfile {
   ConnectorProfile({
     this.id,
     this.ownerUserId,
@@ -226,7 +226,7 @@ class MerchantProfileVerificationDetails {
     "centerJurisdiction": centerJurisdiction,
     "stateJurisdiction": stateJurisdiction,
   };
-}
+} */
 
 class UserMainModel {
   UserMainModel({

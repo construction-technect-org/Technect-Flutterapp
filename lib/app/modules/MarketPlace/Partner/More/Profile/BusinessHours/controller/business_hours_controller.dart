@@ -1,9 +1,20 @@
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 
 class BusinessHoursController extends GetxController {
   RxBool isEnabled = true.obs;
 
-  final Map<String, RxBool> daysEnabled = {
+  final DashBoardController _dashBoardController =
+      Get.find<DashBoardController>();
+  Rx<MerchantBusninessHours?>? busninessHours1 = Rx<MerchantBusninessHours?>(
+    null,
+  );
+  final HomeService _homeService = Get.find<HomeService>();
+
+  Map<String, RxBool> daysEnabled = {
     "Monday": true.obs,
     "Tuesday": true.obs,
     "Wednesday": true.obs,
@@ -13,6 +24,14 @@ class BusinessHoursController extends GetxController {
     "Sunday": false.obs,
   };
 
+  void updateDaysFromApi(Map<String, dynamic> apiDays) {
+    apiDays.forEach((day, value) {
+      if (daysEnabled.containsKey(day)) {
+        daysEnabled[day]!.value = value as bool;
+      }
+    });
+  }
+
   final Map<String, TextEditingController> fromControllers = {};
   final Map<String, TextEditingController> toControllers = {};
 
@@ -21,21 +40,36 @@ class BusinessHoursController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    print("SAtFRi ${storage.merchnatBizHours?.saturday}");
+    busninessHours1?.value = storage.merchnatBizHours;
+    print("Saturday ${busninessHours1?.value?.saturday}");
+
+    daysEnabled = {
+      "Monday": busninessHours1?.value?.monday?.closed?.obs ?? true.obs,
+      "Tuesday": busninessHours1?.value?.tuesday?.closed?.obs ?? true.obs,
+      "Wednesday": busninessHours1?.value?.wednesday?.closed?.obs ?? true.obs,
+      "Thursday": busninessHours1?.value?.thursday?.closed?.obs ?? true.obs,
+      "Friday": busninessHours1?.value?.friday?.closed?.obs ?? true.obs,
+      "Saturday": busninessHours1?.value?.saturday?.closed?.obs ?? true.obs,
+      "Sunday": busninessHours1?.value?.sunday?.closed?.obs ?? false.obs,
+    };
     for (final day in daysEnabled.keys) {
       fromControllers[day] = TextEditingController();
       toControllers[day] = TextEditingController();
       fromPeriods[day] = "AM".obs;
       toPeriods[day] = "PM".obs;
     }
+
+    loadPreviousHours();
   }
 
   @override
   void onClose() {
     for (final controller in fromControllers.values) {
-      controller.dispose();
+      controller?.dispose();
     }
     for (final controller in toControllers.values) {
-      controller.dispose();
+      controller?.dispose();
     }
     super.onClose();
   }
@@ -49,8 +83,76 @@ class BusinessHoursController extends GetxController {
         } else {
           toControllers[day]?.clear();
         }
-        SnackBars.errorSnackBar(content: "Please enter valid time (0-12 hours)", time: 2);
+        SnackBars.errorSnackBar(
+          content: "Please enter valid time (0-12 hours)",
+          time: 2,
+        );
       }
+    }
+  }
+
+  void loadPreviousHours() {
+    busninessHours1?.value = storage.merchnatBizHours;
+    if (busninessHours1?.value != null) {
+      daysEnabled = {
+        "Monday": busninessHours1?.value?.monday?.closed?.obs ?? true.obs,
+        "Tuesday": busninessHours1?.value?.tuesday?.closed?.obs ?? true.obs,
+        "Wednesday": busninessHours1?.value?.wednesday?.closed?.obs ?? true.obs,
+        "Thursday": busninessHours1?.value?.thursday?.closed?.obs ?? true.obs,
+        "Friday": busninessHours1?.value?.friday?.closed?.obs ?? true.obs,
+        "Saturday": busninessHours1?.value?.saturday?.closed?.obs ?? true.obs,
+        "Sunday": busninessHours1?.value?.sunday?.closed?.obs ?? false.obs,
+      };
+      fromControllers["Monday"]!.text =
+          busninessHours1?.value?.monday?.open ?? "";
+      fromControllers["Tuesday"]!.text =
+          busninessHours1?.value?.tuesday?.open ?? "";
+      fromControllers["Wednesday"]!.text =
+          busninessHours1?.value?.wednesday?.open ?? "";
+      fromControllers["Thursday"]!.text =
+          busninessHours1?.value?.thursday?.open ?? "";
+      fromControllers["Friday"]!.text =
+          busninessHours1?.value?.friday?.open ?? "";
+      fromControllers["Saturday"]!.text =
+          busninessHours1?.value?.saturday?.open ?? "";
+      fromControllers["Sunday"]!.text =
+          busninessHours1?.value?.sunday?.open ?? "";
+
+      toControllers["Monday"]!.text =
+          convert24hToAmPm(busninessHours1?.value?.monday?.close) ?? "";
+      toControllers["Tuesday"]!.text =
+          convert24hToAmPm(busninessHours1?.value?.tuesday?.close) ?? "";
+      toControllers["Wednesday"]!.text =
+          convert24hToAmPm(busninessHours1?.value?.wednesday?.close) ?? "";
+      toControllers["Thursday"]!.text =
+          convert24hToAmPm(busninessHours1?.value?.thursday?.close) ?? "";
+      toControllers["Friday"]!.text =
+          convert24hToAmPm(busninessHours1?.value?.friday?.close) ?? "";
+      toControllers["Saturday"]!.text =
+          convert24hToAmPm(busninessHours1?.value?.saturday?.close) ?? "";
+      toControllers["Sunday"]!.text =
+          convert24hToAmPm(busninessHours1?.value?.sunday?.close) ?? "";
+    }
+    busninessHours1?.refresh();
+  }
+
+  String? convert24hToAmPm(String? time) {
+    if (time != null) {
+      final parts = time.split(":");
+      if (parts.length != 2) return "Invalid time";
+
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+
+      if (hour == null || minute == null) return "Invalid time";
+
+      final period = hour >= 12 ? "PM" : "AM";
+      final displayHour = hour % 12 == 0 ? 12 : hour % 12;
+      final displayMinute = minute.toString().padLeft(2, '0');
+
+      return "$displayHour:$displayMinute";
+    } else {
+      return null;
     }
   }
 
@@ -71,7 +173,9 @@ class BusinessHoursController extends GetxController {
           final openHour = openTime.replaceAll(':00', '');
           final closeHour = closeTime.replaceAll(':00', '');
           String removeAmPm(String time) {
-            return time.replaceAll(RegExp('(AM|PM)', caseSensitive: false), "").trim();
+            return time
+                .replaceAll(RegExp('(AM|PM)', caseSensitive: false), "")
+                .trim();
           }
 
           fromControllers[dayName]?.text = removeAmPm(openHour);
@@ -84,6 +188,128 @@ class BusinessHoursController extends GetxController {
           Get.printInfo(info: '📅 $dayName is closed');
         }
       }
+    }
+  }
+
+  bool isValidTimeRange(String input) {
+    final regex = RegExp(
+      r'^([01]\d|2[0-3]):([0-5]\d)\s-\s([01]\d|2[0-3]):([0-5]\d)$',
+    );
+
+    if (!regex.hasMatch(input)) return false;
+
+    final parts = input.split(' - ');
+    final start = parts[0].split(':');
+    final end = parts[1].split(':');
+
+    final startMinutes = int.parse(start[0]) * 60 + int.parse(start[1]);
+    final endMinutes = int.parse(end[0]) * 60 + int.parse(end[1]);
+
+    return endMinutes > startMinutes;
+  }
+
+  String convertAmPmTo24Hour(String time) {
+    final regex = RegExp(
+      r'^(\d{1,2}):(\d{2})\s?(AM|PM)$',
+      caseSensitive: false,
+    );
+
+    final match = regex.firstMatch(time.trim());
+    if (match == null) {
+      throw const FormatException("Invalid AM/PM time format");
+    }
+
+    int hour = int.parse(match.group(1)!);
+    final int minute = int.parse(match.group(2)!);
+    final String period = match.group(3)!.toUpperCase();
+
+    if (hour < 1 || hour > 12 || minute < 0 || minute > 59) {
+      throw const FormatException("Invalid time values");
+    }
+
+    if (period == "AM") {
+      hour = hour == 12 ? 0 : hour;
+    } else {
+      hour = hour == 12 ? 12 : hour + 12;
+    }
+
+    return "${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}";
+  }
+
+  bool isTimeGreater24(String t1, String t2) {
+    int toMinutes(String t) {
+      final parts = t.split(':');
+      return int.parse(parts[0]) * 60 + int.parse(parts[1]);
+    }
+
+    return toMinutes(t1) > toMinutes(t2);
+  }
+
+  Future<void> onHoursSubmit() async {
+    try {
+      if (!isEnabled.value) {
+        SnackBars.errorSnackBar(content: "Please enable business hours");
+        return;
+      }
+      Map<String, dynamic> _days = {};
+      Map<String, dynamic> _addDays = {};
+      Map<String, dynamic> merged = {};
+      for (final day in daysEnabled.keys) {
+        _days = {};
+        bool isEnabledDay = daysEnabled[day]!.value;
+        print(isEnabledDay);
+        if (!isEnabledDay) {
+          print("Monday");
+          String openDayTime = fromControllers[day]!.text;
+          String closedDayTime = convertAmPmTo24Hour(
+            "${toControllers[day]!.text} PM",
+          );
+
+          print("Satu");
+          if (isTimeGreater24(closedDayTime, openDayTime)) {
+            print("Lagy");
+            print(day.toLowerCase());
+            print(openDayTime);
+            print(closedDayTime);
+            _days[day.toLowerCase()] = {
+              "open": openDayTime,
+              "close": closedDayTime,
+              "closed": isEnabledDay,
+            };
+          }
+        } else {
+          _days[day.toLowerCase()] = {
+            "open": null,
+            "close": null,
+            "closed": isEnabledDay,
+          };
+        }
+
+        _addDays[day.toLowerCase()] = _days[day.toLowerCase()];
+      }
+      print(_addDays);
+      final response = await _homeService.updateBusinessHours(
+        storage.merchantID,
+        _addDays,
+      );
+      if (response) {
+        await storage.setMerchantBizHours(
+          MerchantBusninessHours.fromJson(_addDays),
+        );
+        loadPreviousHours();
+        //Get.toNamed(Routes.PROFILE);
+        Get.back(result: true);
+        SnackBars.successSnackBar(
+          content: "Successfully updated Busniness Hours",
+        );
+      } else {
+        SnackBars.errorSnackBar(content: "Business Hours Updation Failed");
+      }
+    } catch (e) {
+      print(e);
+      SnackBars.errorSnackBar(
+        content: "Business Hours Updation Failed, try again later",
+      );
     }
   }
 
@@ -120,7 +346,9 @@ class BusinessHoursController extends GetxController {
     }
 
     if (!hasValidHours) {
-      SnackBars.errorSnackBar(content: "Please set valid business hours for at least one day");
+      SnackBars.errorSnackBar(
+        content: "Please set valid business hours for at least one day",
+      );
       return;
     }
 
@@ -147,7 +375,8 @@ class BusinessHoursController extends GetxController {
           "is_open": true,
           "open_time":
               "${fromControllers[day]?.text.padLeft(2, '0')}:00 ${fromPeriods[day]!.value}",
-          "close_time": "${toControllers[day]?.text.padLeft(2, '0')}:00 ${toPeriods[day]!.value}",
+          "close_time":
+              "${toControllers[day]?.text.padLeft(2, '0')}:00 ${toPeriods[day]!.value}",
         });
       } else {
         businessHoursData.add({

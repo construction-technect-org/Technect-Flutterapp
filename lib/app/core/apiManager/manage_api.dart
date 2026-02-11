@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:construction_technect/app/core/apiManager/api_exception.dart';
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/error_model.dart';
+import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/error_sheet.dart';
 import 'package:http/http.dart' as http;
@@ -66,7 +67,7 @@ class ManageApi extends GetxService {
 
       final headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
+        'Authorization': 'Bearer ${storage.token}',
       };
 
       Get.printInfo(info: '🌐 API GET Request:');
@@ -103,7 +104,7 @@ class ManageApi extends GetxService {
     try {
       final headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
+        'Authorization': 'Bearer ${storage.token}',
       };
 
       Get.printInfo(info: '🌐 API POST Request:');
@@ -139,12 +140,52 @@ class ManageApi extends GetxService {
     }
   }
 
+  Future<dynamic> patch({required String url, required Object body}) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${storage.token}',
+      };
+
+      Get.printInfo(info: '🌐 API PUT Request:');
+      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   Headers: $headers');
+      Get.printInfo(info: '   Body: $body');
+
+      final request = http.Request('PATCH', Uri.parse(baseUrl + url));
+      request.body = json.encode(body);
+      request.headers.addAll(headers);
+
+      final http.StreamedResponse response = await request.send();
+
+      Get.printInfo(info: '📡 API Response:');
+      Get.printInfo(info: '   Status: ${response.statusCode}');
+      Get.printInfo(info: '   Headers: ${response.headers}');
+
+      final map = await _returnResponse(response);
+
+      // Check for invalid/expired token in response body
+      //_checkTokenValidity(map);
+
+      Get.printInfo(info: '✅ Parsed Response: $map');
+      return map;
+    } on SocketException {
+      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      SnackBars.errorSnackBar(content: 'No Internet Connection');
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      Get.printInfo(info: '❌ Unexpected Error: $e');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      throw FetchDataException('Unexpected error: $e');
+    }
+  }
+
   /// PUT method for JSON body requests
   Future<dynamic> put({required String url}) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
+        'Authorization': 'Bearer ${storage.token}',
       };
 
       Get.printInfo(info: '🌐 API PUT Request:');
@@ -182,7 +223,7 @@ class ManageApi extends GetxService {
     try {
       final headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
+        'Authorization': 'Bearer ${storage.token}',
       };
 
       Get.printInfo(info: '🌐 API PUT Request:');
@@ -218,6 +259,90 @@ class ManageApi extends GetxService {
     }
   }
 
+  Future<dynamic> patchMultipart({
+    required String url,
+    required Map<String, dynamic> fields,
+    Map<String, String>? files,
+  }) async {
+    try {
+      final request = http.MultipartRequest('PATCH', Uri.parse(baseUrl + url));
+
+      // Add authorization header
+      request.headers['Authorization'] = 'Bearer ${storage.token}';
+
+      // Add form fields
+      fields.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+
+      // Add files
+      if (files != null) {
+        for (final entry in files.entries) {
+          final file = File(entry.value);
+          final fileName = file.path.split('/').last;
+          final fileExtension = fileName.split('.').last.toLowerCase();
+
+          // Determine MIME type based on file extension
+          String? mimeType;
+          switch (fileExtension) {
+            case 'pdf':
+              mimeType = 'application/pdf';
+            case 'jpg':
+            case 'jpeg':
+              mimeType = 'image/jpeg';
+            case 'png':
+              mimeType = 'image/png';
+            case 'doc':
+              mimeType = 'application/msword';
+            case 'docx':
+              mimeType =
+                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            default:
+              mimeType = 'application/octet-stream';
+          }
+
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              entry.key,
+              entry.value,
+              filename: fileName,
+              //contentType: MediaType.parse(mimeType),
+            ),
+          );
+        }
+      }
+
+      Get.printInfo(info: '🌐 API PATCH Multipart Request:');
+      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   Headers: ${request.headers}');
+      Get.printInfo(info: '   Fields: $fields');
+      Get.printInfo(info: '   Files: $files');
+      Get.printInfo(info: 'Method: ${request.method}');
+
+      final http.StreamedResponse response = await request.send();
+
+      Get.printInfo(info: '📡 API Response:');
+      Get.printInfo(info: '   Status: ${response.statusCode}');
+      Get.printInfo(info: '   Headers: ${response.headers}');
+
+      final map = await _returnResponse(response);
+
+      // Check for invalid/expired token in response body
+      //_checkTokenValidity(map);
+
+      Get.printInfo(info: '✅ Parsed Response: $map');
+      return map;
+    } on SocketException {
+      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      SnackBars.errorSnackBar(content: 'No Internet Connection');
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      Get.printInfo(info: '❌ Unexpected Error: $e');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      throw FetchDataException('Unexpected error: $e');
+    }
+  }
+
   /// POST method for multipart form data requests (file uploads)
   Future<dynamic> postMultipart({
     required String url,
@@ -228,7 +353,7 @@ class ManageApi extends GetxService {
       final request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
 
       // Add authorization header
-      request.headers['Authorization'] = 'Bearer ${myPref.getToken()}';
+      request.headers['Authorization'] = 'Bearer ${storage.token}';
 
       // Add form fields
       fields.forEach((key, value) {
@@ -312,7 +437,7 @@ class ManageApi extends GetxService {
       final request = http.MultipartRequest('PUT', Uri.parse(baseUrl + url));
 
       // Add authorization header
-      request.headers['Authorization'] = 'Bearer ${myPref.getToken()}';
+      request.headers['Authorization'] = 'Bearer ${storage.token}';
 
       // Add form fields
       fields.forEach((key, value) {
@@ -391,7 +516,7 @@ class ManageApi extends GetxService {
     try {
       final headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
+        'Authorization': 'Bearer ${storage.token}',
       };
 
       Get.printInfo(info: '🌐 API DELETE Request:');
@@ -432,7 +557,7 @@ class ManageApi extends GetxService {
     try {
       final headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
+        'Authorization': 'Bearer ${storage.token}',
       };
 
       Get.printInfo(info: '🌐 API POST Request:');
