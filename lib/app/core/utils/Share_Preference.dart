@@ -79,6 +79,8 @@ class AppSharedPreference {
     'serviceRequirementListData',
   );
   final profileId= ''.val('profileId');
+  final mainCategoriesConstructionId= ''.val('mainCategoriesConstructionId');
+  final mainCategoriesInteriorId= ''.val('mainCategoriesInteriorId');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -841,5 +843,11 @@ class AppSharedPreference {
   }
   void setProfileId(String Id) {
     profileId.val = Id;
+  }
+  void setMainCategoriesConstructionId(String? Id) {
+    mainCategoriesConstructionId.val = Id??"";
+  }
+  void setMainCategoriesInteriorId(String? Id) {
+    mainCategoriesInteriorId.val = Id??"";
   }
 }
