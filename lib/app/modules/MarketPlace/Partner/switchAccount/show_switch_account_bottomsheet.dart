@@ -4,19 +4,32 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAcco
 
 void showSwitchAccountBottomSheet() {
   final controller = Get.find<SwitchAccountController>();
+  final CommonController commonController = Get.find<CommonController>();
+
   controller.currentRole.value = myPref.role.val;
+  Get.printInfo(
+    info: '🌐has All Data   : ${commonController.profileDataM.value}',
+  );
+  Get.printInfo(info: '🌐has All Data   : ${myPref.profileData}');
+
   controller.hasPartnerAccount.value =
-      (Get.find<CommonController>()
-                  .profileData
+      (commonController
+                  .profileDataM
                   .value
-                  .data
-                  ?.merchantProfile
-                  ?.businessEmail ??
+                  .merchantProfile
+                  ?.verificationDetails
+                  ?.gstNumber ??
               "")
           .isNotEmpty;
+  Get.printInfo(
+    info: '🌐has Partner n  : ${controller.hasPartnerAccount.value}',
+  );
+
   controller.hasConnectorAccount.value =
-      Get.find<CommonController>().profileData.value.data?.connectorProfile !=
-      null;
+      commonController.profileDataM.value.connectorProfile != null;
+  Get.printInfo(
+    info: '🌐has Connector n : ${controller.hasConnectorAccount.value}',
+  );
 
   Get.bottomSheet(
     Container(
@@ -36,6 +49,10 @@ void showSwitchAccountBottomSheet() {
         VoidCallback? onTap;
         IconData? trailingIcon;
 
+        Get.printInfo(info: '🌐has Partner  :$hasPartner');
+        Get.printInfo(info: '🌐has Connector  :$hasConnector');
+        //if you have only one account then first add the sec account
+        //if u have already sec account  then direct call  switch method
         // Decide what to show
         if (isPartner) {
           // Current: Partner

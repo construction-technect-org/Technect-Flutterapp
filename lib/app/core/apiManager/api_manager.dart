@@ -56,18 +56,18 @@ class ApiManager {
     Map<String, dynamic>? params, // ✅ optional query params
   }) async {
     try {
+      final token = myPref.getToken();
       // Build full URL with query parameters
+      if(token.isNotEmpty){
+        final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
       final uri = Uri.parse(baseUrl + url).replace(
         queryParameters: params?.map(
-          (key, value) => MapEntry(key, value.toString()),
+              (key, value) => MapEntry(key, value.toString()),
         ),
       );
-
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
-      };
-
       Get.printInfo(info: '🌐 API GET Request:');
       Get.printInfo(info: '   URL: $uri');
       Get.printInfo(info: '   Headers: $headers');
@@ -83,6 +83,7 @@ class ApiManager {
 
       Get.printInfo(info: '✅ Parsed Response: $map');
       return map;
+    }
     } on SocketException {
       Get.printInfo(info: '❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');

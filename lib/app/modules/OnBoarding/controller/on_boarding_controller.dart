@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,50 @@ class OnBoardingController extends GetxController {
     //   //_showLocationPermissionPopup();
     // }
   }
+   Future<bool> checkLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
+    // 1️⃣ Check if location service is enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Get.snackbar(
+        "Location Disabled",
+        "Please enable location services",
+      );
+
+      await Geolocator.openLocationSettings();
+      return false;
+    }
+
+    // 2️⃣ Check permission
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        Get.snackbar(
+          "Permission Denied",
+          "Location permission is required",
+        );
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Get.snackbar(
+        "Permission Permanently Denied",
+        "Enable permission from app settings",
+      );
+
+      await Geolocator.openAppSettings();
+      return false;
+    }
+
+    // ✅ Location enabled and permission granted
+    return true;
+  }
   void _showLocationPermissionPopup() {
     Get.dialog(
       AlertDialog(
@@ -80,6 +124,7 @@ class OnBoardingController extends GetxController {
     );
   }
 }
+
 
 /*
 import 'package:construction_technect/app/core/utils/imports.dart';

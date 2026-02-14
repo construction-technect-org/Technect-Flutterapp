@@ -27,7 +27,7 @@ class ConnectorHomeController extends GetxController {
   //Connector
   Rx<ModulesResponse> connectorModuleData = ModulesResponse().obs;
   // Rx<MainCategoryResponse> mainCategoryData = MainCategoryResponse().obs;
-  final RxList<MainCategory> mainCategories = <MainCategory>[].obs;
+   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
   final RxMap<String, List<CCategory>> categoryMap =
       <String, List<CCategory>>{}.obs;
   final RxMap<String, List<SubCategory>> subCategoryMap =
@@ -40,8 +40,9 @@ class ConnectorHomeController extends GetxController {
     super.onInit();
     // fetchCategoryHierarchy();
     // fetchCategoryServiceHierarchy();
-    fetchConnectorModule();
-    fetchMainCategory();
+    Future.delayed(const Duration(seconds: 1), () {
+      fetchConnectorModule();
+    });
     // fetchCategory("08b6213b-5f5e-497a-87ef-aca5a0d80c32");
   }
 
@@ -59,6 +60,7 @@ class ConnectorHomeController extends GetxController {
       final apiConnectorModule = await connectorHomeService
           .getConnectorModule();
       connectorModuleData.value = apiConnectorModule;
+      await fetchMainCategory(connectorModuleData.value.data!.modules?[0].id);
 
       // Store in local storage
       // myPref.setCategoryHierarchyModel(apiConnectorModule);
@@ -74,9 +76,10 @@ class ConnectorHomeController extends GetxController {
     }
   }
 
-  Future<void> fetchMainCategory() async {
+  Future<void> fetchMainCategory(String? moduleId) async {
+    mainCategories.clear();
     try {
-      final response = await connectorHomeService.getMainCategory();
+      final response = await connectorHomeService.getMainCategory(moduleId);
       final result = response.data;
       mainCategories.value = result ?? [];
       for (final mainCat in mainCategories) {

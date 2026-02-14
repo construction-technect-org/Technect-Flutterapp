@@ -121,10 +121,17 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                 'Point of contact',
                 style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
               ),
+
               const Spacer(),
+
               GestureDetector(
                 onTap: () {
-                  Get.to(() => EditPocProfile());
+                  final isNew = controller.profileDatas.value == null;
+
+                  Get.to(
+                          () => EditPocProfile(),
+                      arguments: isNew
+                  );
                 },
                 behavior: HitTestBehavior.translucent,
                 child: Padding(

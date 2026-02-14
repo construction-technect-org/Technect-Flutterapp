@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/explore_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
@@ -192,7 +193,9 @@ class BottomBarView extends GetView<BottomController> {
             ),
             if (myPref.getIsTeamLogin() == false)
               GestureDetector(
-                onTap: () {
+                onTap: () async {
+                 await commonController.fetchProfileDataM();
+
                   Get.put<SwitchAccountController>(SwitchAccountController());
                   showSwitchAccountBottomSheet();
                   // Get.to(() => const ExploreView());

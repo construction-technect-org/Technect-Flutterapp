@@ -15,6 +15,7 @@ import 'package:construction_technect/app/modules/Authentication/forgotPassword/
 import 'package:construction_technect/app/modules/Authentication/login/models/LoginModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/services/LoginService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,6 +35,7 @@ class LoginController extends GetxController {
   FocusNode passwordFocusNode = FocusNode();
   final rememberMe = false.obs;
   final RxString loginError = "".obs;
+
   //RxString _result = 'Unknown'.obs;
   final RxString mobileValidationError = "".obs;
   RxInt isValid = (-1).obs;
@@ -134,16 +136,16 @@ class LoginController extends GetxController {
         loginError.value = "";
         if (loginResponse.token != null) {
           await _appHiveService.setToken(loginResponse.token!);
-          //myPref.setToken(loginResponse.token ?? '');
+          myPref.setToken(loginResponse.token ?? '');
         }
         if (loginResponse.tokenType != null) {
           await _appHiveService.setTokenType(loginResponse.tokenType!);
-          //myPref.setTokenType(loginResponse.tokenType ?? '');
+          myPref.setTokenType(loginResponse.tokenType ?? '');
         }
 
         if (loginResponse.user != null) {
           await _appHiveService.setUser(loginResponse.user ?? UserMainModel());
-          //myPref.setUserModel(loginResponse.user ?? UserMainModel());
+          myPref.setUserModel(loginResponse.user ?? UserMainModel());
           print("LAst ${loginResponse.user?.firstName}");
         }
 
@@ -165,12 +167,12 @@ class LoginController extends GetxController {
             title: "Success!",
             header: "Thanks for Connecting !",
             onTap: () {
-              //Get.find<CommonController>().fetchProfileData();
-              //Get.find<CommonController>().loadTeamFromStorage();
               if (Get.isBottomSheetOpen == true) {
                 Get.back();
               }
-
+              Get.find<CommonController>().fetchProfileData();
+              Get.find<ConnectorHomeController>().fetchConnectorModule();
+              Get.find<CommonController>().loadTeamFromStorage();
               Get.offAllNamed(Routes.MAIN);
             },
           ),

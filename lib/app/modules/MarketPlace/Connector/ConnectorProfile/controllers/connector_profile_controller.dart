@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/models/PocModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/models/persona_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/services/AddKycService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
@@ -15,7 +16,7 @@ class ConnectorProfileController extends GetxController {
   final isSwitch = false.obs;
    Rxn<PocModel> profileDatas = Rxn<PocModel>();
 
-
+  Rxn<PersonaResponse> personaData = Rxn<PersonaResponse>();
 
   HomeController get homeController => Get.find<HomeController>();
 
@@ -54,9 +55,20 @@ class ConnectorProfileController extends GetxController {
 
   Future<void> pointOfContact() async {
     final getProfileId=myPref.profileId;
-    final String? profileId = await AddKycService().getProfileId();
-    Get.printInfo(info: '✅  ProfileId : $profileId');
-    if (profileId!.isNotEmpty) {
+     final data= await AddKycService().getProfileId();
+    personaData.value=data;
+    final List<Persona> personas =
+        personaData.value?.personas ?? [];
+    final String profileId = personas
+        .firstWhere(
+          (e) => e.profileType == "connector",
+      orElse: () => Persona(),
+    )
+        .profileId ??
+        "";
+
+    Get.printInfo(info: '✅  C ProfileId : ${profileId}');
+    if (profileId.isNotEmpty) {
       myPref.setProfileId(profileId);
       try {
         final response = await AddKycService().getPointOfContact(profileId);

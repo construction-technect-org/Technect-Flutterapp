@@ -48,15 +48,15 @@ class ConnectorSelectedProductController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (myPref.role.val == "connector") {
-      ever(hasOpenedOnce, (opened) {
-        if (!opened) {
-          Future.delayed(const Duration(milliseconds: 300), () {
-            openAddressSelection();
-          });
-        }
-      });
-    }
+    // if (myPref.role.val == "connector") {
+    //   ever(hasOpenedOnce, (opened) {
+    //     if (!opened) {
+    //       Future.delayed(const Duration(milliseconds: 300), () {
+    //         openAddressSelection();
+    //       });
+    //     }
+    //   });
+    // }
 
     hasOpenedOnce.value = false;
     final arguments = Get.arguments as Map<String, dynamic>?;

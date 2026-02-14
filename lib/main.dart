@@ -8,6 +8,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/vie
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/controller/sub_category_item_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/main_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:construction_technect/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive/hive.dart';
@@ -71,8 +72,16 @@ class InitialBinding implements Bindings {
   void dependencies() {
     Get.put<ManageApi>(ManageApi(), permanent: true);
     Get.put<HomeService>(HomeService(), permanent: true);
-    Get.put<CommonController>(CommonController(), permanent: true);
-    Get.put<ConnectorHomeController>(ConnectorHomeController(), permanent: true);
+   // if(myPref.token==""){
+   //  Get.lazyPut(() => CommonController());
+   //  Get.lazyPut(() => SwitchAccountController());
+   //  Get.lazyPut(() => ConnectorHomeController());
+   // }
+   // else{
+     Get.put<CommonController>(CommonController(), permanent: true);
+     Get.put<SwitchAccountController>(SwitchAccountController(), permanent: true);
+     Get.put<ConnectorHomeController>(ConnectorHomeController(), permanent: true);
+   // }
     Get.put<SubCategoryController>(SubCategoryController(), permanent: true);
     Get.put<SubCategoryItemController>(SubCategoryItemController(), permanent: true);
     Get.put<MainHomeController>(MainHomeController(), permanent: true);

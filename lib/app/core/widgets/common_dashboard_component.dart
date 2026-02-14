@@ -133,69 +133,99 @@ class CommonDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value, String type, String icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFCCCCCC), width: 1.0),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildStatCard(
+      String title, String value, String type, String icon) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double screenWidth = MediaQuery.of(context).size.width;
 
-              children: [
-                //Image.asset(icon, height: 31, width: 31),
-                const Gap(7),
-                Text(
-                  title,
-                  style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
-                ),
-                Text(
-                  type,
-                  style: MyTexts.regular12.copyWith(
-                    color: const Color(0xFF058200),
-                    fontSize: 10,
-                  ),
-                ),
-                const Gap(16),
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        const Color(0x00FFED29),
-                        const Color(0xFFFFED29),
-                      ],
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "32",
+        return Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.04,  // responsive padding
+            vertical: screenWidth * 0.03,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFFCCCCCC), width: 1.0),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// LEFT SIDE
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: screenWidth * 0.015),
+
+                    /// TITLE
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: MyTexts.medium14.copyWith(
-                        color: const Color(0xFF2E2E2E),
+                        color: MyColors.fontBlack,
                       ),
                     ),
+
+                    /// TYPE
+                    Text(
+                      type,
+                      style: MyTexts.regular12.copyWith(
+                        color: const Color(0xFF058200),
+                        fontSize: screenWidth * 0.025, // responsive font
+                      ),
+                    ),
+
+                    SizedBox(height: screenWidth * 0.04),
+
+                    /// CIRCLE VALUE
+                    Container(
+                      width: screenWidth * 0.09,
+                      height: screenWidth * 0.1,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0x00FFED29),
+                            Color(0xFFFFED29),
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "32",  // now dynamic
+                          style: MyTexts.medium14.copyWith(
+                            color: const Color(0xFF2E2E2E),
+                            fontSize: screenWidth * 0.03,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(width: screenWidth * 0.03),
+
+              /// RIGHT IMAGE
+              Flexible(
+                flex: 2,
+                child: AspectRatio(
+                  aspectRatio: 0.6, // keeps image proportion stable
+                  child: Image.asset(
+                    icon,
+                    fit: BoxFit.contain,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          SizedBox(
-            height: 100,
-            width: 60,
-            child: Image.asset(icon, fit: BoxFit.contain),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -225,7 +255,7 @@ class CommonDashboardController extends GetxController {
     },
     {"title": "OVP", "icon": Asset.ovp, "available": false, "value": "ovp"},
     {
-      "title": "Construction Taxi",
+      "title": "Construction \n Taxi",
       "icon": Asset.taxi,
       "available": false,
       "value": "construction_taxi",
