@@ -80,9 +80,9 @@ class ConnectorHomeService extends GetxService {
       rethrow;
     }
   }
-  Future<MainCategoryResponse> getMainCategory() async {
+  Future<MainCategoryResponse> getMainCategory(String? moduleId) async {
     try {
-      final response = await _apiManager.get(url: '/${APIConstants.getMainCategory}?moduleId=2918c203-b385-42b8-9305-778fa519c82f&includeInactive=false');
+      final response = await _apiManager.get(url: '/${APIConstants.getMainCategory}?moduleId=$moduleId&includeInactive=false');
       return MainCategoryResponse.fromJson(response);
     } catch (e) {
       rethrow;

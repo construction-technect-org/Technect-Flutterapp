@@ -24,8 +24,8 @@ class SplashController extends GetxController {
   }
 
   void _checkTokenAndNavigate() {
-    //final savedToken = myPref.getToken();
-    final savedToken = storage.token;
+    final savedToken = myPref.getToken();
+    // final savedToken = storage.token;
     if (savedToken.isNotEmpty) {
       _navigateToHome();
     } else {

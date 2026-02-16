@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
-import 'package:construction_technect/app/core/utils/imports.dart' hide Category;
+import 'package:construction_technect/app/core/utils/imports.dart'
+    hide Category;
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
@@ -182,7 +183,7 @@ class ConnectorHomeView extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text:
-                                        '${_controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${_controller.userMainModel?.lastName?.capitalizeFirst ?? ''}! RC',
+                                            '${_controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${_controller.userMainModel?.lastName?.capitalizeFirst ?? ''}',
                                         // '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}! Connector',
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
@@ -226,9 +227,9 @@ class ConnectorHomeView extends StatelessWidget {
                                             ),
                                             children: [
                                               TextSpan(
-                                                text:_controller
-                                                    .addressImmediate
-                                                    .value,
+                                                text:
+                                                    "Lat: ${_controller.currentPosition.value.latitude}, "
+                                                    "Lng: ${_controller.currentPosition.value.longitude}",
                                               ),
                                               const WidgetSpan(
                                                 alignment:
@@ -421,8 +422,12 @@ class ConnectorHomeView extends StatelessWidget {
                               return Padding(
                                 padding: const EdgeInsets.only(right: 12),
                                 child: tabBar(
-                                  onTap: () {
+                                  onTap: ()async {
                                     hideKeyboard();
+                                    Get.printInfo(
+                                      info: '✅ Module Name : ${module?.name}',
+                                    );
+                                    await controller.fetchMainCategory(module?.id);
                                     controller.marketPlace.value = index;
                                   },
                                   icon: _getIconFromModule(module),
@@ -751,13 +756,13 @@ class ConnectorHomeView extends StatelessWidget {
                                     final materialList =
                                         controller.mainCategories;
 
-                                    if (materialList == null ||
-                                        materialList.isEmpty) {
+                                    if (materialList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
                                     return ListView.builder(
                                       shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemCount:
                                           controller.mainCategories.length,
                                       itemBuilder: (context, index) {
@@ -781,18 +786,46 @@ class ConnectorHomeView extends StatelessWidget {
                                           .value ==
                                       1) {
                                     /// ------------------- CONSTRUCTION MARKETPLACE -------------------
-                                    final serviceList = controller
-                                        .categoryHierarchyData
-                                        .value
-                                        .data;
+                                    final materialList =
+                                        controller.mainCategories;
 
-                                    if (serviceList == null ||
-                                        serviceList.isEmpty) {
+                                    if (materialList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
-                                    return const Text(
-                                      "CONSTRUCTION MARKETPLACE",
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                      const NeverScrollableScrollPhysics(),
+                                      itemCount:
+                                      controller.mainCategories.length,
+                                      itemBuilder: (context, index) {
+                                        final mainCategory =
+                                        controller.mainCategories[index];
+                                        final categories =
+                                            controller.categoryMap[mainCategory
+                                                .id] ??
+                                                [];
+
+                                        return _buildCategorySection(
+                                          context,
+                                          mainCategory,
+                                          categories,
+                                          route: Routes.SELECT_PRODUCT,
+                                        );
+                                      },
                                     );
+                                    // final serviceList = controller
+                                    //     .categoryHierarchyData
+                                    //     .value
+                                    //     .data;
+                                    //
+                                    // if (serviceList == null ||
+                                    //     serviceList.isEmpty) {
+                                    //   return _buildComingSoon(context);
+                                    // }
+                                    // return const Text(
+                                    //   "CONSTRUCTION MARKETPLACE",
+                                    // );
 
                                     // return _buildServiceList(
                                     //   context,
@@ -980,23 +1013,26 @@ class ConnectorHomeView extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 24.0),
                 child: GestureDetector(
                   onTap: () {
-                    if (myPref.role.val == "connector") {
-                      if ((Get.find<CommonController>()
-                                  .profileData
-                                  .value
-                                  .data
-                                  ?.siteLocations ??
-                              [])
-                          .isEmpty) {
-                        _showAddAddressDialog();
-                        return;
-                      }
-                    }
-                    Get.to(SubCategoryScreen(),arguments: {
-                      "selectedSubCategoryIdIndex": subIndex??0,
-                      "categoryData": category,
-                      "mainCategoryName": mainCategory.name ?? '',
-                    },);
+                    // if (myPref.role.val == "connector") {
+                    //   if ((Get.find<CommonController>()
+                    //               .profileData
+                    //               .value
+                    //               .data
+                    //               ?.siteLocations ??
+                    //           [])
+                    //       .isEmpty) {
+                    //     _showAddAddressDialog();
+                    //     return;
+                    //   }
+                    // }
+                    Get.to(
+                      SubCategoryScreen(),
+                      arguments: {
+                        "selectedSubCategoryIdIndex": subIndex ?? 0,
+                        "categoryData": category,
+                        "mainCategoryName": mainCategory.name ?? '',
+                      },
+                    );
                     // Get.toNamed(
                     //   route,
                     //   arguments: {

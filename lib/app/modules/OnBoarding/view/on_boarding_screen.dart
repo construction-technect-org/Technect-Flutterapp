@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
+
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/OnBoarding/controller/on_boarding_controller.dart';
 import 'package:flutter/material.dart';
@@ -55,10 +56,12 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                       height: 20.h,
                       //aspectRatio: 11 / 5,
                       viewportFraction: .7,
-                      autoPlayInterval: const Duration(seconds: 2), // wait time
+                      autoPlayInterval: const Duration(seconds: 2),
+                      // wait time
                       autoPlayAnimationDuration: const Duration(
                         milliseconds: 900,
-                      ), // slide speed
+                      ),
+                      // slide speed
                       autoPlayCurve: Curves.easeInOut,
                       onPageChanged: (index, reason) {},
                     ),
@@ -75,10 +78,12 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                       height: 20.h,
                       // aspectRatio: 11 / 5,
                       viewportFraction: .7,
-                      autoPlayInterval: const Duration(seconds: 2), // wait time
+                      autoPlayInterval: const Duration(seconds: 2),
+                      // wait time
                       autoPlayAnimationDuration: const Duration(
                         milliseconds: 500,
-                      ), // slide speed
+                      ),
+                      // slide speed
                       autoPlayCurve: Curves.easeInOut,
                       onPageChanged: (index, reason) {},
                     ),
@@ -95,10 +100,12 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                       height: 20.h,
                       //aspectRatio: 11 / 5,
                       viewportFraction: .7,
-                      autoPlayInterval: const Duration(seconds: 2), // wait time
+                      autoPlayInterval: const Duration(seconds: 2),
+                      // wait time
                       autoPlayAnimationDuration: const Duration(
                         milliseconds: 700,
-                      ), // slide speed
+                      ),
+                      // slide speed
                       autoPlayCurve: Curves.easeInOut,
                       onPageChanged: (index, reason) {},
                     ),
@@ -111,8 +118,12 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                   Gap(1.5.h),
                   RoundedButton(
                     buttonName: 'Login',
-                    onTap: () {
-                      controller.showLoginBottomSheet();
+                    onTap: () async {
+                      final bool isLocationReady = await controller
+                          .checkLocation();
+                      if (isLocationReady) {
+                        controller.showLoginBottomSheet();
+                      }
                     },
                   ),
                   Gap(1.5.h),
@@ -184,9 +195,13 @@ class OnboardingScreen extends GetView<OnBoardingController> {
 
                   Gap(1.5.h),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async{
                       //if (Get.isBottomSheetOpen == true) return;
-                      controller.showBottomSheet();
+                      final bool isLocationReady = await controller
+                          .checkLocation();
+                      if (isLocationReady) {
+                        controller.showBottomSheet();
+                      }
                       //Get.toNamed(Routes.SIGN_UP_DETAILS);
                     },
                     child: Row(

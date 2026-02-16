@@ -7,6 +7,7 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDe
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/services/ConstructionLineServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
@@ -25,6 +26,7 @@ class CommonController extends GetxController {
   final hasProfileComplete = false.obs;
   final isLoading = false.obs;
   Rx<ProfileModel> profileData = ProfileModel().obs;
+  Rx<ProfileModelM> profileDataM = ProfileModelM().obs;
   RxBool isCrm = true.obs;
   UserMainModel? userMainModel;
   Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
@@ -184,9 +186,10 @@ class CommonController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
       print("Fetching");
-      if (profileResponse.success == true &&
-          profileResponse.data?.user != null) {
+      if (profileResponse.success == true && profileResponse.data?.user != null) {
         profileData.value = profileResponse;
+        Get.printInfo(info: '🌐profileData : ${profileData.value.data}');
+
         myPref.setProfileData(profileResponse.toJson());
         //myPref.setUserModel(profileResponse.data!.user!);
         if (profileData.value.data?.isTeamLogin == true) {
@@ -206,6 +209,48 @@ class CommonController extends GetxController {
         // if(myPref.getIsTeamLogin()==false){
         loadTeamFromStorage();
         // }
+      }
+      else{
+        const a=10;
+      }
+    } catch (e) {
+      Get.printError(info: 'Error fetching profile: $e');
+    } finally {
+      isLoading.value = false;
+      print("Fetched");
+    }
+  }
+  Future<void> fetchProfileDataM() async {
+    try {
+      isLoading.value = true;
+      final profileResponse = await homeService.getProfileM();
+      print("Fetching");
+      if (profileResponse.success == true && profileResponse.user != null) {
+        profileDataM.value = profileResponse;
+        Get.printInfo(info: '🌐profileData : ${profileDataM.value.merchantProfile!=null}');
+
+        // myPref.setProfileData(profileResponse.toJson());
+        // //myPref.setUserModel(profileResponse.data!.user!);
+        // if (profileData.value.data?.isTeamLogin == true) {
+        //   myPref.setIsTeamLogin(true);
+        //   final permissionsValue = extractPermissions(
+        //     profileResponse.data?.teamMember,
+        //   );
+        //   myPref.setPermissions(permissionsValue);
+        // }
+        // if ((profileData.value.data?.merchantProfile?.website ?? "")
+        //     .isNotEmpty) {
+        //   Get.find<CommonController>().hasProfileComplete.value = true;
+        // } else {
+        //   Get.find<CommonController>().hasProfileComplete.value = false;
+        // }
+        print(profileData.value);
+        // if(myPref.getIsTeamLogin()==false){
+        loadTeamFromStorage();
+        // }
+      }
+      else{
+        const a=10;
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');
@@ -486,7 +531,10 @@ class CommonController extends GetxController {
       print("First Name ${userMainModel?.firstName}");
 
       if (savedToken.isNotEmpty) {
-        //fetchProfileData();
+        Future.delayed(const Duration(seconds: 1), () async {
+         await  fetchProfileDataM();
+          // fetchProfileData();
+        });
         // if(myPref.getIsTeamLogin()==false){
         //loadTeamFromStorage();
         // }

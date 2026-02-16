@@ -17,6 +17,7 @@ class EditPocProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool type = Get.arguments;
     return LoaderWrapper(
       isLoading: eController.isLoading,
       child: GestureDetector(
@@ -96,7 +97,7 @@ class EditPocProfile extends StatelessWidget {
                               ),
                               Gap(2.h),
                               CommonTextField(
-                                readOnly: true,
+                                readOnly: !type,
                                 hintText: "Enter your Mobile Number",
                                 headerText: "Mobile Number",
                                 controller: eController.numberController,
@@ -105,7 +106,7 @@ class EditPocProfile extends StatelessWidget {
                               ),
                               Gap(2.h),
                               CommonTextField(
-                                readOnly: true,
+                                readOnly: !type,
                                 hintText:
                                     "Enter your Alternative Mobile Number",
                                 headerText: "Alternative Mobile Number",
@@ -116,7 +117,7 @@ class EditPocProfile extends StatelessWidget {
                               ),
                               Gap(2.h),
                               CommonTextField(
-                                readOnly: true,
+                                readOnly: !type,
                                 hintText: "Enter your email address",
                                 headerText: "Email ID",
                                 controller: eController.emailController,

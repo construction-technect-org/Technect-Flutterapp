@@ -707,7 +707,7 @@ class MerchantHomeView extends StatelessWidget {
                       child: RoundedButton(
                         buttonName: "Connect",
                         onTap: () {
-                          Get.to(() => MerchantProjectViewDetails());
+                          Get.to(() => const MerchantProjectViewDetails());
                         },
                         height: 4.h,
                         fontSize: 13.sp,

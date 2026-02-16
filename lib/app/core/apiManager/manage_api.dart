@@ -57,8 +57,20 @@ class ManageApi extends GetxService {
     required String url,
     Map<String, dynamic>? params, // ✅ optional query params
   }) async {
+    final String urls =
+        url;
+
+    final Uri uri = Uri.parse(urls);
+
+    final String? endPath = "${uri.path.split('/').last}?";
     try {
-      // Build full URL with query parameters
+     final token= storage.token;
+     final pretoken= myPref.getToken();
+     if(token!=""){
+     Get.printInfo(info: '🌐 Storage Token :$token');
+     Get.printInfo(info: '🌐 Pre Token :$pretoken');
+
+     // Build full URL with query parameters
       final uri = Uri.parse(baseUrl + url).replace(
         queryParameters: params?.map(
           (key, value) => MapEntry(key, value.toString()),
@@ -83,8 +95,9 @@ class ManageApi extends GetxService {
       // Check for invalid/expired token
       //_checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      Get.printInfo(info: '✅ $endPath Parsed Response: $map');
       return map;
+      }
     } on SocketException {
       Get.printInfo(info: '❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');

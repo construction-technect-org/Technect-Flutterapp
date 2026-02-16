@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/models/AddkycModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/models/PocModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/models/persona_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
 class AddKycService {
@@ -28,15 +29,12 @@ class AddKycService {
     }
   }
 
-  Future<String?> getProfileId() async {
+  Future<PersonaResponse> getProfileId() async {
     try {
       final response = await apiManager.get(url: '/${APIConstants.getPersonaList}');
       // Access personas list
-      final List personas = response["personas"] ?? [];
-      if (personas.isNotEmpty) {
-        return personas[0]["profileId"]?.toString();
-      }
-      return "";
+      final data = PersonaResponse.fromJson(response);
+      return data;
     } catch (e) {
       rethrow;
     }

@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
@@ -88,6 +89,18 @@ class HomeService extends GetxService {
       );
 
       return ProfileModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+  Future<ProfileModelM> getProfileM() async {
+    try {
+      final response = await _apiManager.get(
+        url: myPref.isTeamLogin.val == true
+            ? APIConstants.teamProfile
+            : APIConstants.profile,
+      );
+      return ProfileModelM.fromJson(response);
     } catch (e) {
       rethrow;
     }

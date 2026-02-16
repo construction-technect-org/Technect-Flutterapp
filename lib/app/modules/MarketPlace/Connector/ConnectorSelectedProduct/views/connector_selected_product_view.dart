@@ -52,7 +52,7 @@ class SelectedProductView extends StatelessWidget {
       elevation: 0,
       leading: IconButton(
         icon: const Icon(
-          Icons.arrow_back_ios,
+          Icons.near_me,
           color: MyColors.fontBlack,
           size: 20,
         ),
