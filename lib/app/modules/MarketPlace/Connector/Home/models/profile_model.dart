@@ -33,26 +33,48 @@ class User {
   final String? countryCode;
   final String? phone;
   final String? email;
+  final String? passwordHash;
+  final String? provider;
+  final String? providerId;
   final String? firstName;
   final String? lastName;
-  final String? role;
-  final String? status;
-  final String? signupStatus;
+  final String? address;
+  final String? referralCode;
+  final String? myReferralCode;
   final bool? phoneVerified;
   final bool? emailVerified;
+  final String? lastActiveProfileId;
+  final String? lastActiveProfileType;
+  final String? status;
+  final String? signupStatus;
+  final int? sessionVersion;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? deletedAt;
 
   User({
     this.id,
     this.countryCode,
     this.phone,
     this.email,
+    this.passwordHash,
+    this.provider,
+    this.providerId,
     this.firstName,
     this.lastName,
-    this.role,
-    this.status,
-    this.signupStatus,
+    this.address,
+    this.referralCode,
+    this.myReferralCode,
     this.phoneVerified,
     this.emailVerified,
+    this.lastActiveProfileId,
+    this.lastActiveProfileType,
+    this.status,
+    this.signupStatus,
+    this.sessionVersion,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -61,147 +83,160 @@ class User {
       countryCode: json['countryCode'],
       phone: json['phone'],
       email: json['email'],
+      passwordHash: json['passwordHash'],
+      provider: json['provider'],
+      providerId: json['providerId'],
       firstName: json['firstName'],
       lastName: json['lastName'],
-      role: json['role'],
-      status: json['status'],
-      signupStatus: json['signupStatus'],
+      address: json['address'],
+      referralCode: json['referralCode'],
+      myReferralCode: json['myReferralCode'],
       phoneVerified: json['phoneVerified'],
       emailVerified: json['emailVerified'],
+      lastActiveProfileId: json['lastActiveProfileId'],
+      lastActiveProfileType: json['lastActiveProfileType'],
+      status: json['status'],
+      signupStatus: json['signupStatus'],
+      sessionVersion: json['sessionVersion'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      deletedAt: json['deletedAt'],
     );
   }
 }
 
 class MerchantProfile {
   final String? id;
+  final String? ownerUserId;
+  final String? verificationId;
   final String? verificationType;
+  final String? gstinHash;
+  final dynamic verificationDetails;
+  final String? verifiedAt;
+  final String? businessName;
+  final String? businessType;
+  final String? businessWebsite;
+  final String? businessEmail;
+  final String? businessPhone;
+  final String? alternateBusinessPhone;
+  final String? yearOfEstablish;
+  final String? logo;
+  final String? businessAddress;
+  final dynamic businessHours;
+  final dynamic certifications;
+  final dynamic pocDetails;
   final String? profileStatus;
-  final VerificationDetails? verificationDetails;
+  final int? version;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? deletedAt;
 
   MerchantProfile({
     this.id,
+    this.ownerUserId,
+    this.verificationId,
     this.verificationType,
-    this.profileStatus,
+    this.gstinHash,
     this.verificationDetails,
+    this.verifiedAt,
+    this.businessName,
+    this.businessType,
+    this.businessWebsite,
+    this.businessEmail,
+    this.businessPhone,
+    this.alternateBusinessPhone,
+    this.yearOfEstablish,
+    this.logo,
+    this.businessAddress,
+    this.businessHours,
+    this.certifications,
+    this.pocDetails,
+    this.profileStatus,
+    this.version,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
   });
 
   factory MerchantProfile.fromJson(Map<String, dynamic> json) {
     return MerchantProfile(
       id: json['id'],
+      ownerUserId: json['ownerUserId'],
+      verificationId: json['verificationId'],
       verificationType: json['verificationType'],
+      gstinHash: json['gstinHash'],
+      verificationDetails: json['verificationDetails'],
+      verifiedAt: json['verifiedAt'],
+      businessName: json['businessName'],
+      businessType: json['businessType'],
+      businessWebsite: json['businessWebsite'],
+      businessEmail: json['businessEmail'],
+      businessPhone: json['businessPhone'],
+      alternateBusinessPhone: json['alternateBusinessPhone'],
+      yearOfEstablish: json['yearOfEstablish'],
+      logo: json['logo'],
+      businessAddress: json['businessAddress'],
+      businessHours: json['businessHours'],
+      certifications: json['certifications'],
+      pocDetails: json['pocDetails'],
       profileStatus: json['profileStatus'],
-      verificationDetails: json['verificationDetails'] != null
-          ? VerificationDetails.fromJson(json['verificationDetails'])
-          : null,
+      version: json['version'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      deletedAt: json['deletedAt'],
     );
   }
 }
 
 class ConnectorProfile {
   final String? id;
+  final String? ownerUserId;
+  final String? verificationId;
   final String? verificationType;
+  final String? aadhaarHash;
+  final dynamic verificationDetails;
+  final String? verifiedAt;
+  final dynamic pocDetails;
+  final dynamic certifications;
   final String? profileStatus;
-  final ConnectorVerificationDetails? verificationDetails;
-  final PocDetails? pocDetails;
+  final int? version;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? deletedAt;
 
   ConnectorProfile({
     this.id,
+    this.ownerUserId,
+    this.verificationId,
     this.verificationType,
-    this.profileStatus,
+    this.aadhaarHash,
     this.verificationDetails,
+    this.verifiedAt,
     this.pocDetails,
+    this.certifications,
+    this.profileStatus,
+    this.version,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
   });
 
   factory ConnectorProfile.fromJson(Map<String, dynamic> json) {
     return ConnectorProfile(
       id: json['id'],
+      ownerUserId: json['ownerUserId'],
+      verificationId: json['verificationId'],
       verificationType: json['verificationType'],
+      aadhaarHash: json['aadhaarHash'],
+      verificationDetails: json['verificationDetails'],
+      verifiedAt: json['verifiedAt'],
+      pocDetails: json['pocDetails'],
+      certifications: json['certifications'],
       profileStatus: json['profileStatus'],
-      verificationDetails: json['verificationDetails'] != null
-          ? ConnectorVerificationDetails.fromJson(json['verificationDetails'])
-          : null,
-      pocDetails: json['pocDetails'] != null
-          ? PocDetails.fromJson(json['pocDetails'])
-          : null,
-    );
-  }
-}
-
-class VerificationDetails {
-  final String? gstNumber;
-  final String? legalName;
-  final String? tradeName;
-  final String? address;
-  final String? status;
-
-  VerificationDetails({
-    this.gstNumber,
-    this.legalName,
-    this.tradeName,
-    this.address,
-    this.status,
-  });
-
-  factory VerificationDetails.fromJson(Map<String, dynamic> json) {
-    return VerificationDetails(
-      gstNumber: json['gstNumber'],
-      legalName: json['legalName'],
-      tradeName: json['tradeName'],
-      address: json['address'],
-      status: json['status'],
-    );
-  }
-}
-
-class ConnectorVerificationDetails {
-  final String? name;
-  final String? dateOfBirth;
-  final String? address;
-  final String? status;
-  final String? gender;
-
-  ConnectorVerificationDetails({
-    this.name,
-    this.dateOfBirth,
-    this.address,
-    this.status,
-    this.gender,
-  });
-
-  factory ConnectorVerificationDetails.fromJson(
-      Map<String, dynamic> json) {
-    return ConnectorVerificationDetails(
-      name: json['name'],
-      dateOfBirth: json['dateOfBirth'],
-      address: json['address'],
-      status: json['status'],
-      gender: json['gender'],
-    );
-  }
-}
-
-class PocDetails {
-  final String? pocName;
-  final String? pocDesignation;
-  final String? pocPhone;
-  final String? pocAlternatePhone;
-  final String? pocEmail;
-
-  PocDetails({
-    this.pocName,
-    this.pocDesignation,
-    this.pocPhone,
-    this.pocAlternatePhone,
-    this.pocEmail,
-  });
-
-  factory PocDetails.fromJson(Map<String, dynamic> json) {
-    return PocDetails(
-      pocName: json['pocName'],
-      pocDesignation: json['pocDesignation'],
-      pocPhone: json['pocPhone'],
-      pocAlternatePhone: json['pocAlternatePhone'],
-      pocEmail: json['pocEmail'],
+      version: json['version'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      deletedAt: json['deletedAt'],
     );
   }
 }

@@ -1,21 +1,55 @@
+import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/models/persona_profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/services/AddKycService.dart';
 
 class SwitchAccountController extends GetxController {
+  final AppHiveService _appHiveService = Get.find<AppHiveService>();
 
   RxString currentRole = ''.obs;
 
   RxBool hasPartnerAccount = false.obs;
   RxBool hasConnectorAccount = false.obs;
 
-  void switchAccount() {
+  Future<void> switchAccount() async {
+    final data = await AddKycService().getProfileId();
+    final List<Profile> profiles = data.profiles ?? [];
+
     if (currentRole.value == 'partner') {
-      currentRole.value = 'connector';
+      // 🔹 Switch to connector
+      final connector = profiles.firstWhere(
+        (e) => e.profileType == "connector",
+        orElse: () => Profile(),
+      );
+
+      if (connector.profileId != null) {
+        await switchProfile(connector.profileId!, connector.profileType ?? "");
+
+        currentRole.value = 'connector';
+      }
     } else {
-      currentRole.value = 'partner';
+      // 🔹 Switch to merchant (partner)
+      final merchant = profiles.firstWhere(
+        (e) => e.profileType == "merchant",
+        orElse: () => Profile(),
+      );
+
+      if (merchant.profileId != null) {
+        await switchProfile(merchant.profileId!, merchant.profileType ?? "");
+
+        currentRole.value = 'partner';
+      }
     }
+
     myPref.role.val = currentRole.value;
+
+    // if (currentRole.value == 'partner') {
+    //   currentRole.value = 'connector';
+    // } else {
+    //   currentRole.value = 'partner';
+    // }
+    // myPref.role.val = currentRole.value;
     print("Roleach ${myPref.role.val}");
     Get.back();
     // Get.delete<ConnectorHomeController>(force: true);
@@ -34,6 +68,26 @@ class SwitchAccountController extends GetxController {
   }
 
   final ApiManager apiManager = ApiManager();
+
+  Future<void> switchProfile(String profileId, String profileType) async {
+    try {
+      final body = {"profileId": profileId, "profileType": profileType};
+
+      final switchResponse = await apiManager.postObject(
+        url: "/${APIConstants.switchAccount}",
+        body: body,
+      );
+      final String? token = switchResponse["token"];
+
+      if (token != null && token.isNotEmpty) {
+        await _appHiveService.setToken(token);
+        myPref.setToken(token);
+        Get.printInfo(info: "✅ New token stored successfully");
+      }
+    } catch (e) {
+      Get.printInfo(info: "❌ Switch Profile Error: $e");
+    }
+  }
 
   Future<void> updateRole({required String role}) async {
     try {
@@ -54,25 +108,24 @@ class SwitchAccountController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     final CommonController commonController = Get.find<CommonController>();
-    Get.printInfo(info: '🌐has All Data   : ${commonController.profileData.value}');
+    Get.printInfo(
+      info: '🌐has All Data   : ${commonController.profileData.value}',
+    );
     commonController.fetchProfileDataM();
     currentRole.value = myPref.role.val;
-    hasPartnerAccount.value =
-        (commonController
-            .profileData
-            .value
-            .data
-            ?.merchantProfile
-            ?.businessEmail ??
-            "")
-            .isNotEmpty;
-    Get.printInfo(info: '🌐has Partner n  : ${hasPartnerAccount.value}');
-
-    hasConnectorAccount.value =
-        commonController.profileData.value.data?.connectorProfile !=
-            null;
-    Get.printInfo(
-      info: '🌐has Connector n : ${hasConnectorAccount.value}',
-    );
+    // hasPartnerAccount.value =
+    //     (commonController
+    //                 .profileData
+    //                 .value
+    //                 .data
+    //                 ?.merchantProfile
+    //                 ?.ver ??
+    //             "")
+    //         .isNotEmpty;
+    // Get.printInfo(info: '🌐has Partner n  : ${hasPartnerAccount.value}');
+    //
+    // hasConnectorAccount.value =
+    //     commonController.profileData.value.data?.connectorProfile != null;
+    // Get.printInfo(info: '🌐has Connector n : ${hasConnectorAccount.value}');
   }
 }

@@ -118,7 +118,7 @@ class HomeService extends GetxService {
   Future<MerchantProfileModel> getMerchantProfile(String profileID) async {
     try {
       final response = await _manageApi.get(
-        url: '${Endpoints.merchantProfileApi}$profileID',
+        url: Endpoints.merchantProfileApi,
       );
 
       return MerchantProfileModel.fromJson(response);

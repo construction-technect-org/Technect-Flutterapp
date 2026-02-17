@@ -25,7 +25,7 @@ class APIConstants {
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
   static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
   static const String forgotPasswordReset = "auth/forgot-password/reset";
-  static const String profile = "/v1/api/user/me";
+  static const String profile = "/v1/api/auth/profiles/me";
   static const String address = "address";
   static const String merchantSubmit = "merchant/submit";
   static const String deleteDocument = "merchant/documents/";
@@ -69,7 +69,10 @@ class APIConstants {
   static const String getServices = "service/types";
 
   // Service Persona List APIs
-  static const String getPersonaList="v1/api/auth/profiles";
+  static const String getPersonaList="v1/api/auth/profiles/list";
+
+  //Switch Account Apis
+  static const String switchAccount="v1/api/auth/profiles/switch";
 
   // Service Connector ProfileId APIs
   static const String getConnectorProfile="v1/api/business/connector";
