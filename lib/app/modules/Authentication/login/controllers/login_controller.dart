@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
-import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
@@ -13,12 +12,9 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDe
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/LoginModel.dart';
-import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/services/LoginService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:phone_number_hint/phone_number_hint.dart';
 import 'package:flutter/material.dart';
@@ -149,7 +145,7 @@ class LoginController extends GetxController {
           print("LAst ${loginResponse.user?.firstName}");
         }
 
-        if ((loginResponse.user?.role ?? "").toLowerCase() == "merchant") {
+        if ((loginResponse.user?.lastActiveProfileType ?? "").toLowerCase() == "merchant") {
           myPref.setRole("partner");
         } else {
           myPref.setRole("connector");

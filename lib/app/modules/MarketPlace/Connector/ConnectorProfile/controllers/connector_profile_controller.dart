@@ -1,4 +1,3 @@
-import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
@@ -8,7 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
-import 'package:get_storage/get_storage.dart';
 
 class ConnectorProfileController extends GetxController {
   final selectedTabIndex = 0.obs;
@@ -54,15 +52,14 @@ class ConnectorProfileController extends GetxController {
   }
 
   Future<void> pointOfContact() async {
-    final getProfileId=myPref.profileId;
      final data= await AddKycService().getProfileId();
     personaData.value=data;
-    final List<Persona> personas =
-        personaData.value?.personas ?? [];
+    final List<Profile> personas =
+        personaData.value?.profiles ?? [];
     final String profileId = personas
         .firstWhere(
           (e) => e.profileType == "connector",
-      orElse: () => Persona(),
+      orElse: () => Profile(),
     )
         .profileId ??
         "";

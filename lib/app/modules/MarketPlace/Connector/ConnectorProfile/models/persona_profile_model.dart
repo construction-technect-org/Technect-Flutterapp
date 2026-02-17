@@ -1,64 +1,58 @@
 class PersonaResponse {
-  final bool success;
-  final List<Persona> personas;
+  final bool? success;
+  final List<Profile>? profiles;
 
   PersonaResponse({
-    required this.success,
-    required this.personas,
+    this.success,
+    this.profiles,
   });
 
-  /// FROM JSON
   factory PersonaResponse.fromJson(Map<String, dynamic> json) {
     return PersonaResponse(
-      success: json['success'] ?? false,
-      personas: (json['personas'] as List<dynamic>?)
-          ?.map((e) => Persona.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-          [],
+      success: json['success'] as bool?,
+      profiles: json['profiles'] != null
+          ? List<Profile>.from(
+        (json['profiles'] as List)
+            .map((x) => Profile.fromJson(x as Map<String, dynamic>)),
+      )
+          : [],
     );
   }
 
-  /// TO JSON
   Map<String, dynamic> toJson() {
     return {
       'success': success,
-      'personas': personas.map((e) => e.toJson()).toList(),
+      'profiles': profiles?.map((x) => x.toJson()).toList(),
     };
   }
 }
 
-class Persona {
+class Profile {
   final String? profileType;
   final String? profileId;
-  final String? profileName;
   final String? teamRole;
   final String? profileStatus;
 
-  Persona({
+  Profile({
     this.profileType,
     this.profileId,
-    this.profileName,
     this.teamRole,
     this.profileStatus,
   });
 
-  /// FROM JSON
-  factory Persona.fromJson(Map<String, dynamic> json) {
-    return Persona(
-      profileType: json['profileType'],
-      profileId: json['profileId'],
-      profileName: json['profileName'],
-      teamRole: json['teamRole'],
-      profileStatus: json['profileStatus'],
+  factory Profile.fromJson(Map<String, dynamic> json) {
+    return Profile(
+      profileType: json['profileType'] as String?,
+      profileId: json['profileId'] as String?,
+      teamRole: json['teamRole'] as String?,
+      profileStatus: json['profileStatus'] as String?,
     );
   }
 
-  /// TO JSON
   Map<String, dynamic> toJson() {
     return {
       'profileType': profileType,
       'profileId': profileId,
-      'profileName': profileName,
       'teamRole': teamRole,
       'profileStatus': profileStatus,
     };

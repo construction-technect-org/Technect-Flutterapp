@@ -16,11 +16,8 @@ void showSwitchAccountBottomSheet() {
       (commonController
                   .profileDataM
                   .value
-                  .merchantProfile
-                  ?.verificationDetails
-                  ?.gstNumber ??
-              "")
-          .isNotEmpty;
+                  .merchantProfile?.verificationId??"").isNotEmpty
+          ;
   Get.printInfo(
     info: '🌐has Partner n  : ${controller.hasPartnerAccount.value}',
   );

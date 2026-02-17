@@ -229,31 +229,33 @@ class MerchantProfileVerificationDetails {
 } */
 
 class UserMainModel {
+  final String? id;
+  final String? firstName;
+  final String? lastName;
+  final String? phone;
+  final String? email;
+  final String? lastActiveProfileType;
+  final String? lastActiveProfileId;
+  final Address? address;
+  final String? referralCode;
+  final String? myReferralCode;
+  final String? fcmToken;
+  final String? deviceType;
+
   UserMainModel({
     this.id,
     this.firstName,
     this.lastName,
     this.phone,
     this.email,
+    this.lastActiveProfileType,
+    this.lastActiveProfileId,
     this.address,
     this.referralCode,
     this.myReferralCode,
     this.fcmToken,
     this.deviceType,
-    this.role,
   });
-
-  String? id;
-  String? firstName;
-  String? lastName;
-  String? phone;
-  String? email;
-  Address? address;
-  String? referralCode;
-  String? myReferralCode;
-  String? fcmToken;
-  String? deviceType;
-  String? role;
 
   factory UserMainModel.fromJson(Map<String, dynamic> json) {
     return UserMainModel(
@@ -262,14 +264,15 @@ class UserMainModel {
       lastName: json["lastName"],
       phone: json["phone"],
       email: json["email"],
-      address: json["address"] is Map
-          ? Address.fromJson(Map<String, dynamic>.from(json["address"]))
+      lastActiveProfileType: json["lastActiveProfileType"],
+      lastActiveProfileId: json["lastActiveProfileId"],
+      address: json["address"] != null
+          ? Address.fromJson(json["address"])
           : null,
       referralCode: json["referralCode"],
       myReferralCode: json["myReferralCode"],
       fcmToken: json["fcmToken"],
       deviceType: json["deviceType"],
-      role: json["role"],
     );
   }
 
@@ -279,23 +282,27 @@ class UserMainModel {
     "lastName": lastName,
     "phone": phone,
     "email": email,
+    "lastActiveProfileType": lastActiveProfileType,
+    "lastActiveProfileId": lastActiveProfileId,
     "address": address?.toJson(),
     "referralCode": referralCode,
     "myReferralCode": myReferralCode,
     "fcmToken": fcmToken,
     "deviceType": deviceType,
-    "role": role,
   };
 }
 
 class Address {
+  final double? latitude;
+  final double? longitude;
+
   Address({this.latitude, this.longitude});
 
-  double? latitude;
-  double? longitude;
-
   factory Address.fromJson(Map<String, dynamic> json) {
-    return Address(latitude: json["latitude"], longitude: json["longitude"]);
+    return Address(
+      latitude: json["latitude"],
+      longitude: json["longitude"],
+    );
   }
 
   Map<String, dynamic> toJson() => {
