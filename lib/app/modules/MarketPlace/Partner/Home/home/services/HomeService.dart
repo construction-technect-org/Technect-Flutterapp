@@ -1,4 +1,3 @@
-import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -21,9 +20,7 @@ class HomeService extends GetxService {
   final ApiManager _apiManager = ApiManager();
   final ManageApi _manageApi = Get.find<ManageApi>();
 
-  Future<MainCategoryModel> getMainCategories({
-    required String moduleID,
-  }) async {
+  Future<MainCategoryModel> getMainCategories({required String moduleID}) async {
     try {
       final response = await _manageApi.get(
         url: '${Endpoints.mainCatApi}$moduleID&includeInactive=false',
@@ -56,9 +53,7 @@ class HomeService extends GetxService {
     }
   }
 
-  Future<CategoryProductModel> getCategoriesProduct({
-    required String subCatID,
-  }) async {
+  Future<CategoryProductModel> getCategoriesProduct({required String subCatID}) async {
     try {
       final response = await _manageApi.get(
         url: '${Endpoints.catProdApi}$subCatID&includeInactive=false',
@@ -83,9 +78,7 @@ class HomeService extends GetxService {
   Future<ProfileModel> getProfile() async {
     try {
       final response = await _apiManager.get(
-        url: myPref.isTeamLogin.val == true
-            ? APIConstants.teamProfile
-            : APIConstants.profile,
+        url: myPref.isTeamLogin.val == true ? APIConstants.teamProfile : APIConstants.profile,
       );
 
       return ProfileModel.fromJson(response);
@@ -93,12 +86,11 @@ class HomeService extends GetxService {
       rethrow;
     }
   }
+
   Future<ProfileModelM> getProfileM() async {
     try {
       final response = await _apiManager.get(
-        url: myPref.isTeamLogin.val == true
-            ? APIConstants.teamProfile
-            : APIConstants.profile,
+        url: myPref.isTeamLogin.val == true ? APIConstants.teamProfile : APIConstants.profile,
       );
       return ProfileModelM.fromJson(response);
     } catch (e) {
@@ -117,9 +109,7 @@ class HomeService extends GetxService {
 
   Future<MerchantProfileModel> getMerchantProfile(String profileID) async {
     try {
-      final response = await _manageApi.get(
-        url: Endpoints.merchantProfileApi,
-      );
+      final response = await _manageApi.get(url: Endpoints.merchantProfileApi);
 
       return MerchantProfileModel.fromJson(response);
     } catch (e, st) {
@@ -139,9 +129,7 @@ class HomeService extends GetxService {
 
   Future<DashboardModel> getDashboard() async {
     try {
-      final response = await _apiManager.get(
-        url: APIConstants.merchantDashboard,
-      );
+      final response = await _apiManager.get(url: APIConstants.merchantDashboard);
       return DashboardModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -150,9 +138,7 @@ class HomeService extends GetxService {
 
   Future<AllMerchantStoreModel> getMerchantStore() async {
     try {
-      final response = await _apiManager.get(
-        url: APIConstants.connectorMerchantStore,
-      );
+      final response = await _apiManager.get(url: APIConstants.connectorMerchantStore);
       return AllMerchantStoreModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -170,26 +156,18 @@ class HomeService extends GetxService {
 
   Future<ServiceCategoryModel> getCategoryServiceHierarchy() async {
     try {
-      final response = await _apiManager.get(
-        url: 'service-categories/hierarchy',
-      );
+      final response = await _apiManager.get(url: 'service-categories/hierarchy');
       return ServiceCategoryModel.fromJson(response);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<bool> updateBusinessHours(
-    String profileID,
-    Map<String, dynamic> bizHours,
-  ) async {
+  Future<bool> updateBusinessHours(String profileID, Map<String, dynamic> bizHours) async {
     try {
       final json = {"businessHours": bizHours};
       print(json);
-      final response = await _manageApi.patch(
-        url: '${Endpoints.bizHoursApi}$profileID',
-        body: json,
-      );
+      final response = await _manageApi.patch(url: Endpoints.bizHoursApi, body: json);
       if (response["success"] == true) {
         return true;
       } else {
@@ -216,10 +194,7 @@ class HomeService extends GetxService {
         "pocAlternatePhone": pocAlternatePhone,
         "pocEmail": pocEmail,
       };
-      final response = await _manageApi.patch(
-        url: '${Endpoints.pocApi}$profileID',
-        body: json,
-      );
+      final response = await _manageApi.patch(url: Endpoints.pocApi, body: json);
       if (response["success"] == true) {
         return true;
       } else {
@@ -239,7 +214,7 @@ class HomeService extends GetxService {
       final fileJson = {"file": fileName};
       final json = {"title": title};
       final response = await _manageApi.postMultipart(
-        url: '${Endpoints.certApi}merchant/$profileID',
+        url: Endpoints.certApi,
         fields: json,
         files: fileJson,
       );
@@ -266,20 +241,21 @@ class HomeService extends GetxService {
   }) async {
     try {
       final fileJson = {"file": fileName};
-      final json = {
+      final json = <String, String>{
         "businessName": bizName,
         "businessType": bizType,
         "businessEmail": bizEmail,
         "businessPhone": bizPhone,
-        "businessWebsite": businessWebsite ?? "",
-        "alternateBusinessPhone": alternateBizPhone ?? "",
         "yearOfEstablish": yearOfEstablish,
+        if ((businessWebsite ?? "").isNotEmpty) "businessWebsite": businessWebsite!,
+        if ((alternateBizPhone ?? "").isNotEmpty) "alternateBusinessPhone": alternateBizPhone!,
       };
       final response = await _manageApi.patchMultipart(
-        url: '${Endpoints.bizDetailsApi}$profileID',
+        url: Endpoints.bizDetailsApi,
         fields: json,
         files: fileJson,
       );
+      print("Response from merchant profile: ${response}");
       if (response["success"] == true) {
         return true;
       } else {
@@ -296,15 +272,8 @@ class HomeService extends GetxService {
     required String certKey,
   }) async {
     try {
-      final json = {
-        "profileType": profileType,
-        "profileId": profileID,
-        "certificateKey": certKey,
-      };
-      final response = await _manageApi.deleteObject(
-        url: Endpoints.delCertAPi,
-        body: json,
-      );
+      final json = {"profileType": profileType, "profileId": profileID, "certificateKey": certKey};
+      final response = await _manageApi.deleteObject(url: Endpoints.delCertAPi, body: json);
       if (response["success"] == true) {
         return true;
       } else {

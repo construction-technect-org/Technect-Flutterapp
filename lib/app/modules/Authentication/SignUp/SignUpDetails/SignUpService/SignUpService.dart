@@ -24,6 +24,7 @@ class SignUpService {
           if ((website ?? "").isNotEmpty) "website": website,
         },
       );
+      print("AuthCheckAvailability Response : $response");
       final data = response["data"] ?? {};
       if ((email ?? '').isNotEmpty) {
         final emailData = data["email"];
@@ -72,10 +73,16 @@ class SignUpService {
 
   Future<OtpModel> sendOtp({required String mobileNumber}) async {
     try {
-      final response = await apiManager.postObject(
-        url: APIConstants.sendOtp,
-        body: {"countryCode": "+91", "mobileNumber": mobileNumber},
+      print("URL : ${APIConstants.sendOtp}");
+      print("Body : countryCode : +91, $mobileNumber : mobileNumber}");
+      final response = await apiManager.postObjectWithoutToken(
+        // url: APIConstants.sendOtp,
+        url: "auth/user/signup/phone",
+        body: {"countryCode": "+91", "phone": mobileNumber, "email": "chandanmk2738@gmail.com"},
+        // body: {"countryCode": "+91", "mobileNumber": mobileNumber},
       );
+      print("SendOtp Response : $response");
+
       return OtpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in sendOtp: $e , $st');
@@ -94,10 +101,7 @@ class SignUpService {
     }
   }
 
-  Future<OtpModel> resendOtp({
-    required String mobileNumber,
-    String? code,
-  }) async {
+  Future<OtpModel> resendOtp({required String mobileNumber, String? code}) async {
     try {
       final response = await apiManager.postObject(
         url: APIConstants.resendOtp,
@@ -109,10 +113,7 @@ class SignUpService {
     }
   }
 
-  Future<OtpModel> teamResendOtp({
-    required String mobileNumber,
-    String? code,
-  }) async {
+  Future<OtpModel> teamResendOtp({required String mobileNumber, String? code}) async {
     try {
       final response = await apiManager.postObject(
         url: APIConstants.teamResendOtp,
@@ -124,10 +125,7 @@ class SignUpService {
     }
   }
 
-  Future<OtpModel> verifyOtp({
-    required String mobileNumber,
-    required String otp,
-  }) async {
+  Future<OtpModel> verifyOtp({required String mobileNumber, required String otp}) async {
     try {
       final response = await apiManager.postObject(
         url: APIConstants.verifyOtp,
@@ -181,10 +179,7 @@ class SignUpService {
         body["deviceType"] = deviceType;
       }
 
-      final response = await apiManager.postObject(
-        url: APIConstants.signup,
-        body: body,
-      );
+      final response = await apiManager.postObject(url: APIConstants.signup, body: body);
       return SignUpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in signup: $e , $st');

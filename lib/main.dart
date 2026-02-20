@@ -32,7 +32,6 @@ Future<void> main() async {
   await FCMService.initialize();
   await Hive.initFlutter();
   await Hive.openBox('appBox');
-
   await Get.putAsync<AppHiveService>(() async {
     final service = AppHiveService();
     await service.init();

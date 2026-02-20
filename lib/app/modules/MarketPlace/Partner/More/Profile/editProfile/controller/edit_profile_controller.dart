@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,6 +48,7 @@ class EditProfileControllerr extends GetxController {
       final homeController = Get.find<CommonController>();
       // final merchantProfile = homeController.profileData.value.data?.merchantProfile;
       final merProfile = storage.bizMetrics;
+      print("merProfile : $merProfile");
 
       if (merProfile != null) {
         filePath.value = merProfile["image"] ?? "";
@@ -55,8 +56,7 @@ class EditProfileControllerr extends GetxController {
         gstNumberController.text = storage.getNumber ?? '';
         businessEmailController.text = merProfile["businessEmail"] ?? '';
         businessWebsiteController.text = merProfile["businessWebsite"] ?? '';
-        alternativeContactController.text =
-            merProfile["alternateBusinessPhone"] ?? '';
+        alternativeContactController.text = merProfile["alternateBusinessPhone"] ?? '';
         businessContactController.text = merProfile['businessPhone'] ?? '';
         yearsInBusinessController.text = merProfile['yearOfEstablish'] ?? '';
         //projectsCompletedController.text =
@@ -80,16 +80,12 @@ class EditProfileControllerr extends GetxController {
       final cont = Get.find<ProfileController>();
 
       if ((cont.businessModel.value.gstinNumber ?? "").isNotEmpty) {
-        businessNameController.text =
-            cont.businessModel.value.businessName ?? "";
+        businessNameController.text = cont.businessModel.value.businessName ?? "";
         gstNumberController.text = cont.businessModel.value.gstinNumber ?? "";
-        businessEmailController.text =
-            cont.businessModel.value.businessEmail ?? "";
+        businessEmailController.text = cont.businessModel.value.businessEmail ?? "";
         businessWebsiteController.text = cont.businessModel.value.website ?? "";
-        businessContactController.text =
-            cont.businessModel.value.businessContactNumber ?? "";
-        alternativeContactController.text =
-            cont.businessModel.value.alternativeBusinessEmail ?? "";
+        businessContactController.text = cont.businessModel.value.businessContactNumber ?? "";
+        alternativeContactController.text = cont.businessModel.value.alternativeBusinessEmail ?? "";
         yearsInBusinessController.text = cont.businessModel.value.year ?? "";
       }
     } catch (e) {
@@ -113,9 +109,7 @@ class EditProfileControllerr extends GetxController {
             ? Get.find<ProfileController>().selectedImage.value?.path
             : Get.find<ProfileController>().image.value,
       );
-      log(
-        "AlternativeContactController : ${alternativeContactController.text}",
-      );
+      log("AlternativeContactController : ${alternativeContactController.text}");
       Get.find<ProfileController>().businessModel.refresh();
       Get.back();
     } else {
@@ -139,10 +133,7 @@ class EditProfileControllerr extends GetxController {
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt, color: MyColors.gray2E),
-              title: Text(
-                "Camera",
-                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-              ),
+              title: Text("Camera", style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.camera);
@@ -150,10 +141,7 @@ class EditProfileControllerr extends GetxController {
             ),
             ListTile(
               leading: const Icon(Icons.photo, color: MyColors.gray2E),
-              title: Text(
-                "Gallery",
-                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-              ),
+              title: Text("Gallery", style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.gallery);
@@ -166,16 +154,10 @@ class EditProfileControllerr extends GetxController {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await Get.find<ProfileController>().picker.pickImage(
-      source: source,
-    );
+    final pickedFile = await Get.find<ProfileController>().picker.pickImage(source: source);
     if (pickedFile == null) return;
-    final compressedFile = await CommonConstant().compressImage(
-      File(pickedFile.path),
-    );
-    Get.find<ProfileController>().selectedImage.value = File(
-      compressedFile.path,
-    );
+    final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
+    Get.find<ProfileController>().selectedImage.value = File(compressedFile.path);
     filePath.value = compressedFile.path;
   }
 
@@ -198,14 +180,12 @@ class EditProfileControllerr extends GetxController {
   Future<void> validateUrlAvailability() async {
     final website = businessWebsiteController.text;
 
-    final bool isAvailable = await SignUpService().checkAvailability(
-      website: website,
-    );
-    if (!isAvailable) {
-      websiteError.value = "Website url is already connect with other business";
-    } else {
-      websiteError.value = "";
-    }
+    // final bool isAvailable = await SignUpService().checkAvailability(website: website);
+    // if (!isAvailable) {
+    //   websiteError.value = "Website url is already connect with other business";
+    // } else {
+    //   websiteError.value = "";
+    // }
   }
 
   final HomeService _homeService = Get.find<HomeService>();
@@ -225,6 +205,9 @@ class EditProfileControllerr extends GetxController {
       );
       if (response) {
         SnackBars.successSnackBar(content: 'Metrics update successful');
+        // Refresh profile data so the summary screen reflects the new values
+        await Get.find<CommonController>().fetchProfileDataM();
+        Get.back();
       } else {
         SnackBars.errorSnackBar(content: 'Error in metrics update');
       }

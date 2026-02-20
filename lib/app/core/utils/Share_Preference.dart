@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
+
+import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
-import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/models/GetRequirementModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/models/get_service_requirement_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
@@ -19,6 +20,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
     hide Statistics;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class AppSharedPreference {
@@ -60,29 +62,22 @@ class AppSharedPreference {
   final cachedConnectorPriorities = ''.val('cachedConnectorPriorities');
   final productsData = <String, dynamic>{}.val('productsData');
   final supportTicketsData = <String, dynamic>{}.val('supportTicketsData');
-  final connectorSupportTicketsData = <String, dynamic>{}.val(
-    'connectorSupportTicketsData',
-  );
+  final connectorSupportTicketsData = <String, dynamic>{}.val('connectorSupportTicketsData');
   final newsData = <String, dynamic>{}.val('newsData');
   final notificationData = <String, dynamic>{}.val('notificationData');
   final subCategoryData = <String, dynamic>{}.val('subCategoryData');
-  final categoryHierarchyData = <String, dynamic>{}.val(
-    'categoryHierarchyData',
-  );
+  final categoryHierarchyData = <String, dynamic>{}.val('categoryHierarchyData');
 
-  final categoryServiceHierarchyData = <String, dynamic>{}.val(
-    'categoryServiceHierarchyData',
-  );
+  final categoryServiceHierarchyData = <String, dynamic>{}.val('categoryServiceHierarchyData');
 
   final requirementListData = <String, dynamic>{}.val('requirementListData');
-  final serviceRequirementListData = <String, dynamic>{}.val(
-    'serviceRequirementListData',
-  );
-  final profileId= ''.val('profileId');
-  final mainCategoriesConstructionId= ''.val('mainCategoriesConstructionId');
-  final mainCategoriesInteriorId= ''.val('mainCategoriesInteriorId');
+  final serviceRequirementListData = <String, dynamic>{}.val('serviceRequirementListData');
+  final profileId = ''.val('profileId');
+  final mainCategoriesConstructionId = ''.val('mainCategoriesConstructionId');
+  final mainCategoriesInteriorId = ''.val('mainCategoriesInteriorId');
 
   void setToken(String authToken) {
+    print("Token: $authToken");
     token.val = authToken;
   }
 
@@ -217,7 +212,7 @@ class AppSharedPreference {
     storage.erase();
   }
 
-  void logout() {
+  Future<void> logout() async {
     token.val = '';
     role.val = '';
     permissions.val = '';
@@ -231,6 +226,12 @@ class AppSharedPreference {
     teamStatsData.val = {};
     requirementListData.val = {};
     serviceRequirementListData.val = {};
+    try {
+      final AppHiveService appHiveService = Get.find<AppHiveService>();
+      await appHiveService.logout();
+    } catch (e) {
+      print("Error Deleteing all data $e");
+    }
   }
 
   void setAddressData(Map<String, dynamic> address) {
@@ -290,10 +291,7 @@ class AppSharedPreference {
   Future<void> saveRoles(List<GetAllRole> roles) async {
     try {
       final rolesJson = roles.map((role) => role.toJson()).toList();
-      setRolesData({
-        'data': rolesJson,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-      });
+      setRolesData({'data': rolesJson, 'timestamp': DateTime.now().millisecondsSinceEpoch});
     } catch (e) {
       log('Error saving roles: $e');
     }
@@ -334,10 +332,7 @@ class AppSharedPreference {
   Future<void> saveTeam(List<TeamListData> team) async {
     try {
       final teamJson = team.map((member) => member.toJson()).toList();
-      setTeamData({
-        'data': teamJson,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-      });
+      setTeamData({'data': teamJson, 'timestamp': DateTime.now().millisecondsSinceEpoch});
     } catch (e) {
       log('Error saving team: $e');
     }
@@ -475,9 +470,7 @@ class AppSharedPreference {
 
   void setCategoriesData(List<SupportCategory> categories) {
     try {
-      final categoriesJson = categories
-          .map((category) => category.toJson())
-          .toList();
+      final categoriesJson = categories.map((category) => category.toJson()).toList();
       cachedCategories.val = jsonEncode(categoriesJson);
     } catch (e) {
       log('Error saving categories: $e');
@@ -489,9 +482,7 @@ class AppSharedPreference {
       final cachedData = cachedCategories.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> categoriesJson = jsonDecode(cachedData);
-        return categoriesJson
-            .map((json) => SupportCategory.fromJson(json))
-            .toList();
+        return categoriesJson.map((json) => SupportCategory.fromJson(json)).toList();
       }
     } catch (e) {
       log('Error getting categories: $e');
@@ -501,9 +492,7 @@ class AppSharedPreference {
 
   void setPrioritiesData(List<SupportPriority> priorities) {
     try {
-      final prioritiesJson = priorities
-          .map((priority) => priority.toJson())
-          .toList();
+      final prioritiesJson = priorities.map((priority) => priority.toJson()).toList();
       cachedPriorities.val = jsonEncode(prioritiesJson);
     } catch (e) {
       log('Error saving priorities: $e');
@@ -515,9 +504,7 @@ class AppSharedPreference {
       final cachedData = cachedPriorities.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> prioritiesJson = jsonDecode(cachedData);
-        return prioritiesJson
-            .map((json) => SupportPriority.fromJson(json))
-            .toList();
+        return prioritiesJson.map((json) => SupportPriority.fromJson(json)).toList();
       }
     } catch (e) {
       log('Error getting priorities: $e');
@@ -608,9 +595,7 @@ class AppSharedPreference {
   // Connector Support Methods
   void setConnectorCategoriesData(List<SupportCategory> categories) {
     try {
-      final categoriesJson = categories
-          .map((category) => category.toJson())
-          .toList();
+      final categoriesJson = categories.map((category) => category.toJson()).toList();
       cachedConnectorCategories.val = jsonEncode(categoriesJson);
     } catch (e) {
       log('Error saving connector categories: $e');
@@ -622,9 +607,7 @@ class AppSharedPreference {
       final cachedData = cachedConnectorCategories.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> categoriesJson = jsonDecode(cachedData);
-        return categoriesJson
-            .map((json) => SupportCategory.fromJson(json))
-            .toList();
+        return categoriesJson.map((json) => SupportCategory.fromJson(json)).toList();
       }
     } catch (e) {
       log('Error getting connector categories: $e');
@@ -634,9 +617,7 @@ class AppSharedPreference {
 
   void setConnectorPrioritiesData(List<SupportPriority> priorities) {
     try {
-      final prioritiesJson = priorities
-          .map((priority) => priority.toJson())
-          .toList();
+      final prioritiesJson = priorities.map((priority) => priority.toJson()).toList();
       cachedConnectorPriorities.val = jsonEncode(prioritiesJson);
     } catch (e) {
       log('Error saving connector priorities: $e');
@@ -648,9 +629,7 @@ class AppSharedPreference {
       final cachedData = cachedConnectorPriorities.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> prioritiesJson = jsonDecode(cachedData);
-        return prioritiesJson
-            .map((json) => SupportPriority.fromJson(json))
-            .toList();
+        return prioritiesJson.map((json) => SupportPriority.fromJson(json)).toList();
       }
     } catch (e) {
       log('Error getting connector priorities: $e');
@@ -658,9 +637,7 @@ class AppSharedPreference {
     return null;
   }
 
-  void setConnectorSupportTicketsModel(
-    SupportMyTicketsModel supportTicketsModel,
-  ) {
+  void setConnectorSupportTicketsModel(SupportMyTicketsModel supportTicketsModel) {
     try {
       connectorSupportTicketsData.val = supportTicketsModel.toJson();
     } catch (e) {
@@ -816,9 +793,7 @@ class AppSharedPreference {
   }
 
   // Service Requirement List Storage Methods
-  void setServiceRequirementListModel(
-    GetServiceRequirementListModel serviceRequirementListModel,
-  ) {
+  void setServiceRequirementListModel(GetServiceRequirementListModel serviceRequirementListModel) {
     try {
       serviceRequirementListData.val = serviceRequirementListModel.toJson();
     } catch (e) {
@@ -841,13 +816,16 @@ class AppSharedPreference {
   void clearServiceRequirementListData() {
     serviceRequirementListData.val = {};
   }
+
   void setProfileId(String Id) {
     profileId.val = Id;
   }
+
   void setMainCategoriesConstructionId(String? Id) {
-    mainCategoriesConstructionId.val = Id??"";
+    mainCategoriesConstructionId.val = Id ?? "";
   }
+
   void setMainCategoriesInteriorId(String? Id) {
-    mainCategoriesInteriorId.val = Id??"";
+    mainCategoriesInteriorId.val = Id ?? "";
   }
 }

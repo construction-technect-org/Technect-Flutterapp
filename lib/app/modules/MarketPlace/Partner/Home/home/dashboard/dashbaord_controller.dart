@@ -28,8 +28,7 @@ class DashBoardController extends GetxController {
       final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         SnackBars.errorSnackBar(
-          content:
-              'Location services are disabled. Please enable location services.',
+          content: 'Location services are disabled. Please enable location services.',
         );
         return;
       }
@@ -44,9 +43,7 @@ class DashBoardController extends GetxController {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        SnackBars.errorSnackBar(
-          content: 'Location permissions are permanently denied.',
-        );
+        SnackBars.errorSnackBar(content: 'Location permissions are permanently denied.');
         return;
       }
 
@@ -63,10 +60,7 @@ class DashBoardController extends GetxController {
 
   Future<void> _getAddressFromCoordinates(double lat, double lng) async {
     try {
-      final List<Placemark> placemarks = await placemarkFromCoordinates(
-        lat,
-        lng,
-      );
+      final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks.isNotEmpty) {
         final Placemark place = placemarks[0];
         final String address =
@@ -82,8 +76,13 @@ class DashBoardController extends GetxController {
     try {
       isLoading.value = true;
       final personaResponse = await homeService.getPersona();
+      print("Persona Response : ${personaResponse}");
       if (personaResponse.success == true) {
         print("Success");
+        print("Persona Response : ${personaResponse.personas?.length}");
+        for (int i = 0; i < personaResponse.personas!.length; i++) {
+          print("Persona Response : ${personaResponse.personas?[i].profileType}");
+        }
         await storage.setPersonaDetail(personaResponse);
       }
     } catch (e) {
@@ -103,11 +102,13 @@ class DashBoardController extends GetxController {
 
       print("Hy there ${storage.personaDetail}");
       final PersonaProfileModel? _persona = storage.personaDetail;
+      print("Persona : ${_persona}");
       if (_persona == null) {
         print("Yes Null");
       }
       print("Length ${_persona!.personas!.length}");
       for (int i = 0; i < _persona!.personas!.length; i++) {
+        print("Persona : ${_persona?.personas?[i]}");
         print("YEs ${_persona?.personas?[i].profileType}");
         if (_persona?.personas?[i].profileType == "merchant") {
           merchantID = _persona?.personas?[i].profileId;
@@ -117,18 +118,17 @@ class DashBoardController extends GetxController {
       }
 
       if (merchantID != null && merchantID.isNotEmpty) {
-        profileResponse.value = await homeService.getMerchantProfile(
-          merchantID,
-        );
+        profileResponse.value = await homeService.getMerchantProfile(merchantID);
+        print("Merchant Response : ${profileResponse.value}");
         await storage.setMerchantID(merchantID);
+        print("Merchant ID : ${merchantID}");
         if (profileResponse.value.merchant != null) {
+
           print("Merchant NotNull");
           print("Biz Hrs ${profileResponse.value.merchant!.businessHours}");
           if (profileResponse.value.merchant!.businessHours != null) {
             print("Storign BIz HOurs");
-            await storage.setMerchantBizHours(
-              profileResponse.value.merchant!.businessHours,
-            );
+            await storage.setMerchantBizHours(profileResponse.value.merchant!.businessHours);
           }
           if (profileResponse.value.merchant!.pocDetails != null) {
             await storage.setPOC(profileResponse.value.merchant!.pocDetails);

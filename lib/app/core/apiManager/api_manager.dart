@@ -58,32 +58,27 @@ class ApiManager {
     try {
       final token = myPref.getToken();
       // Build full URL with query parameters
-      if(token.isNotEmpty){
-        final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      };
-      final uri = Uri.parse(baseUrl + url).replace(
-        queryParameters: params?.map(
-              (key, value) => MapEntry(key, value.toString()),
-        ),
-      );
-      Get.printInfo(info: '🌐 API GET Request:');
-      Get.printInfo(info: '   URL: $uri');
-      Get.printInfo(info: '   Headers: $headers');
+      if (token.isNotEmpty) {
+        final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
+        final uri = Uri.parse(
+          baseUrl + url,
+        ).replace(queryParameters: params?.map((key, value) => MapEntry(key, value.toString())));
+        Get.printInfo(info: '🌐 API GET Request:');
+        Get.printInfo(info: '   URL: $uri');
+        Get.printInfo(info: '   Headers: $headers');
 
-      final request = http.Request('GET', uri);
-      request.headers.addAll(headers);
+        final request = http.Request('GET', uri);
+        request.headers.addAll(headers);
 
-      final http.StreamedResponse response = await request.send();
-      final map = await _returnResponse(response);
+        final http.StreamedResponse response = await request.send();
+        final map = await _returnResponse(response);
 
-      // Check for invalid/expired token
-      // _checkTokenValidity(map);
+        // Check for invalid/expired token
+        // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
-      return map;
-    }
+        Get.printInfo(info: '✅ Parsed Response: $map');
+        return map;
+      }
     } on SocketException {
       Get.printInfo(info: '❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
@@ -96,10 +91,7 @@ class ApiManager {
   }
 
   /// POST method for JSON body requests
-  Future<dynamic> postObject({
-    required String url,
-    required Object body,
-  }) async {
+  Future<dynamic> postObject({required String url, required Object body}) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -138,11 +130,50 @@ class ApiManager {
       throw FetchDataException('Unexpected error: $e');
     }
   }
+
+  Future<dynamic> postObjectWithoutToken({required String url, required Object body}) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${myPref.getToken()}',
+      };
+      String baseUrl = "https://api.constructiontechnect.com/v1/api/";
+
+      Get.printInfo(info: '🌐 API POST Request:');
+      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   Headers: $headers');
+      Get.printInfo(info: '   Body: $body');
+
+      final request = http.Request('POST', Uri.parse(baseUrl + url));
+      request.body = json.encode(body);
+      request.headers.addAll(headers);
+
+      final http.StreamedResponse response = await request.send();
+
+      Get.printInfo(info: '📡 API Response:');
+      Get.printInfo(info: '   Status: ${response.statusCode}');
+      Get.printInfo(info: '   Headers: ${response.headers}');
+
+      final map = await _returnResponse(response);
+
+      // Check for invalid/expired token in response body
+      // _checkTokenValidity(map);
+
+      Get.printInfo(info: '✅ Parsed Response: $map');
+      return map;
+    } on SocketException {
+      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      SnackBars.errorSnackBar(content: 'No Internet Connection');
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      Get.printInfo(info: '❌ Unexpected Error: $e');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      throw FetchDataException('Unexpected error: $e');
+    }
+  }
+
   ///PATCH Method for JSON body requests
-  Future<dynamic> patchObject({
-    required String url,
-    required Object body,
-  }) async {
+  Future<dynamic> patchObject({required String url, required Object body}) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -154,10 +185,7 @@ class ApiManager {
       Get.printInfo(info: '   Headers: $headers');
       Get.printInfo(info: '   Body: $body');
 
-      final request = http.Request(
-        'PATCH',
-        Uri.parse(baseUrl + url),
-      );
+      final request = http.Request('PATCH', Uri.parse(baseUrl + url));
 
       request.body = json.encode(body);
       request.headers.addAll(headers);
@@ -184,7 +212,6 @@ class ApiManager {
       throw FetchDataException('Unexpected error: $e');
     }
   }
-
 
   /// PUT method for JSON body requests
   Future<dynamic> put({required String url}) async {
@@ -302,8 +329,7 @@ class ApiManager {
             case 'doc':
               mimeType = 'application/msword';
             case 'docx':
-              mimeType =
-                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+              mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
             default:
               mimeType = 'application/octet-stream';
           }
@@ -386,8 +412,7 @@ class ApiManager {
             case 'doc':
               mimeType = 'application/msword';
             case 'docx':
-              mimeType =
-                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+              mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
             default:
               mimeType = 'application/octet-stream';
           }
@@ -472,10 +497,7 @@ class ApiManager {
     }
   }
 
-  Future<dynamic> deleteObject({
-    required String url,
-    required Object body,
-  }) async {
+  Future<dynamic> deleteObject({required String url, required Object body}) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -528,13 +550,9 @@ class ApiManager {
         final responseJson = json.decode(responseString);
         return responseJson;
       case 400:
-        showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Bad Request',
-        );
+        showErrorSheet(ErrorModel.fromJson(json.decode(responseString)).message ?? 'Bad Request');
         throw BadRequestException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Bad Request',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Bad Request',
         );
       case 401:
         final responseJson = json.decode(responseString);
@@ -553,40 +571,28 @@ class ApiManager {
 
         // For non-token-expiry 401 errors (like login failures), return the response
         // so the caller can handle it (e.g., show specific error messages)
-        Get.printInfo(
-          info: '⚠️ 401 Unauthorized - Authentication Error: $message',
-        );
+        Get.printInfo(info: '⚠️ 401 Unauthorized - Authentication Error: $message');
         showErrorSheet(message ?? 'Unauthorized');
         return responseJson; // Return response instead of throwing
 
       case 403:
-        showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Forbidden',
-        );
+        showErrorSheet(ErrorModel.fromJson(json.decode(responseString)).message ?? 'Forbidden');
         throw UnauthorisedException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Forbidden',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Forbidden',
         );
 
       case 404:
-        showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Not Found',
-        );
+        showErrorSheet(ErrorModel.fromJson(json.decode(responseString)).message ?? 'Not Found');
         throw UnauthorisedException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Not Found',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Not Found',
         );
 
       case 409:
         showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Conflict Error',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
         );
         throw BadRequestException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Conflict Error',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
         );
       case 502:
         showErrorSheet('Server is down. Please try again later.');
@@ -595,8 +601,7 @@ class ApiManager {
       case 500:
       default:
         showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Conflict Error',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
         );
 
         throw FetchDataException(

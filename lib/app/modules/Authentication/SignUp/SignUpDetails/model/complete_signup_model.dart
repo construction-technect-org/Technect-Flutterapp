@@ -257,22 +257,40 @@ class UserMainModel {
     this.deviceType,
   });
 
+  // factory UserMainModel.fromJson(Map<String, dynamic> json) {
+  //   return UserMainModel(
+  //     id: json["id"],
+  //     firstName: json["firstName"],
+  //     lastName: json["lastName"],
+  //     phone: json["phone"],
+  //     email: json["email"],
+  //     lastActiveProfileType: json["lastActiveProfileType"],
+  //     lastActiveProfileId: json["lastActiveProfileId"],
+  //     address: json["address"] != null
+  //         ? Address.fromJson(json["address"])
+  //         : null,
+  //     referralCode: json["referralCode"],
+  //     myReferralCode: json["myReferralCode"],
+  //     fcmToken: json["fcmToken"],
+  //     deviceType: json["deviceType"],
+  //   );
+  // }
   factory UserMainModel.fromJson(Map<String, dynamic> json) {
     return UserMainModel(
-      id: json["id"],
-      firstName: json["firstName"],
-      lastName: json["lastName"],
-      phone: json["phone"],
-      email: json["email"],
-      lastActiveProfileType: json["lastActiveProfileType"],
-      lastActiveProfileId: json["lastActiveProfileId"],
+      id: json["id"]?.toString(),
+      firstName: json["firstName"]?.toString(),
+      lastName: json["lastName"]?.toString(),
+      phone: json["phone"]?.toString(),
+      email: json["email"]?.toString(),
+      lastActiveProfileType: json["lastActiveProfileType"]?.toString(),
+      lastActiveProfileId: json["lastActiveProfileId"]?.toString(),
       address: json["address"] != null
-          ? Address.fromJson(json["address"])
+          ? Address.fromJson(Map<String, dynamic>.from(json["address"]))
           : null,
-      referralCode: json["referralCode"],
-      myReferralCode: json["myReferralCode"],
-      fcmToken: json["fcmToken"],
-      deviceType: json["deviceType"],
+      referralCode: json["referralCode"]?.toString(),
+      myReferralCode: json["myReferralCode"]?.toString(),
+      fcmToken: json["fcmToken"]?.toString(),
+      deviceType: json["deviceType"]?.toString(),
     );
   }
 
@@ -298,15 +316,15 @@ class Address {
 
   Address({this.latitude, this.longitude});
 
+  // factory Address.fromJson(Map<String, dynamic> json) {
+  //   return Address(latitude: json["latitude"], longitude: json["longitude"]);
+  // }
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-      latitude: json["latitude"],
-      longitude: json["longitude"],
+      latitude: (json["latitude"] as num?)?.toDouble(),
+      longitude: (json["longitude"] as num?)?.toDouble(),
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    "latitude": latitude,
-    "longitude": longitude,
-  };
+  Map<String, dynamic> toJson() => {"latitude": latitude, "longitude": longitude};
 }

@@ -6,7 +6,7 @@ class PersonaProfileModel {
 
   PersonaProfileModel.fromJson(Map json) {
     success = json['success'];
-    final personasJson = json['personas'];
+    final personasJson = json['profiles'];
 
     if (personasJson is List) {
       personas = personasJson.map((e) => Personas.fromJson(e as Map)).toList();
@@ -19,7 +19,7 @@ class PersonaProfileModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['success'] = this.success;
     if (this.personas != null) {
-      data['personas'] = this.personas?.map((v) => v.toJson()).toList();
+      data['profiles'] = this.personas?.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -32,13 +32,7 @@ class Personas {
   String? teamRole;
   String? profileStatus;
 
-  Personas({
-    this.profileType,
-    this.profileId,
-    this.profileName,
-    this.teamRole,
-    this.profileStatus,
-  });
+  Personas({this.profileType, this.profileId, this.profileName, this.teamRole, this.profileStatus});
 
   Personas.fromJson(Map json) {
     profileType = json['profileType'];

@@ -38,10 +38,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
               children: [
                 Container(
                   decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(Asset.loginBg),
-                      fit: BoxFit.cover,
-                    ),
+                    image: DecorationImage(image: AssetImage(Asset.loginBg), fit: BoxFit.cover),
                   ),
                 ),
                 Column(
@@ -76,9 +73,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                               SizedBox(height: 2.h),
                               Text(
                                 'Set Password',
-                                style: MyTexts.medium20.copyWith(
-                                  color: MyColors.primary,
-                                ),
+                                style: MyTexts.medium20.copyWith(color: MyColors.primary),
                               ),
                               SizedBox(height: 3.h),
                               Obx(() {
@@ -87,13 +82,11 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                   textInputAction: TextInputAction.next,
                                   headerText: "New Password",
                                   controller: controller.passwordController,
-                                  obscureText:
-                                      !controller.isPasswordVisible.value,
+                                  obscureText: !controller.isPasswordVisible.value,
                                   hintText: "Enter new password",
                                   showDivider: true,
                                   suffixIcon: GestureDetector(
-                                    onTap: () =>
-                                        controller.togglePasswordVisibility(),
+                                    onTap: () => controller.togglePasswordVisibility(),
                                     child: Icon(
                                       controller.isPasswordVisible.value
                                           ? Icons.visibility
@@ -112,16 +105,12 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                   ),
                                   textInputAction: TextInputAction.done,
                                   headerText: "Confirm Password",
-                                  controller:
-                                      controller.confirmPasswordController,
-                                  obscureText: !controller
-                                      .isConfirmPasswordVisible
-                                      .value,
+                                  controller: controller.confirmPasswordController,
+                                  obscureText: !controller.isConfirmPasswordVisible.value,
                                   hintText: "Re-enter new password",
                                   showDivider: true,
                                   suffixIcon: GestureDetector(
-                                    onTap: () => controller
-                                        .toggleConfirmPasswordVisibility(),
+                                    onTap: () => controller.toggleConfirmPasswordVisibility(),
                                     child: Icon(
                                       controller.isConfirmPasswordVisible.value
                                           ? Icons.visibility
@@ -134,8 +123,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                               SizedBox(height: 2.h),
                               SavePassWidget(
                                 state: controller.rememberMe,
-                                onChanged: (val) =>
-                                    controller.rememberMe.value = val,
+                                onChanged: (val) => controller.rememberMe.value = val,
                               ),
                               SizedBox(height: 2.h),
                               Padding(
@@ -145,8 +133,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                   onTap: controller.isLoading.value
                                       ? null
                                       : () {
-                                          if (formKey.currentState!
-                                              .validate()) {
+                                          if (formKey.currentState!.validate()) {
                                             controller.signUpComplete();
                                           }
                                         },

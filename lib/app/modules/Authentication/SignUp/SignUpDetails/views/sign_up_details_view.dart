@@ -16,8 +16,7 @@ class SignUpDetailsView extends StatefulWidget {
 }
 
 class _SignUpDetailsViewState extends State<SignUpDetailsView> {
-  final SignUpDetailsController controller =
-      Get.find<SignUpDetailsController>();
+  final SignUpDetailsController controller = Get.find<SignUpDetailsController>();
   final MainSignUpService _mainSignUpService = Get.find<MainSignUpService>();
   @override
   void initState() {
@@ -96,10 +95,7 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
                     controller: controller.emailController,
                     keyboardType: TextInputType.emailAddress,
                     autofillHints: const [AutofillHints.email],
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(254),
-                      EmailInputFormatter(),
-                    ],
+                    inputFormatters: [LengthLimitingTextInputFormatter(254), EmailInputFormatter()],
                     validator: (value) => Validate.validateEmail(value),
                     onChange: (value) {
                       controller.emailError.value = "";
@@ -123,9 +119,7 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
                           controller.emailError.value,
-                          style: MyTexts.medium13.copyWith(
-                            color: MyColors.red33,
-                          ),
+                          style: MyTexts.medium13.copyWith(color: MyColors.red33),
                         ),
                       );
                     }
@@ -139,9 +133,7 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
             RoundedButton(
               buttonName: 'Continue',
               onTap: () async {
-                await controller.validateEmailAvailability(
-                  controller.emailController.text,
-                );
+                await controller.validateEmailAvailability(controller.emailController.text);
 
                 if (controller.emailError.value.isNotEmpty) {
                   SnackBars.errorSnackBar(content: controller.emailError.value);
@@ -150,8 +142,7 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
                 controller.isValid.value = -1;
                 controller.numberError.value = "";
 
-                final mobileNumber = controller.mobileNumberController.text
-                    .trim();
+                final mobileNumber = controller.mobileNumberController.text.trim();
                 final mobileError = await Validate.validateMobileNumberAsync(
                   mobileNumber,
                   countryCode: controller.countryCode.value,
@@ -167,8 +158,8 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
                 hideKeyboard();
                 if (formKey.currentState!.validate()) {
                   controller.resetOtpState();
-                  final sent = await controller.verifyMobileNumber();
-                  if (!sent) return;
+                  // final sent = await controller.verifyMobileNumber();
+                  // if (!sent) return;
 
                   if (Get.isBottomSheetOpen == true) {
                     Get.back();

@@ -34,10 +34,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
               width: double.infinity,
               height: double.infinity,
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Asset.moreIBg),
-                  fit: BoxFit.cover,
-                ),
+                image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
               ),
             ),
             Column(
@@ -52,11 +49,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -76,16 +69,12 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                 children: [
                                   Text(
                                     "Enable",
-                                    style: MyTexts.bold15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    style: MyTexts.bold15.copyWith(color: MyColors.gray2E),
                                   ),
                                   SizedBox(height: 1.h),
                                   Text(
                                     "Quickly Enable or Disable business hours",
-                                    style: MyTexts.medium13.copyWith(
-                                      color: MyColors.gray54,
-                                    ),
+                                    style: MyTexts.medium13.copyWith(color: MyColors.gray54),
                                   ),
                                 ],
                               ),
@@ -172,15 +161,13 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 18),
                                   child: Obx(() {
-                                    final bool enabled =
-                                        controller.daysEnabled[day]!.value;
+                                    final bool enabled = controller.daysEnabled[day]!.value;
                                     return Row(
                                       children: [
                                         CustomSwitch(
                                           value: enabled,
                                           onChanged: (val) {
-                                            controller.daysEnabled[day]!.value =
-                                                val;
+                                            controller.daysEnabled[day]!.value = val;
                                           },
                                         ),
                                         SizedBox(width: 2.w),
@@ -197,55 +184,43 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                             width: 60,
                                             height: 40,
                                             child: TextField(
-                                              style: MyTexts.bold16.copyWith(
-                                                color: Colors.black,
-                                              ),
+                                              style: MyTexts.bold16.copyWith(color: Colors.black),
                                               readOnly: true,
                                               onTap: () async {
-                                                final TimeOfDay?
-                                                pickedTime = await showTimePicker(
+                                                final TimeOfDay? pickedTime = await showTimePicker(
                                                   context: context,
                                                   initialTime: TimeOfDay.now(),
                                                   builder: (context, child) {
                                                     return MediaQuery(
-                                                      data:
-                                                          MediaQuery.of(
-                                                            context,
-                                                          ).copyWith(
-                                                            alwaysUse24HourFormat:
-                                                                false, // 👈 force 12-hour
-                                                          ),
+                                                      data: MediaQuery.of(context).copyWith(
+                                                        alwaysUse24HourFormat:
+                                                            false, // 👈 force 12-hour
+                                                      ),
                                                       child: child!,
                                                     );
                                                   },
                                                 );
 
                                                 if (pickedTime != null) {
-                                                  final int hour12 =
-                                                      pickedTime.hourOfPeriod ==
-                                                          0
+                                                  final int hour12 = pickedTime.hourOfPeriod == 0
                                                       ? 12
                                                       : pickedTime.hourOfPeriod;
 
-                                                  final String hour = hour12
+                                                  final String hour = hour12.toString().padLeft(
+                                                    2,
+                                                    '0',
+                                                  );
+
+                                                  final String minute = pickedTime.minute
                                                       .toString()
                                                       .padLeft(2, '0');
 
-                                                  final String minute =
-                                                      pickedTime.minute
-                                                          .toString()
-                                                          .padLeft(2, '0');
-
-                                                  controller
-                                                          .fromControllers[day]
-                                                          ?.text =
+                                                  controller.fromControllers[day]?.text =
                                                       '$hour:$minute';
                                                 }
                                               },
-                                              controller: controller
-                                                  .fromControllers[day],
-                                              keyboardType:
-                                                  TextInputType.number,
+                                              controller: controller.fromControllers[day],
+                                              keyboardType: TextInputType.number,
                                               // inputFormatters: [
                                               //   FilteringTextInputFormatter
                                               //       .digitsOnly,
@@ -255,67 +230,45 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                               // ],
                                               decoration: InputDecoration(
                                                 hintText: "From",
-                                                hintStyle: MyTexts.bold14
-                                                    .copyWith(
-                                                      color: MyColors.grey,
-                                                    ),
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8,
-                                                    ),
+                                                hintStyle: MyTexts.bold14.copyWith(
+                                                  color: MyColors.grey,
+                                                ),
+                                                contentPadding: const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
 
                                                 border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                   borderSide: const BorderSide(
                                                     color: MyColors.grayCD,
                                                   ),
                                                 ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                            color:
-                                                                MyColors.grayCD,
-                                                          ),
-                                                    ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                            color:
-                                                                MyColors.grayCD,
-                                                          ),
-                                                    ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderSide: const BorderSide(
+                                                    color: MyColors.grayCD,
+                                                  ),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderSide: const BorderSide(
+                                                    color: MyColors.grayCD,
+                                                  ),
+                                                ),
 
                                                 errorBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                   borderSide: const BorderSide(
                                                     color: MyColors.grayCD,
                                                   ),
                                                 ),
-                                                focusedErrorBorder:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                            color:
-                                                                MyColors.grayCD,
-                                                          ),
-                                                    ),
+                                                focusedErrorBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderSide: const BorderSide(
+                                                    color: MyColors.grayCD,
+                                                  ),
+                                                ),
                                               ),
                                               onChanged: (value) {
                                                 // controller.validateTimeInput(
@@ -334,19 +287,15 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                               underline: const SizedBox(),
                                               iconSize: 0,
                                               dropdownColor: Colors.white,
-                                              value: controller
-                                                  .fromPeriods[day]!
-                                                  .value,
+                                              value: controller.fromPeriods[day]!.value,
                                               items: ["AM", "PM"].map((e) {
                                                 return DropdownMenuItem<String>(
                                                   value: e,
                                                   child: Text(
                                                     e,
-                                                    style: MyTexts.medium13
-                                                        .copyWith(
-                                                          color:
-                                                              MyColors.gray2E,
-                                                        ),
+                                                    style: MyTexts.medium13.copyWith(
+                                                      color: MyColors.gray2E,
+                                                    ),
                                                   ),
                                                 );
                                               }).toList(),
@@ -359,54 +308,42 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                             width: 60,
                                             height: 40,
                                             child: TextField(
-                                              style: MyTexts.bold16.copyWith(
-                                                color: Colors.black,
-                                              ),
+                                              style: MyTexts.bold16.copyWith(color: Colors.black),
                                               readOnly: true,
                                               onTap: () async {
-                                                final TimeOfDay?
-                                                pickedTime = await showTimePicker(
+                                                final TimeOfDay? pickedTime = await showTimePicker(
                                                   context: context,
                                                   initialTime: TimeOfDay.now(),
                                                   builder: (context, child) {
                                                     return MediaQuery(
-                                                      data:
-                                                          MediaQuery.of(
-                                                            context,
-                                                          ).copyWith(
-                                                            alwaysUse24HourFormat:
-                                                                false, // 👈 force 12-hour
-                                                          ),
+                                                      data: MediaQuery.of(context).copyWith(
+                                                        alwaysUse24HourFormat:
+                                                            false, // 👈 force 12-hour
+                                                      ),
                                                       child: child!,
                                                     );
                                                   },
                                                 );
 
                                                 if (pickedTime != null) {
-                                                  final int hour12 =
-                                                      pickedTime.hourOfPeriod ==
-                                                          0
+                                                  final int hour12 = pickedTime.hourOfPeriod == 0
                                                       ? 12
                                                       : pickedTime.hourOfPeriod;
 
-                                                  final String hour = hour12
+                                                  final String hour = hour12.toString().padLeft(
+                                                    2,
+                                                    '0',
+                                                  );
+
+                                                  final String minute = pickedTime.minute
                                                       .toString()
                                                       .padLeft(2, '0');
-
-                                                  final String minute =
-                                                      pickedTime.minute
-                                                          .toString()
-                                                          .padLeft(2, '0');
-                                                  controller
-                                                          .toControllers[day]
-                                                          ?.text =
+                                                  controller.toControllers[day]?.text =
                                                       '$hour:$minute';
                                                 }
                                               },
-                                              controller:
-                                                  controller.toControllers[day],
-                                              keyboardType:
-                                                  TextInputType.number,
+                                              controller: controller.toControllers[day],
+                                              keyboardType: TextInputType.number,
                                               // inputFormatters: [
                                               //   FilteringTextInputFormatter
                                               //       .digitsOnly,
@@ -416,67 +353,45 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                               // ],
                                               decoration: InputDecoration(
                                                 hintText: "To",
-                                                hintStyle: MyTexts.bold14
-                                                    .copyWith(
-                                                      color: MyColors.grey,
-                                                    ),
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8,
-                                                    ),
+                                                hintStyle: MyTexts.bold14.copyWith(
+                                                  color: MyColors.grey,
+                                                ),
+                                                contentPadding: const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
 
                                                 border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                  borderRadius: BorderRadius.circular(12),
                                                   borderSide: const BorderSide(
                                                     color: MyColors.grayCD,
                                                   ),
                                                 ),
 
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                            color:
-                                                                MyColors.grayCD,
-                                                          ),
-                                                    ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                            color:
-                                                                MyColors.grayCD,
-                                                          ),
-                                                    ),
-                                                errorBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(12),
                                                   borderSide: const BorderSide(
                                                     color: MyColors.grayCD,
                                                   ),
                                                 ),
-                                                focusedErrorBorder:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                            color:
-                                                                MyColors.grayCD,
-                                                          ),
-                                                    ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderSide: const BorderSide(
+                                                    color: MyColors.grayCD,
+                                                  ),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderSide: const BorderSide(
+                                                    color: MyColors.grayCD,
+                                                  ),
+                                                ),
+                                                focusedErrorBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderSide: const BorderSide(
+                                                    color: MyColors.grayCD,
+                                                  ),
+                                                ),
                                               ),
                                               onChanged: (value) {
                                                 // controller.validateTimeInput(
@@ -497,19 +412,15 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                               dropdownColor: Colors.white,
                                               underline: const SizedBox(),
 
-                                              value: controller
-                                                  .toPeriods[day]!
-                                                  .value,
+                                              value: controller.toPeriods[day]!.value,
                                               items: ["AM", "PM"].map((e) {
                                                 return DropdownMenuItem<String>(
                                                   value: e,
                                                   child: Text(
                                                     e,
-                                                    style: MyTexts.medium13
-                                                        .copyWith(
-                                                          color:
-                                                              MyColors.gray2E,
-                                                        ),
+                                                    style: MyTexts.medium13.copyWith(
+                                                      color: MyColors.gray2E,
+                                                    ),
                                                   ),
                                                 );
                                               }).toList(),
@@ -523,16 +434,11 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
                                               color: const Color(0xFFFCECE9),
-                                              border: Border.all(
-                                                color: const Color(0xFFF9D0CB),
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              border: Border.all(color: const Color(0xFFF9D0CB)),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                left: 10,
-                                              ),
+                                              padding: const EdgeInsets.only(left: 10),
                                               child: Row(
                                                 children: [
                                                   SvgPicture.asset(
@@ -543,10 +449,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                   SizedBox(width: 2.w),
                                                   Text(
                                                     "Closed",
-                                                    style: MyTexts.bold14
-                                                        .copyWith(
-                                                          color: MyColors.black,
-                                                        ),
+                                                    style: MyTexts.bold14.copyWith(
+                                                      color: MyColors.black,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
