@@ -18,25 +18,13 @@ class Endpoints {
   static const String bizDetailsApi = "/v1/api/business/merchant/business-details";
   static const String certApi = "/v1/api/business/upload/certificate";
   static const String delCertAPi = "/v1/api/business/upload/certificate";
-  static const String bizHoursApi = "/v1/api/business/merchant/business-hours/";
-  static const String pocApi = "/v1/api/business/merchant/poc-details/";
-  static const String bizDetailsApi =
-      "/v1/api/business/merchant/business-details";
-  static const String certApi = "/v1/api/upload/certificate/";
-  static const String delCertAPi = "/v1/api/upload/certificate";
   static const String moduleApi = "/v1/api/marketplace/modules?moduleFor=";
   static const String mainCatApi = "/v1/api/marketplace/main-categories?moduleId=";
   static const String catApi = "/v1/api/marketplace/categories?mainCategoryId=";
   static const String subCatApi = "/v1/api/marketplace/sub-categories?categoryId=";
   static const String catProdApi = "/v1/api/marketplace/category-products?subCategoryId=";
   static const String getAllPermissionApi = "/v1/api/business/permissions?permissionFor=";
-  static const String subCatApi =
-      "/v1/api/marketplace/sub-categories?categoryId=";
-  static const String catProdApi =
-      "/v1/api/marketplace/category-products?subCategoryId=";
   static const String merchantProjects =
       "/v1/api/business/merchant/projects";
-  static const String getAllPermissionApi =
-      "/v1/api/business/permissions?permissionFor=";
   static const String createRoleApi = "/v1/api/business/roles/custom/";
 }
