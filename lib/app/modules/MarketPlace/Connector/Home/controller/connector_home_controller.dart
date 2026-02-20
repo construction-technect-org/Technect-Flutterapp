@@ -6,9 +6,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/mod
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/services/connector_home_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart' hide SubCategory;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get_storage/get_storage.dart';
 
 class ConnectorHomeController extends GetxController {
   // New

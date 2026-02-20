@@ -3,11 +3,15 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/module_models.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/merchant_home_view.dart';
 
 class HomeView extends StatelessWidget {
   final CommonController commonController = Get.find();
-  final HomeController controller = Get.put(HomeController());
+  // final HomeController controller = Get.put(HomeController());
+  final ConnectorHomeController controller = Get.put(ConnectorHomeController());
 
   CachedNetworkImage getImageView({
     required String finalUrl,
@@ -392,123 +396,54 @@ class HomeView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Obx(
-                      () => SingleChildScrollView(
+                          () => SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           mainAxisSize: MainAxisSize.min,
-                          children: [
-                            tabBar(
-                              onTap: () {
-                                hideKeyboard();
-                                Get.find<CommonController>().marketPlace.value =
-                                    0;
-                              },
-                              icon: Asset.MM,
-                              name: 'Material',
-                              isMarketPlace:
-                                  Get.find<CommonController>()
-                                      .marketPlace
-                                      .value ==
-                                  0,
-                            ),
-                            const Gap(12),
-                            tabBar(
-                              onTap: () {
-                                hideKeyboard();
-                                Get.find<CommonController>().marketPlace.value =
-                                    1;
-                              },
-                              icon: Asset.CM,
-                              name: 'Construction',
-                              isMarketPlace:
-                                  Get.find<CommonController>()
-                                      .marketPlace
-                                      .value ==
-                                  1,
-                            ),
-                            const Gap(12),
-                            tabBar(
-                              onTap: () {
-                                hideKeyboard();
-                                Get.find<CommonController>().marketPlace.value =
-                                    2;
-                              },
-                              icon: Asset.design1,
-                              name: 'Design',
-                              isMarketPlace:
-                                  Get.find<CommonController>()
-                                      .marketPlace
-                                      .value ==
-                                  2,
-                            ),
-                            const Gap(12),
-                            tabBar(
-                              onTap: () {
-                                hideKeyboard();
-                                Get.find<CommonController>().marketPlace.value =
-                                    3;
-                              },
-                              icon: Asset.fleet,
-                              name: 'Fleet',
-                              isMarketPlace:
-                                  Get.find<CommonController>()
-                                      .marketPlace
-                                      .value ==
-                                  3,
-                            ),
-                            const Gap(12),
-                            tabBar(
-                              onTap: () {
-                                hideKeyboard();
-                                Get.find<CommonController>().marketPlace.value =
-                                    4;
-                              },
-                              icon: Asset.TEM,
-                              name: 'Tools',
-                              isMarketPlace:
-                                  Get.find<CommonController>()
-                                      .marketPlace
-                                      .value ==
-                                  4,
-                            ),
-                            const Gap(12),
-                            tabBar(
-                              onTap: () {
-                                hideKeyboard();
-                                Get.find<CommonController>().marketPlace.value =
-                                    5;
-                              },
-                              icon: Asset.equipment,
-                              name: 'Equipment',
-                              isMarketPlace:
-                                  Get.find<CommonController>()
-                                      .marketPlace
-                                      .value ==
-                                  5,
-                            ),
-                            const Gap(12),
-                            tabBar(
-                              onTap: () {
-                                hideKeyboard();
-                                Get.find<CommonController>().marketPlace.value =
-                                    6;
-                              },
-                              icon: Asset.ppe,
-                              name: 'PPE',
-                              isMarketPlace:
-                                  Get.find<CommonController>()
-                                      .marketPlace
-                                      .value ==
-                                  6,
-                            ),
-                            const Gap(12),
-                          ],
+                          children: List.generate(
+                            controller.connectorModuleData.value.data?.modules?.length ?? 0,
+                                (index) {
+                              final module = controller
+                                  .connectorModuleData.value.data?.modules?[index];
+
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: tabBar(
+                                  onTap: () async {
+                                    hideKeyboard();
+                                    Get.printInfo(
+                                      info: '✅ Module Name : ${module?.name}',
+                                    );
+                                    await controller.fetchMainCategory(module?.id);
+                                    controller.marketPlace.value = index;
+                                  },
+                                  icon: Asset.MM,
+                                  /// 🔥 IMAGE INSTEAD OF ICON
+                                  // icon: module?.image?.url != null
+                                  //     ? Image.network(
+                                  //   module!.image!.url!,
+                                  //   height: 24,
+                                  //   width: 24,
+                                  //   fit: BoxFit.contain,
+                                  //   errorBuilder: (context, error, stackTrace) {
+                                  //     return const Icon(Icons.image_not_supported, size: 24);
+                                  //   },
+                                  // )
+                                  //     : const Icon(Icons.image_not_supported, size: 24),
+
+                                  name: module?.name ?? "-",
+                                  isMarketPlace:
+                                  controller.marketPlace.value == index,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const Gap(24),
+
+                  // const Gap(24),
 
                   //const Gap(10),
                   Expanded(
@@ -518,167 +453,167 @@ class HomeView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    0,
-                                    8,
-                                    16,
-                                    0,
-                                  ),
-                                  child: Container(
-                                    width: 70.w,
+                            // Row(
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.fromLTRB(
+                            //         0,
+                            //         8,
+                            //         16,
+                            //         0,
+                            //       ),
+                            //       child: Container(
+                            //         width: 70.w,
+                            //
+                            //         decoration: BoxDecoration(
+                            //           color: Colors.white,
+                            //           borderRadius: BorderRadius.circular(50),
+                            //           boxShadow: [
+                            //             BoxShadow(
+                            //               color: MyColors.grayEA.withValues(
+                            //                 alpha: 0.32,
+                            //               ),
+                            //               blurRadius: 4,
+                            //             ),
+                            //           ],
+                            //         ),
+                            //         child: CommonTextField(
+                            //           onChange: (value) {
+                            //             //controller.onSearchChanged(value ?? "");
+                            //           },
+                            //           borderRadius: 50,
+                            //           hintText: 'Search',
+                            //           prefixIcon: SvgPicture.asset(
+                            //             Asset.searchIcon,
+                            //             height: 16,
+                            //             width: 16,
+                            //           ),
+                            //           //controller: controller.searchController,
+                            //           /*suffixIcon: Obx(
+                            //       () => controller.searchQuery.value.isNotEmpty
+                            //           ? GestureDetector(
+                            //               onTap: controller.clearSearch,
+                            //               child: const Icon(
+                            //                 Icons.clear,
+                            //                 color: MyColors.gray54,
+                            //               ),
+                            //             )
+                            //           : const SizedBox.shrink(),
+                            //     ), */
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     const Spacer(),
+                            //     GestureDetector(
+                            //       onTap: () {
+                            //         //Get.toNamed(Routes.NEWS);
+                            //       },
+                            //       child: Container(
+                            //         padding: const EdgeInsets.all(6),
+                            //         decoration: BoxDecoration(
+                            //           color: MyColors.white,
+                            //           border: Border.all(
+                            //             color: MyColors.custom('EAEAEA'),
+                            //           ),
+                            //           shape: BoxShape.circle,
+                            //         ),
+                            //         child: SvgPicture.asset(
+                            //           Asset.location,
+                            //           width: 16,
+                            //           height: 16,
+                            //           colorFilter: ColorFilter.mode(
+                            //             MyColors.black,
+                            //             BlendMode.srcIn,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     const Gap(1),
+                            //     GestureDetector(
+                            //       onTap: () {
+                            //         //Get.toNamed(Routes.NEWS);
+                            //       },
+                            //       child: Container(
+                            //         padding: const EdgeInsets.all(6),
+                            //         decoration: BoxDecoration(
+                            //           color: MyColors.white,
+                            //           border: Border.all(
+                            //             color: MyColors.custom('EAEAEA'),
+                            //           ),
+                            //           shape: BoxShape.circle,
+                            //         ),
+                            //         child: SvgPicture.asset(
+                            //           Asset.filter,
+                            //           width: 16,
+                            //           height: 16,
+                            //           colorFilter: ColorFilter.mode(
+                            //             MyColors.black,
+                            //             BlendMode.srcIn,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
 
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(50),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: MyColors.grayEA.withValues(
-                                            alpha: 0.32,
-                                          ),
-                                          blurRadius: 4,
-                                        ),
-                                      ],
-                                    ),
-                                    child: CommonTextField(
-                                      onChange: (value) {
-                                        //controller.onSearchChanged(value ?? "");
-                                      },
-                                      borderRadius: 50,
-                                      hintText: 'Search',
-                                      prefixIcon: SvgPicture.asset(
-                                        Asset.searchIcon,
-                                        height: 16,
-                                        width: 16,
-                                      ),
-                                      //controller: controller.searchController,
-                                      /*suffixIcon: Obx(
-                                  () => controller.searchQuery.value.isNotEmpty
-                                      ? GestureDetector(
-                                          onTap: controller.clearSearch,
-                                          child: const Icon(
-                                            Icons.clear,
-                                            color: MyColors.gray54,
-                                          ),
-                                        )
-                                      : const SizedBox.shrink(),
-                                ), */
-                                    ),
-                                  ),
-                                ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    //Get.toNamed(Routes.NEWS);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: MyColors.white,
-                                      border: Border.all(
-                                        color: MyColors.custom('EAEAEA'),
-                                      ),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      Asset.location,
-                                      width: 16,
-                                      height: 16,
-                                      colorFilter: ColorFilter.mode(
-                                        MyColors.black,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const Gap(7),
-                                GestureDetector(
-                                  onTap: () {
-                                    //Get.toNamed(Routes.NEWS);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: MyColors.white,
-                                      border: Border.all(
-                                        color: MyColors.custom('EAEAEA'),
-                                      ),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      Asset.filter,
-                                      width: 16,
-                                      height: 16,
-                                      colorFilter: ColorFilter.mode(
-                                        MyColors.black,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            const Gap(24),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 11,
-                                horizontal: 12,
-                              ),
-                              width: double.maxFinite,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                                border: Border.all(
-                                  color: const Color(0xFFDADADA),
-                                  width: 1.0,
-                                ),
-                                gradient: const LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [Color(0xFFFFF9BE), Colors.white],
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    Asset.connFlow,
-                                    width: 20.w,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  const SizedBox(width: 13),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Total Materials",
-                                        style: MyTexts.bold13.copyWith(
-                                          color: MyColors.primary,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 3),
-                                      Text(
-                                        "3200",
-                                        style: MyTexts.bold24.copyWith(
-                                          fontSize: 36,
-                                          color: const Color(0xFF058200),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Image.asset(
-                                    Asset.connGraph,
-                                    width: 17.w,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            // const Gap(24),
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(
+                            //     vertical: 11,
+                            //     horizontal: 12,
+                            //   ),
+                            //   width: double.maxFinite,
+                            //   decoration: BoxDecoration(
+                            //     borderRadius: const BorderRadius.all(
+                            //       Radius.circular(20),
+                            //     ),
+                            //     border: Border.all(
+                            //       color: const Color(0xFFDADADA),
+                            //       width: 1.0,
+                            //     ),
+                            //     gradient: const LinearGradient(
+                            //       begin: Alignment.topCenter,
+                            //       end: Alignment.bottomCenter,
+                            //       colors: [Color(0xFFFFF9BE), Colors.white],
+                            //     ),
+                            //   ),
+                            //   child: Row(
+                            //     children: [
+                            //       Image.asset(
+                            //         Asset.connFlow,
+                            //         width: 20.w,
+                            //         fit: BoxFit.contain,
+                            //       ),
+                            //       const SizedBox(width: 13),
+                            //       Column(
+                            //         crossAxisAlignment:
+                            //             CrossAxisAlignment.start,
+                            //         children: [
+                            //           Text(
+                            //             "Total Materials",
+                            //             style: MyTexts.bold13.copyWith(
+                            //               color: MyColors.primary,
+                            //             ),
+                            //           ),
+                            //           const SizedBox(height: 3),
+                            //           Text(
+                            //             "3200",
+                            //             style: MyTexts.bold24.copyWith(
+                            //               fontSize: 36,
+                            //               color: const Color(0xFF058200),
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       const Spacer(),
+                            //       Image.asset(
+                            //         Asset.connGraph,
+                            //         width: 17.w,
+                            //         fit: BoxFit.contain,
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                             Container(
                               height: 2.h,
                               decoration: BoxDecoration(
@@ -703,19 +638,33 @@ class HomeView extends StatelessWidget {
                                           .value ==
                                       0) {
                                     /// ------------------- MATERIAL MARKETPLACE -------------------
-                                    final materialList = controller
-                                        .categoryHierarchyData
-                                        .value
-                                        .data;
+                                    final materialList =
+                                        controller.mainCategories;
 
-                                    if (materialList == null ||
-                                        materialList.isEmpty) {
+                                    if (materialList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                      const NeverScrollableScrollPhysics(),
+                                      itemCount:
+                                      controller.mainCategories.length,
+                                      itemBuilder: (context, index) {
+                                        final mainCategory =
+                                        controller.mainCategories[index];
+                                        final categories =
+                                            controller.categoryMap[mainCategory
+                                                .id] ??
+                                                [];
 
-                                    return _buildMaterialList(
-                                      context,
-                                      materialList,
+                                        return _buildCategorySection(
+                                          context,
+                                          mainCategory,
+                                          categories,
+                                          route: Routes.SELECT_PRODUCT,
+                                        );
+                                      },
                                     );
                                   } else if (Get.find<CommonController>()
                                           .marketPlace
@@ -732,10 +681,7 @@ class HomeView extends StatelessWidget {
                                       return _buildComingSoon(context);
                                     }
 
-                                    return _buildServiceList(
-                                      context,
-                                      serviceList,
-                                    );
+                                    return const Text("TOOLS MARKETPLACE");
                                   } else {
                                     /// ------------------- TOOLS MARKETPLACE -------------------
                                     final toolsList = controller
@@ -748,7 +694,7 @@ class HomeView extends StatelessWidget {
                                       return _buildComingSoon(context);
                                     }
 
-                                    return _buildToolsList(context, toolsList);
+                                    return const Text("TOOLS MARKETPLACE");
                                   }
                                 }),
                               ],
@@ -779,89 +725,93 @@ class HomeView extends StatelessWidget {
   /// ============================
   /// MATERIAL MARKETPLACE VIEW
   /// ============================
-  Widget _buildMaterialList(BuildContext context, List<dynamic> data) {
-    return ListView.builder(
-      padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: data.length,
-      itemBuilder: (context, mainIndex) {
-        final mainCategory = data[mainIndex];
-
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          route: Routes.SELECT_PRODUCT,
-        );
-      },
-    );
-  }
+  // Widget _buildMaterialList(BuildContext context, List<dynamic> data) {
+  //   return ListView.builder(
+  //     padding: EdgeInsets.zero,
+  //     shrinkWrap: true,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     itemCount: data.length,
+  //     itemBuilder: (context, mainIndex) {
+  //       final mainCategory = data[mainIndex];
+  //
+  //       return _buildCategorySection(
+  //         context,
+  //         mainCategory,
+  //         route: Routes.SELECT_PRODUCT,
+  //       );
+  //     },
+  //   );
+  // }
 
   /// ============================
   /// CONSTRUCTION MARKETPLACE VIEW
   /// ============================
-  Widget _buildServiceList(BuildContext context, List<dynamic> data) {
-    return ListView.builder(
-      padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: data.length,
-      itemBuilder: (context, mainIndex) {
-        final mainCategory = data[mainIndex];
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          route: Routes.SELECT_SERVICE,
-        );
-      },
-    );
-  }
+  // Widget _buildServiceList(BuildContext context, List<dynamic> data) {
+  //   return ListView.builder(
+  //     padding: EdgeInsets.zero,
+  //     shrinkWrap: true,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     itemCount: data.length,
+  //     itemBuilder: (context, mainIndex) {
+  //       final mainCategory = data[mainIndex];
+  //       return _buildCategorySection(
+  //         context,
+  //         mainCategory,
+  //         route: Routes.SELECT_SERVICE,
+  //       );
+  //     },
+  //   );
+  // }
 
   /// ============================
   /// TOOLS & EQUIPMENT MARKETPLACE VIEW
   /// ============================
-  Widget _buildToolsList(BuildContext context, List<dynamic> data) {
-    return ListView.builder(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: data.length,
-      itemBuilder: (context, mainIndex) {
-        final mainCategory = data[mainIndex];
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          route: Routes.SEARCH_SERVICE, // create this route if not already
-        );
-      },
-    );
-  }
+  // Widget _buildToolsList(BuildContext context, List<dynamic> data) {
+  //   return ListView.builder(
+  //     shrinkWrap: true,
+  //     padding: EdgeInsets.zero,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     itemCount: data.length,
+  //     itemBuilder: (context, mainIndex) {
+  //       final mainCategory = data[mainIndex];
+  //       return _buildCategorySection(
+  //         context,
+  //         mainCategory,
+  //         route: Routes.SEARCH_SERVICE, // create this route if not already
+  //       );
+  //     },
+  //   );
+  // }
 
   /// ============================
   /// COMMON CATEGORY SECTION BUILDER
   /// ============================
   Widget _buildCategorySection(
-    BuildContext context,
-    dynamic mainCategory, {
-    required String route,
-  }) {
+      BuildContext context,
+      dynamic mainCategory,
+      List<CCategory> category, {
+        required String route,
+      }) {
+    // final category = controller
+    //     .categoryData
+    //     .value;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
           onTap: () {
-            if (myPref.role.val == "connector") {
-              if ((Get.find<CommonController>()
-                          .profileData
-                          .value
-                          .data
-                          ?.siteLocations ??
-                      [])
-                  .isEmpty) {
-                _showAddAddressDialog();
-                return;
-              }
-            }
+            // if (myPref.role.val == "connector") {
+            //   if ((Get.find<CommonController>()
+            //               .profileData
+            //               .value
+            //               .data
+            //               ?.siteLocations ??
+            //           [])
+            //       .isEmpty) {
+            //     _showAddAddressDialog();
+            //     return;
+            //   }
+            // }
 
             Get.toNamed(
               route,
@@ -881,7 +831,10 @@ class HomeView extends StatelessWidget {
         ),
         SizedBox(height: 2.h),
 
-        if (mainCategory.subCategories != null)
+        // if(category.data!=null)
+        //     Text("${category.data?.length??0}"),
+        //     Text("${category.data?.length??0}"),
+        if (category.isNotEmpty)
           GridView.builder(
             padding: EdgeInsets.zero,
             shrinkWrap: true,
@@ -892,35 +845,42 @@ class HomeView extends StatelessWidget {
               mainAxisSpacing: 6,
               childAspectRatio: 0.8,
             ),
-            itemCount: mainCategory.subCategories!.length,
+            itemCount: category.length,
             itemBuilder: (context, subIndex) {
-              final subCategory = mainCategory.subCategories![subIndex];
+              final subCategory = category[subIndex];
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 24.0),
                 child: GestureDetector(
                   onTap: () {
-                    if (myPref.role.val == "connector") {
-                      if ((Get.find<CommonController>()
-                                  .profileData
-                                  .value
-                                  .data
-                                  ?.siteLocations ??
-                              [])
-                          .isEmpty) {
-                        _showAddAddressDialog();
-                        return;
-                      }
-                    }
-
-                    Get.toNamed(
-                      route,
+                    // if (myPref.role.val == "connector") {
+                    //   if ((Get.find<CommonController>()
+                    //               .profileData
+                    //               .value
+                    //               .data
+                    //               ?.siteLocations ??
+                    //           [])
+                    //       .isEmpty) {
+                    //     _showAddAddressDialog();
+                    //     return;
+                    //   }
+                    // }
+                    Get.to(
+                      MerchantHomeView(),
                       arguments: {
-                        "selectedSubCategoryId": subCategory.id ?? 0,
-                        "mainCategoryId": mainCategory.id ?? 0,
+                        "selectedSubCategoryIdIndex": subIndex ?? 0,
+                        "categoryData": category,
                         "mainCategoryName": mainCategory.name ?? '',
                       },
                     );
+                    // Get.toNamed(
+                    //   route,
+                    //   arguments: {
+                    //     "selectedSubCategoryId":  0,
+                    //     "mainCategoryId":  0,
+                    //     "mainCategoryName": mainCategory.name ?? '',
+                    //   },
+                    // );
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -930,7 +890,7 @@ class HomeView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: CachedNetworkImage(
                             imageUrl:
-                                APIConstants.bucketUrl +
+                            APIConstants.bucketUrl +
                                 (subCategory.image ??
                                     'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
                             fit: BoxFit.fill,
@@ -960,7 +920,6 @@ class HomeView extends StatelessWidget {
       ],
     );
   }
-
   Widget tabBar({
     required String icon,
     required String name,
@@ -1027,6 +986,27 @@ class HomeView extends StatelessWidget {
       ),
       barrierDismissible: false,
     );
+  }
+
+  String _getIconFromModule(ModuleModel? module) {
+    switch (module?.name?.toLowerCase()) {
+      case 'material':
+        return Asset.MM;
+      case 'construction':
+        return Asset.CM;
+      case 'design':
+        return Asset.design1;
+      case 'fleet':
+        return Asset.fleet;
+      case 'tools':
+        return Asset.TEM;
+      case 'equipment':
+        return Asset.equipment;
+      case 'ppe':
+        return Asset.ppe;
+      default:
+        return Asset.add;
+    }
   }
 }
 

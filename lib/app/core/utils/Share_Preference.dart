@@ -16,7 +16,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart'
     as ProductModel;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart'
-    hide Statistics;
+   ;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:get_storage/get_storage.dart';

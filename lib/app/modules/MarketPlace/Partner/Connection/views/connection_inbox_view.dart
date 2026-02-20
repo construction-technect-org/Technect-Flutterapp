@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -9,7 +8,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
 
 class ConnectionInboxView extends StatelessWidget {
-  final ConnectionInboxController controller = Get.put(ConnectionInboxController());
+  final ConnectionInboxController controller = Get.put(
+    ConnectionInboxController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -27,232 +28,411 @@ class ConnectionInboxView extends StatelessWidget {
             leadingWidth: 0,
             title: Text("Connection Inbox"),
           ),
-          body:   (PermissionLabelUtils.canShow(PermissionKeys.connectionManager)) ? Stack(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(image: AssetImage(Asset.loginBg), fit: BoxFit.cover),
-                ),
-              ),
-              Column(
-                children: [
-                  SizedBox(height: 1.h),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                    child: CommonTextField(
-                      onChange: (value) {
-                        controller.searchConnections(value ?? "");
-                      },
-                      borderRadius: 22,
-                      hintText: 'Search',
-                      prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+          body: (PermissionLabelUtils.canShow(PermissionKeys.connectionManager))
+              ? Stack(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(Asset.loginBg),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 1.h),
-                  Expanded(
-                    child: RefreshIndicator(
-                      backgroundColor: MyColors.primary,
-                      color: Colors.white,
-                      onRefresh: () async {
-                        controller.clearSearch();
-                        await controller.fetchConnections();
-                      },
-                      child: Obx(() {
-                        if (controller.isLoading.value) {
-                          return const Center(
-                            child: CircularProgressIndicator(color: MyColors.primary),
-                          );
-                        } else if (controller.filteredConnections.isEmpty) {
-                          return SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.7,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    controller.searchQuery.value.isNotEmpty
-                                        ? 'No connections found'
-                                        : 'No connection requests',
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.fontBlack,
-                                      fontFamily: MyTexts.SpaceGrotesk,
-                                    ),
-                                  ),
-                                  SizedBox(height: 0.5.h),
-                                  Text(
-                                    controller.searchQuery.value.isNotEmpty
-                                        ? 'Try searching with different keywords'
-                                        : 'Connection requests will appear here',
-                                    style: MyTexts.regular14.copyWith(
-                                      color: MyColors.grey,
-                                      fontFamily: MyTexts.SpaceGrotesk,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                    Column(
+                      children: [
+                        SizedBox(height: 1.h),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: CommonTextField(
+                            onChange: (value) {
+                              controller.searchConnections(value ?? "");
+                            },
+                            borderRadius: 22,
+                            hintText: 'Search',
+                            prefixIcon: SvgPicture.asset(
+                              Asset.searchIcon,
+                              height: 16,
+                              width: 16,
                             ),
-                          );
-                        } else {
-                          return ListView.builder(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            itemCount: controller.filteredConnections.length,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            itemBuilder: (context, index) {
-                              final connection = controller.filteredConnections[index];
-                              return InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  margin: const EdgeInsets.only(bottom: 12),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: MyColors.white,
-                                    boxShadow: const [
-                                      BoxShadow(color: MyColors.grayEA, blurRadius: 4),
-                                    ],
+                          ),
+                        ),
+                        SizedBox(height: 1.5.h),
+                        Obx(
+                          () => Container(
+                            height: 45,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                              color: MyColors.grayEA,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => controller.onTabChanged(0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color:
+                                            controller.selectedTabIndex.value ==
+                                                0
+                                            ? MyColors.primary
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Received",
+                                          style: MyTexts.medium14.copyWith(
+                                            color:
+                                                controller
+                                                        .selectedTabIndex
+                                                        .value ==
+                                                    0
+                                                ? Colors.white
+                                                : MyColors.fontBlack,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  child: myPref.role.val == "connector"
-                                      ? buildConnector(connection, context)
-                                      : buildPartner(connection, context),
+                                ),
+
+                                /// SENT TAB
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => controller.onTabChanged(1),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color:
+                                            controller.selectedTabIndex.value ==
+                                                1
+                                            ? MyColors.primary
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Sent",
+                                          style: MyTexts.medium14.copyWith(
+                                            color:
+                                                controller
+                                                        .selectedTabIndex
+                                                        .value ==
+                                                    1
+                                                ? Colors.white
+                                                : MyColors.fontBlack,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 2.h),
+                        Expanded(
+                          child: Obx(() {
+                            if (controller.isLoading.value) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: MyColors.primary,
                                 ),
                               );
-                            },
-                          );
-                        }
-                      }),
+                            } else if (controller.filteredConnections.isEmpty) {
+                              return SingleChildScrollView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                child: SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.7,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        controller.searchQuery.value.isNotEmpty
+                                            ? 'No connections found'
+                                            : 'No connection requests',
+                                        style: MyTexts.medium16.copyWith(
+                                          color: MyColors.fontBlack,
+                                          fontFamily: MyTexts.SpaceGrotesk,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.5.h),
+                                      Text(
+                                        controller.searchQuery.value.isNotEmpty
+                                            ? 'Try searching with different keywords'
+                                            : 'Connection requests will appear here',
+                                        style: MyTexts.regular14.copyWith(
+                                          color: MyColors.grey,
+                                          fontFamily: MyTexts.SpaceGrotesk,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              if (controller.selectedTabIndex.value == 0) {
+                                return ListView.builder(
+                                  itemCount:
+                                      controller.incomingConnections.length,
+                                  itemBuilder: (context, index) {
+                                    final item =
+                                        controller.incomingConnections[index];
+                                    return ReceivedCard(item: item);
+                                  },
+                                );
+                              } else {
+                                return ListView.builder(
+                                  itemCount:
+                                      controller.outgoingConnections.length,
+                                  itemBuilder: (context, index) {
+                                    final item =
+                                        controller.outgoingConnections[index];
+                                    return SentCard(item: item);
+                                  },
+                                );
+                              }
+                            }
+                          }),
+                        ),
+
+                        // Expanded(
+                        //   child: RefreshIndicator(
+                        //     backgroundColor: MyColors.primary,
+                        //     color: Colors.white,
+                        //     onRefresh: () async {
+                        //       controller.clearSearch();
+                        //       await controller.fetchIncomingConnections();
+                        //     },
+                        //     child: Obx(() {
+                        //       if (controller.isLoading.value) {
+                        //         return const Center(
+                        //           child: CircularProgressIndicator(
+                        //             color: MyColors.primary,
+                        //           ),
+                        //         );
+                        //       } else if (controller
+                        //           .filteredConnections
+                        //           .isEmpty) {
+                        //         return SingleChildScrollView(
+                        //           physics:
+                        //               const AlwaysScrollableScrollPhysics(),
+                        //           child: SizedBox(
+                        //             height:
+                        //                 MediaQuery.of(context).size.height *
+                        //                 0.7,
+                        //             child: Column(
+                        //               mainAxisAlignment:
+                        //                   MainAxisAlignment.center,
+                        //               children: [
+                        //                 Text(
+                        //                   controller
+                        //                           .searchQuery
+                        //                           .value
+                        //                           .isNotEmpty
+                        //                       ? 'No connections found'
+                        //                       : 'No connection requests',
+                        //                   style: MyTexts.medium16.copyWith(
+                        //                     color: MyColors.fontBlack,
+                        //                     fontFamily: MyTexts.SpaceGrotesk,
+                        //                   ),
+                        //                 ),
+                        //                 SizedBox(height: 0.5.h),
+                        //                 Text(
+                        //                   controller
+                        //                           .searchQuery
+                        //                           .value
+                        //                           .isNotEmpty
+                        //                       ? 'Try searching with different keywords'
+                        //                       : 'Connection requests will appear here',
+                        //                   style: MyTexts.regular14.copyWith(
+                        //                     color: MyColors.grey,
+                        //                     fontFamily: MyTexts.SpaceGrotesk,
+                        //                   ),
+                        //                 ),
+                        //               ],
+                        //             ),
+                        //           ),
+                        //         );
+                        //       } else {
+                        //         return ListView.builder(
+                        //           physics:
+                        //               const AlwaysScrollableScrollPhysics(),
+                        //           itemCount:
+                        //               controller.filteredConnections.length,
+                        //           padding: const EdgeInsets.symmetric(
+                        //             horizontal: 16,
+                        //           ),
+                        //           itemBuilder: (context, index) {
+                        //             final connection =
+                        //                 controller.filteredConnections[index];
+                        //             return InkWell(
+                        //               onTap: () {},
+                        //               child: Container(
+                        //                 margin: const EdgeInsets.only(
+                        //                   bottom: 12,
+                        //                 ),
+                        //                 decoration: BoxDecoration(
+                        //                   borderRadius: BorderRadius.circular(
+                        //                     16,
+                        //                   ),
+                        //                   color: MyColors.white,
+                        //                   boxShadow: const [
+                        //                     BoxShadow(
+                        //                       color: MyColors.grayEA,
+                        //                       blurRadius: 4,
+                        //                     ),
+                        //                   ],
+                        //                 ),
+                        //                 child: myPref.role.val == "connector"
+                        //                     ? buildConnector(
+                        //                         connection,
+                        //                         context,
+                        //                       )
+                        //                     : buildPartner(connection, context),
+                        //               ),
+                        //             );
+                        //           },
+                        //         );
+                        //       }
+                        //     }),
+                        //   ),
+                        // ),
+                      ],
                     ),
+                  ],
+                )
+              : const Center(
+                  child: NoPermissionWidget(
+                    message: 'No permission for this section',
                   ),
-                ],
-              ),
-            ],
-          ):
-          const Center(
-            child:  NoPermissionWidget(
-              message: 'No permission for this section',
-            ),
-          ),
+                ),
         ),
       ),
     );
   }
 
-  Stack buildConnector(Connection connection, BuildContext context) {
-    return Stack(
-      alignment: AlignmentGeometry.bottomRight,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: MyColors.grey,
-                    radius: 18,
-                    child: connection.merchantProfileImageUrl != null
-                        ? ClipOval(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  APIConstants.bucketUrl + connection.merchantProfileImageUrl!,
-                              width: 36,
-                              height: 36,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => const ColoredBox(
-                                color: MyColors.lightGray,
-                                child: Center(child: CircularProgressIndicator()),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.person, color: MyColors.white),
-                            ),
-                          )
-                        : Icon(Icons.person, color: MyColors.white),
-                  ),
-                  const Gap(12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          connection.merchantName ?? 'Unknown',
-                          style: MyTexts.medium16.copyWith(
-                            color: MyColors.fontBlack,
-                            fontFamily: MyTexts.SpaceGrotesk,
-                          ),
-                        ),
-                        const Gap(2),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              Asset.location,
-                              colorFilter: const ColorFilter.mode(MyColors.gra54, BlendMode.srcIn),
-                              height: 14,
-                              width: 14,
-                            ),
-                            const Gap(4),
-                            Expanded(
-                              child: Text(
-                                connection.merchantAddress ?? "Unknown",
-                                maxLines: 2,
-                                style: MyTexts.medium13.copyWith(
-                                  color: MyColors.gra54,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Gap(8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
-                          decoration: BoxDecoration(
-                            color: getStatusColor(status: connection.status ?? ""),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            connection.status?.capitalizeFirst ?? "",
-                            style: MyTexts.medium13.copyWith(color: MyColors.gra54),
-                          ),
-                        ),
-                        const Gap(10),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 1.h),
-            ],
-          ),
-        ),
-        if (connection.status?.toLowerCase() == "accepted")
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32),
-                bottomLeft: Radius.circular(32),
-                bottomRight: Radius.circular(16),
-              ),
-              color: MyColors.grayE6,
-            ),
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Connected  ",
-                    style: MyTexts.medium13.copyWith(color: MyColors.grayA5),
-                  ),
-                  TextSpan(
-                    text: timeAgo(connection.connectedAt),
-                    style: MyTexts.medium13.copyWith(color: MyColors.gra54),
-                  ),
-                ],
-              ),
-            ),
-          ),
-      ],
-    );
+  Text buildConnector(Connection connection, BuildContext context) {
+    return const Text("Rohit");
+    // return Stack(
+    //   alignment: AlignmentGeometry.bottomRight,
+    //   children: [
+    //     Padding(
+    //       padding: const EdgeInsets.all(12),
+    //       child: Column(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           Row(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: [
+    //               CircleAvatar(
+    //                 backgroundColor: MyColors.grey,
+    //                 radius: 18,
+    //                 child: connection.merchantProfileImageUrl != null
+    //                     ? ClipOval(
+    //                         child: CachedNetworkImage(
+    //                           imageUrl:
+    //                               APIConstants.bucketUrl + connection.merchantProfileImageUrl!,
+    //                           width: 36,
+    //                           height: 36,
+    //                           fit: BoxFit.cover,
+    //                           placeholder: (context, url) => const ColoredBox(
+    //                             color: MyColors.lightGray,
+    //                             child: Center(child: CircularProgressIndicator()),
+    //                           ),
+    //                           errorWidget: (context, url, error) =>
+    //                               Icon(Icons.person, color: MyColors.white),
+    //                         ),
+    //                       )
+    //                     : Icon(Icons.person, color: MyColors.white),
+    //               ),
+    //               const Gap(12),
+    //               Expanded(
+    //                 child: Column(
+    //                   crossAxisAlignment: CrossAxisAlignment.start,
+    //                   children: [
+    //                     Text(
+    //                       connection.merchantName ?? 'Unknown',
+    //                       style: MyTexts.medium16.copyWith(
+    //                         color: MyColors.fontBlack,
+    //                         fontFamily: MyTexts.SpaceGrotesk,
+    //                       ),
+    //                     ),
+    //                     const Gap(2),
+    //                     Row(
+    //                       children: [
+    //                         SvgPicture.asset(
+    //                           Asset.location,
+    //                           colorFilter: const ColorFilter.mode(MyColors.gra54, BlendMode.srcIn),
+    //                           height: 14,
+    //                           width: 14,
+    //                         ),
+    //                         const Gap(4),
+    //                         Expanded(
+    //                           child: Text(
+    //                             connection.merchantAddress ?? "Unknown",
+    //                             maxLines: 2,
+    //                             style: MyTexts.medium13.copyWith(
+    //                               color: MyColors.gra54,
+    //                               fontFamily: MyTexts.SpaceGrotesk,
+    //                             ),
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                     const Gap(8),
+    //                     Container(
+    //                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+    //                       decoration: BoxDecoration(
+    //                         color: getStatusColor(status: connection.status ?? ""),
+    //                         borderRadius: BorderRadius.circular(8),
+    //                       ),
+    //                       child: Text(
+    //                         connection.status?.capitalizeFirst ?? "",
+    //                         style: MyTexts.medium13.copyWith(color: MyColors.gra54),
+    //                       ),
+    //                     ),
+    //                     const Gap(10),
+    //                   ],
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //           SizedBox(height: 1.h),
+    //         ],
+    //       ),
+    //     ),
+    //     if (connection.status?.toLowerCase() == "accepted")
+    //       Container(
+    //         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    //         decoration: const BoxDecoration(
+    //           borderRadius: BorderRadius.only(
+    //             topLeft: Radius.circular(32),
+    //             bottomLeft: Radius.circular(32),
+    //             bottomRight: Radius.circular(16),
+    //           ),
+    //           color: MyColors.grayE6,
+    //         ),
+    //         child: RichText(
+    //           text: TextSpan(
+    //             children: [
+    //               TextSpan(
+    //                 text: "Connected  ",
+    //                 style: MyTexts.medium13.copyWith(color: MyColors.grayA5),
+    //               ),
+    //               TextSpan(
+    //                 text: timeAgo(connection.connectedAt),
+    //                 style: MyTexts.medium13.copyWith(color: MyColors.gra54),
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //   ],
+    // );
   }
 
   String timeAgo(DateTime? dateTime) {
@@ -290,33 +470,33 @@ class ConnectionInboxView extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundColor: MyColors.grey,
-                radius: 18,
-                child: connection.connectorProfileImageUrl != null
-                    ? ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: APIConstants.bucketUrl + connection.connectorProfileImageUrl!,
-                          width: 36,
-                          height: 36,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => const ColoredBox(
-                            color: MyColors.lightGray,
-                            child: Center(child: CircularProgressIndicator()),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.person, color: MyColors.white),
-                        ),
-                      )
-                    : Icon(Icons.person, color: MyColors.white),
-              ),
+              // CircleAvatar(
+              //   backgroundColor: MyColors.grey,
+              //   radius: 18,
+              //   child: connection.connectorProfileImageUrl != null
+              //       ? ClipOval(
+              //           child: CachedNetworkImage(
+              //             imageUrl: APIConstants.bucketUrl + connection.connectorProfileImageUrl!,
+              //             width: 36,
+              //             height: 36,
+              //             fit: BoxFit.cover,
+              //             placeholder: (context, url) => const ColoredBox(
+              //               color: MyColors.lightGray,
+              //               child: Center(child: CircularProgressIndicator()),
+              //             ),
+              //             errorWidget: (context, url, error) =>
+              //                 Icon(Icons.person, color: MyColors.white),
+              //           ),
+              //         )
+              //       : Icon(Icons.person, color: MyColors.white),
+              // ),
               const Gap(12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      connection.connectorName ?? 'Unknown',
+                      "connection.connectorName" ?? 'Unknown',
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.fontBlack,
                         fontFamily: MyTexts.SpaceGrotesk,
@@ -327,14 +507,17 @@ class ConnectionInboxView extends StatelessWidget {
                       children: [
                         SvgPicture.asset(
                           Asset.location,
-                          colorFilter: const ColorFilter.mode(MyColors.gra54, BlendMode.srcIn),
+                          colorFilter: const ColorFilter.mode(
+                            MyColors.gra54,
+                            BlendMode.srcIn,
+                          ),
                           height: 14,
                           width: 14,
                         ),
                         const Gap(4),
                         Expanded(
                           child: Text(
-                            connection.connectorAddress ?? "",
+                            "connection.connectorAddress" ?? "",
                             maxLines: 2,
                             style: MyTexts.medium13.copyWith(
                               color: MyColors.gra54,
@@ -350,34 +533,50 @@ class ConnectionInboxView extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              ConnectionDialogs.showAcceptConnectionDialog(context, connection);
+                              ConnectionDialogs.showAcceptConnectionDialog(
+                                context,
+                                connection,
+                              );
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 18,
+                              ),
                               decoration: BoxDecoration(
                                 color: MyColors.greenBtn,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 "Connect",
-                                style: MyTexts.medium13.copyWith(color: MyColors.white),
+                                style: MyTexts.medium13.copyWith(
+                                  color: MyColors.white,
+                                ),
                               ),
                             ),
                           ),
                           const Gap(16),
                           GestureDetector(
                             onTap: () {
-                              ConnectionDialogs.showRejectConnectionDialog(context, connection);
+                              ConnectionDialogs.showRejectConnectionDialog(
+                                context,
+                                connection,
+                              );
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 18,
+                              ),
                               decoration: BoxDecoration(
                                 color: MyColors.red,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 "Disconnect",
-                                style: MyTexts.medium13.copyWith(color: MyColors.white),
+                                style: MyTexts.medium13.copyWith(
+                                  color: MyColors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -385,14 +584,21 @@ class ConnectionInboxView extends StatelessWidget {
                       ),
                     ] else ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 18,
+                        ),
                         decoration: BoxDecoration(
-                          color: getStatusColor(status: connection.status ?? ""),
+                          color: getStatusColor(
+                            status: connection.status ?? "",
+                          ),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           connection.status?.capitalizeFirst ?? "",
-                          style: MyTexts.medium13.copyWith(color: MyColors.gra54),
+                          style: MyTexts.medium13.copyWith(
+                            color: MyColors.gra54,
+                          ),
                         ),
                       ),
                     ],
@@ -421,10 +627,10 @@ class ConnectionInboxView extends StatelessWidget {
                     text: "Connected  ",
                     style: MyTexts.medium13.copyWith(color: MyColors.grayA5),
                   ),
-                  TextSpan(
-                    text: timeAgo(connection.connectedAt),
-                    style: MyTexts.medium13.copyWith(color: MyColors.gra54),
-                  ),
+                  // TextSpan(
+                  //   text: timeAgo(connection.connectedAt),
+                  //   style: MyTexts.medium13.copyWith(color: MyColors.gra54),
+                  // ),
                 ],
               ),
             ),
@@ -461,29 +667,38 @@ class ChatBottomSheet extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: MyColors.grey,
-                  backgroundImage: connection.connectorProfileImageUrl != null
-                      ? CachedNetworkImageProvider(
-                          APIConstants.bucketUrl + connection.connectorProfileImageUrl!,
-                        )
-                      : null,
-                ),
+                // CircleAvatar(
+                //   radius: 20,
+                //   backgroundColor: MyColors.grey,
+                //   backgroundImage: connection.connectorProfileImageUrl != null
+                //       ? CachedNetworkImageProvider(
+                //           APIConstants.bucketUrl + connection.connectorProfileImageUrl!,
+                //         )
+                //       : null,
+                // ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    connection.connectorName ?? "Unknown",
+                    "connection.connectorName" ?? "Unknown",
                     style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                   ),
                 ),
                 PopupMenuButton<String>(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   onSelected: (value) {
                     if (value == 'remove') {
-                      ConnectionDialogs.showRemoveConnectionDialog(context, connection);
+                      ConnectionDialogs.showRemoveConnectionDialog(
+                        context,
+                        connection,
+                      );
                     } else if (value == 'block') {
-                      ConnectionDialogs.showBlockDialog(context, connection);
+                      ConnectionDialogs.showBlockDialog(
+                        context,
+                        connection,
+                        "Block",
+                      );
                     }
                   },
                   itemBuilder: (_) => [
@@ -503,7 +718,12 @@ class ChatBottomSheet extends StatelessWidget {
                         children: [
                           SvgPicture.asset(Asset.block),
                           const Gap(4),
-                          Text('Block', style: MyTexts.medium14.copyWith(color: MyColors.red)),
+                          Text(
+                            'Block',
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.red,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -559,7 +779,11 @@ class ChatBottomSheet extends StatelessWidget {
                     textAlign: TextAlign.right,
                   ),
                   const Gap(16),
-                  RoundedButton(buttonName: "Connect CRM", onTap: () {}, width: 160),
+                  RoundedButton(
+                    buttonName: "Connect CRM",
+                    onTap: () {},
+                    width: 160,
+                  ),
                 ],
               ),
             ),
@@ -576,6 +800,320 @@ class ChatBottomSheet extends StatelessWidget {
         const Spacer(),
         Text(data, style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
       ],
+    );
+  }
+}
+
+class SentCard extends StatelessWidget {
+  final Connection item;
+
+  const SentCard({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onDoubleTap: () {
+        Get.find<ConnectionInboxController>().withdrawRequest(item.id ?? "");
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+
+          border: Border.all(color: Colors.grey.shade200, width: 0.3),
+
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              spreadRadius: 0,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// Profile Row
+            const Row(
+              children: [
+                // CircleAvatar(
+                //   radius: 22,
+                //   backgroundImage: NetworkImage(item.image ?? ""),
+                // ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "House owner / other",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "Jp nagar 7th phase rbi layout",
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 14),
+
+            Row(
+              children: [
+                /// Connect Sent Button
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff1E2A78),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child:  Text(
+                    item.status=="withdrawn"?"${item.status}":"Connect Sent",
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+
+                const Spacer(),
+
+                /// Time Badge
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade100,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    "Connected 2h ago",
+                    style: TextStyle(fontSize: 11),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ReceivedCard extends StatelessWidget {
+  final Connection item;
+
+  const ReceivedCard({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+
+        border: Border.all(color: Colors.grey.shade200, width: 0.3),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 12,
+            spreadRadius: 0,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// Profile Row
+          const Row(
+            children: [
+              // CircleAvatar(
+              //   radius: 22,
+              //   backgroundImage: NetworkImage(item.image ?? ""),
+              // ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "House owner / other",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "Jp nagar 7th phase rbi layout",
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 14),
+
+          /// Buttons Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              /// Accept
+              if (item.status == "pending") ...[
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      ConnectionDialogs.showRemoveConnectionDialog(
+                        context,
+                        item,
+                      );
+                    },
+                    child: Container(
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Accept",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 7),
+
+                /// Decline
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      ConnectionDialogs.showBlockDialog(
+                        context,
+                        item,
+                        "Decline",
+                      );
+                    },
+                    child: Container(
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Decline",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 7),
+
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      ConnectionDialogs.showBlockDialog(context, item, "Block");
+                    },
+                    child: Container(
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Block",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ]
+              else ...[
+                Expanded(
+                  child: Container(
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey.shade100,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Connected",
+                        style: TextStyle(fontSize: 11),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 7),
+
+                /// Remove
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      ConnectionDialogs.showBlockDialog(
+                        context,
+                        item,
+                        "Remove",
+                      );
+                    },
+                    child: Container(
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Remove",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+
+              const SizedBox(width: 10),
+
+              /// Time Badge
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey.shade100,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text("2h ago", style: TextStyle(fontSize: 11)),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -3,9 +3,11 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/models/persona_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/services/AddKycService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 
 class SwitchAccountController extends GetxController {
   final AppHiveService _appHiveService = Get.find<AppHiveService>();
+  final ConnectorHomeController controller = Get.put(ConnectorHomeController());
 
   RxString currentRole = ''.obs;
 
@@ -25,8 +27,10 @@ class SwitchAccountController extends GetxController {
 
       if (connector.profileId != null) {
         await switchProfile(connector.profileId!, connector.profileType ?? "");
-
         currentRole.value = 'connector';
+        myPref.setRole("connector");
+        await controller.fetchConnectorModule();
+
       }
     } else {
       // 🔹 Switch to merchant (partner)
@@ -37,8 +41,9 @@ class SwitchAccountController extends GetxController {
 
       if (merchant.profileId != null) {
         await switchProfile(merchant.profileId!, merchant.profileType ?? "");
-
         currentRole.value = 'partner';
+        myPref.setRole("partner");
+        await controller.fetchConnectorModule();
       }
     }
 

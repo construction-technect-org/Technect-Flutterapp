@@ -94,8 +94,10 @@ class APIConstants {
   static const String getPartnerSupportTickets = "support-ticket/my-tickets";
 
   // Connection Inbox API
-  static const String connectionInbox = "connection-request/merchant/inbox";
-  static const String acceptReject = "connection-request";
+  static const String incomingConnectionInbox = "v1/api/marketplace/connection/incoming-list";
+  static const String outgoingConnectionInbox = "v1/api/marketplace/connection/outgoing-list";
+  // static const String connectionInbox = "connection-request/merchant/inbox";
+  static const String acceptReject = "v1/api/marketplace/connection";
 
   /// Connector Api
   static const String connectorCreate = "connector/create";
@@ -106,6 +108,10 @@ class APIConstants {
   static const String recentlyProduct = "connector/product/recently-launched";
   static const String searchProduct = "connector/product/search";
   static const String productDetails = "connector/product/";
+  static const String connectionRequest = "v1/api/marketplace/connection/request";
+  static const String connectionWithdrawRequest = "v1/api/marketplace/connection/withdraw-request";
+
+
 
   //Connector services
   static const String searchService = "connector/service/search";

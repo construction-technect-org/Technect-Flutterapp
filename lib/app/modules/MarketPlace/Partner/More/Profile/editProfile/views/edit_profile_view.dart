@@ -19,6 +19,7 @@ class UpperCaseTextFormatter extends TextInputFormatter {
 }
 
 class EditProfileView extends GetView<EditProfileControllerr> {
+
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -46,7 +47,19 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                     // controller.isValid.value = 1;
                     return;
                   }
-                  controller.updateMetrcis();
+                  final response = await controller.updateMetrcis();
+                  SnackBars.successSnackBar(content: '$response');
+                  // dashBoardController.profileResponse.value = await homeService
+                  //     .getMerchantProfile("");
+                  // dashBoardController.businessModel1.value=dashBoardController.profileResponse.value;
+
+                  if(response!=null) {
+                    Navigator.pop(context);
+                  }
+                  else{
+                    SnackBars.successSnackBar(content: 'Not Update please fill all filled');
+                  }
+
                 },
               ).paddingOnly(bottom: 30, right: 20, left: 20),
             ],

@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_projects.model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/module_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,6 +21,10 @@ class HomeController extends GetxController {
   RxBool isGridView = true.obs;
   RxInt selectedIndex = 0.obs;
   RxList<Modules?> modules = <Modules?>[].obs;
+  Rx<ProjectResponse> projectResponseData = ProjectResponse().obs;
+
+  final ApiManager _apiManager = ApiManager();
+
 
   @override
   void onInit() {
@@ -27,6 +32,7 @@ class HomeController extends GetxController {
     fetchSideBarList();
     fetchCategoryHierarchy();
     fetchCategoryServiceHierarchy();
+    fetchRightSideList();
   }
 
   Future<void> fetchSideBarList() async {
@@ -38,6 +44,19 @@ class HomeController extends GetxController {
           modules.addAll(response.data!.modules!);
           print("Modules ${modules?.value}");
         }
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading(false);
+    }
+  }
+  Future<void> fetchRightSideList() async {
+    try {
+      isLoading(true);
+      final response = await _homeService.getMerchantProjects();
+      if (response.success == true) {
+        projectResponseData.value=response;
       }
     } catch (e) {
       print(e);
@@ -72,6 +91,49 @@ class HomeController extends GetxController {
       isLoading(false);
     }
   }
+  Future<void> requestConnection({
+    required String targetProfileId,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      final body = {
+        "targetProfileId": targetProfileId,
+      };
+
+      final response = await _apiManager.postObject(
+        url: "/${APIConstants.connectionRequest}",
+        body: body,
+      );
+
+      /// Directly check success from response map
+      if (response["success"] == true) {
+        Get.snackbar(
+          "Success",
+          response["message"] ?? "Connection request sent successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 2),
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          response["message"] ?? "Something went wrong",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Something went wrong",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
 
   Future<void> fetchCategoryServiceHierarchy() async {
     try {

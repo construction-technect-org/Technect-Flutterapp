@@ -95,7 +95,7 @@ class BottomBarView extends GetView<BottomController> {
       case 1:
         return myPref.getRole() == "connector"
             ? ConnectorHomeView()
-            : MerchantHomeView();
+            : HomeView();
       case 2:
         return ConnectionInboxView();
       case 3:

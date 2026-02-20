@@ -209,11 +209,11 @@ class EditProfileControllerr extends GetxController {
   }
 
   final HomeService _homeService = Get.find<HomeService>();
-  Future<void> updateMetrcis() async {
+  Future<String?> updateMetrcis() async {
     try {
       print(basename(filePath.value));
       final response = await _homeService.updateBizMetrics(
-        profileID: storage.merchantID,
+        profileID: storage.merchantID??"",
         bizName: businessNameController.text.trim(),
         bizType: "Manufacturer",
         bizEmail: businessEmailController.text.trim(),
@@ -225,8 +225,11 @@ class EditProfileControllerr extends GetxController {
       );
       if (response) {
         SnackBars.successSnackBar(content: 'Metrics update successful');
+        return "Metrics update successful";
       } else {
         SnackBars.errorSnackBar(content: 'Error in metrics update');
+        return "Error in metrics update";
+
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');

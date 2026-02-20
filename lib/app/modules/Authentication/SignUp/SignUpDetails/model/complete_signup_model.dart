@@ -257,22 +257,24 @@ class UserMainModel {
     this.deviceType,
   });
 
-  factory UserMainModel.fromJson(Map<String, dynamic> json) {
+  factory UserMainModel.fromJson(Map json) {
+    final map = Map<String, dynamic>.from(json);
+
     return UserMainModel(
-      id: json["id"],
-      firstName: json["firstName"],
-      lastName: json["lastName"],
-      phone: json["phone"],
-      email: json["email"],
-      lastActiveProfileType: json["lastActiveProfileType"],
-      lastActiveProfileId: json["lastActiveProfileId"],
-      address: json["address"] != null
-          ? Address.fromJson(json["address"])
+      id: map["id"]?.toString(),
+      firstName: map["firstName"]?.toString(),
+      lastName: map["lastName"]?.toString(),
+      phone: map["phone"]?.toString(),
+      email: map["email"]?.toString(),
+      lastActiveProfileType: map["lastActiveProfileType"]?.toString(),
+      lastActiveProfileId: map["lastActiveProfileId"]?.toString(),
+      address: map["address"] != null
+          ? Address.fromJson(Map<String, dynamic>.from(map["address"]))
           : null,
-      referralCode: json["referralCode"],
-      myReferralCode: json["myReferralCode"],
-      fcmToken: json["fcmToken"],
-      deviceType: json["deviceType"],
+      referralCode: map["referralCode"]?.toString(),
+      myReferralCode: map["myReferralCode"]?.toString(),
+      fcmToken: map["fcmToken"]?.toString(),
+      deviceType: map["deviceType"]?.toString(),
     );
   }
 
@@ -291,17 +293,18 @@ class UserMainModel {
     "deviceType": deviceType,
   };
 }
-
 class Address {
   final double? latitude;
   final double? longitude;
 
   Address({this.latitude, this.longitude});
 
-  factory Address.fromJson(Map<String, dynamic> json) {
+  factory Address.fromJson(Map json) {
+    final map = Map<String, dynamic>.from(json);
+
     return Address(
-      latitude: json["latitude"],
-      longitude: json["longitude"],
+      latitude: (map["latitude"] as num?)?.toDouble(),
+      longitude: (map["longitude"] as num?)?.toDouble(),
     );
   }
 

@@ -85,6 +85,7 @@ class DashBoardController extends GetxController {
       if (personaResponse.success == true) {
         print("Success");
         await storage.setPersonaDetail(personaResponse);
+        profileFetch();
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');
@@ -117,9 +118,10 @@ class DashBoardController extends GetxController {
       }
 
       if (merchantID != null && merchantID.isNotEmpty) {
+        if(myPref.role=="merchant"){
         profileResponse.value = await homeService.getMerchantProfile(
           merchantID,
-        );
+        );}
         await storage.setMerchantID(merchantID);
         if (profileResponse.value.merchant != null) {
           print("Merchant NotNull");

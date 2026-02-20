@@ -1,60 +1,58 @@
 class PersonaProfileModel {
-  bool? success;
-  List<Personas>? personas;
+  final bool? success;
+  final List<Personas>? personas;
 
-  PersonaProfileModel({this.success, this.personas});
+  PersonaProfileModel({
+    this.success,
+    this.personas,
+  });
 
-  PersonaProfileModel.fromJson(Map json) {
-    success = json['success'];
-    final personasJson = json['personas'];
-
-    if (personasJson is List) {
-      personas = personasJson.map((e) => Personas.fromJson(e as Map)).toList();
-    } else {
-      personas = [];
-    }
+  factory PersonaProfileModel.fromJson(Map<String, dynamic> json) {
+    return PersonaProfileModel(
+      success: json['success'],
+      personas: json['profiles'] != null
+          ? List<Personas>.from(
+        json['profiles'].map((x) => Personas.fromJson(x)),
+      )
+          : [],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    if (this.personas != null) {
-      data['personas'] = this.personas?.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return {
+      "success": success,
+      "profiles": personas?.map((x) => x.toJson()).toList(),
+    };
   }
 }
-
 class Personas {
-  String? profileType;
-  String? profileId;
-  String? profileName;
-  String? teamRole;
-  String? profileStatus;
+  final String? profileType;
+  final String? profileId;
+  final String? teamRole;
+  final String? profileStatus;
 
   Personas({
     this.profileType,
     this.profileId,
-    this.profileName,
     this.teamRole,
     this.profileStatus,
   });
 
-  Personas.fromJson(Map json) {
-    profileType = json['profileType'];
-    profileId = json['profileId'];
-    profileName = json['profileName'];
-    teamRole = json['teamRole'];
-    profileStatus = json['profileStatus'];
+  factory Personas.fromJson(Map<String, dynamic> json) {
+    return Personas(
+      profileType: json['profileType'],
+      profileId: json['profileId'],
+      teamRole: json['teamRole'],
+      profileStatus: json['profileStatus'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['profileType'] = this.profileType;
-    data['profileId'] = this.profileId;
-    data['profileName'] = this.profileName;
-    data['teamRole'] = this.teamRole;
-    data['profileStatus'] = this.profileStatus;
-    return data;
+    return {
+      "profileType": profileType,
+      "profileId": profileId,
+      "teamRole": teamRole,
+      "profileStatus": profileStatus,
+    };
   }
 }

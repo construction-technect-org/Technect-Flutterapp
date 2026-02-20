@@ -12,6 +12,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/main_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_projects.model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchat_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/module_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/persona_profile_model.dart';
@@ -75,6 +76,16 @@ class HomeService extends GetxService {
         url: '${Endpoints.moduleApi}$mFor&includeInactive=false',
       );
       return ModuleModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting Modules: $e , $st');
+    }
+  }
+  Future<ProjectResponse> getMerchantProjects() async {
+    try {
+      final response = await _manageApi.get(
+        url: Endpoints.merchantProjects,
+      );
+      return ProjectResponse.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in getting Modules: $e , $st');
     }
@@ -276,7 +287,7 @@ class HomeService extends GetxService {
         "yearOfEstablish": yearOfEstablish,
       };
       final response = await _manageApi.patchMultipart(
-        url: '${Endpoints.bizDetailsApi}$profileID',
+        url: '${Endpoints.bizDetailsApi}',
         fields: json,
         files: fileJson,
       );

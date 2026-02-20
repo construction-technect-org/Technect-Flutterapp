@@ -74,7 +74,11 @@ class ConnectorHomeService extends GetxService {
 
   Future<ModulesResponse> getConnectorModule() async {
     try {
-      final response = await _apiManager.get(url: '/${APIConstants.getConnectorModule}?moduleFor=connector&includeInactive=false');
+      String moduleFor =myPref.getRole();
+      if(moduleFor=="partner") {
+        moduleFor="merchant";
+      }
+      final response = await _apiManager.get(url: '/${APIConstants.getConnectorModule}?moduleFor=$moduleFor&includeInactive=false');
       return ModulesResponse.fromJson(response);
     } catch (e) {
       rethrow;
