@@ -9,12 +9,12 @@ import 'package:construction_technect/app/core/widgets/verifying_otp_screen.dart
 //import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/sign_up_service.dart';
+import 'package:phone_number_hint/phone_number_hint.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/otp_verification_screen.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
 import 'package:timer_count_down/timer_controller.dart';
-import 'package:phone_number_hint/phone_number_hint.dart';
 
 class SignUpDetailsController extends GetxController {
   final firstNameController = TextEditingController();
@@ -107,26 +107,21 @@ class SignUpDetailsController extends GetxController {
     // Format is valid, now check availability via API
     // validateEmailAsync already checks format first, but we check here to avoid API call
     isEmailValidating.value = true;
-    final apiError = await Validate.validateEmailAsync(email);
+    // final apiError = await Validate.validateEmailAsync(email);
     // apiError will be null if format is invalid (handled above), or error message if API fails
-    emailError.value = apiError ?? "";
+    // emailError.value = apiError ?? "";
     isEmailValidating.value = false;
   }
 
   Future<String?> validateNumberAvailability(String number) async {
     // Use the new async validation that checks format first, then availability
-    return await Validate.validateMobileNumberAsync(
-      number,
-      countryCode: countryCode.value,
-    );
+    return await Validate.validateMobileNumberAsync(number, countryCode: countryCode.value);
   }
 
   Future<bool> verifyMobileNumber() async {
     try {
       // First check if mobile number is available
-      final availabilityError = await validateNumberAvailability(
-        mobileNumberController.text,
-      );
+      final availabilityError = await validateNumberAvailability(mobileNumberController.text);
 
       // If number is not available, return error message
       // Empty string means valid, null also means valid (shouldn't happen with async)
@@ -137,9 +132,7 @@ class SignUpDetailsController extends GetxController {
 
       // Send OTP if mobile number is available
       if (!otpSend.value) {
-        final otpResponse = await signUpService.sendOtp(
-          mobileNumber: mobileNumberController.text,
-        );
+        final otpResponse = await signUpService.sendOtp(mobileNumber: mobileNumberController.text);
 
         if (otpResponse.success == true) {
           SnackBars.successSnackBar(
@@ -148,9 +141,7 @@ class SignUpDetailsController extends GetxController {
           otpSend.value = true;
           return true;
         } else {
-          SnackBars.errorSnackBar(
-            content: otpResponse.message ?? 'Failed to send OTP',
-          );
+          SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
           return false;
         }
       } else {
@@ -177,9 +168,7 @@ class SignUpDetailsController extends GetxController {
           content: 'OTP resent successfully to ${mobileNumberController.text}',
         );
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to resend OTP',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to resend OTP');
         otpSend.value = false;
       }
       startTimer();
@@ -216,6 +205,8 @@ class SignUpDetailsController extends GetxController {
         countryCode: countryCode.value,
       );
 
+      print("OTP response = $otpResponse");
+
       if (otpResponse.success == true) {
         if (isOTPLoading.value) {
           Get.offAll(
@@ -223,15 +214,15 @@ class SignUpDetailsController extends GetxController {
               header: "Verifying the OTP",
               onTap: () {
                 if (otpResponse.user?.phoneVerified == true) {
+                  print("Token Verification");
+                  print("Token ${otpResponse.token}");
                   otpVerify.value = true;
                   myPref.setToken(otpResponse.token!);
                   myPref.setTokenType(otpResponse.tokenType!);
                   myPref.setPhone(mobileNumberController.text.trim());
                   myPref.setEmail(emailController.text.trim());
                   myPref.setCC(countryCode.value);
-                  SnackBars.successSnackBar(
-                    content: 'OTP verified successfully!',
-                  );
+                  SnackBars.successSnackBar(content: 'OTP verified successfully!');
 
                   Get.back();
                   Get.to(
@@ -244,18 +235,14 @@ class SignUpDetailsController extends GetxController {
                     ),
                   );
                 } else {
-                  SnackBars.errorSnackBar(
-                    content: 'OTP verification failed. Please try again.',
-                  );
+                  SnackBars.errorSnackBar(content: 'OTP verification failed. Please try again.');
                 }
               },
             ),
           );
         }
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to verify OTP',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to verify OTP');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -292,10 +279,7 @@ class SignUpDetailsController extends GetxController {
                 ),
               ),
               const Gap(24),
-              Text(
-                "Mobile Number",
-                style: MyTexts.medium20.copyWith(color: Colors.black),
-              ),
+              Text("Mobile Number", style: MyTexts.medium20.copyWith(color: Colors.black)),
               const Gap(5),
               CommonPhoneField(
                 controller: mobileNumberController,

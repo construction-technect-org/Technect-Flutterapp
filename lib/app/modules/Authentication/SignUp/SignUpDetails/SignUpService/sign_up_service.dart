@@ -12,11 +12,7 @@ import 'package:get/get.dart';
 class MainSignUpService extends GetxService {
   final ManageApi _manageApi = Get.find<ManageApi>();
 
-  Future<void> tempSignUp(
-    String mobileNumber,
-    String email,
-    String countryCode,
-  ) async {
+  Future<void> tempSignUp(String mobileNumber, String email, String countryCode) async {
     try {
       final response = await _manageApi.postObject(
         url: Endpoints.signUpUserPhone,
@@ -68,7 +64,7 @@ class MainSignUpService extends GetxService {
 
   Future<DetailsGST> verifyGST({required String gstNumber}) async {
     try {
-      final response = await _manageApi.postObject(
+      final response = await _manageApi.postObjectBeforeSignUp(
         url: Endpoints.verifyGST,
         body: {"gstNumber": gstNumber},
       );
@@ -113,7 +109,7 @@ class MainSignUpService extends GetxService {
         body["deviceType"] = deviceType;
       }
 
-      final response = await _manageApi.postObject(
+      final response = await _manageApi.postObjectBeforeSignUp(
         url: Endpoints.completeSignUp,
         body: body,
       );
@@ -125,9 +121,7 @@ class MainSignUpService extends GetxService {
     }
   }
 
-  Future<AadharSendOTPModel> sendAadharOTP({
-    required String aadharNumber,
-  }) async {
+  Future<AadharSendOTPModel> sendAadharOTP({required String aadharNumber}) async {
     try {
       final response = await _manageApi.postObject(
         url: Endpoints.aadharVerify,

@@ -26,11 +26,7 @@ class ProfileView extends GetView<ProfileController> {
                     onTap: () => Get.back(),
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -47,10 +43,7 @@ class ProfileView extends GetView<ProfileController> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         margin: const EdgeInsets.symmetric(horizontal: 16),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 12,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                         child: Obx(() {
                           return SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -58,18 +51,13 @@ class ProfileView extends GetView<ProfileController> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 GestureDetector(
-                                  onTap: () =>
-                                      controller.selectedTabIndex.value = 0,
+                                  onTap: () => controller.selectedTabIndex.value = 0,
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 250),
                                     curve: Curves.easeInOut,
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(
-                                        alpha:
-                                            controller.selectedTabIndex.value ==
-                                                0
-                                            ? 1
-                                            : 0,
+                                        alpha: controller.selectedTabIndex.value == 0 ? 1 : 0,
                                       ),
                                       borderRadius: BorderRadius.circular(24),
                                     ),
@@ -81,9 +69,7 @@ class ProfileView extends GetView<ProfileController> {
                                       child: Center(
                                         child: Text(
                                           "Info",
-                                          style: MyTexts.medium15.copyWith(
-                                            color: MyColors.gray2E,
-                                          ),
+                                          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                         ),
                                       ),
                                     ),
@@ -91,18 +77,13 @@ class ProfileView extends GetView<ProfileController> {
                                 ),
                                 const Gap(10),
                                 GestureDetector(
-                                  onTap: () =>
-                                      controller.selectedTabIndex.value = 1,
+                                  onTap: () => controller.selectedTabIndex.value = 1,
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 250),
                                     curve: Curves.easeInOut,
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(
-                                        alpha:
-                                            controller.selectedTabIndex.value ==
-                                                1
-                                            ? 1
-                                            : 0,
+                                        alpha: controller.selectedTabIndex.value == 1 ? 1 : 0,
                                       ),
                                       borderRadius: BorderRadius.circular(24),
                                     ),
@@ -114,9 +95,7 @@ class ProfileView extends GetView<ProfileController> {
                                       child: Center(
                                         child: Text(
                                           "Certification",
-                                          style: MyTexts.medium15.copyWith(
-                                            color: MyColors.gray2E,
-                                          ),
+                                          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                         ),
                                       ),
                                     ),
@@ -124,18 +103,13 @@ class ProfileView extends GetView<ProfileController> {
                                 ),
                                 const Gap(10),
                                 GestureDetector(
-                                  onTap: () =>
-                                      controller.selectedTabIndex.value = 2,
+                                  onTap: () => controller.selectedTabIndex.value = 2,
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 250),
                                     curve: Curves.easeInOut,
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(
-                                        alpha:
-                                            controller.selectedTabIndex.value ==
-                                                2
-                                            ? 1
-                                            : 0,
+                                        alpha: controller.selectedTabIndex.value == 2 ? 1 : 0,
                                       ),
                                       borderRadius: BorderRadius.circular(24),
                                     ),
@@ -147,9 +121,7 @@ class ProfileView extends GetView<ProfileController> {
                                       child: Center(
                                         child: Text(
                                           "Metrics",
-                                          style: MyTexts.medium15.copyWith(
-                                            color: MyColors.gray2E,
-                                          ),
+                                          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                         ),
                                       ),
                                     ),
@@ -178,30 +150,20 @@ class ProfileView extends GetView<ProfileController> {
           padding: const EdgeInsets.all(24.0),
           child: Obx(() {
             return RoundedButton(
-              buttonName: controller.selectedTabIndex.value == 2
-                  ? "Save"
-                  : "Continue",
+              buttonName: controller.selectedTabIndex.value == 2 ? "Save" : "Continue",
               onTap: () {
                 if (controller.selectedTabIndex.value == 0) {
-                  if ((controller.businessModel.value.businessEmail ?? "")
-                      .isEmpty) {
-                    SnackBars.errorSnackBar(
-                      content: "Please fill business metrics",
-                    );
+                  if ((controller.businessModel.value.businessEmail ?? "").isEmpty) {
+                    SnackBars.errorSnackBar(content: "Please fill business metrics");
                   } else if (controller.businessHoursData.isEmpty) {
-                    SnackBars.errorSnackBar(
-                      content: "Please fill business hours",
-                    );
+                    SnackBars.errorSnackBar(content: "Please fill business hours");
                   } else {
                     controller.selectedTabIndex.value = 1;
                   }
                 } else if (controller.selectedTabIndex.value == 1) {
                   for (final cert in controller.certificates) {
-                    if (cert.isDefault &&
-                        (cert.filePath == null || cert.filePath!.isEmpty)) {
-                      SnackBars.errorSnackBar(
-                        content: "Please upload all relevant certificates",
-                      );
+                    if (cert.isDefault && (cert.filePath == null || cert.filePath!.isEmpty)) {
+                      SnackBars.errorSnackBar(content: "Please upload all relevant certificates");
                       return;
                     } else {
                       controller.selectedTabIndex.value = 2;

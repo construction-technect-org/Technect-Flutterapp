@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/email_validation.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 
 class Validate {
   // ==================== Null Validation ====================
@@ -25,25 +24,25 @@ class Validate {
     }
 
     // Only check email availability via API if format is valid
-    try {
-      final isAvailable = await SignUpService().checkAvailability(email: email);
-      // If isAvailable is false, the email is already registered
-      if (isAvailable == false) {
-        return "This email is already registered";
-      }
-      // If isAvailable is true, the email is available
-      if (isAvailable == true) {
-        return ""; // Empty string means valid and available
-      }
-      // If isAvailable is null or unexpected, treat as error for safety
-      return "Error checking email availability. Please try again.";
-    } catch (e) {
-      // Log the error for debugging
-      if (kDebugMode) {
-        print("Email availability check error: $e");
-      }
-      return "Error checking email availability. Please try again.";
-    }
+    // try {
+    //   final isAvailable = await SignUpService().checkAvailability(email: email);
+    //   // If isAvailable is false, the email is already registered
+    //   if (isAvailable == false) {
+    //     return "This email is already registered";
+    //   }
+    //   // If isAvailable is true, the email is available
+    //   if (isAvailable == true) {
+    //     return ""; // Empty string means valid and available
+    //   }
+    //   // If isAvailable is null or unexpected, treat as error for safety
+    //   return "Error checking email availability. Please try again.";
+    // } catch (e) {
+    //   // Log the error for debugging
+    //   if (kDebugMode) {
+    //     print("Email availability check error: $e");
+    //   }
+    //   return "Error checking email availability. Please try again.";
+    // }
   }
 
   // ==================== Name Validation ====================
@@ -64,10 +63,7 @@ class Validate {
   }
 
   /// Validates business name format
-  static String? validateBusinessName(
-    String? value, {
-    String fieldName = "Name",
-  }) {
+  static String? validateBusinessName(String? value, {String fieldName = "Name"}) {
     if (value == null || value.trim().isEmpty) {
       return "Please enter $fieldName";
     }
@@ -106,10 +102,7 @@ class Validate {
     return null;
   }
 
-  static String? validateMobileNumber(
-    String? mobileNumber, {
-    bool isOptional = false,
-  }) {
+  static String? validateMobileNumber(String? mobileNumber, {bool isOptional = false}) {
     // Handle null or empty values
     if (mobileNumber == null || mobileNumber.trim().isEmpty) {
       if (isOptional) {
@@ -215,17 +208,18 @@ class Validate {
       SnackBars.errorSnackBar(content: "Invalid GSTIN format");
       return false;
     }
-    final isAvailable = await SignUpService().checkAvailability(
-      gstNumber: value,
-    );
-    if (isAvailable) {
-      SnackBars.successSnackBar(content: "GSTIN verified successfully!");
-      return true;
-    } else {
-      SnackBars.errorSnackBar(
-        content: "User with this GSTIN number already exists",
-      );
-      return false;
-    }
+    return true;
+    // final isAvailable = await SignUpService().checkAvailability(
+    //   gstNumber: value,
+    // );
+    // if (isAvailable) {
+    //   SnackBars.successSnackBar(content: "GSTIN verified successfully!");
+    //   return true;
+    // } else {
+    //   SnackBars.errorSnackBar(
+    //     content: "User with this GSTIN number already exists",
+    //   );
+    //   return false;
+    // }
   }
 }

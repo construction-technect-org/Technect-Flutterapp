@@ -1,7 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/model/all_chat_list_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
@@ -23,10 +21,7 @@ class InfoMetricsComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Information',
-              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-            ),
+            Text('Information', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
             GestureDetector(
               onTap: () => Get.to(() => EditProfile()),
 
@@ -43,10 +38,7 @@ class InfoMetricsComponent extends StatelessWidget {
         SizedBox(height: 2.h),
         Row(
           children: [
-            Text(
-              'Business Metrics',
-              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-            ),
+            Text('Business Metrics', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
             const Spacer(),
             GestureDetector(
               onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
@@ -150,9 +142,7 @@ class InfoMetricsComponent extends StatelessWidget {
                             children: [
                               Text(
                                 "Role",
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.grayA5,
-                                ),
+                                style: MyTexts.medium14.copyWith(color: MyColors.grayA5),
                               ),
                               const SizedBox(width: 20),
                               Obx(() {
@@ -170,10 +160,7 @@ class InfoMetricsComponent extends StatelessWidget {
                                           value: 'Service Provider',
                                           child: Text('Service Provider'),
                                         ),
-                                        DropdownMenuItem(
-                                          value: 'Trader',
-                                          child: Text('Trader'),
-                                        ),
+                                        DropdownMenuItem(value: 'Trader', child: Text('Trader')),
                                       ],
                                       onChanged: (value) {
                                         controller.selectedValue.value = value!;
@@ -206,7 +193,7 @@ class InfoMetricsComponent extends StatelessWidget {
       // final modelGstin = controller.businessModel.value.gstinNumber ?? '';
       // final merchantGstin = merchant?.gstinNumber ?? '';
 
-      if (controller.businessModel1.value.gstinNumber == null) {
+      if (controller.businessModel.value.gstinNumber == null) {
         return GestureDetector(
           onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
           child: Container(
@@ -225,7 +212,7 @@ class InfoMetricsComponent extends StatelessWidget {
             ),
           ),
         );
-      } else if (controller.businessModel1.value.gstinNumber!.isEmpty) {
+      } else if (controller.businessModel.value.gstinNumber!.isEmpty) {
         return GestureDetector(
           onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
           child: Container(
@@ -257,44 +244,39 @@ class InfoMetricsComponent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(() {
-                final name = controller.businessModel1.value.businessName;
+                final name = controller.businessModel.value.businessName;
                 return buildRow(title: "Company name", data: name);
               }),
               const Gap(6),
               Obx(() {
-                final modelGstin =
-                    controller.businessModel1.value.gstinNumber ?? '';
+                final modelGstin = controller.businessModel.value.gstinNumber ?? '';
                 final userGstin = controller.userData?.gst ?? '-';
                 return buildRow(title: "GSTIN", data: modelGstin);
               }),
               const Gap(6),
 
               Obx(() {
-                final contact =
-                    controller.businessModel1.value.businessContactNumber ?? '';
+                final contact = controller.businessModel.value.businessContactNumber ?? '';
                 return buildRow(title: "Mobile Number", data: contact);
               }),
               const Gap(6),
               Obx(() {
-                final website = controller.businessModel1.value.website ?? '';
+                final website = controller.businessModel.value.website ?? '';
                 return buildRow(title: "Website", data: website);
               }),
               const Gap(6),
               Obx(() {
-                final email =
-                    controller.businessModel1.value.businessEmail ?? '';
+                final email = controller.businessModel.value.businessEmail ?? '';
                 return buildRow(title: "Email id", data: email);
               }),
               const Gap(6),
               Obx(() {
-                final alt =
-                    controller.businessModel1.value.alternativeBusinessEmail ??
-                    '';
+                final alt = controller.businessModel.value.alternativeBusinessEmail ?? '';
                 return buildRow(title: "Alternative number", data: alt);
               }),
               const Gap(6),
               Obx(() {
-                final year = controller.businessModel1.value.year ?? '';
+                final year = controller.businessModel.value.year ?? '';
                 return buildRow(title: "Year of establish", data: year);
               }),
 
@@ -337,39 +319,13 @@ class InfoMetricsComponent extends StatelessWidget {
       final closedDays = data.where((d) => d['is_open'] == false).toList(); */
 
       final List<Widget> items = [];
-      items.add(
-        _buildBusinessHourItem("Monday", controller.businessHoursData1[0]![0]!),
-      );
-      items.add(
-        _buildBusinessHourItem(
-          "Tuesday",
-          controller.businessHoursData1[1]![1]!,
-        ),
-      );
-      items.add(
-        _buildBusinessHourItem(
-          "Wednesday",
-          controller.businessHoursData1[2]![2]!,
-        ),
-      );
-      items.add(
-        _buildBusinessHourItem(
-          "Thursday",
-          controller.businessHoursData1[3]![3]!,
-        ),
-      );
-      items.add(
-        _buildBusinessHourItem("Friday", controller.businessHoursData1[4]![4]!),
-      );
-      items.add(
-        _buildBusinessHourItem(
-          "Saturday",
-          controller.businessHoursData1[5]![5]!,
-        ),
-      );
-      items.add(
-        _buildBusinessHourItem("Sunday", controller.businessHoursData1[6]![6]!),
-      );
+      items.add(_buildBusinessHourItem("Monday", controller.businessHoursData1[0]![0]!));
+      items.add(_buildBusinessHourItem("Tuesday", controller.businessHoursData1[1]![1]!));
+      items.add(_buildBusinessHourItem("Wednesday", controller.businessHoursData1[2]![2]!));
+      items.add(_buildBusinessHourItem("Thursday", controller.businessHoursData1[3]![3]!));
+      items.add(_buildBusinessHourItem("Friday", controller.businessHoursData1[4]![4]!));
+      items.add(_buildBusinessHourItem("Saturday", controller.businessHoursData1[5]![5]!));
+      items.add(_buildBusinessHourItem("Sunday", controller.businessHoursData1[6]![6]!));
       /*for (final day in openDays) {
         items.add(_buildBusinessHourItem([day], isOpen: true));
       }
@@ -387,10 +343,7 @@ class InfoMetricsComponent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Working Hours",
-              style: MyTexts.medium15.copyWith(color: MyColors.grayA5),
-            ),
+            Text("Working Hours", style: MyTexts.medium15.copyWith(color: MyColors.grayA5)),
             const Gap(12),
             Column(children: items),
           ],
@@ -408,14 +361,10 @@ class InfoMetricsComponent extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: !days.closed!
-            ? const Color(0xFFEAF0FF)
-            : const Color(0xFFFFEEEE),
+        color: !days.closed! ? const Color(0xFFEAF0FF) : const Color(0xFFFFEEEE),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: !days.closed!
-              ? const Color(0xFFCAD6FF)
-              : const Color(0xFFF5C8C8),
+          color: !days.closed! ? const Color(0xFFCAD6FF) : const Color(0xFFF5C8C8),
         ),
       ),
       child: Column(
@@ -488,10 +437,7 @@ class InfoMetricsComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Flexible(
-          child: Text(
-            title,
-            style: MyTexts.medium14.copyWith(color: MyColors.grayA5),
-          ),
+          child: Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
         ),
         Flexible(
           flex: 2,
@@ -504,9 +450,7 @@ class InfoMetricsComponent extends StatelessWidget {
             style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
             trimExpandedText: '  Show less',
             textAlign: TextAlign.right,
-            moreStyle: MyTexts.medium15.copyWith(
-              color: const Color.fromRGBO(33, 150, 243, 1),
-            ),
+            moreStyle: MyTexts.medium15.copyWith(color: const Color.fromRGBO(33, 150, 243, 1)),
           ),
         ),
       ],

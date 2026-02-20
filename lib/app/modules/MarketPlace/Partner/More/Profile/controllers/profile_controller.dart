@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
@@ -15,7 +16,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/edit_profile_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
@@ -63,18 +63,15 @@ class ProfileController extends GetxController {
     final merProfile = storage.bizMetrics;
 
     if (dashboardController.profileResponse.value.merchant != null) {
-      businessModel1.value.gstinNumber = storage.getNumber ?? '';
-      businessModel1.value.website = merProfile?["businessWebsite"] ?? '';
-      businessModel1.value.businessEmail = merProfile?["businessEmail"] ?? '';
-      businessModel1.value.year =
-          merProfile?['yearOfEstablish'].toString() ?? '';
-      businessModel1.value.businessContactNumber =
-          merProfile?['businessPhone'] ?? '';
+      businessModel.value.gstinNumber = storage.getNumber ?? '';
+      businessModel.value.website = merProfile?["businessWebsite"] ?? '';
+      businessModel.value.businessEmail = merProfile?["businessEmail"] ?? '';
+      businessModel.value.year = merProfile?['yearOfEstablish'].toString() ?? '';
+      businessModel.value.businessContactNumber = merProfile?['businessPhone'] ?? '';
 
-      businessModel1.value.businessName = merProfile?["businessName"] ?? '';
-      businessModel1.value.alternativeBusinessEmail =
-          merProfile?["alternateBusinessPhone"] ?? '';
-      //businessModel1.value.image =
+      businessModel.value.businessName = merProfile?["businessName"] ?? '';
+      businessModel.value.alternativeBusinessEmail = merProfile?["alternateBusinessPhone"] ?? '';
+      //businessModel.value.image =
       //  dashboardController.profileResponse.value.merchant!.logoKey ?? "";
 
       _merBizHours?.value =
@@ -82,8 +79,7 @@ class ProfileController extends GetxController {
           //dashboardController.profileResponse.value.merchant!.businessHours ??
           null;
       _merBizHours?.refresh();
-      if (dashboardController.profileResponse.value.merchant!.businessHours !=
-          null) {
+      if (dashboardController.profileResponse.value.merchant!.businessHours != null) {
         print("Sunday ${_merBizHours?.value?.sunday}");
         businessHoursData1.add({6: _merBizHours?.value?.sunday});
         businessHoursData1.add({0: _merBizHours?.value?.monday});
@@ -97,16 +93,14 @@ class ProfileController extends GetxController {
 
       loadMerchantCertificates();
     }
-    businessModel.value.gstinNumber =
-        homeController.profileData.value.data?.user?.gst ?? "";
+    businessModel.value.gstinNumber = homeController.profileData.value.data?.user?.gst ?? "";
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website ?? "";
       businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
       businessModel.value.year = merchantProfile?.yearsInBusiness != null
           ? merchantProfile?.yearsInBusiness.toString()
           : "";
-      businessModel.value.businessContactNumber =
-          merchantProfile?.businessContactNumber ?? "";
+      businessModel.value.businessContactNumber = merchantProfile?.businessContactNumber ?? "";
       businessModel.value.alternativeBusinessEmail =
           merchantProfile?.alternativeBusinessContactNumber ?? "";
       businessModel.value.businessName = merchantProfile?.businessName ?? "";
@@ -141,18 +135,6 @@ class ProfileController extends GetxController {
 
       if (merchantProfile?.documents != null) {
         loadCertificatesFromDocuments(merchantProfile!.documents!);
-      }
-      if (certs.isNotEmpty) {
-        merCert.addAll(certs);
-        print("MErcert $merCert");
-        for (int i = 0; i < merCert.length; i++) {
-          jsonCert.add(
-            AllCertificateModel(
-              title: merCert[i].originalName!,
-              filePath: merCert[i].url!,
-            ),
-          );
-        }
       }
 
       businessModel.refresh();
@@ -227,7 +209,27 @@ class ProfileController extends GetxController {
         certs.add(Cert(title: "MSME/Udyam Certificate"));
         certs.add(Cert(title: "Pan Certificate"));
       }
+
+      // Update jsonCert and certificates to sync with certs length
+      jsonCert.clear();
+      certificates.clear();
+      for (int i = 0; i < certs.length; i++) {
+        jsonCert.add(
+          AllCertificateModel(title: certs[i].title ?? "", filePath: certs[i].url ?? ""),
+        );
+        certificates.add(
+          CertificateModel(
+            title: certs[i].title ?? "",
+            filePath: certs[i].url,
+            name: certs[i].originalName,
+            isDefault: i < 3,
+          ),
+        );
+      }
+
       certs.refresh();
+      jsonCert.refresh();
+      certificates.refresh();
     }
   }
 
@@ -249,9 +251,7 @@ class ProfileController extends GetxController {
       } else {
         certificates.add(
           CertificateModel(
-            title: (doc.documentType ?? type)
-                .replaceAll("_", " ")
-                .toUpperCase(),
+            title: (doc.documentType ?? type).replaceAll("_", " ").toUpperCase(),
             filePath: path,
             name: doc.documentName ?? "",
           ),
@@ -266,16 +266,13 @@ class ProfileController extends GetxController {
   final isLoading = false.obs;
 
   final DocumentService _documentService = DocumentService();
-  final Rx<MerchantBusninessHours?>? _merBizHours = Rx<MerchantBusninessHours?>(
-    null,
-  );
+  final Rx<MerchantBusninessHours?>? _merBizHours = Rx<MerchantBusninessHours?>(null);
 
   final HomeService _homeService = Get.find<HomeService>();
 
   CommonController get homeController => Get.find<CommonController>();
 
-  DashBoardController get dashboardController =>
-      Get.find<DashBoardController>();
+  DashBoardController get dashboardController => Get.find<DashBoardController>();
 
   ProfileModel get profileData => homeController.profileData.value;
 
@@ -283,8 +280,7 @@ class ProfileController extends GetxController {
 
   UserModel? get userData => profileData.data?.user;
 
-  int get profileCompletionPercentage =>
-      merchantProfile?.profileCompletionPercentage ?? 0;
+  int get profileCompletionPercentage => merchantProfile?.profileCompletionPercentage ?? 0;
 
   List<BusinessHours> get businessHours => merchantProfile?.businessHours ?? [];
 
@@ -337,11 +333,7 @@ class ProfileController extends GetxController {
       }
 
       if (merchantID != null && merchantID.isNotEmpty) {
-        if(myPref.role=="merchant") {
-          profileResponse1.value = await _homeService.getMerchantProfile(
-            merchantID,
-          );
-        }
+        profileResponse1.value = await _homeService.getMerchantProfile(merchantID);
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');
@@ -380,14 +372,10 @@ class ProfileController extends GetxController {
       final response = await _documentService.deleteDocument(documentId);
 
       if (response.success == true) {
-        SnackBars.successSnackBar(
-          content: response.message ?? 'Document deleted successfully',
-        );
+        SnackBars.successSnackBar(content: response.message ?? 'Document deleted successfully');
         await homeController.fetchProfileData();
       } else {
-        SnackBars.errorSnackBar(
-          content: response.message ?? 'Failed to delete document',
-        );
+        SnackBars.errorSnackBar(content: response.message ?? 'Failed to delete document');
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error deleting document: $e');
@@ -437,9 +425,7 @@ class ProfileController extends GetxController {
         certKey: certs[index].key!,
       );
       if (response) {
-        SnackBars.successSnackBar(
-          content: "Successfully deleted the certificate",
-        );
+        SnackBars.successSnackBar(content: "Successfully deleted the certificate");
       } else {
         SnackBars.errorSnackBar(content: "Deletion of certificate failed");
       }
@@ -474,8 +460,7 @@ class ProfileController extends GetxController {
 
         if (!fileName.contains('.')) {
           SnackBars.errorSnackBar(
-            content:
-                "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
+            content: "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
           );
           return;
         }
@@ -503,8 +488,7 @@ class ProfileController extends GetxController {
 
         if (!allowedExtensions.contains(fileExtension)) {
           SnackBars.errorSnackBar(
-            content:
-                "Invalid certificate. Please upload only PDF or image files.",
+            content: "Invalid certificate. Please upload only PDF or image files.",
           );
           return;
         }
@@ -515,15 +499,26 @@ class ProfileController extends GetxController {
 
           if (!isValidFile) {
             SnackBars.errorSnackBar(
-              content:
-                  "Invalid file format. Please select a valid PDF, JPG, or PNG file",
+              content: "Invalid file format. Please select a valid PDF, JPG, or PNG file",
             );
             return;
           }
         }
+
+        // Ensure lists are large enough to prevent RangeError
+        while (jsonCert.length <= index) {
+          jsonCert.add(AllCertificateModel(title: "", filePath: ""));
+        }
+        while (certificates.length <= index) {
+          certificates.add(
+            CertificateModel(title: certs.length > index ? certs[index].title ?? "" : ""),
+          );
+        }
+
         jsonCert[index].title = basename(file.path ?? "");
         jsonCert[index].filePath = file.path!;
         jsonCert.refresh();
+
         certificates[index].filePath = file.path;
         certificates[index].name = basename(file.path ?? "");
         certificates.refresh();
@@ -544,9 +539,7 @@ class ProfileController extends GetxController {
       const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB
 
       if (sizeInBytes > maxSizeInBytes) {
-        SnackBars.errorSnackBar(
-          content: "File too large,please select a file smaller than 2 MB",
-        );
+        SnackBars.errorSnackBar(content: "File too large,please select a file smaller than 2 MB");
         return null;
       }
 
@@ -556,8 +549,7 @@ class ProfileController extends GetxController {
 
       if (!fileName.contains('.')) {
         SnackBars.errorSnackBar(
-          content:
-              "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
+          content: "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
         );
         return null;
       }
@@ -585,8 +577,7 @@ class ProfileController extends GetxController {
 
       if (!allowedExtensions.contains(fileExtension)) {
         SnackBars.errorSnackBar(
-          content:
-              "Only PDF, JPG, PNG, DOC, and TXT files are allowed for certificates",
+          content: "Only PDF, JPG, PNG, DOC, and TXT files are allowed for certificates",
         );
         return null;
       }
@@ -597,8 +588,7 @@ class ProfileController extends GetxController {
 
         if (!isValidFile) {
           SnackBars.errorSnackBar(
-            content:
-                "Invalid file format. Please select a valid PDF, JPG, or PNG file",
+            content: "Invalid file format. Please select a valid PDF, JPG, or PNG file",
           );
           return null;
         }
@@ -610,7 +600,6 @@ class ProfileController extends GetxController {
     return null;
   }
 
-  Rx<BusinessModel> businessModel1 = BusinessModel().obs;
   Rx<BusinessModel> businessModel = BusinessModel().obs;
 
   void handleBusinessHoursData() {
@@ -621,8 +610,7 @@ class ProfileController extends GetxController {
     refreshBizHours(_merBizHours?.value);
   }
 
-  RxList<Map<int, MerchantDay?>> businessHoursData1 =
-      <Map<int, MerchantDay?>>[].obs;
+  RxList<Map<int, MerchantDay?>> businessHoursData1 = <Map<int, MerchantDay?>>[].obs;
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
   EditProfileService editProfileService = EditProfileService();
 
@@ -636,10 +624,7 @@ class ProfileController extends GetxController {
 
       case 'jpg':
       case 'jpeg':
-        return bytes.length >= 3 &&
-            bytes[0] == 0xFF &&
-            bytes[1] == 0xD8 &&
-            bytes[2] == 0xFF;
+        return bytes.length >= 3 && bytes[0] == 0xFF && bytes[1] == 0xD8 && bytes[2] == 0xFF;
 
       case 'png':
         return bytes.length >= 4 &&
@@ -651,16 +636,10 @@ class ProfileController extends GetxController {
       case 'doc':
       case 'docx':
         if (bytes.length >= 4) {
-          if (bytes[0] == 0xD0 &&
-              bytes[1] == 0xCF &&
-              bytes[2] == 0x11 &&
-              bytes[3] == 0xE0) {
+          if (bytes[0] == 0xD0 && bytes[1] == 0xCF && bytes[2] == 0x11 && bytes[3] == 0xE0) {
             return true;
           }
-          if (bytes[0] == 0x50 &&
-              bytes[1] == 0x4B &&
-              bytes[2] == 0x03 &&
-              bytes[3] == 0x04) {
+          if (bytes[0] == 0x50 && bytes[1] == 0x4B && bytes[2] == 0x03 && bytes[3] == 0x04) {
             return true;
           }
         }
@@ -670,10 +649,7 @@ class ProfileController extends GetxController {
         if (bytes.isEmpty) return true;
         int printableCount = 0;
         for (final int byte in bytes) {
-          if (byte >= 32 && byte <= 126 ||
-              byte == 9 ||
-              byte == 10 ||
-              byte == 13) {
+          if (byte >= 32 && byte <= 126 || byte == 9 || byte == 10 || byte == 13) {
             printableCount++;
           }
         }
@@ -704,8 +680,7 @@ class ProfileController extends GetxController {
       isLoading.value = true;
 
       final homeController = Get.find<CommonController>();
-      final merchantProfile =
-          homeController.profileData.value.data?.merchantProfile;
+      final merchantProfile = homeController.profileData.value.data?.merchantProfile;
       final bool isUpdate;
       if (isSwitch.value) {
         isUpdate = false;
@@ -714,47 +689,48 @@ class ProfileController extends GetxController {
       }
 
       final formFields = <String, dynamic>{
-        'business_name': businessModel.value.businessName.toString(),
-        'gstin_number': businessModel.value.gstinNumber.toString(),
-        'year_of_established': businessModel.value.year.toString(),
-        'business_email': businessModel.value.businessEmail.toString(),
+        'business_name': businessModel.value.businessName ?? "",
+        'gstin_number': businessModel.value.gstinNumber ?? "",
+        'year_of_established': businessModel.value.year ?? "",
+        'business_email': businessModel.value.businessEmail ?? "",
         if ((businessModel.value.alternativeBusinessEmail ?? "").isNotEmpty)
-          'alternative_business_contact_number': businessModel
-              .value
-              .alternativeBusinessEmail
-              .toString(),
-        'business_contact_number': businessModel.value.businessContactNumber
-            .toString(),
-        'website': businessModel.value.website.toString(),
-        if (!isUpdate)
-          'business_hours': json.encode(businessHoursData.toList()),
+          'alternative_business_contact_number': businessModel.value.alternativeBusinessEmail ?? "",
+        'business_contact_number': businessModel.value.businessContactNumber ?? "",
+        'website': businessModel.value.website ?? "",
+        'gstCount': gstCount.toString(),
+        'msmeCount': msmeCount.toString(),
+        'panCount': panCount.toString(),
       };
 
       final files = <String, String>{};
-      if (!(businessModel.value.image ?? "").contains("merchant-logo")) {
-        files['merchant_logo'] = businessModel.value.image ?? "";
+      final merchantLogo = businessModel.value.image ?? "";
+      if (merchantLogo.isNotEmpty && !merchantLogo.contains("merchant-logo")) {
+        files['merchant_logo'] = merchantLogo;
       }
+
       if (certificates.isNotEmpty &&
-          !(certificates[0].filePath ?? "").startsWith("merchant-documents")) {
+          (certificates[0].filePath ?? "").isNotEmpty &&
+          !certificates[0].filePath!.startsWith("merchant-documents")) {
         files['gst_certificate'] = certificates[0].filePath!;
       }
 
       if (certificates.length > 1 &&
-          !(certificates[1].filePath ?? "").startsWith("merchant-documents")) {
+          (certificates[1].filePath ?? "").isNotEmpty &&
+          !certificates[1].filePath!.startsWith("merchant-documents")) {
         files['udyam_certificate'] = certificates[1].filePath!;
       }
 
       if (certificates.length > 2 &&
-          !(certificates[2].filePath ?? "").startsWith("merchant-documents")) {
+          (certificates[2].filePath ?? "").isNotEmpty &&
+          !certificates[2].filePath!.startsWith("merchant-documents")) {
         files['mtc_certificate'] = certificates[2].filePath!;
       }
 
       if (certificates.length > 3) {
         for (var i = 3; i < certificates.length; i++) {
-          if (!(certificates[i].filePath ?? "").startsWith(
-            "merchant-documents",
-          )) {
-            files[certificates[i].title] = certificates[i].filePath!;
+          final certPath = certificates[i].filePath ?? "";
+          if (certPath.isNotEmpty && !certPath.startsWith("merchant-documents")) {
+            files[certificates[i].title] = certPath;
           }
         }
       }
@@ -820,9 +796,7 @@ class ProfileController extends GetxController {
         }
       } else {
         SnackBars.errorSnackBar(
-          content:
-              response['message'] ??
-              'Failed to ${isUpdate ? 'update' : 'submit'} profile',
+          content: response['message'] ?? 'Failed to ${isUpdate ? 'update' : 'submit'} profile',
         );
       }
     } catch (e) {
@@ -839,12 +813,7 @@ class CertificateModel {
   String? name;
   final bool isDefault;
 
-  CertificateModel({
-    required this.title,
-    this.filePath,
-    this.name,
-    this.isDefault = false,
-  });
+  CertificateModel({required this.title, this.filePath, this.name, this.isDefault = false});
 }
 
 class AllCertificateModel {

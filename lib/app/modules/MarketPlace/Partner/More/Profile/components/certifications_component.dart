@@ -18,9 +18,7 @@ class CertificationsComponent extends StatelessWidget {
           ...controller.certs.asMap().entries.map((entry) {
             final index = entry.key;
             final cert = entry.value;
-            print(
-              "Index $index, Entry ${entry.value.title}, ${entry.value.url}",
-            );
+            print("Index $index, Entry ${entry.value.title}, ${entry.value.url}");
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,17 +36,11 @@ class CertificationsComponent extends StatelessWidget {
                         if (url != null && url.isNotEmpty) {
                           final uri = Uri.parse(url);
                           if (await canLaunchUrl(uri)) {
-                            await launchUrl(
-                              uri,
-                              mode: LaunchMode.externalApplication,
-                            );
+                            await launchUrl(uri, mode: LaunchMode.externalApplication);
                           }
                         }
                       },
-                      child: const Icon(
-                        Icons.visibility,
-                        color: MyColors.primary,
-                      ),
+                      child: const Icon(Icons.visibility, color: MyColors.primary),
                     ),
                     if (cert.url != null)
                       Row(
@@ -77,7 +69,9 @@ class CertificationsComponent extends StatelessWidget {
                     padding: const EdgeInsets.all(17),
                     child: Column(
                       children: [
-                        if (cert.url == null) ...[
+                        if (cert.url == null &&
+                            (controller.certificates.length <= index ||
+                                controller.certificates[index].filePath == null)) ...[
                           Column(
                             children: [
                               Container(
@@ -86,11 +80,7 @@ class CertificationsComponent extends StatelessWidget {
                                   border: Border.all(color: MyColors.grey),
                                 ),
                                 padding: const EdgeInsets.all(14),
-                                child: const Icon(
-                                  Icons.add,
-                                  size: 30,
-                                  color: MyColors.grey,
-                                ),
+                                child: const Icon(Icons.add, size: 30, color: MyColors.grey),
                               ),
                               const Gap(10),
                               const Gap(10),
@@ -104,9 +94,7 @@ class CertificationsComponent extends StatelessWidget {
                               const Gap(10),
                               Text(
                                 "Upload Certification",
-                                style: MyTexts.bold16.copyWith(
-                                  color: MyColors.black,
-                                ),
+                                style: MyTexts.bold16.copyWith(color: MyColors.black),
                               ),
                             ],
                           ),
@@ -115,7 +103,11 @@ class CertificationsComponent extends StatelessWidget {
                             children: [
                               const Gap(14),
                               FileIconWidget(
-                                fileName: cert.originalName ?? '',
+                                fileName: cert.url != null
+                                    ? (cert.originalName ?? '')
+                                    : (controller.certificates.length > index
+                                          ? (controller.certificates[index].name ?? '')
+                                          : ''),
                                 showFileName: true,
                               ),
                             ],
@@ -159,10 +151,7 @@ class CertificationsComponent extends StatelessWidget {
     Documents document,
   ) {
     return DottedBorder(
-      options: const RectDottedBorderOptions(
-        color: Color(0xFF8C8C8C),
-        dashPattern: [5, 5],
-      ),
+      options: const RectDottedBorderOptions(color: Color(0xFF8C8C8C), dashPattern: [5, 5]),
       child: Stack(
         children: [
           Container(
@@ -193,10 +182,7 @@ class CertificationsComponent extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     child: SvgPicture.asset(
                       Asset.certificateIcon,
-                      colorFilter: const ColorFilter.mode(
-                        MyColors.primary,
-                        BlendMode.srcIn,
-                      ),
+                      colorFilter: const ColorFilter.mode(MyColors.primary, BlendMode.srcIn),
                     ),
                   ),
                 ),

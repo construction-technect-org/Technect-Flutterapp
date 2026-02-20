@@ -1,11 +1,12 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/services/app_service.dart';
+import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
-import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
@@ -15,9 +16,8 @@ import 'package:construction_technect/app/modules/Authentication/login/models/Lo
 import 'package:construction_technect/app/modules/Authentication/login/services/LoginService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
-import 'package:timer_count_down/timer_controller.dart';
 import 'package:phone_number_hint/phone_number_hint.dart';
-import 'package:flutter/material.dart';
+import 'package:timer_count_down/timer_controller.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -112,7 +112,7 @@ class LoginController extends GetxController {
   Future<void> login() async {
     isLoading.value = true;
     loginError.value = ""; //
-    print("Login Done Started"); // Clear previous errors
+    print("Login Started");
 
     try {
       // Get FCM token and device type
@@ -128,6 +128,13 @@ class LoginController extends GetxController {
       );
       print("Login Done Started123456");
       if (loginResponse.success == true) {
+        // print all data here
+        print("message ${loginResponse.message}");
+        print("token ${loginResponse.token}");
+        print("tokenType ${loginResponse.tokenType}");
+        print("user ${loginResponse.user}");
+        print("success ${loginResponse.success}");
+
         myPref.setIsTeamLogin(false);
         loginError.value = "";
         if (loginResponse.token != null) {
@@ -151,10 +158,7 @@ class LoginController extends GetxController {
           myPref.setRole("connector");
         }
         if (rememberMe.value) {
-          myPref.saveCredentials(
-            mobileController.text,
-            passwordController.text,
-          );
+          myPref.saveCredentials(mobileController.text, passwordController.text);
         } else {
           myPref.clearCredentials();
         }
@@ -174,8 +178,7 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        loginError.value =
-            loginResponse.message ?? 'Invalid mobile number or password';
+        loginError.value = loginResponse.message ?? 'Invalid mobile number or password';
       }
     } catch (e) {
       loginError.value = "Invalid mobile number or password";
@@ -296,10 +299,7 @@ class LoginController extends GetxController {
                 ),
               ),
               const Gap(24),
-              Text(
-                "Mobile Number",
-                style: MyTexts.medium20.copyWith(color: Colors.black),
-              ),
+              Text("Mobile Number", style: MyTexts.medium20.copyWith(color: Colors.black)),
               const Gap(5),
               CommonPhoneField(
                 controller: mobileNumberController,
@@ -386,10 +386,7 @@ class LoginController extends GetxController {
   final countdownController = CountdownController(autoStart: true);
 
   Future<String?> validateNumberAvailability(String number) async {
-    return await Validate.validateMobileNumberAsync(
-      number,
-      countryCode: countryCode.value,
-    );
+    return await Validate.validateMobileNumberAsync(number, countryCode: countryCode.value);
   }
 
   Future<bool> verifyMobileNumber() async {
@@ -415,9 +412,7 @@ class LoginController extends GetxController {
           otpSend.value = true;
           return true;
         } else {
-          SnackBars.errorSnackBar(
-            content: otpResponse.message ?? 'Failed to send OTP',
-          );
+          SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
           return false;
         }
       } else {
@@ -447,9 +442,7 @@ class LoginController extends GetxController {
           content: 'OTP resent successfully to ${mobileNumberController.text}',
         );
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to resend OTP',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to resend OTP');
         otpSend.value = false;
       }
       startTimer();
@@ -551,9 +544,5 @@ class LoginController extends GetxController {
 
 String extractPermissions(TeamMemberModel? data) {
   if (data == null) return '';
-  return data.roles
-          ?.map((r) => r.functionalities ?? '')
-          .where((e) => e.isNotEmpty)
-          .join(',') ??
-      '';
+  return data.roles?.map((r) => r.functionalities ?? '').where((e) => e.isNotEmpty).join(',') ?? '';
 }

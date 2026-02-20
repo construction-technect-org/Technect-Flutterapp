@@ -93,10 +93,7 @@ class LoginView extends GetView<LoginController> {
                     ),*/
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Text(
-                      'Login',
-                      style: MyTexts.medium20.copyWith(color: Colors.black),
-                    ),
+                    child: Text('Login', style: MyTexts.medium20.copyWith(color: Colors.black)),
                   ),
                   const Gap(16),
 
@@ -114,9 +111,7 @@ class LoginView extends GetView<LoginController> {
                       controller.countryCode.value = code;
                     },
                     onSubmitted: (val) {
-                      FocusScope.of(
-                        context,
-                      ).requestFocus(controller.passwordFocusNode);
+                      FocusScope.of(context).requestFocus(controller.passwordFocusNode);
                     },
                   ),
                   const Gap(16),
@@ -177,38 +172,40 @@ class LoginView extends GetView<LoginController> {
                       buttonName: 'Login',
                       onTap: controller.isLoading.value
                           ? null
-                          : () {
+                          : () async {
+                              // try {
+                              //   final AppSharedPreference pref = AppSharedPreference();
+                              //   await pref.logout();
+                              //   print("Data cleared");
+                              //   return;
+                              // } catch (e) {
+                              //   print("Error clearing data $e");
+                              // }
+                              // return;
                               controller.loginError.value = "";
                               controller.mobileValidationError.value = "";
                               controller.isValid.value = -1;
                               print("IsValid123 ${controller.isValid.value}");
 
-                              final mobileNumber = controller
-                                  .mobileController
-                                  .text
-                                  .trim();
-                              if (!controller.formKey.currentState!
-                                  .validate()) {
+                              final mobileNumber = controller.mobileController.text.trim();
+                              if (!controller.formKey.currentState!.validate()) {
                                 if (mobileNumber.isEmpty) {
                                   controller.isValid.value = 0;
                                   return;
                                 }
 
-                                final mobileError =
-                                    ValidationUtils.validateMobileNumber(
-                                      mobileNumber,
-                                    );
+                                final mobileError = ValidationUtils.validateMobileNumber(
+                                  mobileNumber,
+                                );
                                 if (mobileError != null) {
-                                  controller.mobileValidationError.value =
-                                      mobileError;
+                                  controller.mobileValidationError.value = mobileError;
                                   controller.isValid.value = 1;
                                   return;
                                 }
                                 print("IsValid ${controller.isValid.value}");
                               }
 
-                              if (controller.formKey.currentState?.validate() ??
-                                  false) {
+                              if (controller.formKey.currentState?.validate() ?? false) {
                                 print(controller.isValid.value);
                                 hideKeyboard();
                                 controller.login();
@@ -232,11 +229,7 @@ class LoginView extends GetView<LoginController> {
                   Row(
                     children: [
                       Expanded(
-                        child: Divider(
-                          color: MyColors.grayD4,
-                          indent: 10.sw,
-                          thickness: 1,
-                        ),
+                        child: Divider(color: MyColors.grayD4, indent: 10.sw, thickness: 1),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 2.w),
@@ -249,11 +242,7 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
                       Expanded(
-                        child: Divider(
-                          color: MyColors.grayD4,
-                          endIndent: 10.sw,
-                          thickness: 1,
-                        ),
+                        child: Divider(color: MyColors.grayD4, endIndent: 10.sw, thickness: 1),
                       ),
                     ],
                   ),
@@ -277,8 +266,7 @@ class LoginView extends GetView<LoginController> {
                         ),
                         onTap: () async {
                           try {
-                            final user =
-                                await GoogleSignInService.signInWithGoogle();
+                            final user = await GoogleSignInService.signInWithGoogle();
                             if (user != null) {
                               //await controller.callSocialLoginAPI(user);
                             } else {
@@ -287,9 +275,7 @@ class LoginView extends GetView<LoginController> {
                               );
                             }
                           } catch (e) {
-                            SnackBars.errorSnackBar(
-                              content: 'Google Sign-In failed: $e',
-                            );
+                            SnackBars.errorSnackBar(content: 'Google Sign-In failed: $e');
                           }
                         },
                       ),

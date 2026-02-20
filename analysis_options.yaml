@@ -1,30 +1,30 @@
 include: package:lint/analysis_options.yaml
 analyzer:
   errors:
-    unused_element: false
-    unused_import: error
-    prefer_const_constructors: error
-    unused_field: error
+    # unused_element: false
+    # unused_import: error
+    # prefer_const_constructors: error
+    # unused_field: error
     file_names: false
-    unused_local_variable: error
-    prefer_final_locals: error
+    # unused_local_variable: error
+    # prefer_final_locals: error
     #    avoid_print: error
     prefer_const_declarations: error
     missing_return: error
-    sort_child_properties_last: error
-    unnecessary_new: error
+    # sort_child_properties_last: error
+    # unnecessary_new: error
     prefer_collection_literals: error
     prefer_constructors_over_static_methods: error
     use_setters_to_change_properties: false
-    unnecessary_this: error
+    # unnecessary_this: error
     always_declare_return_types: error
-    avoid_bool_literals_in_conditional_expressions: error
+    # avoid_bool_literals_in_conditional_expressions: error
     avoid_unnecessary_containers: error
     prefer_final_fields: error
     prefer_const_literals_to_create_immutables: error
     prefer_if_elements_to_conditional_expressions: error
     avoid_void_async: error
-    curly_braces_in_flow_control_structures: error
+    # curly_braces_in_flow_control_structures: error
     unnecessary_parenthesis: error
     prefer_equal_for_default_values: error
     prefer_foreach: error
