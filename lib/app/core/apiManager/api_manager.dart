@@ -12,7 +12,7 @@ class ApiManager {
   // Local
   // static const String baseUrl = "http://localhost:3000/api/";
   // Live
-  static const String baseUrl = "https://api.constructiontechnect.com";
+  static const String baseUrl = "https://api.constructiontechnect.com/";
 
   /// Check if response contains invalid/expired token
   void _checkTokenValidity(dynamic response) {
