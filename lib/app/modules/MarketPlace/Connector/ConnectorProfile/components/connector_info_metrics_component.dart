@@ -13,7 +13,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
 
   ConnectorProfileController get controller => Get.find<ConnectorProfileController>();
 
-   // final  EditProductController editControllers = Get.find<EditProductController>();
+  EditProductController get editController => Get.find<EditProductController>();
 
   @override
   Widget build(BuildContext context) {
@@ -79,29 +79,6 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         ],
         SizedBox(height: 2.h),
 
-        // ---------- Project Section ----------
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Project details', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
-              const Spacer(),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => EditProjectView());
-                },
-                behavior: HitTestBehavior.translucent,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SvgPicture.asset(Asset.edit),
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 1.h),
-        _buildProjectDetails(),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
@@ -154,10 +131,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Project details',
-                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-              ),
+              Text('Project details', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
               const Spacer(),
               GestureDetector(
                 onTap: () {

@@ -5,10 +5,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/marketplace_category_models.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/services/InventoryService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/services/marketplace_category_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 
 class InventoryController extends GetxController {
-  final HomeService _homeService = Get.find<HomeService>();
   final InventoryService _inventoryService = InventoryService();
   final MarketplaceCategoryService _categoryService = MarketplaceCategoryService();
 

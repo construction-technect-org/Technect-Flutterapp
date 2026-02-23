@@ -36,6 +36,11 @@ class ProfileModel {
       'connectorProfile': connectorProfile?.toJson(),
     };
   }
+
+  static String? _parseString(dynamic value) {
+    if (value == null) return null;
+    return value.toString();
+  }
 }
 
 class UserM {
@@ -105,10 +110,10 @@ class UserM {
       myReferralCode: json['myReferralCode'],
       phoneVerified: json['phoneVerified'],
       emailVerified: json['emailVerified'],
-      lastActiveProfileId: ProfileModelM._parseString(json['lastActiveProfileId']),
-      lastActiveProfileType: ProfileModelM._parseString(json['lastActiveProfileType']),
-      status: ProfileModelM._parseString(json['status']),
-      signupStatus: ProfileModelM._parseString(json['signupStatus']),
+      lastActiveProfileId: ProfileModel._parseString(json['lastActiveProfileId']),
+      lastActiveProfileType: ProfileModel._parseString(json['lastActiveProfileType']),
+      status: ProfileModel._parseString(json['status']),
+      signupStatus: ProfileModel._parseString(json['signupStatus']),
       sessionVersion: json['sessionVersion'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
@@ -209,56 +214,26 @@ class MerchantProfileM {
       verificationType: json['verificationType'],
       gstinHash: json['gstinHash'],
       verificationDetails: json['verificationDetails'],
-      verifiedAt: ProfileModelM._parseString(json['verifiedAt']),
-      businessName: ProfileModelM._parseString(json['businessName']),
-      businessType: ProfileModelM._parseString(json['businessType']),
-      businessWebsite: ProfileModelM._parseString(json['businessWebsite']),
-      businessEmail: ProfileModelM._parseString(json['businessEmail']),
-      businessPhone: ProfileModelM._parseString(json['businessPhone']),
-      alternateBusinessPhone: ProfileModelM._parseString(json['alternateBusinessPhone']),
-      yearOfEstablish: ProfileModelM._parseString(json['yearOfEstablish']),
-      logo: ProfileModelM._parseString(json['logo']),
-      businessAddress: ProfileModelM._parseString(json['businessAddress']),
+      verifiedAt: ProfileModel._parseString(json['verifiedAt']),
+      businessName: ProfileModel._parseString(json['businessName']),
+      businessType: ProfileModel._parseString(json['businessType']),
+      businessWebsite: ProfileModel._parseString(json['businessWebsite']),
+      businessEmail: ProfileModel._parseString(json['businessEmail']),
+      businessPhone: ProfileModel._parseString(json['businessPhone']),
+      alternateBusinessPhone: ProfileModel._parseString(json['alternateBusinessPhone']),
+      yearOfEstablish: ProfileModel._parseString(json['yearOfEstablish']),
+      logo: ProfileModel._parseString(json['logo']),
+      businessAddress: ProfileModel._parseString(json['businessAddress']),
       businessHours: json['businessHours'],
       certifications: json['certifications'],
       pocDetails: json['pocDetails'],
       profileStatus: json['profileStatus'],
       isProfileComplete: json['isProfileComplete'],
       version: json['version'],
-      createdAt: ProfileModelM._parseString(json['createdAt']),
-      updatedAt: ProfileModelM._parseString(json['updatedAt']),
-      deletedAt: ProfileModelM._parseString(json['deletedAt']),
+      createdAt: ProfileModel._parseString(json['createdAt']),
+      updatedAt: ProfileModel._parseString(json['updatedAt']),
+      deletedAt: ProfileModel._parseString(json['deletedAt']),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'ownerUserId': ownerUserId,
-      'verificationId': verificationId,
-      'verificationType': verificationType,
-      'gstinHash': gstinHash,
-      'verificationDetails': verificationDetails,
-      'verifiedAt': verifiedAt,
-      'businessName': businessName,
-      'businessType': businessType,
-      'businessWebsite': businessWebsite,
-      'businessEmail': businessEmail,
-      'businessPhone': businessPhone,
-      'alternateBusinessPhone': alternateBusinessPhone,
-      'yearOfEstablish': yearOfEstablish,
-      'logo': logo,
-      'businessAddress': businessAddress,
-      'businessHours': businessHours,
-      'certifications': certifications,
-      'pocDetails': pocDetails,
-      'profileStatus': profileStatus,
-      'isProfileComplete': isProfileComplete,
-      'version': version,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'deletedAt': deletedAt,
-    };
   }
 
   Map<String, dynamic> toJson() {
@@ -335,15 +310,15 @@ class ConnectorProfileM {
       verificationType: json['verificationType'],
       aadhaarHash: json['aadhaarHash'],
       verificationDetails: json['verificationDetails'],
-      verifiedAt: ProfileModelM._parseString(json['verifiedAt']),
+      verifiedAt: ProfileModel._parseString(json['verifiedAt']),
       pocDetails: json['pocDetails'],
       certifications: json['certifications'],
       profileStatus: json['profileStatus'],
       isProfileComplete: json['isProfileComplete'],
       version: json['version'],
-      createdAt: ProfileModelM._parseString(json['createdAt']),
-      updatedAt: ProfileModelM._parseString(json['updatedAt']),
-      deletedAt: ProfileModelM._parseString(json['deletedAt']),
+      createdAt: ProfileModel._parseString(json['createdAt']),
+      updatedAt: ProfileModel._parseString(json['updatedAt']),
+      deletedAt: ProfileModel._parseString(json['deletedAt']),
     );
   }
 
