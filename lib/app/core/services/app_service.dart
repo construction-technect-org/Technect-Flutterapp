@@ -9,7 +9,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/module_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/persona_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/subcategory_model.dart';
-
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:get/get.dart';
@@ -44,8 +43,7 @@ class AppHiveService extends GetxService {
   }
 
   bool get isTeamLogin => _box.get('isTeamLogin', defaultValue: false) as bool;
-  Future<void> setTeamLogin(bool value) async =>
-      await _box.put('isTeamLogin', value);
+  Future<void> setTeamLogin(bool value) async => await _box.put('isTeamLogin', value);
 
   bool get kycValid => _box.get('kyc', defaultValue: false) as bool;
   Future<void> setKyc(bool value) async => await _box.put('kyc', value);
@@ -62,9 +60,8 @@ class AppHiveService extends GetxService {
     await _box.flush();
   }
 
-
-  String get connectorProfileId => _box.get('isProfileId',defaultValue: '')as String;
-  Future<void> setProfileId(String value)async {
+  String get connectorProfileId => _box.get('isProfileId', defaultValue: '') as String;
+  Future<void> setProfileId(String value) async {
     await _box.put('isProfile', value);
   }
   // ================= USER =================
@@ -99,10 +96,8 @@ class AppHiveService extends GetxService {
   }
 
   bool get rememberMe => _box.get('rememberMe', defaultValue: false) as bool;
-  String get savedMobile =>
-      _box.get('savedMobileNumber', defaultValue: '') as String;
-  String get savedPassword =>
-      _box.get('savedPassword', defaultValue: '') as String;
+  String get savedMobile => _box.get('savedMobileNumber', defaultValue: '') as String;
+  String get savedPassword => _box.get('savedPassword', defaultValue: '') as String;
 
   // ================= CACHED API DATA =================
 
@@ -145,11 +140,11 @@ class AppHiveService extends GetxService {
     try {
       final data = _box.get('persona');
       if (data == null) return null;
-      print("Persona 123");
-      print("Personal $data");
+      log("Persona 123");
+      log("Personal $data");
       return PersonaProfileModel.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      print("Error parsing PersonaProfileModel: $e");
+      log("Error parsing PersonaProfileModel: $e");
       return null;
     }
   }
@@ -158,7 +153,7 @@ class AppHiveService extends GetxService {
     if (persona == null) {
       await _box.delete('persona');
     } else {
-      print("PEr 123");
+      log("PEr 123");
       await _box.put('persona', persona.toJson());
       await _box.flush();
     }
@@ -172,7 +167,7 @@ class AppHiveService extends GetxService {
       if (data == null) return null;
       return MerchantBusninessHours.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      print("Error parsing Merchant Biz Hours: $e");
+      log("Error parsing Merchant Biz Hours: $e");
       return null;
     }
   }
@@ -186,7 +181,7 @@ class AppHiveService extends GetxService {
         await _box.flush();
       }
     } catch (e) {
-      print("Error in housrs, $e");
+      log("Error in housrs, $e");
     }
   }
 
@@ -197,7 +192,7 @@ class AppHiveService extends GetxService {
       if (data == null) return null;
       return POC.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      print("Error parsing POC: $e");
+      log("Error parsing POC: $e");
       return null;
     }
   }
@@ -211,7 +206,7 @@ class AppHiveService extends GetxService {
         await _box.flush();
       }
     } catch (e) {
-      print("Error in POC, $e");
+      log("Error in POC, $e");
     }
   }
 
@@ -223,30 +218,26 @@ class AppHiveService extends GetxService {
       if (data == null) return null;
       return data;
     } catch (e) {
-      print("Error parsing Business Metrics: $e");
+      log("Error parsing Business Metrics: $e");
       return null;
     }
   }
 
   Future<void> setBM(Merchant mpm) async {
     try {
-      if (mpm == null) {
-        await _box.delete('bm');
-      } else {
-        await _box.put('bm', {
-          "businessName": mpm.businessName,
-          "businessType": mpm.businessType,
-          "businessEmail": mpm.businessEmail,
-          "businessWebsite": mpm.businessWebsite,
-          "businessPhone": mpm.businessPhone,
-          "alternateBusinessPhone": mpm.alternateBusinessPhone,
-          "yearOfEstablish": mpm.yearOfEstablish,
-          "image": mpm.logoKey?.url,
-        });
-        await _box.flush();
-      }
+      await _box.put('bm', {
+        "businessName": mpm.businessName,
+        "businessType": mpm.businessType,
+        "businessEmail": mpm.businessEmail,
+        "businessWebsite": mpm.businessWebsite,
+        "businessPhone": mpm.businessPhone,
+        "alternateBusinessPhone": mpm.alternateBusinessPhone,
+        "yearOfEstablish": mpm.yearOfEstablish,
+        "image": mpm.logoKey?.url,
+      });
+      await _box.flush();
     } catch (e) {
-      print("Error in POC, $e");
+      log("Error in POC, $e");
     }
   }
 
@@ -257,7 +248,7 @@ class AppHiveService extends GetxService {
       if (data == null) return null;
       return ModuleModel.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      print("Error parsing POC: $e");
+      log("Error parsing POC: $e");
       return null;
     }
   }
@@ -271,7 +262,7 @@ class AppHiveService extends GetxService {
         await _box.flush();
       }
     } catch (e) {
-      print("Error in Module, $e");
+      log("Error in Module, $e");
     }
   }
 
@@ -283,7 +274,7 @@ class AppHiveService extends GetxService {
       if (data == null) return null;
       return MainCategoryModel.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      print("Error parsing POC: $e");
+      log("Error parsing POC: $e");
       return null;
     }
   }
@@ -297,7 +288,7 @@ class AppHiveService extends GetxService {
         await _box.flush();
       }
     } catch (e) {
-      print("Error in Module, $e");
+      log("Error in Module, $e");
     }
   }
 
@@ -309,7 +300,7 @@ class AppHiveService extends GetxService {
       if (data == null) return null;
       return FullCategoryModel.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      print("Error parsing POC: $e");
+      log("Error parsing POC: $e");
       return null;
     }
   }
@@ -323,7 +314,7 @@ class AppHiveService extends GetxService {
         await _box.flush();
       }
     } catch (e) {
-      print("Error in Module, $e");
+      log("Error in Module, $e");
     }
   }
 
@@ -335,7 +326,7 @@ class AppHiveService extends GetxService {
       if (data == null) return null;
       return FullSubCategoryModel.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      print("Error parsing POC: $e");
+      log("Error parsing POC: $e");
       return null;
     }
   }
@@ -349,7 +340,7 @@ class AppHiveService extends GetxService {
         await _box.flush();
       }
     } catch (e) {
-      print("Error in Module, $e");
+      log("Error in Module, $e");
     }
   }
 
@@ -361,7 +352,7 @@ class AppHiveService extends GetxService {
       if (data == null) return null;
       return CategoryProductModel.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
-      print("Error parsing POC: $e");
+      log("Error parsing POC: $e");
       return null;
     }
   }
@@ -375,20 +366,44 @@ class AppHiveService extends GetxService {
         await _box.flush();
       }
     } catch (e) {
-      print("Error in Module, $e");
+      log("Error in Module, $e");
     }
+  }
+
+  // ================= GENERIC STORAGE =================
+
+  T? read<T>(String key, {T? defaultValue}) {
+    try {
+      final value = _box.get(key, defaultValue: defaultValue);
+      if (value == null) return defaultValue;
+
+      if (value is Map && T.toString().contains('Map<String, dynamic>')) {
+        return Map<String, dynamic>.from(value) as T;
+      }
+      if (value is List && T.toString().contains('List<String>')) {
+        return List<String>.from(value) as T;
+      }
+      return value as T?;
+    } catch (e) {
+      log('Error reading Hive key $key: $e');
+      return defaultValue;
+    }
+  }
+
+  Future<void> write<T>(String key, T value) async {
+    await _box.put(key, value);
+    await _box.flush();
+  }
+
+  Future<void> delete(String key) async {
+    await _box.delete(key);
+    await _box.flush();
   }
 
   // ================= CLEAR =================
 
   Future<void> logout() async {
-    await _box.deleteAll([
-      'token',
-      'tokenType',
-      'role',
-      'userModel',
-      'isTeamLogin',
-    ]);
+    await clearAll();
   }
 
   Future<void> clearAll() async {

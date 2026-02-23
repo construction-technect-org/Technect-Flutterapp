@@ -456,9 +456,9 @@ class ChatSystemController extends GetxController {
             try {
               // Show compressing dialog
               Get.dialog(
-                WillPopScope(
-                  onWillPop: () async => false,
-                  child: const Center(
+                const PopScope(
+                  canPop: false,
+                  child: Center(
                     child: Card(
                       child: Padding(
                         padding: EdgeInsets.all(20),
@@ -483,7 +483,6 @@ class ChatSystemController extends GetxController {
               final info = await VideoCompress.compressVideo(
                 filePath,
                 quality: VideoQuality.MediumQuality,
-                deleteOrigin: false,
               );
 
               if (info == null) {
@@ -619,9 +618,9 @@ class ChatSystemController extends GetxController {
             try {
               // Show compressing dialog
               Get.dialog(
-                WillPopScope(
-                  onWillPop: () async => false,
-                  child: const Center(
+                const PopScope(
+                  canPop: false,
+                  child: Center(
                     child: Card(
                       child: Padding(
                         padding: EdgeInsets.all(20),
@@ -646,7 +645,6 @@ class ChatSystemController extends GetxController {
               final info = await VideoCompress.compressVideo(
                 filePath,
                 quality: VideoQuality.MediumQuality,
-                deleteOrigin: false,
               );
 
               if (info == null) {
@@ -828,7 +826,6 @@ class ChatSystemController extends GetxController {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'zip'],
-        allowMultiple: false,
       );
 
       if (result == null || result.files.isEmpty) return;
@@ -959,7 +956,7 @@ class ChatSystemController extends GetxController {
               p.administrativeArea,
               p.country,
             ].where((e) => e != null && e.isNotEmpty).join(', ');
-            print(address);
+            log(address);
           }
         } catch (e) {
           address = '';
@@ -997,7 +994,7 @@ class ChatSystemController extends GetxController {
         _currentRecordingPath = '${directory.path}/audio_$timestamp.m4a';
 
         await _audioRecorder.start(
-          const RecordConfig(encoder: AudioEncoder.aacLc, bitRate: 128000, sampleRate: 44100),
+          const RecordConfig(),
           path: _currentRecordingPath!,
         );
 
@@ -1021,7 +1018,7 @@ class ChatSystemController extends GetxController {
       log('❌ Error starting recording: $e');
       Get.snackbar(
         'Error',
-        'Failed to start recording: ${e.toString()}',
+        'Failed to start recording: $e',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -1116,7 +1113,7 @@ class ChatSystemController extends GetxController {
         'message': durationText, // Store duration as message text
       });
 
-      log('🎵 Sent audio message: $fileName (${durationText})');
+      log('🎵 Sent audio message: $fileName ($durationText)');
 
       // Clean up the temporary file after sending
       try {
@@ -1130,7 +1127,7 @@ class ChatSystemController extends GetxController {
       log('❌ Error sending audio: $e');
       Get.snackbar(
         'Error',
-        'Failed to send audio: ${e.toString()}',
+        'Failed to send audio: $e',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );

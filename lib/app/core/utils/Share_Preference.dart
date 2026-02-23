@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/services/app_service.dart';
+import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/models/GetRequirementModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/models/get_service_requirement_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/models/notification_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
@@ -15,69 +15,98 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart'
-    as ProductModel;
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart'
-   ;
+    as product_model;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+
+class HiveValue<T> {
+  final String key;
+  final T defaultValue;
+
+  HiveValue(this.key, this.defaultValue);
+
+  T get val {
+    try {
+      final storage = Get.find<AppHiveService>();
+      return storage.read<T>(key, defaultValue: defaultValue) ?? defaultValue;
+    } catch (e) {
+      return defaultValue;
+    }
+  }
+
+  set val(T newValue) {
+    try {
+      final storage = Get.find<AppHiveService>();
+      storage.write<T>(key, newValue);
+    } catch (e) {
+      log('Error writing to Hive for key $key: $e');
+    }
+  }
+}
 
 class AppSharedPreference {
-  GetStorage? getStorage;
-
   Future<AppSharedPreference> initializeStorage() async {
-    getStorage = GetStorage();
-    await GetStorage.init();
     return this;
   }
 
   UserMainModel? _cachedUser;
-  final token = ''.val('token');
-  final tokenType = ''.val('tokenType');
-  final phone = ''.val('phone');
-  final email = ''.val('emailID');
-  final cc = ''.val('cc');
-  final kycValid = false.val('kyc');
-  final dashboard = ''.val('dashboard');
-  final isOffice = true.val('isOffice');
-  final isTeamLogin = false.val('isTeamLogin');
-  final role = ''.val('role');
-  final permissions = ''.val('permissions');
-  final userModel = <String, dynamic>{}.val('userModel');
-  final savedMobileNumber = ''.val('savedMobileNumber');
-  final savedPassword = ''.val('savedPassword');
-  final rememberMe = false.val('rememberMe');
-  final addressData = <String, dynamic>{}.val('addressData');
-  final profileData = <String, dynamic>{}.val('profileData');
-  final addressDataTimestamp = 0.val('addressDataTimestamp');
-  final profileDataTimestamp = 0.val('profileDataTimestamp');
-  final rolesData = <String, dynamic>{}.val('rolesData');
-  final teamData = <String, dynamic>{}.val('teamData');
-  final teamStatsData = <String, dynamic>{}.val('teamStatsData');
-  final faqData = <String, dynamic>{}.val('faqData');
-  final cachedCategories = ''.val('cachedCategories');
-  final cachedPriorities = ''.val('cachedPriorities');
-  final cachedConnectorCategories = ''.val('cachedConnectorCategories');
-  final cachedConnectorPriorities = ''.val('cachedConnectorPriorities');
-  final productsData = <String, dynamic>{}.val('productsData');
-  final supportTicketsData = <String, dynamic>{}.val('supportTicketsData');
-  final connectorSupportTicketsData = <String, dynamic>{}.val('connectorSupportTicketsData');
-  final newsData = <String, dynamic>{}.val('newsData');
-  final notificationData = <String, dynamic>{}.val('notificationData');
-  final subCategoryData = <String, dynamic>{}.val('subCategoryData');
-  final categoryHierarchyData = <String, dynamic>{}.val('categoryHierarchyData');
+  final token = HiveValue<String>('token', '');
+  final tokenType = HiveValue<String>('tokenType', '');
+  final phone = HiveValue<String>('phone', '');
+  final email = HiveValue<String>('emailID', '');
+  final cc = HiveValue<String>('cc', '');
+  final kycValid = HiveValue<bool>('kyc', false);
+  final dashboard = HiveValue<String>('dashboard', '');
+  final isOffice = HiveValue<bool>('isOffice', true);
+  final isTeamLogin = HiveValue<bool>('isTeamLogin', false);
+  final role = HiveValue<String>('role', '');
+  final permissions = HiveValue<String>('permissions', '');
+  final userModel = HiveValue<Map<String, dynamic>>('userModel', {});
+  final savedMobileNumber = HiveValue<String>('savedMobileNumber', '');
+  final savedPassword = HiveValue<String>('savedPassword', '');
+  final rememberMe = HiveValue<bool>('rememberMe', false);
+  final addressData = HiveValue<Map<String, dynamic>>('addressData', {});
+  final profileData = HiveValue<Map<String, dynamic>>('profileData', {});
+  final addressDataTimestamp = HiveValue<int>('addressDataTimestamp', 0);
+  final profileDataTimestamp = HiveValue<int>('profileDataTimestamp', 0);
+  final rolesData = HiveValue<Map<String, dynamic>>('rolesData', {});
+  final teamData = HiveValue<Map<String, dynamic>>('teamData', {});
+  final teamStatsData = HiveValue<Map<String, dynamic>>('teamStatsData', {});
+  final faqData = HiveValue<Map<String, dynamic>>('faqData', {});
+  final cachedCategories = HiveValue<String>('cachedCategories', '');
+  final cachedPriorities = HiveValue<String>('cachedPriorities', '');
+  final cachedConnectorCategories = HiveValue<String>('cachedConnectorCategories', '');
+  final cachedConnectorPriorities = HiveValue<String>('cachedConnectorPriorities', '');
+  final productsData = HiveValue<Map<String, dynamic>>('productsData', {});
+  final supportTicketsData = HiveValue<Map<String, dynamic>>('supportTicketsData', {});
+  final connectorSupportTicketsData = HiveValue<Map<String, dynamic>>(
+    'connectorSupportTicketsData',
+    {},
+  );
+  final newsData = HiveValue<Map<String, dynamic>>('newsData', {});
+  final notificationData = HiveValue<Map<String, dynamic>>('notificationData', {});
+  final subCategoryData = HiveValue<Map<String, dynamic>>('subCategoryData', {});
+  final categoryHierarchyData = HiveValue<Map<String, dynamic>>('categoryHierarchyData', {});
 
-  final categoryServiceHierarchyData = <String, dynamic>{}.val('categoryServiceHierarchyData');
+  final categoryServiceHierarchyData = HiveValue<Map<String, dynamic>>(
+    'categoryServiceHierarchyData',
+    {},
+  );
 
-  final requirementListData = <String, dynamic>{}.val('requirementListData');
-  final serviceRequirementListData = <String, dynamic>{}.val('serviceRequirementListData');
-  final profileId = ''.val('profileId');
-  final mainCategoriesConstructionId = ''.val('mainCategoriesConstructionId');
-  final mainCategoriesInteriorId = ''.val('mainCategoriesInteriorId');
+  final requirementListData = HiveValue<Map<String, dynamic>>('requirementListData', {});
+  final serviceRequirementListData = HiveValue<Map<String, dynamic>>(
+    'serviceRequirementListData',
+    {},
+  );
+  final profileId = HiveValue<String>('profileId', '');
+  final mainCategoriesConstructionId = HiveValue<String>('mainCategoriesConstructionId', '');
+  final mainCategoriesInteriorId = HiveValue<String>('mainCategoriesInteriorId', '');
+  final roleStatsData = HiveValue<Map<String, dynamic>>('roleStatsData', {});
 
   void setToken(String authToken) {
-    print("Token: $authToken");
+    log("Token: $authToken");
     token.val = authToken;
   }
 
@@ -179,8 +208,7 @@ class AppSharedPreference {
     if (_cachedUser != null) return _cachedUser;
     final userData = userModel.val;
     if (userData.isEmpty) return null;
-    _cachedUser = UserMainModel.fromJson(Map<String, dynamic>.from(userData));
-    return _cachedUser;
+    return UserMainModel.fromJson(Map<String, dynamic>.from(userData));
   }
 
   void saveCredentials(String mobileNumber, String password) {
@@ -208,29 +236,18 @@ class AppSharedPreference {
   }
 
   void clear() {
-    final GetStorage storage = GetStorage();
-    storage.erase();
+    final AppHiveService storage = Get.find<AppHiveService>();
+    storage.clearAll();
   }
 
   Future<void> logout() async {
-    token.val = '';
-    role.val = '';
-    permissions.val = '';
-    isOffice.val = false;
-    isTeamLogin.val = false;
-    userModel.val = {};
-    addressData.val = {};
-    profileData.val = {};
-    rolesData.val = {};
-    teamData.val = {};
-    teamStatsData.val = {};
-    requirementListData.val = {};
-    serviceRequirementListData.val = {};
     try {
       final AppHiveService appHiveService = Get.find<AppHiveService>();
       await appHiveService.logout();
+      // Ensure FCM Token is deleted on logout
+      await FCMService.deleteToken();
     } catch (e) {
-      print("Error Deleteing all data $e");
+      log("Error Deleting all data $e");
     }
   }
 
@@ -415,8 +432,6 @@ class AppSharedPreference {
     return null;
   }
 
-  final roleStatsData = <String, dynamic>{}.val('roleStatsData');
-
   void setRoleStatsData(Map<String, dynamic> stats) {
     roleStatsData.val = stats;
   }
@@ -552,7 +567,7 @@ class AppSharedPreference {
     return null;
   }
 
-  void setProductListModel(ProductModel.ProductListModel productListModel) {
+  void setProductListModel(product_model.ProductListModel productListModel) {
     try {
       productsData.val = productListModel.toJson();
     } catch (e) {
@@ -560,11 +575,11 @@ class AppSharedPreference {
     }
   }
 
-  ProductModel.ProductListModel? getProductListModel() {
+  product_model.ProductListModel? getProductListModel() {
     try {
       final data = productsData.val;
       if (data.isNotEmpty) {
-        return ProductModel.ProductListModel.fromJson(data);
+        return product_model.ProductListModel.fromJson(data);
       }
     } catch (e) {
       log('Error getting product list model: $e');
@@ -817,15 +832,15 @@ class AppSharedPreference {
     serviceRequirementListData.val = {};
   }
 
-  void setProfileId(String Id) {
-    profileId.val = Id;
+  void setProfileId(String id) {
+    profileId.val = id;
   }
 
-  void setMainCategoriesConstructionId(String? Id) {
-    mainCategoriesConstructionId.val = Id ?? "";
+  void setMainCategoriesConstructionId(String? id) {
+    mainCategoriesConstructionId.val = id ?? "";
   }
 
-  void setMainCategoriesInteriorId(String? Id) {
-    mainCategoriesInteriorId.val = Id ?? "";
+  void setMainCategoriesInteriorId(String? id) {
+    mainCategoriesInteriorId.val = id ?? "";
   }
 }

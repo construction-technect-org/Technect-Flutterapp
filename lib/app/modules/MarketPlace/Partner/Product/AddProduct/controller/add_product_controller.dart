@@ -223,7 +223,7 @@ class AddProductController extends GetxController {
 
   void removeImageAt(int index) {
     if (imageSlots[index] != null) {
-      print("Removed");
+      log("Removed");
       removedImages["remove_image_${index + 1}"] = "remove";
       imageSlots[index] = null;
     }
@@ -538,7 +538,7 @@ class AddProductController extends GetxController {
     List<XFile> results = [];
     try {
       final remainingSlots = 5 - pickedFilePathList.length;
-      print("RS $remainingSlots PFL ${pickedFilePathList.length}");
+      log("RS $remainingSlots PFL ${pickedFilePathList.length}");
       if (remainingSlots <= 0) {
         SnackBars.errorSnackBar(content: "You can only upload up to 5 images");
         return;
@@ -568,7 +568,7 @@ class AddProductController extends GetxController {
         pickedFilePathList.addAll(results.map((e) => e.path));
       }
     } catch (e) {
-      print("Failed pick");
+      log("Failed pick");
       SnackBars.errorSnackBar(content: 'Failed to pick images: $e', time: 3);
     }
   }
@@ -577,7 +577,7 @@ class AddProductController extends GetxController {
     List<XFile> pickedFiles = [];
     try {
       final empSlots = imageSlots.where((e) => e == null).length;
-      print("Empty $empSlots");
+      log("Empty $empSlots");
 
       if (empSlots <= 0) {
         SnackBars.errorSnackBar(content: "Maximum 5 images allowed");

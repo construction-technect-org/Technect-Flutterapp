@@ -45,51 +45,19 @@ class EditProfileControllerr extends GetxController {
 
   void _populateExistingData() {
     try {
-      final homeController = Get.find<CommonController>();
-      // final merchantProfile = homeController.profileData.value.data?.merchantProfile;
-      final merProfile = storage.bizMetrics;
-      print("merProfile : $merProfile");
-
-      if (merProfile != null) {
-        filePath.value = merProfile["image"] ?? "";
-        businessNameController.text = merProfile["businessName"] ?? '';
-        gstNumberController.text = storage.getNumber ?? '';
-        businessEmailController.text = merProfile["businessEmail"] ?? '';
-        businessWebsiteController.text = merProfile["businessWebsite"] ?? '';
-        alternativeContactController.text = merProfile["alternateBusinessPhone"] ?? '';
-        businessContactController.text = merProfile['businessPhone'] ?? '';
-        yearsInBusinessController.text = merProfile['yearOfEstablish'] ?? '';
-        //projectsCompletedController.text =
-        //  merchantProfile.projectsCompleted?.toString() ?? '';
-
-        /*  if (merchantProfile.businessHours?.isNotEmpty == true) {
-          final hoursList = merchantProfile.businessHours!
-              .map(
-                (hour) => {
-                  'day_of_week': hour.dayOfWeek,
-                  'day_name': hour.dayName,
-                  'is_open': hour.isOpen,
-                  'open_time': hour.openTime,
-                  'close_time': hour.closeTime,
-                },
-              )
-              .toList();
-          businessHoursData.value = hoursList;
-        } */
-      }
       final cont = Get.find<ProfileController>();
+      final bm = cont.businessModel.value;
 
-      if ((cont.businessModel.value.gstinNumber ?? "").isNotEmpty) {
-        businessNameController.text = cont.businessModel.value.businessName ?? "";
-        gstNumberController.text = cont.businessModel.value.gstinNumber ?? "";
-        businessEmailController.text = cont.businessModel.value.businessEmail ?? "";
-        businessWebsiteController.text = cont.businessModel.value.website ?? "";
-        businessContactController.text = cont.businessModel.value.businessContactNumber ?? "";
-        alternativeContactController.text = cont.businessModel.value.alternativeBusinessEmail ?? "";
-        yearsInBusinessController.text = cont.businessModel.value.year ?? "";
-      }
+      filePath.value = bm.image ?? "";
+      businessNameController.text = bm.businessName ?? "";
+      gstNumberController.text = bm.gstinNumber ?? storage.getNumber;
+      businessEmailController.text = bm.businessEmail ?? "";
+      businessWebsiteController.text = bm.website ?? "";
+      businessContactController.text = bm.businessContactNumber ?? "";
+      alternativeContactController.text = bm.alternativeBusinessEmail ?? "";
+      yearsInBusinessController.text = bm.year ?? "";
     } catch (e) {
-      // ignore: avoid_print
+      log("Error populating data: $e");
     }
   }
 
@@ -178,7 +146,7 @@ class EditProfileControllerr extends GetxController {
   }
 
   Future<void> validateUrlAvailability() async {
-    final website = businessWebsiteController.text;
+    // final website = businessWebsiteController.text;
 
     // final bool isAvailable = await SignUpService().checkAvailability(website: website);
     // if (!isAvailable) {
@@ -191,9 +159,9 @@ class EditProfileControllerr extends GetxController {
   final HomeService _homeService = Get.find<HomeService>();
   Future<String?> updateMetrcis() async {
     try {
-      print(basename(filePath.value));
+      log(basename(filePath.value));
       final response = await _homeService.updateBizMetrics(
-        profileID: storage.merchantID??"",
+        profileID: storage.merchantID,
         bizName: businessNameController.text.trim(),
         bizType: "Manufacturer",
         bizEmail: businessEmailController.text.trim(),
@@ -211,10 +179,10 @@ class EditProfileControllerr extends GetxController {
       } else {
         SnackBars.errorSnackBar(content: 'Error in metrics update');
         return "Error in metrics update";
-
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching profile: $e');
+      log( 'Error fetching profile: $e');
     }
+    return null;
   }
 }

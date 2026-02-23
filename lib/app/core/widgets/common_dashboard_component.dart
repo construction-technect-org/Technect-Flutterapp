@@ -4,9 +4,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/con
 
 class CommonDashboard extends StatelessWidget {
   CommonDashboard({super.key});
-  final CommonDashboardController controller = Get.put(
-    CommonDashboardController(),
-  );
+  final CommonDashboardController controller = Get.put(CommonDashboardController());
   final CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
@@ -15,15 +13,12 @@ class CommonDashboard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Features",
-              style: MyTexts.extraBold18.copyWith(color: MyColors.black),
-            ),
+            Text("Features", style: MyTexts.extraBold18.copyWith(color: MyColors.black)),
             const Gap(12),
             LayoutBuilder(
               builder: (context, constraints) {
                 // final isTablet = constraints.maxWidth >= 550;
-                // print("Con ${constraints.maxWidth}, $isTablet");
+                // log("Con ${constraints.maxWidth}, $isTablet");
                 // const crossAxisCount = 3;
                 // const spacing = 8.0;
                 //
@@ -58,8 +53,7 @@ class CommonDashboard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = controller.features[index];
                     return Obx(() {
-                      final isSelected =
-                          controller.selectedIndex.value == index;
+                      final isSelected = controller.selectedIndex.value == index;
                       return BuildFeatureCard(
                         isSelected: isSelected,
                         item: item,
@@ -74,9 +68,7 @@ class CommonDashboard extends StatelessWidget {
                               const Duration(seconds: 1);
                             }
 
-                            controller.onSecondScreenTap(
-                              item["value"].toString(),
-                            );
+                            controller.onSecondScreenTap(item["value"].toString());
                           }
                         },
                       );
@@ -133,19 +125,18 @@ class CommonDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(
-      String title, String value, String type, String icon) {
+  Widget _buildStatCard(String title, String value, String type, String icon) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double screenWidth = MediaQuery.of(context).size.width;
 
         return Container(
           padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.04,  // responsive padding
+            horizontal: screenWidth * 0.04, // responsive padding
             vertical: screenWidth * 0.03,
           ),
           decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFFCCCCCC), width: 1.0),
+            border: Border.all(color: const Color(0xFFCCCCCC)),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -164,9 +155,7 @@ class CommonDashboard extends StatelessWidget {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
+                      style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                     ),
 
                     /// TYPE
@@ -189,15 +178,12 @@ class CommonDashboard extends StatelessWidget {
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [
-                            Color(0x00FFED29),
-                            Color(0xFFFFED29),
-                          ],
+                          colors: [Color(0x00FFED29), Color(0xFFFFED29)],
                         ),
                       ),
                       child: Center(
                         child: Text(
-                          "32",  // now dynamic
+                          "32", // now dynamic
                           style: MyTexts.medium14.copyWith(
                             color: const Color(0xFF2E2E2E),
                             fontSize: screenWidth * 0.03,
@@ -216,10 +202,7 @@ class CommonDashboard extends StatelessWidget {
                 flex: 2,
                 child: AspectRatio(
                   aspectRatio: 0.6, // keeps image proportion stable
-                  child: Image.asset(
-                    icon,
-                    fit: BoxFit.contain,
-                  ),
+                  child: Image.asset(icon, fit: BoxFit.contain),
                 ),
               ),
             ],
@@ -232,12 +215,7 @@ class CommonDashboard extends StatelessWidget {
 
 class CommonDashboardController extends GetxController {
   final features = [
-    {
-      "title": "Marketplace",
-      "icon": Asset.role1,
-      "available": true,
-      "value": "marketplace",
-    },
+    {"title": "Marketplace", "icon": Asset.role1, "available": true, "value": "marketplace"},
     {"title": "CRM", "icon": Asset.crm, "available": true, "value": "crm"},
     {"title": "ERP", "icon": Asset.erp, "available": false, "value": "erp"},
     {
@@ -264,17 +242,10 @@ class CommonDashboardController extends GetxController {
   ];
   final RxInt selectedIndex = 20.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   void onFeatureTap(String value) {
     final savedValue = myPref.dashboard.val;
 
-    final index = features.indexWhere(
-      (feature) => feature['value'] == savedValue,
-    );
+    final index = features.indexWhere((feature) => feature['value'] == savedValue);
     if (index != -1) {
       selectedIndex.value = index;
     } else {
@@ -293,9 +264,7 @@ class CommonDashboardController extends GetxController {
   void onSecondScreenTap(String value) {
     final savedValue = myPref.dashboard.val;
 
-    final index = features.indexWhere(
-      (feature) => feature['value'] == savedValue,
-    );
+    final index = features.indexWhere((feature) => feature['value'] == savedValue);
     if (index != -1) {
       selectedIndex.value = index;
     } else {
@@ -337,9 +306,7 @@ class BuildFeatureCard extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              border: isSelected
-                  ? BoxBorder.all(width: 1, color: MyColors.primary)
-                  : null,
+              border: isSelected ? BoxBorder.all(color: MyColors.primary) : null,
               gradient: const LinearGradient(
                 begin: AlignmentGeometry.topCenter,
                 end: AlignmentGeometry.bottomCenter,

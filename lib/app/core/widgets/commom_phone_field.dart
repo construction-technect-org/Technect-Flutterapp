@@ -81,7 +81,6 @@ class CommonPhoneField extends StatelessWidget {
           AutofillGroup(
             child: IntlPhoneField(
               flagsButtonMargin: const EdgeInsets.all(8),
-              disableAutoFillHints: false,
               controller: controller,
               focusNode: focusNode,
               initialCountryCode: initialCountryCode,

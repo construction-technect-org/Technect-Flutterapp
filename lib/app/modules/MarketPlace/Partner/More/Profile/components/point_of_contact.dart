@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
-import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/poc_controller.dart';
 
 class PointOfContentScreen extends StatelessWidget {

@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 // import 'package:construction_technect/app/core/utils/imports.dart';
 // import 'package:construction_technect/app/core/widgets/success_screen.dart';
 // import 'package:construction_technect/app/modules/SignUpDetails/SignUpService/SignUpService.dart';
@@ -116,16 +119,13 @@
 // }
 
 import 'package:construction_technect/app/core/services/app_service.dart';
-import 'package:construction_technect/app/core/utils/globals.dart';
+import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
-import 'package:construction_technect/app/core/services/fcm_service.dart';
-import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/sign_up_service.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -231,7 +231,7 @@ class SignUpPasswordController extends GetxController {
       final fcmToken = await FCMService.getFCMToken();
       final deviceType = FCMService.getDeviceType();
       await _getCurrentLocation();
-      print("YEs Done ${currentPosition.value}");
+      log("YEs Done ${currentPosition.value}");
       final response = await _mainSignUpService.completeSignUp(
         roleName: role == "connector" ? "connector" : "merchant",
         firstName: firstName!,
@@ -249,7 +249,7 @@ class SignUpPasswordController extends GetxController {
         },
         referralCode: "",
       );
-      print("NotDone");
+      log("NotDone");
       if (response.success == true) {
         SnackBars.successSnackBar(content: "Password set Successfully");
         if (response.token != null) {
@@ -261,7 +261,7 @@ class SignUpPasswordController extends GetxController {
         if (response.user != null) {
           await _appHiveService.setUser(response.user ?? UserMainModel());
           myPref.setUserModel(response.user ?? UserMainModel());
-          print("LAst ${response.user?.firstName}");
+          log("LAst ${response.user?.firstName}");
         }
         //if (response.user != null) {
 
@@ -281,7 +281,7 @@ class SignUpPasswordController extends GetxController {
             onTap: () {
               //et.find<CommonController>().fetchProfileData();
               //Get.find<CommonController>().loadTeamFromStorage();
-              print("Sone signup");
+              log("Sone signup");
 
               Get.offAllNamed(Routes.MAIN);
             },
@@ -293,7 +293,7 @@ class SignUpPasswordController extends GetxController {
         );
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -369,7 +369,7 @@ class SignUpPasswordController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;

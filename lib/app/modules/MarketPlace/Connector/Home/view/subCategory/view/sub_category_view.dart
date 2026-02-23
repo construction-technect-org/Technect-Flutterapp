@@ -6,13 +6,13 @@ import 'package:construction_technect/app/core/utils/constants.dart';
 import 'package:construction_technect/app/core/utils/text_theme.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/controller/sub_category_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/view/sub_category_item_view.dart';
 import 'package:construction_technect/app/routes/app_pages.dart';
 import 'package:construction_technect/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../controller/sub_category_controller.dart';
 
 class SubCategoryScreen extends StatelessWidget {
   SubCategoryScreen({super.key});
@@ -22,24 +22,19 @@ class SubCategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args =
-    (Get.arguments ?? {}) as Map<String, dynamic>;
+    final Map<String, dynamic> args = (Get.arguments ?? {}) as Map<String, dynamic>;
 
-    final int selectedIndexFromPrev =
-        args["selectedSubCategoryIdIndex"] ?? 0;
+    final int selectedIndexFromPrev = args["selectedSubCategoryIdIndex"] ?? 0;
 
-    final List<CCategory> categoryData =
-        args["categoryData"] ?? [];
+    final List<CCategory> categoryData = args["categoryData"] ?? [];
 
     /// 🔥 AUTO LOAD FROM PREVIOUS SCREEN
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (categoryData.isNotEmpty &&
-          selectedIndexFromPrev < categoryData.length) {
+      if (categoryData.isNotEmpty && selectedIndexFromPrev < categoryData.length) {
         controller.loadSubCategory(
           categoryId: categoryData[selectedIndexFromPrev].id ?? "",
           index: selectedIndexFromPrev,
-          categoryName:
-          categoryData[selectedIndexFromPrev].name ?? "",
+          categoryName: categoryData[selectedIndexFromPrev].name ?? "",
         );
       }
     });
@@ -51,16 +46,12 @@ class SubCategoryScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Asset.categoryBg),
-                fit: BoxFit.cover,
-              ),
+              image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
             ),
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   children: [
                     /// PROFILE IMAGE
@@ -73,19 +64,13 @@ class SubCategoryScreen extends StatelessWidget {
 
                         final profileImage = isTeamLogin
                             ? Get.find<CommonController>()
-                            .profileData
-                            .value
-                            .data
-                            ?.teamMember
-                            ?.profilePhoto ??
-                            ''
-                            : commonController
-                            .profileData
-                            .value
-                            .data
-                            ?.user
-                            ?.image ??
-                            '';
+                                      .profileData
+                                      .value
+                                      .data
+                                      ?.teamMember
+                                      ?.profilePhoto ??
+                                  ''
+                            : commonController.profileData.value.data?.user?.image ?? '';
 
                         if (profileImage.isEmpty) {
                           return const Icon(
@@ -97,8 +82,7 @@ class SubCategoryScreen extends StatelessWidget {
 
                         return ClipOval(
                           child: getImageView(
-                            finalUrl:
-                            "${APIConstants.bucketUrl}$profileImage",
+                            finalUrl: "${APIConstants.bucketUrl}$profileImage",
                             height: 48,
                             width: 48,
                             fit: BoxFit.cover,
@@ -118,20 +102,14 @@ class SubCategoryScreen extends StatelessWidget {
                             final isTeamLogin = myPref.getIsTeamLogin();
 
                             final firstName = isTeamLogin
-                                ? commonController.profileData.value.data
-                                ?.teamMember?.firstName ??
-                                ''
-                                : commonController.profileData.value.data
-                                ?.user?.firstName ??
-                                '';
+                                ? commonController.profileData.value.data?.teamMember?.firstName ??
+                                      ''
+                                : commonController.profileData.value.data?.user?.firstName ?? '';
 
                             final lastName = isTeamLogin
-                                ? commonController.profileData.value.data
-                                ?.teamMember?.lastName ??
-                                ''
-                                : commonController.profileData.value.data
-                                ?.user?.lastName ??
-                                '';
+                                ? commonController.profileData.value.data?.teamMember?.lastName ??
+                                      ''
+                                : commonController.profileData.value.data?.user?.lastName ?? '';
 
                             return Text(
                               '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}! Connector',
@@ -150,14 +128,12 @@ class SubCategoryScreen extends StatelessWidget {
                             onTap: myPref.getIsTeamLogin()
                                 ? null
                                 : () {
-                              if (myPref.role.val == "partner") {
-                                Get.toNamed(
-                                    Routes.MANUFACTURER_ADDRESS);
-                              } else {
-                                Get.toNamed(
-                                    Routes.DELIVERY_LOCATION);
-                              }
-                            },
+                                    if (myPref.role.val == "partner") {
+                                      Get.toNamed(Routes.MANUFACTURER_ADDRESS);
+                                    } else {
+                                      Get.toNamed(Routes.DELIVERY_LOCATION);
+                                    }
+                                  },
                             child: Row(
                               children: [
                                 SvgPicture.asset(
@@ -170,14 +146,11 @@ class SubCategoryScreen extends StatelessWidget {
                                 Expanded(
                                   child: Obx(() {
                                     return Text(
-                                      commonController
-                                          .getCurrentAddress()
-                                          .value,
+                                      commonController.getCurrentAddress().value,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: MyTexts.medium14.copyWith(
-                                        color:
-                                        MyColors.custom('545454'),
+                                        color: MyColors.custom('545454'),
                                       ),
                                     );
                                   }),
@@ -212,8 +185,7 @@ class SubCategoryScreen extends StatelessWidget {
                       final category = categoryData[index];
 
                       return Obx(() {
-                        final isSelected =
-                            controller.selectedIndex.value == index;
+                        final isSelected = controller.selectedIndex.value == index;
 
                         return InkWell(
                           onTap: () => {
@@ -221,7 +193,7 @@ class SubCategoryScreen extends StatelessWidget {
                               categoryId: category.id ?? "",
                               index: index,
                               categoryName: category.name ?? "",
-                            )
+                            ),
                           },
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 150),
@@ -229,13 +201,10 @@ class SubCategoryScreen extends StatelessWidget {
                             margin: const EdgeInsets.symmetric(vertical: 2),
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: isSelected
-                                  ? Colors.blue.shade50
-                                  : Colors.transparent,
+                              color: isSelected ? Colors.blue.shade50 : Colors.transparent,
                               border: Border(
                                 left: BorderSide(
-                                  color:
-                                  isSelected ? Colors.blue : Colors.transparent,
+                                  color: isSelected ? Colors.blue : Colors.transparent,
                                   width: 3,
                                 ),
                               ),
@@ -248,17 +217,14 @@ class SubCategoryScreen extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                      APIConstants.bucketUrl +
+                                          APIConstants.bucketUrl +
                                           (category.image ??
                                               'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
                                       fit: BoxFit.fill,
-                                      placeholder: (context, url) => const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                      errorWidget: (context, url, error) => const Icon(
-                                        Icons.category,
-                                        color: MyColors.primary,
-                                      ),
+                                      placeholder: (context, url) =>
+                                          const Center(child: CircularProgressIndicator()),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.category, color: MyColors.primary),
                                     ),
                                   ),
                                 ),
@@ -276,13 +242,13 @@ class SubCategoryScreen extends StatelessWidget {
                     },
                   ),
                 ),
+
                 /// RIGHT GRID
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: Obx(
-                          () => Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      () => Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (controller.selectedCategoryName.isNotEmpty)
@@ -303,15 +269,18 @@ class SubCategoryScreen extends StatelessWidget {
                                 childAspectRatio: 0.9,
                               ),
                               itemBuilder: (context, index) {
-                                final subCategory=controller.subCategoryList;
+                                final subCategory = controller.subCategoryList;
                                 final item = controller.subCategoryList[index];
 
                                 return GestureDetector(
                                   onTap: () {
-                                    Get.to(SubCategoryItemScreen(),arguments: {
-                                      "selectedSubCategoryItemIdIndex": index??0,
-                                      "subCategoryData": subCategory,
-                                    },);
+                                    Get.to(
+                                      SubCategoryItemScreen(),
+                                      arguments: {
+                                        "selectedSubCategoryItemIdIndex": index ?? 0,
+                                        "subCategoryData": subCategory,
+                                      },
+                                    );
                                   },
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -321,14 +290,17 @@ class SubCategoryScreen extends StatelessWidget {
                                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                           child: ClipOval(
                                             child: CachedNetworkImage(
-                                              imageUrl: APIConstants.bucketUrl +
+                                              imageUrl:
+                                                  APIConstants.bucketUrl +
                                                   (item.image ??
                                                       'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
                                               fit: BoxFit.cover,
                                               placeholder: (context, url) =>
-                                              const Center(child: CircularProgressIndicator()),
-                                              errorWidget: (context, url, error) =>
-                                              const Icon(Icons.category, color: MyColors.primary),
+                                                  const Center(child: CircularProgressIndicator()),
+                                              errorWidget: (context, url, error) => const Icon(
+                                                Icons.category,
+                                                color: MyColors.primary,
+                                              ),
                                             ),
                                           ),
                                         ),

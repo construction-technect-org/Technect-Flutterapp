@@ -67,8 +67,7 @@ class ProductDetailsController extends GetxController {
       }).toList();
 
       WidgetsBinding.instance.addPostFrameCallback((val) async {
-        if (product.productVideo != null &&
-            (product.productVideo?.isNotEmpty ?? false)) {
+        if (product.productVideo != null && (product.productVideo?.isNotEmpty ?? false)) {
           final videoPath = product.productVideo ?? "";
 
           if (videoPath.isNotEmpty) {
@@ -93,9 +92,7 @@ class ProductDetailsController extends GetxController {
                     const Duration(seconds: 30),
                     onTimeout: () {
                       log('Video initialization timeout');
-                      throw TimeoutException(
-                        'Video initialization took too long',
-                      );
+                      throw TimeoutException('Video initialization took too long');
                     },
                   )
                   .then((val) {
@@ -106,7 +103,7 @@ class ProductDetailsController extends GetxController {
             } catch (e) {
               log('Error initializing main video: $e');
               if (kDebugMode) {
-                print('Main video initialization failed: $e');
+                log('Main video initialization failed: $e');
               }
             }
           }
@@ -138,9 +135,7 @@ class ProductDetailsController extends GetxController {
                     const Duration(seconds: 30),
                     onTimeout: () {
                       log('Video initialization timeout');
-                      throw TimeoutException(
-                        'Video initialization took too long',
-                      );
+                      throw TimeoutException('Video initialization took too long');
                     },
                   )
                   .then((val) {
@@ -151,7 +146,7 @@ class ProductDetailsController extends GetxController {
             } catch (e) {
               log('Error initializing main video: $e');
               if (kDebugMode) {
-                print('Main video initialization failed: $e');
+                log('Main video initialization failed: $e');
               }
             }
           }
@@ -182,7 +177,7 @@ class ProductDetailsController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;
@@ -193,9 +188,7 @@ class ProductDetailsController extends GetxController {
     if (videoPlayerController != null) {
       final size = videoPlayerController!.value.size;
       final bool isVideoPortrait = size.height > size.width;
-      log(
-        'Video Size: ${size.width}x${size.height}, Is Portrait: $isVideoPortrait',
-      );
+      log('Video Size: ${size.width}x${size.height}, Is Portrait: $isVideoPortrait');
 
       return isVideoPortrait ? 9 / 16 : 16 / 9;
     } else {
@@ -206,12 +199,10 @@ class ProductDetailsController extends GetxController {
   Future<void> productDetails(int id) async {
     try {
       isLoading.value = true;
-      productDetailsModel.value = await _service.productDetails(
-        id: id.toString(),
-      );
+      productDetailsModel.value = await _service.productDetails(id: id.toString());
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;
@@ -242,11 +233,7 @@ class ProductDetailsController extends GetxController {
       try {
         videoPlayerController = VideoPlayerController.networkUrl(
           Uri.parse(videoUrl),
-          httpHeaders: {
-            'Range': 'bytes=0-',
-            'Accept': 'video/*',
-            'User-Agent': 'Mozilla/5.0',
-          },
+          httpHeaders: {'Range': 'bytes=0-', 'Accept': 'video/*', 'User-Agent': 'Mozilla/5.0'},
           videoPlayerOptions: VideoPlayerOptions(),
         );
 
@@ -263,7 +250,7 @@ class ProductDetailsController extends GetxController {
       } catch (e) {
         log('Error retrying video initialization: $e');
         if (kDebugMode) {
-          print('Video retry failed: $e');
+          log('Video retry failed: $e');
         }
         update();
       }
@@ -277,7 +264,7 @@ class ProductDetailsController extends GetxController {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
       } else {
         if (kDebugMode) {
-          print('Could not launch $url');
+          log('Could not launch $url');
         }
       }
     } catch (e) {
@@ -300,20 +287,20 @@ class ProductDetailsController extends GetxController {
     } catch (_) {}
 
     final playerController = isNetwork
-        ? VideoPlayerController.network(videoPath)
+        ? VideoPlayerController.networkUrl(Uri.parse(videoPath))
         : VideoPlayerController.file(File(videoPath));
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (_) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
             try {
-              await playerController.pause();
-              await playerController.dispose();
+              playerController.pause();
+              playerController.dispose();
             } catch (_) {}
-            return true;
           },
           child: Dialog(
             insetPadding: const EdgeInsets.all(16),
@@ -371,11 +358,7 @@ class ProductDetailsController extends GetxController {
                                       ),
                                     ],
                                   ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
+                                  child: const Icon(Icons.close, color: Colors.white, size: 20),
                                 ),
                               ),
                             ),

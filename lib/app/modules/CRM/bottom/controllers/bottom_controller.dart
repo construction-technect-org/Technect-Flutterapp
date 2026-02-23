@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class CRMBottomController extends GetxController {
@@ -11,8 +14,8 @@ class CRMBottomController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print("MyRole123 ${myPref.role.val}");
+    log("MyRole123 ${myPref.role.val}");
     myRole.value = myPref.role.val;
-    print("MyRole123 $myRole");
+    log("MyRole123 $myRole");
   }
 }

@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
@@ -17,10 +20,9 @@ class MainSignUpService extends GetxService {
       final response = await _manageApi.postObject(
         url: Endpoints.signUpUserPhone,
         body: {
-          if ((email ?? "").isNotEmpty) "email": email,
-          if ((mobileNumber ?? "").isNotEmpty) "phone": mobileNumber,
-          if ((mobileNumber ?? "").isNotEmpty && (countryCode ?? "").isNotEmpty)
-            "countryCode": countryCode,
+          if (email.isNotEmpty) "email": email,
+          if (mobileNumber.isNotEmpty) "phone": mobileNumber,
+          if (mobileNumber.isNotEmpty && countryCode.isNotEmpty) "countryCode": countryCode,
         },
       );
 
@@ -33,7 +35,7 @@ class MainSignUpService extends GetxService {
         if (signUpResponse.data?.user != null) {
           myPref.setUserModel(signUpResponse.data!.user!);
         } */
-        print("AllData $data");
+        log("AllData $data");
         if (Get.isBottomSheetOpen == true) {
           Get.back();
         }
@@ -68,7 +70,7 @@ class MainSignUpService extends GetxService {
         url: Endpoints.verifyGST,
         body: {"gstNumber": gstNumber},
       );
-      print("GST $response");
+      log("GST $response");
       return DetailsGST.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in verifying GST: $e , $st');
@@ -113,8 +115,8 @@ class MainSignUpService extends GetxService {
         url: Endpoints.completeSignUp,
         body: body,
       );
-      print("Res123");
-      print(response);
+      log("Res123");
+      log(response);
       return CompleteSignUpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in Signing Up: $e , $st');
@@ -127,7 +129,7 @@ class MainSignUpService extends GetxService {
         url: Endpoints.aadharVerify,
         body: {"aadharNumber": aadharNumber},
       );
-      print("OTP , $response");
+      log("OTP , $response");
       return AadharSendOTPModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in Sending OTP: $e , $st');
@@ -140,7 +142,7 @@ class MainSignUpService extends GetxService {
         url: Endpoints.aadharOTPVerify,
         body: {"otp": otp},
       );
-      print("OTP 123 $response");
+      log("OTP 123 $response");
       return AadharDetailsModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in Verifying OTP: $e , $st');

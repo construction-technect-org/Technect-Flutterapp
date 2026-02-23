@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -177,7 +180,7 @@ class ConnectorTeamMemberController extends GetxController {
       Get.back();
     } catch (e) {
       // ignore: avoid_print
-      print(e);
+      log(e.toString());
     } finally {
       isLoading.value = false;
     }

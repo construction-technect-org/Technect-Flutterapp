@@ -13,12 +13,6 @@ import 'package:construction_technect/app/modules/CRM/bottom/bindings/bottom_bin
 import 'package:construction_technect/app/modules/CRM/bottom/views/bottom_view.dart';
 import 'package:construction_technect/app/modules/CRM/chat/bindings/crm_chat_list_binding.dart';
 import 'package:construction_technect/app/modules/CRM/chat/views/crm_chat_list_screen.dart';
-import 'package:construction_technect/app/modules/CRM/inbox/bindings/crm_inbox_bindings.dart';
-import 'package:construction_technect/app/modules/CRM/inbox/views/crm_inbox_view.dart';
-import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
-import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead/leadDetail/bindings/lead_detail_binding.dart';
-import 'package:construction_technect/app/modules/CRM/lead/leadDetail/views/lead_detail_screen.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/accounts/bindings/accounts_bindings.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/accounts/view/accounts_screen.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/crm_dashboard_screen.dart';
@@ -28,6 +22,12 @@ import 'package:construction_technect/app/modules/CRM/dashboard/sales/bindings/s
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/saleDetail/bindings/sale_detail_binding.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/saleDetail/views/sale_lead_detail_screen.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/view/sales_screen.dart';
+import 'package:construction_technect/app/modules/CRM/inbox/bindings/crm_inbox_bindings.dart';
+import 'package:construction_technect/app/modules/CRM/inbox/views/crm_inbox_view.dart';
+import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
+import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead/leadDetail/bindings/lead_detail_binding.dart';
+import 'package:construction_technect/app/modules/CRM/lead/leadDetail/views/lead_detail_screen.dart';
 import 'package:construction_technect/app/modules/CRM/more/analysis/bindings/analysis_binding.dart';
 import 'package:construction_technect/app/modules/CRM/more/analysis/views/analysis_screen.dart';
 import 'package:construction_technect/app/modules/CRM/reminder/bindings/reminder_bindings.dart';
@@ -78,7 +78,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notif
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/views/notification_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/views/approval_Inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/bindings/add_inventory_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/bindings/inventory_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/views/add_inventory_generic_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/views/add_inventory_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/views/inventory_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/bindings/report_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/views/report_view.dart';
@@ -144,16 +147,8 @@ class AppPages {
   static const INITIAL = Routes.SPLASH;
 
   static final routes = [
-    GetPage(
-      name: _Paths.SPLASH,
-      page: () => const SplashView(),
-      binding: SplashBinding(),
-    ),
-    GetPage(
-      name: _Paths.LOGIN,
-      page: () => LoginView(),
-      bindings: [LoginBinding()],
-    ),
+    GetPage(name: _Paths.SPLASH, page: () => const SplashView(), binding: SplashBinding()),
+    GetPage(name: _Paths.LOGIN, page: () => LoginView(), bindings: [LoginBinding()]),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -161,7 +156,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SIGN_UP_DETAILS,
-      page: () => SignUpDetailsView(),
+      page: () => const SignUpDetailsView(),
       binding: SignUpDetailsBinding(),
     ),
     GetPage(
@@ -174,26 +169,14 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(
-      name: _Paths.MAIN,
-      page: () => BottomBarView(),
-      binding: BottomBinding(),
-    ),
-    GetPage(
-      name: _Paths.PROFILE,
-      page: () => ProfileView(),
-      binding: ProfileBinding(),
-    ),
+    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
+    GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
       binding: BusinessHoursBinding(),
     ),
-    GetPage(
-      name: _Paths.ADD_PRODUCT,
-      page: () => AddProductView(),
-      binding: AddProductBinding(),
-    ),
+    GetPage(name: _Paths.ADD_PRODUCT, page: () => AddProductView(), binding: AddProductBinding()),
     GetPage(
       name: _Paths.PRODUCT_DETAILS,
       page: () => ProductDetailsView(),
@@ -204,16 +187,8 @@ class AppPages {
       page: () => const RoleManagementView(),
       binding: RoleManagementBinding(),
     ),
-    GetPage(
-      name: _Paths.ADD_ROLE,
-      page: () => AddRoleView(),
-      binding: AddRoleBinding(),
-    ),
-    GetPage(
-      name: _Paths.ADD_TEAM,
-      page: () => AddTeamView(),
-      binding: AddTeamBinding(),
-    ),
+    GetPage(name: _Paths.ADD_ROLE, page: () => AddRoleView(), binding: AddRoleBinding()),
+    GetPage(name: _Paths.ADD_TEAM, page: () => AddTeamView(), binding: AddTeamBinding()),
     GetPage(
       name: _Paths.APPROVAL_INBOX,
       page: () => ApprovalInboxView(),
@@ -229,22 +204,14 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(
-      name: _Paths.FAQ,
-      page: () => const FaqScreen(),
-      binding: FAQBindings(),
-    ),
+    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
 
     // GetPage(
     //   name: _Paths.SERVICE_DETAILS,
     //   page: () => ServiceDetailsView(),
     //   binding: ServiceDetailBinding(),
     // ),
-    GetPage(
-      name: _Paths.CHAT_SYSTEM,
-      page: () => ChatSystemView(),
-      binding: ChatSystemBinding(),
-    ),
+    GetPage(name: _Paths.CHAT_SYSTEM, page: () => ChatSystemView(), binding: ChatSystemBinding()),
     GetPage(
       name: _Paths.CONNECTOR_CHAT_SYSTEM,
       page: () => ConnectorChatSystemView(),
@@ -255,11 +222,7 @@ class AppPages {
       page: () => ConnectionInboxView(),
       binding: ConnectionInboxBinding(),
     ),
-    GetPage(
-      name: _Paths.SETTING,
-      page: () => const SettingView(),
-      binding: SettingBinding(),
-    ),
+    GetPage(name: _Paths.SETTING, page: () => const SettingView(), binding: SettingBinding()),
 
     GetPage(
       name: _Paths.EDIT_PROFILE,
@@ -288,21 +251,9 @@ class AppPages {
       page: () => CreatNewTicket(),
       binding: CreateNewTicketBinding(),
     ),
-    GetPage(
-      name: Routes.REFER_EARN,
-      page: () => ReferAndEarnScreen(),
-      binding: ReferBindings(),
-    ),
-    GetPage(
-      name: Routes.REPORT,
-      page: () => const ReportView(),
-      binding: ReportBinding(),
-    ),
-    GetPage(
-      name: Routes.INVENTORY,
-      page: () => InventoryView(),
-      binding: InventoryBinding(),
-    ),
+    GetPage(name: Routes.REFER_EARN, page: () => ReferAndEarnScreen(), binding: ReferBindings()),
+    GetPage(name: Routes.REPORT, page: () => const ReportView(), binding: ReportBinding()),
+    GetPage(name: Routes.INVENTORY, page: () => InventoryView(), binding: InventoryBinding()),
     GetPage(name: Routes.NEWS, page: () => NewsView(), binding: NewsBinding()),
     GetPage(
       name: Routes.NOTIFICATIONS,
@@ -314,37 +265,21 @@ class AppPages {
       page: () => AddRequirementView(),
       binding: AddRequirementBinding(),
     ),
-    GetPage(
-      name: Routes.REQUIREMENT,
-      page: () => RequirementView(),
-      binding: RequirementBinding(),
-    ),
+    GetPage(name: Routes.REQUIREMENT, page: () => RequirementView(), binding: RequirementBinding()),
     GetPage(
       name: Routes.ADD_SERVICE_REQUIREMENT,
       page: () => AddServiceRequirementView(),
       binding: AddServiceRequirementBinding(),
     ),
-    GetPage(
-      name: Routes.WISH_LIST,
-      page: () => WishListView(),
-      binding: WishListBinding(),
-    ),
+    GetPage(name: Routes.WISH_LIST, page: () => WishListView(), binding: WishListBinding()),
     GetPage(name: Routes.TEAM_EDIT, page: () => TeamEditProfile()),
     GetPage(
       name: Routes.ON_BOARDING,
       page: () => const OnboardingScreen(),
       bindings: [OnBoardingBinding(), LoginBinding(), SignUpDetailsBinding()],
     ),
-    GetPage(
-      name: Routes.ACCOUNT,
-      page: () => const AccountScreen(),
-      binding: AccountBinding(),
-    ),
-    GetPage(
-      name: Routes.CART_LIST,
-      page: () => CartListView(),
-      binding: CartListBinding(),
-    ),
+    GetPage(name: Routes.ACCOUNT, page: () => const AccountScreen(), binding: AccountBinding()),
+    GetPage(name: Routes.CART_LIST, page: () => CartListView(), binding: CartListBinding()),
     GetPage(
       name: Routes.SELECT_PRODUCT,
       page: () => SelectedProductView(),
@@ -402,22 +337,14 @@ class AppPages {
     ),
 
     ///CRM
-    GetPage(
-      name: _Paths.CRM_MAIN,
-      page: () => CRMBottomBarView(),
-      binding: CRMBottomBinding(),
-    ),
+    GetPage(name: _Paths.CRM_MAIN, page: () => CRMBottomBarView(), binding: CRMBottomBinding()),
     GetPage(
       name: _Paths.CONNECTOR_All_CHAT_LIST,
       page: () => ConnectorAllChatListScreen(),
       binding: ConnectorAllChatListBinding(),
     ),
 
-    GetPage(
-      name: _Paths.ADD_LEAD,
-      page: () => const AddLeadScreen(),
-      binding: AddLeadBinding(),
-    ),
+    GetPage(name: _Paths.ADD_LEAD, page: () => const AddLeadScreen(), binding: AddLeadBinding()),
     GetPage(
       name: _Paths.All_CHAT_LIST,
       page: () => const AllChatListScreen(),
@@ -448,11 +375,7 @@ class AppPages {
       page: () => const MarketingScreen(),
       binding: MarketingBindings(),
     ),
-    GetPage(
-      name: Routes.SALES,
-      page: () => const SalesScreen(),
-      binding: SalesBindings(),
-    ),
+    GetPage(name: Routes.SALES, page: () => const SalesScreen(), binding: SalesBindings()),
     GetPage(
       name: Routes.ACCOUNT_LEAD,
       page: () => const AccountsScreen(),
@@ -468,11 +391,7 @@ class AppPages {
       page: () => const AnalysisScreen(),
       binding: AnalysisBinding(),
     ),
-    GetPage(
-      name: Routes.CRM_INBOX,
-      page: () => CrmInboxView(),
-      binding: CrmInboxBinding(),
-    ),
+    GetPage(name: Routes.CRM_INBOX, page: () => CrmInboxView(), binding: CrmInboxBinding()),
     GetPage(
       name: Routes.VRM_NOTIFICATION,
       page: () => VrmNotificationView(),
@@ -489,11 +408,7 @@ class AppPages {
       binding: CRMChatListBinding(),
     ),
     //Vrm
-    GetPage(
-      name: Routes.VRM_MAIN,
-      page: () => VRMBottomBarView(),
-      binding: VRMBottomBinding(),
-    ),
+    GetPage(name: Routes.VRM_MAIN, page: () => VRMBottomBarView(), binding: VRMBottomBinding()),
     GetPage(
       name: Routes.VRM_leadDashboard,
       page: () => const VRMDashboardScreen(),
@@ -503,6 +418,16 @@ class AppPages {
       name: Routes.Crm_leadDashboard,
       page: () => const CRMDashboardScreen(),
       // binding: CrmLeadDashboardBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_INVENTORY_PRODUCT,
+      page: () => const AddInventoryProductView(),
+      binding: AddInventoryBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_INVENTORY_GENERIC,
+      page: () => const AddInventoryGenericView(),
+      binding: AddInventoryBinding(),
     ),
   ];
 }

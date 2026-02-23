@@ -151,23 +151,20 @@ class ProfileView extends GetView<ProfileController> {
           child: Obx(() {
             return RoundedButton(
               buttonName: controller.selectedTabIndex.value == 2 ? "Save" : "Continue",
-              onTap: () {
+              onTap: () async {
                 if (controller.selectedTabIndex.value == 0) {
                   if ((controller.businessModel.value.businessEmail ?? "").isEmpty) {
                     SnackBars.errorSnackBar(content: "Please fill business metrics");
-                  } else if (controller.businessHoursData.isEmpty) {
+                  } else if (controller.businessHoursData1.isEmpty) {
                     SnackBars.errorSnackBar(content: "Please fill business hours");
                   } else {
                     controller.selectedTabIndex.value = 1;
                   }
                 } else if (controller.selectedTabIndex.value == 1) {
-                  for (final cert in controller.certificates) {
-                    if (cert.isDefault && (cert.filePath == null || cert.filePath!.isEmpty)) {
-                      SnackBars.errorSnackBar(content: "Please upload all relevant certificates");
-                      return;
-                    } else {
-                      controller.selectedTabIndex.value = 2;
-                    }
+                  // Upload any newly-added certificate files, then advance
+                  final success = await controller.uploadPendingCertificates();
+                  if (success) {
+                    controller.selectedTabIndex.value = 2;
                   }
                 } else {
                   controller.handleMerchantData();

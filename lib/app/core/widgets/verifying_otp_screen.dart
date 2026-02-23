@@ -1,11 +1,7 @@
-import 'package:construction_technect/app/core/utils/colors.dart';
-import 'package:construction_technect/app/core/utils/constants.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/text_theme.dart';
-import 'package:flutter/material.dart';
 
 class VerifyingOtpScreen extends StatefulWidget {
-  VerifyingOtpScreen({super.key, this.header, this.onTap});
+  const VerifyingOtpScreen({super.key, this.header, this.onTap});
 
   final String? header;
 

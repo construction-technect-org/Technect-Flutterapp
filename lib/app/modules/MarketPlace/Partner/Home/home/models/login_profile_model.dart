@@ -73,29 +73,29 @@ class LoginProfileModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['countryCode'] = this.countryCode;
-    data['phone'] = this.phone;
-    data['email'] = this.email;
-    data['passwordHash'] = this.passwordHash;
-    data['provider'] = this.provider;
-    data['providerId'] = this.providerId;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    if (this.address != null) {
-      data['address'] = this.address?.toJson();
+    data['id'] = id;
+    data['countryCode'] = countryCode;
+    data['phone'] = phone;
+    data['email'] = email;
+    data['passwordHash'] = passwordHash;
+    data['provider'] = provider;
+    data['providerId'] = providerId;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    if (address != null) {
+      data['address'] = address?.toJson();
     }
-    data['referralCode'] = this.referralCode;
-    data['myReferralCode'] = this.myReferralCode;
-    data['phoneVerified'] = this.phoneVerified;
-    data['emailVerified'] = this.emailVerified;
-    data['role'] = this.role;
-    data['status'] = this.status;
-    data['signupStatus'] = this.signupStatus;
-    data['sessionVersion'] = this.sessionVersion;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['deletedAt'] = this.deletedAt;
+    data['referralCode'] = referralCode;
+    data['myReferralCode'] = myReferralCode;
+    data['phoneVerified'] = phoneVerified;
+    data['emailVerified'] = emailVerified;
+    data['role'] = role;
+    data['status'] = status;
+    data['signupStatus'] = signupStatus;
+    data['sessionVersion'] = sessionVersion;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['deletedAt'] = deletedAt;
     return data;
   }
 }
@@ -113,8 +113,8 @@ class Address {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     return data;
   }
 }

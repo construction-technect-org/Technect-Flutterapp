@@ -1,9 +1,9 @@
 import 'dart:convert';
+import "dart:developer";
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
@@ -14,7 +14,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/document_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/edit_profile_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -52,6 +51,9 @@ class ProfileController extends GetxController {
     }
   }
 
+  final CommonController _commonController = Get.find<CommonController>();
+  final HomeService _homeService = Get.find<HomeService>();
+
   @override
   void onInit() {
     super.onInit();
@@ -60,97 +62,83 @@ class ProfileController extends GetxController {
     if (Get.arguments != null) {
       isSwitch.value = true;
     }
-    final merProfile = storage.bizMetrics;
 
-    if (dashboardController.profileResponse.value.merchant != null) {
-      businessModel.value.gstinNumber = storage.getNumber ?? '';
-      businessModel.value.website = merProfile?["businessWebsite"] ?? '';
-      businessModel.value.businessEmail = merProfile?["businessEmail"] ?? '';
-      businessModel.value.year = merProfile?['yearOfEstablish'].toString() ?? '';
-      businessModel.value.businessContactNumber = merProfile?['businessPhone'] ?? '';
+    // Fetch profile data directly from API instead of local storage
+    fetchProfileSummaryData();
+  }
 
-      businessModel.value.businessName = merProfile?["businessName"] ?? '';
-      businessModel.value.alternativeBusinessEmail = merProfile?["alternateBusinessPhone"] ?? '';
-      //businessModel.value.image =
-      //  dashboardController.profileResponse.value.merchant!.logoKey ?? "";
+  Future<void> fetchProfileSummaryData() async {
+    try {
+      isLoading.value = true;
 
-      _merBizHours?.value =
-          storage.merchnatBizHours ??
-          //dashboardController.profileResponse.value.merchant!.businessHours ??
-          null;
-      _merBizHours?.refresh();
-      if (dashboardController.profileResponse.value.merchant!.businessHours != null) {
-        print("Sunday ${_merBizHours?.value?.sunday}");
-        businessHoursData1.add({6: _merBizHours?.value?.sunday});
-        businessHoursData1.add({0: _merBizHours?.value?.monday});
-        businessHoursData1.add({1: _merBizHours?.value?.tuesday});
-        businessHoursData1.add({2: _merBizHours?.value?.wednesday});
-        businessHoursData1.add({3: _merBizHours?.value?.thursday});
-        businessHoursData1.add({4: _merBizHours?.value?.friday});
-        businessHoursData1.add({5: _merBizHours?.value?.saturday});
+      // Attempt to find the merchant ID from persona mapping
+      String? merchantID;
+      final personaDet = storage.personaDetail;
+      if (personaDet != null && personaDet.personas != null) {
+        for (final p in personaDet.personas!) {
+          if (p.profileType == "merchant") {
+            merchantID = p.profileId;
+            break;
+          }
+        }
       }
-      businessHoursData1.refresh();
 
-      loadMerchantCertificates();
-    }
-    businessModel.value.gstinNumber = homeController.profileData.value.data?.user?.gst ?? "";
-    if (merchantProfile != null) {
-      businessModel.value.website = merchantProfile?.website ?? "";
-      businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
-      businessModel.value.year = merchantProfile?.yearsInBusiness != null
-          ? merchantProfile?.yearsInBusiness.toString()
-          : "";
-      businessModel.value.businessContactNumber = merchantProfile?.businessContactNumber ?? "";
-      businessModel.value.alternativeBusinessEmail =
-          merchantProfile?.alternativeBusinessContactNumber ?? "";
-      businessModel.value.businessName = merchantProfile?.businessName ?? "";
-      businessModel.value.gstinNumber = merchantProfile?.gstinNumber ?? "";
-      businessModel.value.image = merchantProfile?.merchantLogo ?? "";
+      if (merchantID == null || merchantID.isEmpty) {
+        log("No merchant profile found for summary fetch.");
+        return;
+      }
 
-      final timeFormatter = DateFormat.jm();
+      // 1. Fetch live merchant profile
+      final response = await _homeService.getMerchantProfile(merchantID);
+      final merchantData = response.merchant;
+      if (merchantData == null) return;
 
-      businessHoursData.value = businessHours.map((e) {
-        String? formattedOpen;
-        String? formattedClose;
+      // Update local observables
+      profileResponse1.value = response;
 
-        if (e.openTime != null && e.openTime!.isNotEmpty) {
-          final open = DateFormat("HH:mm:ss").parse(e.openTime!);
-          formattedOpen = timeFormatter.format(open);
-        }
+      // 2. Map Business Metrics
+      businessModel.value.businessName = merchantData.businessName ?? "";
+      businessModel.value.website = merchantData.businessWebsite ?? "";
+      businessModel.value.businessEmail = merchantData.businessEmail ?? "";
+      businessModel.value.alternativeBusinessEmail = merchantData.alternateBusinessPhone ?? "";
+      businessModel.value.gstinNumber =
+          merchantData.verificationDetails?.gstNumber ?? merchantData.gstinHash ?? "";
+      businessModel.value.businessContactNumber = merchantData.businessPhone ?? "";
+      businessModel.value.year = merchantData.yearOfEstablish?.toString() ?? "";
+      businessModel.value.image = merchantData.logoKey?.url ?? merchantData.logoKey?.key ?? "";
 
-        if (e.closeTime != null && e.closeTime!.isNotEmpty) {
-          final close = DateFormat("HH:mm:ss").parse(e.closeTime!);
-          formattedClose = timeFormatter.format(close);
-        }
-
-        return {
-          "id": e.id,
-          "is_open": e.isOpen,
-          "day_name": e.dayName,
-          "open_time": formattedOpen,
-          "close_time": formattedClose,
-          "day_of_week": e.dayOfWeek,
-        };
-      }).toList();
-
-      if (merchantProfile?.documents != null) {
-        loadCertificatesFromDocuments(merchantProfile!.documents!);
+      if (_commonController.profileData.value.data?.user?.gst?.isNotEmpty == true) {
+        businessModel.value.gstinNumber = _commonController.profileData.value.data?.user?.gst ?? "";
       }
 
       businessModel.refresh();
+
+      // 3. Map Business Hours
+      if (merchantData.businessHours != null) {
+        _merBizHours.value = merchantData.businessHours;
+        _merBizHours.refresh();
+        refreshBizHours(merchantData.businessHours);
+      }
+
+      // 4. Load Certificates
+      await loadMerchantCertificates();
+    } catch (e, st) {
+      log('Error fetching profile summary data: $e, ST: $st');
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  void refreshBizHours(MerchantBusninessHours? _mer) {
+  void refreshBizHours(MerchantBusninessHours? mer) {
     businessHoursData1.clear();
-    print("Sunday ${_mer?.monday?.open}");
-    businessHoursData1.add({6: _mer?.sunday});
-    businessHoursData1.add({0: _mer?.monday});
-    businessHoursData1.add({1: _mer?.tuesday});
-    businessHoursData1.add({2: _mer?.wednesday});
-    businessHoursData1.add({3: _mer?.thursday});
-    businessHoursData1.add({4: _mer?.friday});
-    businessHoursData1.add({5: _mer?.saturday});
+    log("Sunday ${mer?.monday?.open}");
+    businessHoursData1.add({6: mer?.sunday});
+    businessHoursData1.add({0: mer?.monday});
+    businessHoursData1.add({1: mer?.tuesday});
+    businessHoursData1.add({2: mer?.wednesday});
+    businessHoursData1.add({3: mer?.thursday});
+    businessHoursData1.add({4: mer?.friday});
+    businessHoursData1.add({5: mer?.saturday});
     businessHoursData1.refresh();
   }
 
@@ -165,7 +153,7 @@ class ProfileController extends GetxController {
     await certificateFetch();
     if (profileResponse1.value.merchant!.certifications != null) {
       if (profileResponse1.value.merchant!.certifications!.isNotEmpty) {
-        print("certs in");
+        log("certs in");
         tempcerts.addAll(profileResponse1.value.merchant!.certifications!);
         for (int i = 0; i < tempcerts.length; i++) {
           if (tempcerts[i].title == "GST Certificate") {
@@ -203,7 +191,7 @@ class ProfileController extends GetxController {
           }
         }
 
-        print("Certs $certs");
+        log("Certs $certs");
       } else {
         certs.add(Cert(title: "GST Certificate"));
         certs.add(Cert(title: "MSME/Udyam Certificate"));
@@ -266,9 +254,7 @@ class ProfileController extends GetxController {
   final isLoading = false.obs;
 
   final DocumentService _documentService = DocumentService();
-  final Rx<MerchantBusninessHours?>? _merBizHours = Rx<MerchantBusninessHours?>(null);
-
-  final HomeService _homeService = Get.find<HomeService>();
+  final Rx<MerchantBusninessHours?> _merBizHours = Rx<MerchantBusninessHours?>(null);
 
   CommonController get homeController => Get.find<CommonController>();
 
@@ -312,23 +298,21 @@ class ProfileController extends GetxController {
   }
 
   Future<void> certificateFetch() async {
-    String? merchantID, connectorID;
+    String? merchantID;
+    // String? connectorID;
 
     try {
       //isLoading.value = true;
 
-      print("Hy there ${storage.personaDetail}");
-      final PersonaProfileModel? _persona = storage.personaDetail;
-      if (_persona == null) {
-        print("Yes Null");
+      log("Hy there ${storage.personaDetail}");
+      final PersonaProfileModel? persona = storage.personaDetail;
+      if (persona == null) {
+        log("Yes Null");
       }
-      print("Length ${_persona!.personas!.length}");
-      for (int i = 0; i < _persona!.personas!.length; i++) {
-        print("YEs ${_persona?.personas?[i].profileType}");
-        if (_persona?.personas?[i].profileType == "merchant") {
-          merchantID = _persona?.personas?[i].profileId;
-        } else {
-          connectorID = _persona?.personas?[i].profileId;
+      log("Length ${persona!.personas!.length}");
+      for (int i = 0; i < (persona.personas?.length ?? 0); i++) {
+        if (persona.personas?[i].profileType == "merchant") {
+          merchantID = persona.personas?[i].profileId;
         }
       }
 
@@ -336,33 +320,87 @@ class ProfileController extends GetxController {
         profileResponse1.value = await _homeService.getMerchantProfile(merchantID);
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching profile: $e');
+      log('Error fetching profile: $e');
     } finally {
       //isLoading.value = false;
-      print("Fetched");
+      log("Fetched");
     }
   }
 
   Future<void> updateCert(String t, String f) async {
-    print("Updtae Ceert");
+    log("Updtae Ceert");
     try {
       final response = await _homeService.updateCertificates(
         fileName: f,
         title: t,
         profileID: storage.merchantID,
       );
-      print("Yes $response");
+      log("Yes $response");
       if (response) {
-        print("Snckbrs");
+        log("Snckbrs");
         //loadMerchantCertificates();
         Get.back(result: true);
         SnackBars.successSnackBar(content: 'Document uploading successful');
       } else {
-        print("Snckbrs123");
+        log("Snckbrs123");
         SnackBars.errorSnackBar(content: 'Error uploading document');
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
+    }
+  }
+
+  /// Uploads all locally-selected certificate files to the server.
+  /// Only uploads certificates whose [filePath] is a local path (not an http URL).
+  /// Returns true if all uploads succeeded (or there was nothing to upload).
+  Future<bool> uploadPendingCertificates() async {
+    try {
+      isLoading.value = true;
+
+      // Collect certificates that have a NEW local file (not already uploaded)
+      final toUpload = <CertificateModel>[];
+      for (final cert in certificates) {
+        final path = cert.filePath;
+        if (path != null &&
+            path.isNotEmpty &&
+            !path.startsWith('http') &&
+            !path.startsWith('https')) {
+          toUpload.add(cert);
+        }
+      }
+
+      if (toUpload.isEmpty) {
+        // Nothing new to upload — allow proceeding to next tab
+        return true;
+      }
+
+      int successCount = 0;
+      for (final cert in toUpload) {
+        final success = await _homeService.updateCertificates(
+          fileName: cert.filePath!,
+          title: cert.title,
+          profileID: storage.merchantID,
+        );
+        if (success) {
+          successCount++;
+        } else {
+          SnackBars.errorSnackBar(content: 'Failed to upload "${cert.title}". Please try again.');
+          return false;
+        }
+      }
+
+      if (successCount > 0) {
+        SnackBars.successSnackBar(content: '$successCount certificate(s) uploaded successfully.');
+        // Refresh the certificate list from the server
+        await loadMerchantCertificates();
+      }
+
+      return true;
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error uploading certificates: $e');
+      return false;
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -437,7 +475,7 @@ class ProfileController extends GetxController {
         certs.refresh();
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
   }
 
@@ -603,11 +641,11 @@ class ProfileController extends GetxController {
   Rx<BusinessModel> businessModel = BusinessModel().obs;
 
   void handleBusinessHoursData() {
-    print("Mer Hours ${storage.merchnatBizHours?.monday?.open}");
-    _merBizHours?.value = storage.merchnatBizHours;
-    _merBizHours?.refresh();
-    print("Mer Hours123 ${_merBizHours?.value?.monday?.open}");
-    refreshBizHours(_merBizHours?.value);
+    log("Mer Hours ${storage.merchnatBizHours?.monday?.open}");
+    _merBizHours.value = storage.merchnatBizHours;
+    _merBizHours.refresh();
+    log("Mer Hours123 ${_merBizHours.value?.monday?.open}");
+    refreshBizHours(_merBizHours.value);
   }
 
   RxList<Map<int, MerchantDay?>> businessHoursData1 = <Map<int, MerchantDay?>>[].obs;
@@ -745,60 +783,61 @@ class ProfileController extends GetxController {
       }).toList();
       formFields['business_hours'] = json.encode(normalizedBusinessHours);
 
-      final response = isUpdate
-          ? await editProfileService.updateMerchantData(
-              formFields: formFields,
-              files: files.isNotEmpty ? files : null,
-            )
-          : await editProfileService.submitMerchantData(
-              formFields: formFields,
-              files: files.isNotEmpty ? files : null,
-            );
+      // final response = isUpdate
+      //     ? await editProfileService.updateMerchantData(
+      //         formFields: formFields,
+      //         files: files.isNotEmpty ? files : null,
+      //       )
+      //     : await editProfileService.submitMerchantData(
+      //         formFields: formFields,
+      //         files: files.isNotEmpty ? files : null,
+      //       );
 
-      if (response['success'] == true) {
-        try {
-          Get.find<CommonController>().hasProfileComplete.value = true;
-          if (isUpdate) {
-            await homeController.fetchProfileData();
-            Get.to(
-              () => SuccessScreen(
-                title: "Success!",
-                header: "Profile update successfully!",
-                onTap: () {
-                  Get.back();
-                  Get.back();
-                },
-              ),
-            );
-          } else {
-            if (isSwitch.value) {
-              Get.find<SwitchAccountController>().updateRole(role: "partner");
-              myPref.role.val = "partner";
+      // if (response['success'] == true) {
+      //   try {
+      //     Get.find<CommonController>().hasProfileComplete.value = true;
+      //     if (isUpdate) {
+      //       await homeController.fetchProfileData();
+      //       Get.to(
+      //         () => SuccessScreen(
+      //           title: "Success!",
+      //           header: "Profile update successfully!",
+      //           onTap: () {
+      //             Get.back();
+      //             Get.back();
+      //           },
+      //         ),
+      //       );
+      //     } else {
+      //       if (isSwitch.value) {
+      //         Get.find<SwitchAccountController>().updateRole(role: "partner");
+      //         myPref.role.val = "partner";
 
-              Get.offAllNamed(Routes.MAIN);
-            } else {
-              await homeController.fetchProfileData();
-              Get.to(
-                () => SuccessScreen(
-                  title: "Success!",
-                  header: "Profile added successfully!",
-                  onTap: () {
-                    Get.back();
-                    Get.back();
-                  },
-                ),
-              );
-            }
-          }
-        } catch (e) {
-          Get.printError(info: 'Could not notify Home controller: $e');
-          Get.back();
-        }
-      } else {
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to ${isUpdate ? 'update' : 'submit'} profile',
-        );
-      }
+      //         Get.offAllNamed(Routes.MAIN);
+      //       } else {
+      //         await homeController.fetchProfileData();
+      //         Get.to(
+      //           () => SuccessScreen(
+      //             title: "Success!",
+      //             header: "Profile added successfully!",
+      //             onTap: () {
+      //               Get.back();
+      //               Get.back();
+      //             },
+      //           ),
+      //         );
+      //       }
+      //     }
+      //   } catch (e) {
+      //     log( 'Could not notify Home controller: $e');
+      //     Get.back();
+      //   }
+      // } else {
+      //   SnackBars.errorSnackBar(
+      //     content: response['message'] ?? 'Failed to ${isUpdate ? 'update' : 'submit'} profile',
+      //   );
+      // }
+      Get.back();
     } catch (e) {
       // No Error show
     } finally {

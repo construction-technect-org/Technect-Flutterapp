@@ -15,10 +15,10 @@ class AadharDetailsModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.aadharDetails != null) {
-      data['aadharDetails'] = this.aadharDetails?.toJson();
+    data['success'] = success;
+    data['message'] = message;
+    if (aadharDetails != null) {
+      data['aadharDetails'] = aadharDetails?.toJson();
     }
     return data;
   }
@@ -55,12 +55,12 @@ class AadharDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['aadharNumber'] = this.aadharNumber;
-    data['name'] = this.name;
-    data['dateOfBirth'] = this.dateOfBirth;
-    data['address'] = this.address;
-    data['status'] = this.status;
-    data['gender'] = this.gender;
+    data['aadharNumber'] = aadharNumber;
+    data['name'] = name;
+    data['dateOfBirth'] = dateOfBirth;
+    data['address'] = address;
+    data['status'] = status;
+    data['gender'] = gender;
     //data['photo'] = this.photo;
     return data;
   }

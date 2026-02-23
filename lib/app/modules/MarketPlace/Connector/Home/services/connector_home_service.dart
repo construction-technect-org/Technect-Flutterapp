@@ -3,12 +3,12 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/main_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/module_models.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/sub_category_item_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/sub_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchat_model.dart';
 
@@ -19,9 +19,7 @@ class ConnectorHomeService extends GetxService {
   Future<ProfileModel> getProfile() async {
     try {
       final response = await _apiManager.get(
-        url: myPref.isTeamLogin.val == true
-            ? APIConstants.teamProfile
-            : APIConstants.profile,
+        url: myPref.isTeamLogin.val == true ? APIConstants.teamProfile : APIConstants.profile,
       );
 
       return ProfileModel.fromJson(response);
@@ -42,9 +40,7 @@ class ConnectorHomeService extends GetxService {
 
   Future<DashboardModel> getDashboard() async {
     try {
-      final response = await _apiManager.get(
-        url: APIConstants.merchantDashboard,
-      );
+      final response = await _apiManager.get(url: APIConstants.merchantDashboard);
       return DashboardModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -53,9 +49,7 @@ class ConnectorHomeService extends GetxService {
 
   Future<AllMerchantStoreModel> getMerchantStore() async {
     try {
-      final response = await _apiManager.get(
-        url: APIConstants.connectorMerchantStore,
-      );
+      final response = await _apiManager.get(url: APIConstants.connectorMerchantStore);
       return AllMerchantStoreModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -64,7 +58,7 @@ class ConnectorHomeService extends GetxService {
 
   Future<CategoryModel> getCategoryHierarchy() async {
     try {
-      final response = await _apiManager.get(url: 'merchant/hierarchy');
+      final response = await _apiManager.get(url: '/v1/api/business/merchant/hierarchy');
       return CategoryModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -74,43 +68,58 @@ class ConnectorHomeService extends GetxService {
 
   Future<ModulesResponse> getConnectorModule() async {
     try {
-      String moduleFor =myPref.getRole();
-      if(moduleFor=="partner") {
-        moduleFor="merchant";
+      String moduleFor = myPref.getRole();
+      if (moduleFor == "partner") {
+        moduleFor = "merchant";
       }
-      final response = await _apiManager.get(url: '/${APIConstants.getConnectorModule}?moduleFor=$moduleFor&includeInactive=false');
+      final response = await _apiManager.get(
+        url: '${APIConstants.getConnectorModule}?moduleFor=$moduleFor&includeInactive=false',
+      );
       return ModulesResponse.fromJson(response);
     } catch (e) {
       rethrow;
     }
   }
+
   Future<MainCategoryResponse> getMainCategory(String? moduleId) async {
     try {
-      final response = await _apiManager.get(url: '/${APIConstants.getMainCategory}?moduleId=$moduleId&includeInactive=false');
+      final response = await _apiManager.get(
+        url: '${APIConstants.getMainCategory}?moduleId=$moduleId&includeInactive=false',
+      );
       return MainCategoryResponse.fromJson(response);
     } catch (e) {
       rethrow;
     }
   }
+
   Future<CategoryResponse> getCategory(String? mainCategoryId) async {
     try {
-      final response = await _apiManager.get(url: '/${APIConstants.getCategory}?mainCategoryId=$mainCategoryId&includeInactive=false');
+      final response = await _apiManager.get(
+        url: '${APIConstants.getCategory}?mainCategoryId=$mainCategoryId&includeInactive=false',
+      );
       return CategoryResponse.fromJson(response);
     } catch (e) {
       rethrow;
     }
   }
+
   Future<SubCategoryResponse> getSubCategory(String? categoryId) async {
     try {
-      final response = await _apiManager.get(url: '/${APIConstants.getSubCategory}?categoryId=$categoryId&includeInactive=false');
+      final response = await _apiManager.get(
+        url: '${APIConstants.getSubCategory}?categoryId=$categoryId&includeInactive=false',
+      );
       return SubCategoryResponse.fromJson(response);
     } catch (e) {
       rethrow;
     }
   }
+
   Future<SubCategoryItemResponse> getSubCategoryItem(String? subCategoryId) async {
     try {
-      final response = await _apiManager.get(url: '/${APIConstants.getSubCategoryItem}?subCategoryId=$subCategoryId&includeInactive=false');
+      final response = await _apiManager.get(
+        url:
+            '${APIConstants.getSubCategoryItem}?subCategoryId=$subCategoryId&includeInactive=false',
+      );
       return SubCategoryItemResponse.fromJson(response);
     } catch (e) {
       rethrow;
@@ -119,9 +128,7 @@ class ConnectorHomeService extends GetxService {
 
   Future<ServiceCategoryModel> getCategoryServiceHierarchy() async {
     try {
-      final response = await _apiManager.get(
-        url: 'service-categories/hierarchy',
-      );
+      final response = await _apiManager.get(url: '/v1/api/business/service-categories/hierarchy');
       return ServiceCategoryModel.fromJson(response);
     } catch (e) {
       rethrow;

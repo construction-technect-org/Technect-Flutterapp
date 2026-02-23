@@ -1,3 +1,5 @@
+import "dart:developer";
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
@@ -8,7 +10,7 @@ import 'package:readmore/readmore.dart';
 class InfoMetricsComponent extends StatelessWidget {
   InfoMetricsComponent({super.key});
 
-  List<String> items = ["Manufacturer", "Service Provider", "Trader"];
+  final List<String> items = ["Manufacturer", "Service Provider", "Trader"];
 
   final ProfileController controller = Get.find<ProfileController>();
 
@@ -71,7 +73,7 @@ class InfoMetricsComponent extends StatelessWidget {
                   //arguments: previousData.isNotEmpty ? previousData : null,
                 );
                 if (result != null && result == true) {
-                  print("Result, $result");
+                  log("Result, $result");
                   controller.handleBusinessHoursData();
                 }
               },
@@ -92,29 +94,29 @@ class InfoMetricsComponent extends StatelessWidget {
   }
 
   Widget _buildInfoMetricsContent() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: MyColors.white,
-        border: Border.all(color: MyColors.grayEA),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Obx(() {
-                      final userData = controller.userData;
-                      // final merchantProfile = controller.merchantProfile;
-
-                      return Column(
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: MyColors.white,
+          border: Border.all(color: MyColors.grayEA),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           buildRow(
@@ -128,13 +130,10 @@ class InfoMetricsComponent extends StatelessWidget {
                           const Gap(6),
                           buildRow(
                             title: "Mobile Number",
-                            data: "${controller.userMainModel?.phone ?? ""}",
+                            data: controller.userMainModel?.phone ?? "",
                           ),
                           const Gap(6),
-                          buildRow(
-                            title: "Email ID",
-                            data: "${controller.userMainModel?.email ?? ""}",
-                          ),
+                          buildRow(title: "Email ID", data: controller.userMainModel?.email ?? ""),
                           const Gap(8),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,24 +173,25 @@ class InfoMetricsComponent extends StatelessWidget {
                           //buildRow(title: "Role", data: userData?.roleName ?? "-"),
                           SizedBox(height: 0.5.h),
                         ],
-                      );
-                    }),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildBusinessMetricsContent() {
     return Obx(() {
-      // final home = Get.find<CommonController>();
-      // final merchant = home.profileData.value.data?.merchantProfile;
-      // final modelGstin = controller.businessModel.value.gstinNumber ?? '';
-      // final merchantGstin = merchant?.gstinNumber ?? '';
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      log("Bussiness Model -> ${controller.businessModel.value.gstinNumber}");
 
       if (controller.businessModel.value.gstinNumber == null) {
         return GestureDetector(
@@ -243,42 +243,26 @@ class InfoMetricsComponent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Obx(() {
-                final name = controller.businessModel.value.businessName;
-                return buildRow(title: "Company name", data: name);
-              }),
+              buildRow(title: "Company name", data: controller.businessModel.value.businessName),
               const Gap(6),
-              Obx(() {
-                final modelGstin = controller.businessModel.value.gstinNumber ?? '';
-                final userGstin = controller.userData?.gst ?? '-';
-                return buildRow(title: "GSTIN", data: modelGstin);
-              }),
+              buildRow(title: "GSTIN", data: controller.businessModel.value.gstinNumber ?? ''),
               const Gap(6),
 
-              Obx(() {
-                final contact = controller.businessModel.value.businessContactNumber ?? '';
-                return buildRow(title: "Mobile Number", data: contact);
-              }),
+              buildRow(
+                title: "Mobile Number",
+                data: controller.businessModel.value.businessContactNumber ?? '',
+              ),
               const Gap(6),
-              Obx(() {
-                final website = controller.businessModel.value.website ?? '';
-                return buildRow(title: "Website", data: website);
-              }),
+              buildRow(title: "Website", data: controller.businessModel.value.website ?? ''),
               const Gap(6),
-              Obx(() {
-                final email = controller.businessModel.value.businessEmail ?? '';
-                return buildRow(title: "Email id", data: email);
-              }),
+              buildRow(title: "Email id", data: controller.businessModel.value.businessEmail ?? ''),
               const Gap(6),
-              Obx(() {
-                final alt = controller.businessModel.value.alternativeBusinessEmail ?? '';
-                return buildRow(title: "Alternative number", data: alt);
-              }),
+              buildRow(
+                title: "Alternative number",
+                data: controller.businessModel.value.alternativeBusinessEmail ?? '',
+              ),
               const Gap(6),
-              Obx(() {
-                final year = controller.businessModel.value.year ?? '';
-                return buildRow(title: "Year of establish", data: year);
-              }),
+              buildRow(title: "Year of establish", data: controller.businessModel.value.year ?? ''),
 
               const Gap(6),
               Obx(() {
@@ -297,7 +281,10 @@ class InfoMetricsComponent extends StatelessWidget {
 
   Widget _buildBusinessHourContent() {
     return Obx(() {
-      if (controller.businessHoursData1.isEmpty) {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (controller.businessHoursData1.isEmpty || controller.businessHoursData1.length < 7) {
         return Text(
           "No business hours set",
           style: MyTexts.medium16.copyWith(color: MyColors.gray54),
@@ -308,8 +295,8 @@ class InfoMetricsComponent extends StatelessWidget {
         final keyB = b.keys.first;
         return keyA.compareTo(keyB);
       });
-      if (controller.businessHoursData1[0].keys == 0) {
-        print("Values ${controller.businessHoursData1[0].values}");
+      if (controller.businessHoursData1[0].keys.first == 0) {
+        // log( "Values ${controller.businessHoursData1[0].values}");
       }
       /*data.sort(
         (a, b) => (a['day_of_week'] as int).compareTo(b['day_of_week'] as int),
@@ -319,13 +306,13 @@ class InfoMetricsComponent extends StatelessWidget {
       final closedDays = data.where((d) => d['is_open'] == false).toList(); */
 
       final List<Widget> items = [];
-      items.add(_buildBusinessHourItem("Monday", controller.businessHoursData1[0]![0]!));
-      items.add(_buildBusinessHourItem("Tuesday", controller.businessHoursData1[1]![1]!));
-      items.add(_buildBusinessHourItem("Wednesday", controller.businessHoursData1[2]![2]!));
-      items.add(_buildBusinessHourItem("Thursday", controller.businessHoursData1[3]![3]!));
-      items.add(_buildBusinessHourItem("Friday", controller.businessHoursData1[4]![4]!));
-      items.add(_buildBusinessHourItem("Saturday", controller.businessHoursData1[5]![5]!));
-      items.add(_buildBusinessHourItem("Sunday", controller.businessHoursData1[6]![6]!));
+      items.add(_buildBusinessHourItem("Monday", controller.businessHoursData1[0][0]!));
+      items.add(_buildBusinessHourItem("Tuesday", controller.businessHoursData1[1][1]!));
+      items.add(_buildBusinessHourItem("Wednesday", controller.businessHoursData1[2][2]!));
+      items.add(_buildBusinessHourItem("Thursday", controller.businessHoursData1[3][3]!));
+      items.add(_buildBusinessHourItem("Friday", controller.businessHoursData1[4][4]!));
+      items.add(_buildBusinessHourItem("Saturday", controller.businessHoursData1[5][5]!));
+      items.add(_buildBusinessHourItem("Sunday", controller.businessHoursData1[6][6]!));
       /*for (final day in openDays) {
         items.add(_buildBusinessHourItem([day], isOpen: true));
       }
@@ -353,19 +340,18 @@ class InfoMetricsComponent extends StatelessWidget {
   }
 
   Widget _buildBusinessHourItem(String dayofWeek, MerchantDay days) {
-    String dayLabel = dayofWeek;
+    final String dayLabel = dayofWeek;
+    final bool isClosed = days.closed ?? true;
 
-    final String openTime = !days.closed! ? (days.open ?? "") : "";
-    final String closeTime = !days.closed! ? (days.close ?? "") : "";
+    final String openTime = !isClosed ? (days.open ?? "") : "";
+    final String closeTime = !isClosed ? (days.close ?? "") : "";
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: !days.closed! ? const Color(0xFFEAF0FF) : const Color(0xFFFFEEEE),
+        color: !isClosed ? const Color(0xFFEAF0FF) : const Color(0xFFFFEEEE),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: !days.closed! ? const Color(0xFFCAD6FF) : const Color(0xFFF5C8C8),
-        ),
+        border: Border.all(color: !isClosed ? const Color(0xFFCAD6FF) : const Color(0xFFF5C8C8)),
       ),
       child: Column(
         children: [
@@ -377,7 +363,7 @@ class InfoMetricsComponent extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    !days.closed!
+                    !isClosed
                         ? "$dayLabel ${openTime.isNotEmpty ? '$openTime - $closeTime' : ''}"
                         : dayLabel,
                     style: MyTexts.medium15.copyWith(color: MyColors.gray2E),

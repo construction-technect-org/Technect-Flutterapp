@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/views/merchant_project_view_details.dart';
 
 class MerchantHomeView extends StatelessWidget {
   //final CommonController commonController = Get.find();
@@ -24,8 +22,7 @@ class MerchantHomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args =
-        (Get.arguments ?? {}) as Map<String, dynamic>;
+    final Map<String, dynamic> args = (Get.arguments ?? {}) as Map<String, dynamic>;
 
     final int selectedIndexFromPrev = args["selectedSubCategoryIdIndex"] ?? 0;
 
@@ -33,14 +30,12 @@ class MerchantHomeView extends StatelessWidget {
 
     /// 🔥 AUTO LOAD FROM PREVIOUS SCREEN
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (categoryData.isNotEmpty &&
-          selectedIndexFromPrev < categoryData.length) {
-        // controller.loadSubCategory(
-        //   categoryId: categoryData[selectedIndexFromPrev].id ?? "",
-        //   index: selectedIndexFromPrev,
-        //   categoryName:
-        //   categoryData[selectedIndexFromPrev].name ?? "",
-        // );
+      if (categoryData.isNotEmpty && selectedIndexFromPrev < categoryData.length) {
+        controller.selectedIndex.value = selectedIndexFromPrev;
+        controller.loadSubCategories(
+          categoryId: categoryData[selectedIndexFromPrev].id ?? "",
+          categoryName: categoryData[selectedIndexFromPrev].name,
+        );
       }
     });
     return LoaderWrapper(
@@ -49,9 +44,13 @@ class MerchantHomeView extends StatelessWidget {
         child: Scaffold(
           backgroundColor: MyColors.white,
           appBar: CommonAppBar(
-            title: Text(
-              "Project Details",
-              style: MyTexts.medium18.copyWith(color: Colors.black),
+            title: Obx(
+              () => Text(
+                controller.selectedCategoryName.value.isNotEmpty
+                    ? controller.selectedCategoryName.value
+                    : "Marketplace",
+                style: MyTexts.medium18.copyWith(color: Colors.black),
+              ),
             ),
             isCenter: false,
             action: [
@@ -63,10 +62,7 @@ class MerchantHomeView extends StatelessWidget {
                   Asset.location,
                   width: 24,
                   height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    Color(0xFF2E2E2E),
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: const ColorFilter.mode(Color(0xFF2E2E2E), BlendMode.srcIn),
                 ),
               ),
               const Gap(20),
@@ -78,10 +74,7 @@ class MerchantHomeView extends StatelessWidget {
                   Asset.searchIcon,
                   width: 24,
                   height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    Color(0xFF2E2E2E),
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: const ColorFilter.mode(Color(0xFF2E2E2E), BlendMode.srcIn),
                 ),
               ),
               const Gap(20),
@@ -100,7 +93,6 @@ class MerchantHomeView extends StatelessWidget {
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   /*Row(
                     children: [
@@ -332,21 +324,27 @@ class MerchantHomeView extends StatelessWidget {
                   const Divider(thickness: 1.0, color: MyColors.gra54EA),
                   Expanded(
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
                         buildSideBar(context, categoryData),
                         const Gap(4),
                         Expanded(
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
                             children: [
                               _buildFilterButtons(context),
                               const Gap(4),
                               Flexible(
                                 child: Obx(() {
-                                  return controller.isGridView.value
-                                      ? _buildServicesGrid(context)
-                                      : buildMaterialListView(context);
+                                  return Column(
+                                    children: [
+                                      _buildSubCategoryChips(context),
+                                      const Gap(4),
+                                      Flexible(
+                                        child: controller.isGridView.value
+                                            ? _buildServicesGrid(context)
+                                            : buildMaterialListView(context),
+                                      ),
+                                    ],
+                                  );
                                 }),
                               ),
                               //_buildServicesGrid(context)),
@@ -383,18 +381,80 @@ class MerchantHomeView extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              label,
-              style: MyTexts.medium14.copyWith(
-                color: MyColors.custom('2E2E2E'),
-              ),
-            ),
+            Text(label, style: MyTexts.medium14.copyWith(color: MyColors.custom('2E2E2E'))),
             const SizedBox(width: 4),
             SvgPicture.asset(iconPath, width: 16, height: 16),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildSubCategoryChips(BuildContext context) {
+    return Obx(() {
+      final subCategories = controller.subCategoryData.value.data ?? [];
+
+      if (subCategories.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
+      return SizedBox(
+        height: 50,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: subCategories.length,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          itemBuilder: (context, index) {
+            final subCat = subCategories[index];
+
+            return Obx(() {
+              final isSelected = controller.selectedSubCategoryId.value == subCat.id;
+
+              return Padding(
+                padding: const EdgeInsets.only(right: 10, top: 8, bottom: 8),
+                child: GestureDetector(
+                  onTap: () {
+                    controller.loadCategoryProducts(
+                      subCategoryId: subCat.id ?? "",
+                      subCategoryName: subCat.name,
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? MyColors.primary : Colors.grey[100],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected ? MyColors.primary : Colors.grey[300]!,
+                        width: 1,
+                      ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: MyColors.primary.withValues(alpha: 0.3),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Center(
+                      child: Text(
+                        subCat.name ?? "",
+                        style: MyTexts.medium12.copyWith(
+                          color: isSelected ? Colors.white : MyColors.gray54,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            });
+          },
+        ),
+      );
+    });
   }
 
   Widget _buildFilterButtons(BuildContext context) {
@@ -405,25 +465,24 @@ class MerchantHomeView extends StatelessWidget {
         _buildFilterButton(
           label: 'Sort',
           iconPath: Asset.sort,
-          // onTap: () => controller.showSortBottomSheet(context),
+          onTap: () => controller.showSortBottomSheet(context),
         ),
         const Gap(2),
         _buildFilterButton(
           label: 'Radius',
           iconPath: Asset.location,
-          //onTap: () => controller.showLocationBottomSheet(context),
+          onTap: () => controller.showRadiusBottomSheet(context),
         ),
         const Gap(2),
         _buildFilterButton(
           label: 'Filter',
           iconPath: Asset.filter,
-          //onTap: () => controller.showLocationBottomSheet(context),
+          onTap: () => controller.showFilterBottomSheet(context),
         ),
         const Spacer(),
         const Gap(2),
         GestureDetector(
-          onTap: () =>
-              controller.isGridView.value = !controller.isGridView.value,
+          onTap: () => controller.isGridView.value = !controller.isGridView.value,
           behavior: HitTestBehavior.translucent,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
@@ -454,41 +513,35 @@ class MerchantHomeView extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       }
 
-      if (controller.projectResponseData.value.data == null ||
-          controller.projectResponseData.value.data!.isEmpty) {
-        return const Center(child: Text("No Projects Found"));
+      if (controller.categoryProductData.value.data == null ||
+          controller.categoryProductData.value.data!.isEmpty) {
+        return const Center(child: Text("No Products Found"));
       }
 
       return LayoutBuilder(
         builder: (context, constraints) {
-          final double itemWidth =
-              (constraints.maxWidth - 12) / 2;
+          final double itemWidth = (constraints.maxWidth - 12) / 2;
 
           final double itemHeight = itemWidth + 165;
 
           return GridView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 1),
-            itemCount:
-            controller.projectResponseData.value.data!.length,
-            gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(
+            itemCount: controller.categoryProductData.value.data!.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: itemWidth / itemHeight,
               crossAxisSpacing: 5,
               mainAxisSpacing: 17,
             ),
             itemBuilder: (context, index) {
-              final project =
-              controller.projectResponseData.value.data![index];
+              final product = controller.categoryProductData.value.data![index];
 
               const String defaultImage =
                   "https://static.vecteezy.com/system/resources/thumbnails/027/078/450/small/construction-of-new-building-with-reinforced-concrete-floors-construction-of-modern-design-architecture-project-in-downtown-high-rise-multi-storey-building-construction-generative-ai-photo.jpg";
               String imageUrl;
 
-              if (project.images != null &&
-                  project.images!.isNotEmpty &&
-                  project.images![0].isNotEmpty) {
-                imageUrl = APIConstants.bucketUrl + project.images![0];
+              if (product.images != null && product.images!.isNotEmpty) {
+                imageUrl = APIConstants.bucketUrl + product.images![0];
               } else {
                 imageUrl = defaultImage;
               }
@@ -498,75 +551,34 @@ class MerchantHomeView extends StatelessWidget {
                     padding: EdgeInsets.all(3.w),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius:
-                      BorderRadius.circular(2.w),
-                      border: Border.all(
-                          color: MyColors.gra54EA,
-                          width: 1),
+                      borderRadius: BorderRadius.circular(2.w),
+                      border: Border.all(color: MyColors.gra54EA),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                          Colors.black.withOpacity(0.04),
+                          color: Colors.black.withValues(alpha: 0.04),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
                       ],
                     ),
                     child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// IMAGE SECTION
                         Stack(
                           children: [
                             ClipRRect(
-                              borderRadius:
-                              BorderRadius.circular(2.w),
+                              borderRadius: BorderRadius.circular(2.w),
                               child: SizedBox(
                                 height: 14.h,
                                 width: double.infinity,
                                 child: CachedNetworkImage(
                                   imageUrl: imageUrl,
                                   fit: BoxFit.cover,
-                                  placeholder:
-                                      (context, url) =>
-                                  const Center(
-                                    child:
-                                    CircularProgressIndicator(),
-                                  ),
-                                  errorWidget:
-                                      (context, url, error) =>
-                                      Image.network(
-                                        defaultImage,
-                                        fit: BoxFit.cover,
-                                      ),
-                                ),
-                              ),
-                            ),
-
-                            /// KM Badge
-                            Positioned(
-                              top: 0,
-                              left: 0,
-                              child: Container(
-                                height: 18,
-                                padding:
-                                const EdgeInsets.symmetric(
-                                    horizontal: 6),
-                                decoration:
-                                BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      4),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "32 KM",
-                                    style: MyTexts.regular12
-                                        .copyWith(
-                                        fontSize: 10),
-                                  ),
+                                  placeholder: (context, url) =>
+                                      const Center(child: CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) =>
+                                      Image.network(defaultImage, fit: BoxFit.cover),
                                 ),
                               ),
                             ),
@@ -575,67 +587,22 @@ class MerchantHomeView extends StatelessWidget {
 
                         SizedBox(height: 1.5.h),
 
-                        /// Project Name
+                        /// Product Name
                         Text(
-                          project.name ?? "",
-                          style: MyTexts.bold12
-                              .copyWith(fontSize: 13.sp),
+                          product.name ?? "",
+                          style: MyTexts.bold12.copyWith(fontSize: 13.sp),
                           maxLines: 1,
-                          overflow:
-                          TextOverflow.ellipsis,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 0.8.h),
 
-                        Row(
-                          children: [
-                            ClipOval(
-                              child: Image.asset(
-                                Asset.renovation,
-                                width: 6.w,
-                                height: 6.w,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const Gap(2),
-                            Text(
-                              "Saanvi Kumari",
-                              style: MyTexts.medium12.copyWith(
-                                color: const Color(0xFF545454),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                        /// Description / Category
+                        Text(
+                          product.categoryName ?? "",
+                          style: MyTexts.medium12.copyWith(color: const Color(0xFF545454)),
+                          overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 0.8.h),
-
-                        /// Address
-                        Row(
-                          children: [
-                            Icon(
-                              Icons
-                                  .location_on_outlined,
-                              color:
-                              const Color(0xFF545454),
-                              size: 12.sp,
-                            ),
-                            SizedBox(width: 1.w),
-                            Expanded(
-                              child: Text(
-                                project.address ?? "",
-                                style: MyTexts
-                                    .regular12
-                                    .copyWith(
-                                  color: const Color(
-                                      0xFF545454),
-                                  fontSize: 12.sp,
-                                ),
-                                overflow:
-                                TextOverflow
-                                    .ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
 
                         const Gap(7),
 
@@ -643,90 +610,39 @@ class MerchantHomeView extends StatelessWidget {
                         Container(
                           height: 38,
                           width: double.infinity,
-                          decoration:
-                          const BoxDecoration(
+                          decoration: const BoxDecoration(
                             gradient: LinearGradient(
-                              begin: Alignment
-                                  .topCenter,
-                              end: Alignment
-                                  .bottomCenter,
-                              colors: [
-                                Color(
-                                    0x00FFF9BD),
-                                Color(
-                                    0xFFFFF9BD),
-                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Color(0x00FFF9BD), Color(0xFFFFF9BD)],
                             ),
                           ),
                           child: Align(
-                            alignment:
-                            Alignment.centerLeft,
+                            alignment: Alignment.centerLeft,
                             child: Text(
-                              project.area??"₹ 1600 Sqft",
-                              style:
-                              MyTexts.medium15,
+                              "₹ ${product.price ?? '0'} / ${product.unit ?? 'Unit'}",
+                              style: MyTexts.medium15,
                             ),
                           ),
                         ),
 
                         const Gap(6),
 
-                        /// CONNECT BUTTON
+                        /// DETAILS BUTTON
                         Padding(
-                          padding:
-                          const EdgeInsets
-                              .symmetric(
-                              horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: RoundedButton(
-                            buttonName: "Connect",
+                            buttonName: "View Details",
                             onTap: () {
-                              controller.requestConnection(targetProfileId: project.id??"");
+                              // Navigate to Product Details
                             },
                             height: 4.h,
                             fontSize: 13.sp,
                             borderRadius: 1.5.w,
-                            style:
-                            MyTexts.medium13
-                                .copyWith(
-                              color: Colors.white,
-                            ),
+                            style: MyTexts.medium13.copyWith(color: Colors.white),
                           ),
                         ),
                       ],
-                    ),
-                  ),
-
-                  /// STATUS BADGE
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      height: 18,
-                      padding:
-                      const EdgeInsets.symmetric(
-                          horizontal: 8),
-                      decoration:
-                      const BoxDecoration(
-                        color: Color(0xFFC1FFC3),
-                        borderRadius:
-                        BorderRadius.only(
-                          topLeft:
-                          Radius.circular(12),
-                          topRight:
-                          Radius.circular(12),
-                          bottomLeft:
-                          Radius.circular(5),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          project.status ?? "",
-                          style: MyTexts
-                              .regular12
-                              .copyWith(
-                              fontSize: 8),
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -993,173 +909,118 @@ class MerchantHomeView extends StatelessWidget {
   Widget buildMaterialListView(BuildContext context) {
     final controller = Get.find<HomeController>();
 
-    return ListView.builder(
-      itemCount: controller.projectResponseData.value.data?.length,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        final project = controller.projectResponseData.value.data?[index];
-        const String defaultImage =
-            "https://static.vecteezy.com/system/resources/thumbnails/027/078/450/small/construction-of-new-building-with-reinforced-concrete-floors-construction-of-modern-design-architecture-project-in-downtown-high-rise-multi-storey-building-construction-generative-ai-photo.jpg";
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-        String imageUrl;
+      if (controller.categoryProductData.value.data == null ||
+          controller.categoryProductData.value.data!.isEmpty) {
+        return const Center(child: Text("No Products Found"));
+      }
 
-        if (project?.images != null &&
-            project!.images!.isNotEmpty &&
-            project.images![0].isNotEmpty) {
-          imageUrl = APIConstants.bucketUrl + project.images![0];
-        } else {
-          imageUrl = defaultImage;
-        }
-        return Container(
-          padding: EdgeInsets.all(3.w),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(2.w)),
-            border: Border.all(color: MyColors.gra54EA, width: 1.0),
-          ),
-          //width: double.maxFinite,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius:
-                BorderRadius.circular(2.w),
-                child: SizedBox(
-                  height: 15.h,
-                  width: 12.h,
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    fit: BoxFit.cover,
-                    placeholder:
-                        (context, url) =>
-                    const Center(
-                      child:
-                      CircularProgressIndicator(),
+      return ListView.builder(
+        itemCount: controller.categoryProductData.value.data?.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          final product = controller.categoryProductData.value.data?[index];
+          const String defaultImage =
+              "https://static.vecteezy.com/system/resources/thumbnails/027/078/450/small/construction-of-new-building-with-reinforced-concrete-floors-construction-of-modern-design-architecture-project-in-downtown-high-rise-multi-storey-building-construction-generative-ai-photo.jpg";
+
+          String imageUrl;
+
+          if (product?.images != null && product!.images!.isNotEmpty) {
+            imageUrl = APIConstants.bucketUrl + product.images![0];
+          } else {
+            imageUrl = defaultImage;
+          }
+          return Container(
+            padding: EdgeInsets.all(3.w),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(2.w)),
+              border: Border.all(color: MyColors.gra54EA),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(2.w),
+                  child: SizedBox(
+                    height: 12.h,
+                    width: 12.h,
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) =>
+                          Image.network(defaultImage, fit: BoxFit.cover),
                     ),
-                    errorWidget:
-                        (context, url, error) =>
-                        Image.network(
-                          defaultImage,
-                          fit: BoxFit.cover,
-                        ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      project?.name ?? "Luna;s Traquil Project",
-                      style: MyTexts.bold12.copyWith(fontSize: 13.sp),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 5),
-
-                    Row(
-                      children: [
-                        ClipOval(
-                          child: Image.asset(
-                            Asset.renovation,
-                            width: 6.w,
-                            height: 6.w,
-                            fit: BoxFit.cover,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product?.name ?? "",
+                        style: MyTexts.bold12.copyWith(fontSize: 13.sp),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        product?.categoryName ?? "",
+                        style: MyTexts.medium12.copyWith(color: const Color(0xFF545454)),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Gap(7),
+                      Container(
+                        height: 38,
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              const Color(0xFFFFF9BD).withValues(alpha: 0),
+                              const Color(0xFFFFF9BD),
+                            ],
                           ),
                         ),
-                        const Gap(2),
-                        Text(
-                          "Saanvi Kumari",
-                          style: MyTexts.medium12.copyWith(
-                            color: const Color(0xFF545454),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "₹ ${product?.price ?? '0'} / ${product?.unit ?? 'Unit'}",
+                            style: MyTexts.medium15,
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: const Color(0xFF545454),
-                          size: 12.sp,
-                        ),
-                        const Gap(2),
-                        Text(
-                          project?.address ?? "Jayanagar ,bng 560078 ",
-                          style: MyTexts.regular12.copyWith(
-                            color: const Color(0xFF545454),
-                            fontSize: 10.sp,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                    const Gap(7),
-                    Container(
-                      height: 38,
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: AlignmentGeometry.topCenter,
-                          end: AlignmentGeometry.bottomCenter,
-                          colors: [
-                            const Color(0xFFFFF9BD).withValues(alpha: 0),
-                            const Color(0xFFFFF9BD),
-                          ],
                         ),
                       ),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          project?.area ?? "₹ 1600 Sqft",
-                          style: MyTexts.medium15,
+                      const Gap(6),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: RoundedButton(
+                          buttonName: "View Details",
+                          onTap: () {
+                            // Navigate to details
+                          },
+                          height: 4.h,
+                          fontSize: 13.sp,
+                          borderRadius: 1.5.w,
+                          style: MyTexts.medium13.copyWith(color: Colors.white),
                         ),
                       ),
-                    ),
-                    const Gap(6),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: RoundedButton(
-                        buttonName: "Connect",
-                        onTap: () {
-                          controller.requestConnection(targetProfileId: project?.id??"");
-
-                          // Get.to(() => const MerchantProjectViewDetails());
-                        },
-                        height: 4.h,
-                        fontSize: 13.sp,
-                        borderRadius: 1.5.w,
-                        style: MyTexts.medium13.copyWith(color: Colors.white),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+              ],
+            ),
+          );
+        },
+      );
+    });
   }
-
-  final List<String> _imageURL = [
-    Asset.residential,
-    Asset.commercial,
-    Asset.industrial,
-    Asset.infrastructure,
-    Asset.renovation,
-    Asset.renovation,
-  ];
-  final List<String> _imageNames = [
-    "Residential",
-    "Commercial",
-    "Industrial",
-    "Infrastructure",
-    "Renovation",
-    "Manufacturer",
-  ];
 
   Widget buildSideBar(BuildContext context, List<CCategory> categoryData) {
     return Container(
@@ -1183,6 +1044,10 @@ class MerchantHomeView extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 controller.selectedIndex.value = index;
+                controller.loadSubCategories(
+                  categoryId: category.id ?? "",
+                  categoryName: category.name,
+                );
               },
               child: Container(
                 height: _itemHeight,
@@ -1197,12 +1062,8 @@ class MerchantHomeView extends StatelessWidget {
                           width: _selectionBarWidth,
                           height: _imageHeight,
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.horizontal(
-                              right: Radius.circular(10),
-                            ),
-                            color: isSelected
-                                ? MyColors.primary
-                                : Colors.transparent,
+                            borderRadius: const BorderRadius.horizontal(right: Radius.circular(10)),
+                            color: isSelected ? MyColors.primary : Colors.transparent,
                           ),
                         ),
 
@@ -1218,32 +1079,24 @@ class MerchantHomeView extends StatelessWidget {
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                                 colors: [
-                                  MyColors.custom(
-                                    'EAEAEA',
-                                  ).withValues(alpha: 0),
+                                  MyColors.custom('EAEAEA').withValues(alpha: 0),
                                   MyColors.custom('EAEAEA'),
                                 ],
                               ),
                             ),
                             child: Center(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: _horizontalPadding,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
                                 child: CachedNetworkImage(
                                   imageUrl:
                                       APIConstants.bucketUrl +
                                       (category.image ??
                                           'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
                                   fit: BoxFit.fill,
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
+                                  placeholder: (context, url) =>
+                                      const Center(child: CircularProgressIndicator()),
                                   errorWidget: (context, url, error) =>
-                                      const Icon(
-                                        Icons.category,
-                                        color: MyColors.primary,
-                                      ),
+                                      const Icon(Icons.category, color: MyColors.primary),
                                 ),
                               ),
                             ),
@@ -1259,10 +1112,7 @@ class MerchantHomeView extends StatelessWidget {
                       category.name ?? "",
                       style: MyTexts.medium13,
                       textAlign: TextAlign.center,
-                    ).paddingOnly(
-                      right: _horizontalPadding,
-                      left: _horizontalPadding,
-                    ),
+                    ).paddingOnly(right: _horizontalPadding, left: _horizontalPadding),
                   ],
                 ),
               ),
@@ -1273,199 +1123,9 @@ class MerchantHomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildComingSoon(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 3.5),
-        child: const Text("Coming soon"),
-      ),
-    );
-  }
-
-  /// ============================
-  /// MATERIAL MARKETPLACE VIEW
-  /// ============================
-  Widget _buildMaterialList(BuildContext context, List<dynamic> data) {
-    return ListView.builder(
-      padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: data.length,
-      itemBuilder: (context, mainIndex) {
-        final mainCategory = data[mainIndex];
-
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          route: Routes.SELECT_PRODUCT,
-        );
-      },
-    );
-  }
-
-  /// ============================
-  /// CONSTRUCTION MARKETPLACE VIEW
-  /// ============================
-  Widget _buildServiceList(BuildContext context, List<dynamic> data) {
-    return ListView.builder(
-      padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: data.length,
-      itemBuilder: (context, mainIndex) {
-        final mainCategory = data[mainIndex];
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          route: Routes.SELECT_SERVICE,
-        );
-      },
-    );
-  }
-
-  /// ============================
-  /// TOOLS & EQUIPMENT MARKETPLACE VIEW
-  /// ============================
-  Widget _buildToolsList(BuildContext context, List<dynamic> data) {
-    return ListView.builder(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: data.length,
-      itemBuilder: (context, mainIndex) {
-        final mainCategory = data[mainIndex];
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          route: Routes.SEARCH_SERVICE, // create this route if not already
-        );
-      },
-    );
-  }
-
   /// ============================
   /// COMMON CATEGORY SECTION BUILDER
   /// ============================
-  Widget _buildCategorySection(
-    BuildContext context,
-    dynamic mainCategory, {
-    required String route,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () {
-            if (myPref.role.val == "connector") {
-              if ((Get.find<CommonController>()
-                          .profileData
-                          .value
-                          .data
-                          ?.siteLocations ??
-                      [])
-                  .isEmpty) {
-                _showAddAddressDialog();
-                return;
-              }
-            }
-
-            Get.toNamed(
-              route,
-              arguments: {
-                "mainCategoryId": mainCategory.id ?? 0,
-                "mainCategoryName": mainCategory.name ?? '',
-              },
-            );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(mainCategory.name ?? '', style: MyTexts.bold18),
-              const Icon(Icons.arrow_forward_ios, size: 20),
-            ],
-          ),
-        ),
-        SizedBox(height: 2.h),
-
-        if (mainCategory.subCategories != null)
-          GridView.builder(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 6,
-              childAspectRatio: 0.8,
-            ),
-            itemCount: mainCategory.subCategories!.length,
-            itemBuilder: (context, subIndex) {
-              final subCategory = mainCategory.subCategories![subIndex];
-
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 24.0),
-                child: GestureDetector(
-                  onTap: () {
-                    if (myPref.role.val == "connector") {
-                      if ((Get.find<CommonController>()
-                                  .profileData
-                                  .value
-                                  .data
-                                  ?.siteLocations ??
-                              [])
-                          .isEmpty) {
-                        _showAddAddressDialog();
-                        return;
-                      }
-                    }
-
-                    Get.toNamed(
-                      route,
-                      arguments: {
-                        "selectedSubCategoryId": subCategory.id ?? 0,
-                        "mainCategoryId": mainCategory.id ?? 0,
-                        "mainCategoryName": mainCategory.name ?? '',
-                      },
-                    );
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                APIConstants.bucketUrl +
-                                (subCategory.image ??
-                                    'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
-                            fit: BoxFit.fill,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.category,
-                              color: MyColors.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        subCategory.name ?? '',
-                        style: MyTexts.medium14,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        SizedBox(height: 2.h),
-      ],
-    );
-  }
 
   Widget tabBar({
     required String icon,
@@ -1520,9 +1180,7 @@ class MerchantHomeView extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: const Text("Add Address"),
           ),
@@ -1542,10 +1200,7 @@ class HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium17.copyWith(
-        color: MyColors.black,
-        fontFamily: MyTexts.SpaceGrotesk,
-      ),
+      style: MyTexts.medium17.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }
 }

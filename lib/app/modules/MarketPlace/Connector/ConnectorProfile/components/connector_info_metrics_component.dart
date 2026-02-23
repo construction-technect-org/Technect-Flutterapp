@@ -5,20 +5,18 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
-import 'package:get_storage/get_storage.dart';
 
 class ConnectorInfoMetricsComponent extends StatelessWidget {
   const ConnectorInfoMetricsComponent({super.key});
 
-  ConnectorProfileController get controller =>
-      Get.find<ConnectorProfileController>();
+  ConnectorProfileController get controller => Get.find<ConnectorProfileController>();
 
   // final  ConnectorProfileController controllers = Get.put(ConnectorProfileController());
 
   @override
   Widget build(BuildContext context) {
     final connectorProfile = controller.connectorProfile;
-    final connectorProfileData = controller.profileDatas;
+    // final connectorProfileData = controller.profileDatas;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,10 +26,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Information',
-                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-              ),
+              Text('Information', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
               const Spacer(),
               GestureDetector(
                 onTap: () {
@@ -56,17 +51,13 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           padding: EdgeInsets.zero,
           child: Row(
             children: [
-              Text(
-                'Aadhaar details',
-                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-              ),
+              Text('Aadhaar details', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
             ],
           ),
         ),
         SizedBox(height: 1.h),
         if (connectorProfile != null &&
-            (connectorProfile.aadhaarNumber != null ||
-                connectorProfile.panNumber != null)) ...[
+            (connectorProfile.aadhaarNumber != null || connectorProfile.panNumber != null)) ...[
           _buildExistingKycDetails(connectorProfile),
         ] else ...[
           GestureDetector(
@@ -92,10 +83,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Project details',
-                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-              ),
+              Text('Project details', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
               const Spacer(),
               GestureDetector(
                 onTap: () {
@@ -117,10 +105,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Point of contact',
-                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-              ),
+              Text('Point of contact', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
 
               const Spacer(),
 
@@ -128,10 +113,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                 onTap: () {
                   final isNew = controller.profileDatas.value == null;
 
-                  Get.to(
-                          () => EditPocProfile(),
-                      arguments: isNew
-                  );
+                  Get.to(() => EditPocProfile(), arguments: isNew);
                 },
                 behavior: HitTestBehavior.translucent,
                 child: Padding(
@@ -159,10 +141,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
             {"title": "POC Name", "value": poc?.pocName ?? "Null"},
             {"title": "Designation", "value": poc?.pocDesignation ?? "Null"},
             {"title": "Phone Number", "value": poc?.pocPhone ?? "Null"},
-            {
-              "title": "Alternative Number",
-              "value": poc?.pocAlternatePhone ?? "Null",
-            },
+            {"title": "Alternative Number", "value": poc?.pocAlternatePhone ?? "Null"},
             {"title": "Email", "value": poc?.pocEmail ?? "Null"},
           ]);
         }),
@@ -202,8 +181,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
               const Gap(6),
               buildRow(
                 title: "Mobile Number",
-                data:
-                    "${userData?.countryCode ?? ''} ${userData?.mobileNumber ?? ''}",
+                data: "${userData?.countryCode ?? ''} ${userData?.mobileNumber ?? ''}",
               ),
               const Gap(6),
               buildRow(title: "Email ID", data: userData?.email ?? "-"),
@@ -222,10 +200,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
       children: [
         Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
         const Spacer(),
-        Text(
-          data ?? "",
-          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-        ),
+        Text(data ?? "", style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
       ],
     );
   }
@@ -245,15 +220,9 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildRow(
-              title: "Aadhaar Number",
-              data: connectorProfile.aadhaarNumber ?? "-",
-            ),
+            buildRow(title: "Aadhaar Number", data: connectorProfile.aadhaarNumber ?? "-"),
             const Gap(6),
-            buildRow(
-              title: "PAN Number",
-              data: connectorProfile.panNumber ?? "-",
-            ),
+            buildRow(title: "PAN Number", data: connectorProfile.panNumber ?? "-"),
           ],
         ),
       ),
@@ -272,17 +241,17 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildRow(title: "Project Name", data: "Adarsh" ?? "-"),
+          buildRow(title: "Project Name", data: "Adarsh"),
           const Gap(6),
-          buildRow(title: "Project Code", data: "CT-PRJ001" ?? "-"),
+          buildRow(title: "Project Code", data: "CT-PRJ001"),
           const Gap(6),
-          buildRow(title: "Area", data: "1600 sqft" ?? "-"),
+          buildRow(title: "Area", data: "1600 sqft"),
           const Gap(6),
-          buildRow(title: "Project Type", data: "Residential Project" ?? "-"),
+          buildRow(title: "Project Type", data: "Residential Project"),
           const Gap(6),
-          buildRow(title: "No. of floor", data: "2" ?? "-"),
+          buildRow(title: "No. of floor", data: "2"),
           const Gap(6),
-          buildRow(title: "Project Status", data: "Ongoing" ?? "-"),
+          buildRow(title: "Project Status", data: "Ongoing"),
         ],
       ),
     );

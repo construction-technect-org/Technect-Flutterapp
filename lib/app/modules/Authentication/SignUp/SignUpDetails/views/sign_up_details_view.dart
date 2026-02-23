@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
@@ -9,7 +12,7 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDe
 //import 'package:carousel_slider/carousel_slider.dart';
 
 class SignUpDetailsView extends StatefulWidget {
-  SignUpDetailsView({super.key});
+  const SignUpDetailsView({super.key});
 
   @override
   State<SignUpDetailsView> createState() => _SignUpDetailsViewState();
@@ -22,7 +25,7 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Onit state called");
+    log("Onit state called");
     controller.emailController.text = "";
     controller.mobileNumberController.text = "";
     controller.numberError.value = "";

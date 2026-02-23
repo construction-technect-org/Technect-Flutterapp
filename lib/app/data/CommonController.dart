@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/services/app_service.dart';
-import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/profile_model.dart'
+    as connector;
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/services/ConstructionLineServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
@@ -26,7 +26,7 @@ class CommonController extends GetxController {
   final hasProfileComplete = false.obs;
   final isLoading = false.obs;
   Rx<ProfileModel> profileData = ProfileModel().obs;
-  Rx<ProfileModelM> profileDataM = ProfileModelM().obs;
+  Rx<connector.ProfileModel> profileDataM = connector.ProfileModel().obs;
   RxBool isCrm = true.obs;
   UserMainModel? userMainModel;
   Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
@@ -58,8 +58,7 @@ class CommonController extends GetxController {
       final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         SnackBars.errorSnackBar(
-          content:
-              'Location services are disabled. Please enable location services.',
+          content: 'Location services are disabled. Please enable location services.',
         );
         return;
       }
@@ -74,14 +73,12 @@ class CommonController extends GetxController {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        SnackBars.errorSnackBar(
-          content: 'Location permissions are permanently denied.',
-        );
+        SnackBars.errorSnackBar(content: 'Location permissions are permanently denied.');
         return;
       }
 
       final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
 
       currentPosition.value = LatLng(position.latitude, position.longitude);
@@ -95,10 +92,7 @@ class CommonController extends GetxController {
 
   Future<void> _getAddressFromCoordinates(double lat, double lng) async {
     try {
-      final List<Placemark> placemarks = await placemarkFromCoordinates(
-        lat,
-        lng,
-      );
+      final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks.isNotEmpty) {
         final Placemark place = placemarks[0];
         final String address =
@@ -125,56 +119,49 @@ class CommonController extends GetxController {
 
   RxString getCurrentAddress() {
     if (myPref.role.val == "partner") {
-      if (profileData.value.data?.addresses?.isNotEmpty == true) {
-        final int index =
-            profileData.value.data?.addresses?.indexWhere(
-              (e) => e.isDefault == true,
-            ) ??
-            0;
-        final address = profileData.value.data?.addresses?[index];
+      final addresses = profileData.value.data?.addresses;
+      if (addresses != null && addresses.isNotEmpty) {
+        final int index = addresses.indexWhere((e) => e.isDefault == true);
+        final address = index != -1 ? addresses[index] : addresses[0];
 
-        return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+        return '${address.fullAddress}, ${address.landmark ?? ''}'.obs;
       }
-      return 'No address found'.obs;
     } else {
-      if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
-        final int index =
-            profileData.value.data?.siteLocations?.indexWhere(
-              (e) => e.isDefault == true,
-            ) ??
-            0;
-        final address = profileData.value.data?.siteLocations?[index];
+      final siteLocations = profileData.value.data?.siteLocations;
+      if (siteLocations != null && siteLocations.isNotEmpty) {
+        final int index = siteLocations.indexWhere((e) => e.isDefault == true);
+        final address = index != -1 ? siteLocations[index] : siteLocations[0];
 
-        return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+        return '${address.fullAddress}, ${address.landmark ?? ''}'.obs;
       }
-      return 'No address found'.obs;
     }
+
+    // Fallback to locally selected address if profile addresses are missing
+    if (selectedAddress.value.isNotEmpty) {
+      return selectedAddress.value.obs;
+    }
+
+    return 'No address found'.obs;
   }
 
   RxString getDeliveryLocation() {
-    if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
-      final int index =
-          profileData.value.data?.siteLocations?.indexWhere(
-            (e) => e.isDefault == true,
-          ) ??
-          0;
-      final address = profileData.value.data?.siteLocations?[index];
+    final siteLocations = profileData.value.data?.siteLocations;
+    if (siteLocations != null && siteLocations.isNotEmpty) {
+      final int index = siteLocations.indexWhere((e) => e.isDefault == true);
+      final address = index != -1 ? siteLocations[index] : siteLocations[0];
 
-      return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+      return '${address.fullAddress}, ${address.landmark ?? ''}'.obs;
     }
     return 'No address found'.obs;
   }
 
   RxString getManufacturerAddress() {
-    if (profileData.value.data?.addresses?.isNotEmpty == true) {
-      final int index =
-          profileData.value.data?.addresses?.indexWhere(
-            (e) => e.isDefault == true,
-          ) ??
-          0;
-      final address = profileData.value.data?.addresses?[index];
+    final addresses = profileData.value.data?.addresses;
+    if (addresses != null && addresses.isNotEmpty) {
+      final int index = addresses.indexWhere((e) => e.isDefault == true);
+      final address = index != -1 ? addresses[index] : addresses[0];
 
-      return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+      return '${address.fullAddress}, ${address.landmark ?? ''}'.obs;
     }
     return 'No manufacturer address found'.obs;
   }
@@ -182,81 +169,80 @@ class CommonController extends GetxController {
   final HomeService homeService = Get.find<HomeService>();
 
   Future<void> fetchProfileData() async {
+    if (myPref.getToken().isEmpty) {
+      log("Skipping fetchProfileData: No token");
+      return;
+    }
     try {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
-      print("Fetching");
+      log("Fetching");
       if (profileResponse.success == true && profileResponse.data?.user != null) {
         profileData.value = profileResponse;
-        Get.printInfo(info: '🌐profileData : ${profileData.value.data}');
+        log('🌐profileData : ${profileData.value.data}');
 
         myPref.setProfileData(profileResponse.toJson());
         //myPref.setUserModel(profileResponse.data!.user!);
+        log("profileData.value.data?.isTeamLogin: ${profileData.value.data?.isTeamLogin}");
         if (profileData.value.data?.isTeamLogin == true) {
           myPref.setIsTeamLogin(true);
-          final permissionsValue = extractPermissions(
-            profileResponse.data?.teamMember,
-          );
+          final permissionsValue = extractPermissions(profileResponse.data?.teamMember);
           myPref.setPermissions(permissionsValue);
         }
-        if ((profileData.value.data?.merchantProfile?.website ?? "")
-            .isNotEmpty) {
-          Get.find<CommonController>().hasProfileComplete.value = true;
-        } else {
-          Get.find<CommonController>().hasProfileComplete.value = false;
-        }
-        print(profileData.value);
+        final isComplete = profileData.value.data?.connectorProfile?.isProfileComplete ?? false;
+        hasProfileComplete.value = isComplete;
+        log("Profile Status: ${isComplete ? "Complete" : "Incomplete"}");
+        log(profileData.value.toString());
         // if(myPref.getIsTeamLogin()==false){
         loadTeamFromStorage();
         // }
       }
-      else{
-        const a=10;
-      }
     } catch (e) {
-      Get.printError(info: 'Error fetching profile: $e');
+      log('Error fetching profile: $e');
     } finally {
       isLoading.value = false;
-      print("Fetched");
+      log("Fetched");
     }
   }
+
   Future<void> fetchProfileDataM() async {
+    if (myPref.getToken().isEmpty) {
+      log("Skipping fetchProfileDataM: No token");
+      return;
+    }
     try {
       isLoading.value = true;
       final profileResponse = await homeService.getProfileM();
-      print("Fetching");
+      log("Fetching");
       if (profileResponse.success == true && profileResponse.user != null) {
         profileDataM.value = profileResponse;
-        Get.printInfo(info: '🌐profileData : ${profileDataM.value.merchantProfile!=null}');
+        log('🌐profileData : ${profileDataM.value.merchantProfile != null}');
 
-        // myPref.setProfileData(profileResponse.toJson());
-        // //myPref.setUserModel(profileResponse.data!.user!);
-        // if (profileData.value.data?.isTeamLogin == true) {
-        //   myPref.setIsTeamLogin(true);
-        //   final permissionsValue = extractPermissions(
-        //     profileResponse.data?.teamMember,
-        //   );
-        //   myPref.setPermissions(permissionsValue);
-        // }
-        // if ((profileData.value.data?.merchantProfile?.website ?? "")
-        //     .isNotEmpty) {
-        //   Get.find<CommonController>().hasProfileComplete.value = true;
-        // } else {
-        //   Get.find<CommonController>().hasProfileComplete.value = false;
-        // }
-        print(profileData.value);
-        // if(myPref.getIsTeamLogin()==false){
+        myPref.setProfileData(profileResponse.toJson());
+
+        // Ensure we check the current profileData (which is of type ProfileModel) or
+        // the connector profileResponse for team login logic if applicable.
+        // If profileData.value.data is null, we can't check isTeamLogin this way safely.
+        final isTeamLogin = profileData.value.data?.isTeamLogin ?? false;
+        if (isTeamLogin) {
+          myPref.setIsTeamLogin(true);
+          final permissionsValue = extractPermissions(profileData.value.data?.teamMember);
+          myPref.setPermissions(permissionsValue);
+        }
+        log("isTeamLogin: $isTeamLogin");
+        log("merchantProfile: ${profileResponse.merchantProfile}");
+        log("businessWebsite: ${profileResponse.merchantProfile?.businessWebsite}");
+
+        final isComplete = profileResponse.merchantProfile?.profileStatus == "completed";
+        hasProfileComplete.value = isComplete;
+        log("Profile Status (M): ${isComplete ? "Complete" : "Incomplete"}");
         loadTeamFromStorage();
-        // }
-      }
-      else{
-        const a=10;
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching profile: $e');
+      log('Error fetching profile: $e');
     } finally {
       isLoading.value = false;
-      print("Fetched");
+      log("Fetched");
     }
   }
 
@@ -274,7 +260,7 @@ class CommonController extends GetxController {
         statistics.value = cachedTeamModel.statistics!;
       }
     } else {
-      await fetchTeamList();
+      // await fetchTeamList();   //Important!
     }
   }
 
@@ -282,7 +268,7 @@ class CommonController extends GetxController {
 
   Future<void> fetchTeamList() async {
     try {
-      print("Fetching Team");
+      log("Fetching Team");
       isLoading.value = true;
       final TeamListModel result = await roleService.fetchAllTeam();
       teamList.clear();
@@ -296,7 +282,7 @@ class CommonController extends GetxController {
       // ignore: avoid_print
     } finally {
       isLoading.value = false;
-      print("Fetching Team123");
+      log("Fetching Team123");
     }
   }
 
@@ -306,21 +292,38 @@ class CommonController extends GetxController {
 
   Rx<Statistics> statistics = Statistics().obs;
 
+  void loadCachedProfile() {
+    final cachedData = myPref.getProfileData();
+    if (cachedData != null) {
+      try {
+        final role = myPref.role.val;
+        if (role == "partner") {
+          final profile = ProfileModel.fromJson(cachedData);
+          profileData.value = profile;
+          hasProfileComplete.value = profile.data?.merchantProfile?.isProfileComplete ?? false;
+        } else if (role == "connector") {
+          final profile = connector.ProfileModel.fromJson(cachedData);
+          profileDataM.value = profile;
+          hasProfileComplete.value = profile.connectorProfile?.isProfileComplete ?? false;
+        }
+        log("Loaded profile from cache. hasProfileComplete: ${hasProfileComplete.value}");
+      } catch (e) {
+        log("Error loading cached profile: $e");
+      }
+    }
+  }
+
   RxInt marketPlace = 0.obs;
 
   Future<void> notifyMeApi({int? mID, VoidCallback? onSuccess}) async {
     try {
       final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
       if (res.success == true) {
-        SnackBars.successSnackBar(
-          content: "You’ll be notified when it’s restocked!",
-        );
+        SnackBars.successSnackBar(content: "You’ll be notified when it’s restocked!");
         if (onSuccess != null) onSuccess();
       }
     } catch (e) {
-      SnackBars.errorSnackBar(
-        content: "Something went wrong. Please try again.",
-      );
+      SnackBars.errorSnackBar(content: "Something went wrong. Please try again.");
     } finally {}
   }
 
@@ -371,9 +374,7 @@ class CommonController extends GetxController {
       );
       if (res.success == true) {
         if (onSuccess != null) onSuccess();
-        SnackBars.successSnackBar(
-          content: "Connection request sent successfully!",
-        );
+        SnackBars.successSnackBar(content: "Connection request sent successfully!");
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Unable to send connection request.");
@@ -400,12 +401,9 @@ class CommonController extends GetxController {
   }
 
   void editAddress(String addressId) {
-    final address = Get.find<CommonController>()
-        .profileData
-        .value
-        .data
-        ?.siteLocations
-        ?.firstWhere((addr) => addr.id.toString() == addressId);
+    final address = Get.find<CommonController>().profileData.value.data?.siteLocations?.firstWhere(
+      (addr) => addr.id.toString() == addressId,
+    );
 
     if (address != null) {
       Get.toNamed(
@@ -430,10 +428,7 @@ class CommonController extends GetxController {
         backgroundColor: Colors.white,
         titlePadding: const EdgeInsets.all(20),
         contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-        actionsPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         title: Container(
           decoration: BoxDecoration(
             border: Border.all(color: const Color(0xFFF9D0CB)),
@@ -496,14 +491,9 @@ class CommonController extends GetxController {
     }
   }
 
-  Future<void> setDefaultAddress(
-    String addressId, {
-    VoidCallback? onSuccess,
-  }) async {
+  Future<void> setDefaultAddress(String addressId, {VoidCallback? onSuccess}) async {
     try {
-      await DeliveryAddressService.updateDeliveryAddress(addressId, {
-        "is_default": true,
-      });
+      await DeliveryAddressService.updateDeliveryAddress(addressId, {"is_default": true});
 
       //await Get.find<CommonController>().fetchProfileData();
 
@@ -517,22 +507,37 @@ class CommonController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    print("Oninit");
+    log("Oninit");
+
+    loadCachedProfile();
+
+    // Fetch profile immediately so hasProfileComplete and addresses
+    // are ready before any screen checks them (e.g. + button tap).
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (myPref.role.val == "partner") {
+        await fetchProfileData();
+      } else {
+        await fetchProfileDataM();
+      }
+    });
+
     getCurrentLocation();
     final savedToken = _appHiveService.token;
     //myPref.getToken();
     final savedTokenType = _appHiveService.tokenType;
     //myPref.getTokenType();
-    print("Saved $savedTokenType");
+    log("Saved $savedTokenType");
     if (savedTokenType == "ACCESS") {
-      print("HeyToke");
+      log("HeyToke");
       userMainModel = _appHiveService.user;
       //myPref.getUserModel();
-      print("First Name ${userMainModel?.firstName}");
+      log("First Name ${userMainModel?.firstName}");
 
       if (savedToken.isNotEmpty) {
         Future.delayed(const Duration(seconds: 1), () async {
-         await  fetchProfileDataM();
+          if (_appHiveService.token.isNotEmpty) {
+            await fetchProfileDataM();
+          }
           // fetchProfileData();
         });
         // if(myPref.getIsTeamLogin()==false){

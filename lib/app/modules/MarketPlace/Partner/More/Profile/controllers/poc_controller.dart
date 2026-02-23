@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
 import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
@@ -5,8 +8,8 @@ import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PointOfContactController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -101,7 +104,7 @@ class PointOfContactController extends GetxController {
         SnackBars.errorSnackBar(content: "Point of Contact updation Failed");
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
       SnackBars.errorSnackBar(content: "Point of Contact updation Failed");
       // ignore: avoid_print
     } finally {

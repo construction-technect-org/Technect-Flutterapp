@@ -1,3 +1,5 @@
+
+
 import 'package:construction_technect/app/core/utils/email_validation.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 
@@ -20,7 +22,7 @@ class Validate {
     // First validate email format using the non-future method
     final formatError = validateEmail(email);
     if (formatError != null) {
-      return null;
+      return formatError;
     }
 
     // Only check email availability via API if format is valid
@@ -39,10 +41,11 @@ class Validate {
     // } catch (e) {
     //   // Log the error for debugging
     //   if (kDebugMode) {
-    //     print("Email availability check error: $e");
+    //     log("Email availability check error: $e");
     //   }
     //   return "Error checking email availability. Please try again.";
     // }
+    return null;
   }
 
   // ==================== Name Validation ====================
@@ -177,6 +180,7 @@ class Validate {
     } catch (e) {
       return "Error checking mobile number availability";
     } */
+    return null;
   }
 
   // ==================== GST Validation ====================

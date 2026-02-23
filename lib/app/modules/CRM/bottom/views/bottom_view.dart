@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
@@ -7,9 +8,7 @@ import 'package:construction_technect/app/modules/CRM/chat/views/crm_chat_list_s
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/crm_dashboard_screen.dart';
 import 'package:construction_technect/app/modules/CRM/home/views/crm_home_view.dart';
 import 'package:construction_technect/app/modules/CRM/more/views/more_screen.dart';
-import 'package:construction_technect/app/modules/CRM/switchAccount/switchCRMAccount.dart';
 import 'package:construction_technect/app/modules/CRM/switchAccount/switchCRMAccountController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
@@ -24,14 +23,8 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
     return OfflineBuilder(
       child: _buildUpgradeAlert(context),
       connectivityBuilder:
-          (
-            BuildContext context,
-            List<ConnectivityResult> connectivity,
-            Widget child,
-          ) {
-            final bool connected = !connectivity.contains(
-              ConnectivityResult.none,
-            );
+          (BuildContext context, List<ConnectivityResult> connectivity, Widget child) {
+            final bool connected = !connectivity.contains(ConnectivityResult.none);
 
             if (!connected && !controller.isBottomSheetOpen.value) {
               controller.isBottomSheetOpen.value = true;
@@ -43,12 +36,9 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                   isScrollControlled: true,
                   backgroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16.0),
-                    ),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
                   ),
-                  builder: (_) =>
-                      PopScope(canPop: false, child: NoInternetBottomSheet()),
+                  builder: (_) => PopScope(canPop: false, child: NoInternetBottomSheet()),
                 ).whenComplete(() {
                   controller.isBottomSheetOpen.value = false;
                 });
@@ -79,11 +69,8 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
     );
   }
 
-  void _showCrmVrmSwitchSheet(
-    BuildContext context,
-    CommonController commonController,
-  ) {
-    print("Role ${myPref.getRole()}");
+  void _showCrmVrmSwitchSheet(BuildContext context, CommonController commonController) {
+    log("Role ${myPref.getRole()}");
     Get.bottomSheet(
       myPref.getRole() != "connector"
           ? Container(
@@ -118,10 +105,8 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                     asset: Asset.contractor,
                     onTap: () {
                       Get.back();
-                      Get.put<SwitchAccountController>(
-                        SwitchAccountController(),
-                      ).switchAccount();
-                      print("what567 ${myPref.getRole()}");
+                      Get.put<SwitchAccountController>(SwitchAccountController()).switchAccount();
+                      log("what567 ${myPref.getRole()}");
                       Get.offAllNamed(Routes.VRM_MAIN);
                     },
                   ),
@@ -161,10 +146,8 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                     asset: Asset.contractor,
                     onTap: () {
                       Get.back();
-                      Get.put<SwitchAccountController>(
-                        SwitchAccountController(),
-                      ).switchAccount();
-                      print("what879 ${myPref.getRole()}");
+                      Get.put<SwitchAccountController>(SwitchAccountController()).switchAccount();
+                      log("what879 ${myPref.getRole()}");
                       Get.offAllNamed(Routes.CRM_MAIN);
                     },
                   ),
@@ -205,15 +188,9 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
-                  ),
+                  Text(title, style: MyTexts.bold16.copyWith(color: MyColors.fontBlack)),
                   const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: MyTexts.regular12.copyWith(color: MyColors.grey),
-                  ),
+                  Text(subtitle, style: MyTexts.regular12.copyWith(color: MyColors.grey)),
                 ],
               ),
             ),
@@ -239,7 +216,7 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
   }
 
   Widget _buildBottomBar(BuildContext context) {
-    print("Cont ${controller.myRole.value}");
+    log("Cont ${controller.myRole.value}");
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -249,10 +226,7 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.white,
@@ -315,10 +289,9 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
             if (myPref.getIsTeamLogin() == false)
               GestureDetector(
                 onTap: () {
-                  Get.put<SwitchCRMAccountController>(
-                    SwitchCRMAccountController(),
-                  );
-                  showSwitchCRMAccountBottomSheet();
+                  Get.put<SwitchCRMAccountController>(SwitchCRMAccountController());
+                  log("Switch Account Clicked");
+                  // showSwitchCRMAccountBottomSheet();
                   // Get.put<SwitchAccountController>(SwitchAccountController());
                   // _showCrmVrmSwitchSheet(context, commonController);
                 },
@@ -327,21 +300,14 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
                     color: Color(0xFF1B2F62),
-                    shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
                   child: Column(
                     children: [
-                      const Icon(
-                        Icons.autorenew,
-                        color: Colors.white,
-                        size: 30,
-                      ),
+                      const Icon(Icons.autorenew, color: Colors.white, size: 30),
 
                       Text(
-                        myPref.getRole() == "connector"
-                            ? "Connector"
-                            : "Merchant",
+                        myPref.getRole() == "connector" ? "Connector" : "Merchant",
                         style: MyTexts.medium12.copyWith(color: Colors.white),
                       ),
                     ],
@@ -365,13 +331,7 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
     );
   }
 
-  Widget bottomBar(
-    String icon,
-    String icon2,
-    String name, {
-    void Function()? onTap,
-    int? index,
-  }) {
+  Widget bottomBar(String icon, String icon2, String name, {void Function()? onTap, int? index}) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,

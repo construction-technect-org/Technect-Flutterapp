@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/model/sales_model.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/services/SalesService.dart';
@@ -210,7 +213,7 @@ class SalesController extends GetxController {
       isLoading.value = false;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;
@@ -251,7 +254,7 @@ class SalesController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;

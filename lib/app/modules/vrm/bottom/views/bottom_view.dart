@@ -138,7 +138,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
                       Get.put<SwitchAccountController>(
                         SwitchAccountController(),
                       ).switchAccount();
-                      print("what123 ${myPref.getRole()}");
+                      log("what123 ${myPref.getRole()}");
                       Get.offAllNamed(Routes.VRM_MAIN);
                     },
                   ),
@@ -181,7 +181,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
                       Get.put<SwitchAccountController>(
                         SwitchAccountController(),
                       ).switchAccount();
-                      print("what ${myPref.getRole()}");
+                      log("what ${myPref.getRole()}");
                       Get.offAllNamed(Routes.CRM_MAIN);
                     },
                   ),
@@ -242,7 +242,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
   }
 
   Widget _buildBottomBar(BuildContext context) {
-    print("Cont123 ${controller.myRole.value}");
+    log("Cont123 ${controller.myRole.value}");
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -331,7 +331,6 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
                     color: Color(0xFF1B2F62),
-                    shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
                   child: Column(

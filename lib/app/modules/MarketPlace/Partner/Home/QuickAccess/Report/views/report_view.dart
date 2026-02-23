@@ -1,3 +1,4 @@
+import "dart:developer" as dev;
 import 'dart:math';
 
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
@@ -347,7 +348,7 @@ class ReportView extends GetView<ReportController> {
 
   Widget _buildCharts() {
     if (kDebugMode) {
-      print(myPref.role.val);
+      dev.log(myPref.role.val);
     }
     return Obx(() {
       if (!controller.isReport.value) {

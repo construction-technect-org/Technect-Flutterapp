@@ -1,10 +1,9 @@
+import 'dart:io';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/media_bottom_sheet.dart';
-import 'package:get/get.dart';
-import 'dart:io';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProductController extends GetxController {
   final isEditLoading = false.obs;
@@ -34,31 +33,29 @@ class EditProductController extends GetxController {
       return;
     }
 
-    final List<XFile>? pickedImages = await _picker.pickMultiImage();
+    final List<XFile> pickedImages = await _picker.pickMultiImage();
 
-    if (pickedImages != null) {
-      for (var img in pickedImages) {
-        if (images.length >= 5) {
-          SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
-          break;
-        }
-
-        final file = File(img.path);
-        final sizeMb = _bytesToMb(file.lengthSync());
-
-        if (sizeMb > 2) {
-          SnackBars.errorSnackBar(
-            content: "File too large, Image must be ≤ 2 MB",
-          );
-          continue;
-        }
-
-        images.add(
-          PlatformFile(name: img.name, path: img.path, size: file.lengthSync()),
-        );
+    for (final img in pickedImages) {
+      if (images.length >= 5) {
+        SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
+        break;
       }
+
+      final file = File(img.path);
+      final sizeMb = _bytesToMb(file.lengthSync());
+
+      if (sizeMb > 2) {
+        SnackBars.errorSnackBar(
+          content: "File too large, Image must be ≤ 2 MB",
+        );
+        continue;
+      }
+
+      images.add(
+        PlatformFile(name: img.name, path: img.path, size: file.lengthSync()),
+      );
     }
-  }
+    }
 
   // Add Image
   /*Future<void> _pickImages() async {
@@ -145,7 +142,7 @@ class EditProductController extends GetxController {
       return;
     }
 
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );

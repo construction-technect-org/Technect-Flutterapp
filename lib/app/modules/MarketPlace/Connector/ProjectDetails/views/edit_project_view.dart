@@ -160,7 +160,6 @@ class EditProjectView extends StatelessWidget {
                       },
                       child: DottedBorder(
                         options: const RectDottedBorderOptions(
-                          color: Colors.black, // border color
                           strokeWidth: 2, // border width
                           dashPattern: [8, 4], // dash length and gap
                         ),
@@ -216,8 +215,9 @@ class EditProjectView extends StatelessWidget {
                     RoundedButton(
                       buttonName: "Add",
                       onTap: () {
-                        if (!controller.formKey.currentState!.validate())
+                        if (!controller.formKey.currentState!.validate()) {
                           return;
+                        }
                         Get.toNamed(Routes.SIGN_UP_PASSWORD);
                       },
                     ),

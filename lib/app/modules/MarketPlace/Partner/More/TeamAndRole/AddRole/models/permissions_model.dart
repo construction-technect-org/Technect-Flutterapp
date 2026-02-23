@@ -16,9 +16,9 @@ class PermissionsModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    if (this.permissions != null) {
-      data['permissions'] = this.permissions?.map((v) => v.toJson()).toList();
+    data['success'] = success;
+    if (permissions != null) {
+      data['permissions'] = permissions?.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -58,14 +58,14 @@ class UserPermissions {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['code'] = this.code;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['category'] = this.category;
-    data['permissionFor'] = this.permissionFor;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    data['id'] = id;
+    data['code'] = code;
+    data['name'] = name;
+    data['description'] = description;
+    data['category'] = category;
+    data['permissionFor'] = permissionFor;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

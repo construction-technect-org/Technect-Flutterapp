@@ -1,10 +1,14 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart' hide Category;
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/main_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/module_models.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/sub_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/services/connector_home_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart' hide SubCategory;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart'
+    hide SubCategory;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -21,15 +25,12 @@ class ConnectorHomeController extends GetxController {
   RxBool isGridView = true.obs;
   RxInt selectedIndex = 0.obs;
 
-
   //Connector
   Rx<ModulesResponse> connectorModuleData = ModulesResponse().obs;
   // Rx<MainCategoryResponse> mainCategoryData = MainCategoryResponse().obs;
-   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
-  final RxMap<String, List<CCategory>> categoryMap =
-      <String, List<CCategory>>{}.obs;
-  final RxMap<String, List<SubCategory>> subCategoryMap =
-      <String, List<SubCategory>>{}.obs;
+  RxList<MainCategory> mainCategories = <MainCategory>[].obs;
+  final RxMap<String, List<CCategory>> categoryMap = <String, List<CCategory>>{}.obs;
+  final RxMap<String, List<SubCategory>> subCategoryMap = <String, List<SubCategory>>{}.obs;
 
   RxInt marketPlace = 0.obs;
 
@@ -38,9 +39,11 @@ class ConnectorHomeController extends GetxController {
     super.onInit();
     // fetchCategoryHierarchy();
     // fetchCategoryServiceHierarchy();
-    Future.delayed(const Duration(seconds: 1), () {
-      fetchConnectorModule();
-    });
+    if (myPref.getToken().isNotEmpty) {
+      Future.delayed(const Duration(seconds: 1), () {
+        fetchConnectorModule();
+      });
+    }
     // fetchCategory("08b6213b-5f5e-497a-87ef-aca5a0d80c32");
   }
 
@@ -55,8 +58,7 @@ class ConnectorHomeController extends GetxController {
       // }
 
       // Fetch fresh data from API
-      final apiConnectorModule = await connectorHomeService
-          .getConnectorModule();
+      final apiConnectorModule = await connectorHomeService.getConnectorModule();
       connectorModuleData.value = apiConnectorModule;
       await fetchMainCategory(connectorModuleData.value.data!.modules?[0].id);
 
@@ -68,7 +70,7 @@ class ConnectorHomeController extends GetxController {
       // if (cachedCategoryHierarchy != null) {
       //   categoryHierarchyData.value = cachedCategoryHierarchy;
       // }
-      Get.printError(info: 'Error fetching category hierarchy: $e');
+      log( 'Error fetching category hierarchy: $e');
     } finally {
       isLoading(false);
     }
@@ -86,25 +88,22 @@ class ConnectorHomeController extends GetxController {
         }
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching category hierarchy: $e');
+      log( 'Error fetching category hierarchy: $e');
     }
     return;
   }
+
   Future<void> fetchCategoriesByMainId(String? mainCategoryId) async {
-    final response = await connectorHomeService.getCategory(
-      mainCategoryId,
-    );
+    final response = await connectorHomeService.getCategory(mainCategoryId);
     final result = response.data;
-    categoryMap[mainCategoryId??""] = result ?? [];
-  }
-  Future<void> fetchSubCategoriesByCategoryId(String? categoryId) async {
-    final response = await connectorHomeService.getSubCategory(
-     categoryId,
-    );
-    final result = response.data;
-    subCategoryMap[categoryId??""] = result ?? [];
+    categoryMap[mainCategoryId ?? ""] = result ?? [];
   }
 
+  Future<void> fetchSubCategoriesByCategoryId(String? categoryId) async {
+    final response = await connectorHomeService.getSubCategory(categoryId);
+    final result = response.data;
+    subCategoryMap[categoryId ?? ""] = result ?? [];
+  }
 
   Future<void> fetchCategoryHierarchy() async {
     try {
@@ -116,8 +115,7 @@ class ConnectorHomeController extends GetxController {
       }
 
       // Fetch fresh data from API
-      final apiCategoryHierarchy = await connectorHomeService
-          .getCategoryHierarchy();
+      final apiCategoryHierarchy = await connectorHomeService.getCategoryHierarchy();
       categoryHierarchyData.value = apiCategoryHierarchy;
 
       // Store in local storage
@@ -128,7 +126,7 @@ class ConnectorHomeController extends GetxController {
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyData.value = cachedCategoryHierarchy;
       }
-      Get.printError(info: 'Error fetching category hierarchy: $e');
+      log( 'Error fetching category hierarchy: $e');
     } finally {
       isLoading(false);
     }
@@ -144,8 +142,7 @@ class ConnectorHomeController extends GetxController {
       }
 
       // Fetch fresh data from API
-      final apiCategoryHierarchy = await connectorHomeService
-          .getCategoryServiceHierarchy();
+      final apiCategoryHierarchy = await connectorHomeService.getCategoryServiceHierarchy();
       categoryHierarchyDataCM.value = apiCategoryHierarchy;
 
       // Store in local storage
@@ -156,7 +153,7 @@ class ConnectorHomeController extends GetxController {
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyDataCM.value = cachedCategoryHierarchy;
       }
-      Get.printError(info: 'Error fetching category hierarchy: $e');
+      log( 'Error fetching category hierarchy: $e');
     } finally {
       isLoading(false);
     }
@@ -180,12 +177,9 @@ class ConnectorHomeController extends GetxController {
         return;
       }
 
-      if (permission == LocationPermission.always ||
-          permission == LocationPermission.whileInUse) {
+      if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
         final Position position = await Geolocator.getCurrentPosition(
-          locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.high,
-          ),
+          locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
         );
 
         currentLatitude.value = position.latitude;
@@ -198,7 +192,7 @@ class ConnectorHomeController extends GetxController {
         _showMandatoryLocationDialog();
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching location: $e');
+      log( 'Error fetching location: $e');
     }
   }
 
@@ -206,19 +200,13 @@ class ConnectorHomeController extends GetxController {
     isLocationDialogShowing.value = true;
 
     Get.dialog(
-      WillPopScope(
-        onWillPop: () async => false,
+      PopScope(
+        canPop: false,
         child: AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: Colors.white,
           titlePadding: const EdgeInsets.all(20),
-          contentPadding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-            bottom: 16,
-          ),
+          contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
           title: Container(
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xFFF9D0CB)),
@@ -248,15 +236,14 @@ class ConnectorHomeController extends GetxController {
                     await Geolocator.openLocationSettings();
                   }
                 } catch (e) {
-                  Get.printError(info: 'Error opening settings: $e');
+                  log( 'Error opening settings: $e');
                 }
                 const int maxAttempts = 6;
                 const Duration interval = Duration(seconds: 1);
 
                 for (int attempt = 0; attempt < maxAttempts; attempt++) {
                   await Future.delayed(interval);
-                  final LocationPermission after =
-                      await Geolocator.checkPermission();
+                  final LocationPermission after = await Geolocator.checkPermission();
 
                   if (after == LocationPermission.always ||
                       after == LocationPermission.whileInUse) {
@@ -280,8 +267,7 @@ class ConnectorHomeController extends GetxController {
                 if (Get.isDialogOpen ?? false) Get.back();
                 isLocationDialogShowing.value = false;
                 Future.delayed(const Duration(milliseconds: 200), () {
-                  if (!isLocationDialogShowing.value)
-                    _showMandatoryLocationDialog();
+                  if (!isLocationDialogShowing.value) _showMandatoryLocationDialog();
                 });
               },
               buttonName: 'Continue',
@@ -305,11 +291,7 @@ class ConnectorHomeController extends GetxController {
     {"title": "ERP", "icon": Asset.erp, "available": false},
     {"title": "Project Management", "icon": Asset.project, "available": false},
     {"title": "HRMS", "icon": Asset.hrms, "available": false},
-    {
-      "title": "Portfolio Management",
-      "icon": Asset.portfolio,
-      "available": false,
-    },
+    {"title": "Portfolio Management", "icon": Asset.portfolio, "available": false},
     {"title": "OVP", "icon": Asset.ovp, "available": false},
     {"title": "Construction Taxi", "icon": Asset.taxi, "available": false},
   ];

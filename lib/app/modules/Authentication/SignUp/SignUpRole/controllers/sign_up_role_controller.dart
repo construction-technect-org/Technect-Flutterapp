@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/sign_up_service.dart';
@@ -72,7 +75,7 @@ class SignUpRoleController extends GetxController {
         );
         if (response.success == true) {
           //SnackBars.successSnackBar(content: 'Aadhar Verified Successfully');
-          print('Aadhar Verified Successfully');
+          log('Aadhar Verified Successfully');
 
           detailsAadhar.value = response;
           isGSTValid.value = true;
@@ -86,24 +89,21 @@ class SignUpRoleController extends GetxController {
     } finally {
       if (Get.isBottomSheetOpen == true) {
         currentRoute = Get.currentRoute;
-        print("Route $currentRoute");
+        log("Route $currentRoute");
         Get.focusScope?.unfocus();
-        print("geb back");
+        log("geb back");
         Get.back();
-        print("Ture Adhaar ${isGSTValid.value}");
-        print("Not working");
+        log("Ture Adhaar ${isGSTValid.value}");
+        log("Not working");
       }
     }
   }
 
   void showBottomSheet() {
     Get.bottomSheet(
-      AadharOtpVerificationView(),
+      const AadharOtpVerificationView(),
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      useRootNavigator: false,
-      isDismissible: true,
-      enableDrag: true,
     );
   }
 

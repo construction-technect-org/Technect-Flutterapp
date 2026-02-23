@@ -88,7 +88,7 @@ class ConnectorSiteLocationController extends GetxController {
       }
 
       final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
 
       currentPosition.value = LatLng(position.latitude, position.longitude);
@@ -111,10 +111,7 @@ class ConnectorSiteLocationController extends GetxController {
   void onCameraIdle() {
     if (isSearching.value == false) {
       searchController.clear();
-      _getAddressFromCoordinates(
-        currentPosition.value.latitude,
-        currentPosition.value.longitude,
-      );
+      _getAddressFromCoordinates(currentPosition.value.latitude, currentPosition.value.longitude);
     } else {
       isSearching.value = false;
     }

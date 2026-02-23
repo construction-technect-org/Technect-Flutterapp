@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class SwitchVRMAccountController extends GetxController {
@@ -13,7 +16,7 @@ class SwitchVRMAccountController extends GetxController {
       currentRole.value = 'partner';
     }
     myPref.role.val = currentRole.value;
-    print("Roleach ${myPref.role.val}");
+    log("Roleach ${myPref.role.val}");
     Get.back();
     if (myPref.role.val == 'connector') {
       Get.offAllNamed(Routes.VRM_MAIN);

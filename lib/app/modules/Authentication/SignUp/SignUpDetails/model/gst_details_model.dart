@@ -15,11 +15,11 @@ class DetailsGST {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    if (this.gstDetails != null) {
-      data['gstDetails'] = this.gstDetails?.toJson();
+    data['success'] = success;
+    if (gstDetails != null) {
+      data['gstDetails'] = gstDetails?.toJson();
     }
-    data['message'] = this.message;
+    data['message'] = message;
     return data;
   }
 }
@@ -61,15 +61,15 @@ class GstDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['gstNumber'] = this.gstNumber;
-    data['legalName'] = this.legalName;
-    data['tradeName'] = this.tradeName;
-    data['address'] = this.address;
-    data['registrationDate'] = this.registrationDate;
-    data['status'] = this.status;
-    data['businessType'] = this.businessType;
-    data['centerJurisdiction'] = this.centerJurisdiction;
-    data['stateJurisdiction'] = this.stateJurisdiction;
+    data['gstNumber'] = gstNumber;
+    data['legalName'] = legalName;
+    data['tradeName'] = tradeName;
+    data['address'] = address;
+    data['registrationDate'] = registrationDate;
+    data['status'] = status;
+    data['businessType'] = businessType;
+    data['centerJurisdiction'] = centerJurisdiction;
+    data['stateJurisdiction'] = stateJurisdiction;
     return data;
   }
 }

@@ -133,7 +133,7 @@ class VRMDashboardController extends GetxController {
     totalTitle.value = data.totalCount?.title ?? "";
     totalCountValue.value = (data.totalCount?.count ?? 0).toString();
     final pct = data.totalCount?.percentageChange ?? 0;
-    totalPercent.value = "${pct.toString()}%";
+    totalPercent.value = "$pct%";
     conversionPercent.value = (data.orderedRatio ?? 0).toDouble();
 
     final cards = data.statCards;

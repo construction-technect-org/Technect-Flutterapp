@@ -16,15 +16,11 @@ String? validateName(String? value, {String fieldName = "Name"}) {
 
 class NameInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     String newText = newValue.text.replaceAll(RegExp('[^a-zA-Z]'), '');
     if (newText.isNotEmpty) {
       newText =
-          newText[0].toUpperCase() +
-          (newText.length > 1 ? newText.substring(1).toLowerCase() : '');
+          newText[0].toUpperCase() + (newText.length > 1 ? newText.substring(1).toLowerCase() : '');
     }
     final int diff = newValue.text.length - newText.length;
     int newOffset = newValue.selection.baseOffset - diff;
@@ -40,10 +36,7 @@ class NameInputFormatter extends TextInputFormatter {
 
 class EmailInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     final String newText = newValue.text.replaceAll(' ', '').toLowerCase();
     final int diff = newValue.text.length - newText.length;
     int newOffset = newValue.selection.baseOffset - diff;
@@ -72,7 +65,7 @@ String? validatePassword(String? value) {
     errors.add("• At least 8 characters");
   }
 
-  if (!RegExp(r'[A-Z]').hasMatch(value)) {
+  if (!RegExp('[A-Z]').hasMatch(value)) {
     errors.add("• At least 1 uppercase letter");
   }
 
@@ -93,35 +86,26 @@ String? validatePassword(String? value) {
 
 bool isValidPassword(String? password) {
   if (password == null || password.isEmpty) return false;
-  return RegExp(
-    r'^(?=.*[A-Za-z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$',
-  ).hasMatch(password);
+  return RegExp(r'^(?=.*[A-Za-z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$').hasMatch(password);
 }
 
 bool isValidUsername(String? username) {
   if (username == null || username.isEmpty) return false;
-  return RegExp(
-    r'^(?!.*[_.]{2})[a-zA-Z0-9](?:[a-zA-Z0-9._]{1,}[a-zA-Z0-9])?$',
-  ).hasMatch(username);
+  return RegExp(r'^(?!.*[_.]{2})[a-zA-Z0-9](?:[a-zA-Z0-9._]{1,}[a-zA-Z0-9])?$').hasMatch(username);
 }
 
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    return newValue.copyWith(
-      text: newValue.text.toUpperCase(),
-      selection: newValue.selection,
-    );
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return newValue.copyWith(text: newValue.text.toUpperCase(), selection: newValue.selection);
   }
 }
 
 class CommonTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final bool showDivider; // <-- new
-  final Widget? suffixIcon, suffix;
+  final Widget? suffixIcon;
+  final Widget? suffix;
   final Iterable<String>? autofillHints;
   final String? hintText;
   final String? headerText;
@@ -195,15 +179,10 @@ class CommonTextField extends StatelessWidget {
                 children: [
                   Text(
                     headerText ?? "",
-                    style:
-                        style ??
-                        MyTexts.medium14.copyWith(color: MyColors.gra54),
+                    style: style ?? MyTexts.medium14.copyWith(color: MyColors.gra54),
                   ),
                   if (isRed == true)
-                    Text(
-                      '*',
-                      style: MyTexts.medium14.copyWith(color: MyColors.red33),
-                    ),
+                    Text('*', style: MyTexts.medium14.copyWith(color: MyColors.red33)),
                 ],
               ),
               const Gap(5),
@@ -233,16 +212,11 @@ class CommonTextField extends StatelessWidget {
           enabled: enable ?? true,
           decoration: InputDecoration(
             prefixIcon: prefixIcon != null
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: prefixIcon,
-                  )
+                ? Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: prefixIcon)
                 : null,
             suffixIcon: suffixIcon != null
                 ? Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: suffixPadding ?? 16,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: suffixPadding ?? 16),
                     child: suffixIcon,
                   )
                 : null,
@@ -266,16 +240,11 @@ class CommonTextField extends StatelessWidget {
             filled: true,
             fillColor: bgColor ?? Colors.white,
             counterText: "",
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 12,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             errorStyle: MyTexts.medium13.copyWith(color: MyColors.red33),
             errorMaxLines: 2,
             hintText: hintText,
-            hintStyle: MyTexts.medium13.copyWith(
-              color: MyColors.primary.withValues(alpha: 0.5),
-            ),
+            hintStyle: MyTexts.medium13.copyWith(color: MyColors.primary.withValues(alpha: 0.5)),
           ),
         ),
       ],

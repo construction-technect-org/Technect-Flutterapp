@@ -1,3 +1,5 @@
+import "dart:developer";
+
 import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
@@ -30,7 +32,6 @@ class SwitchAccountController extends GetxController {
         currentRole.value = 'connector';
         myPref.setRole("connector");
         await controller.fetchConnectorModule();
-
       }
     } else {
       // 🔹 Switch to merchant (partner)
@@ -55,7 +56,7 @@ class SwitchAccountController extends GetxController {
     //   currentRole.value = 'partner';
     // }
     // myPref.role.val = currentRole.value;
-    print("Roleach ${myPref.role.val}");
+    log("Roleach ${myPref.role.val}");
     Get.back();
     // Get.delete<ConnectorHomeController>(force: true);
     // Get.delete<CommonController>(force: true);
@@ -77,20 +78,21 @@ class SwitchAccountController extends GetxController {
   Future<void> switchProfile(String profileId, String profileType) async {
     try {
       final body = {"profileId": profileId, "profileType": profileType};
+      log("body $body");
 
-      final switchResponse = await apiManager.postObject(
-        url: "/${APIConstants.switchAccount}",
-        body: body,
-      );
-      final String? token = switchResponse["token"];
+      // final switchResponse = await apiManager.postObject(
+      //   url: APIConstants.switchAccount,
+      //   body: body,
+      // );
+      // final String? token = switchResponse["token"];
 
-      if (token != null && token.isNotEmpty) {
-        await _appHiveService.setToken(token);
-        myPref.setToken(token);
-        Get.printInfo(info: "✅ New token stored successfully");
-      }
+      // if (token != null && token.isNotEmpty) {
+      //   await _appHiveService.setToken(token);
+      //   myPref.setToken(token);
+      //   log( "✅ New token stored successfully");
+      // }
     } catch (e) {
-      Get.printInfo(info: "❌ Switch Profile Error: $e");
+      log("❌ Switch Profile Error: $e");
     }
   }
 
@@ -108,15 +110,16 @@ class SwitchAccountController extends GetxController {
       SnackBars.errorSnackBar(content: "Update failed: $e $st");
     } finally {}
   }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     final CommonController commonController = Get.find<CommonController>();
-    Get.printInfo(
-      info: '🌐has All Data   : ${commonController.profileData.value}',
-    );
-    commonController.fetchProfileDataM();
+    log('🌐has All Data   : ${commonController.profileData.value}');
+    if (myPref.getToken().isNotEmpty) {
+      commonController.fetchProfileDataM();
+    }
     currentRole.value = myPref.role.val;
     // hasPartnerAccount.value =
     //     (commonController
@@ -127,10 +130,10 @@ class SwitchAccountController extends GetxController {
     //                 ?.ver ??
     //             "")
     //         .isNotEmpty;
-    // Get.printInfo(info: '🌐has Partner n  : ${hasPartnerAccount.value}');
+    // log( '🌐has Partner n  : ${hasPartnerAccount.value}');
     //
     // hasConnectorAccount.value =
     //     commonController.profileData.value.data?.connectorProfile != null;
-    // Get.printInfo(info: '🌐has Connector n : ${hasConnectorAccount.value}');
+    // log( '🌐has Connector n : ${hasConnectorAccount.value}');
   }
 }

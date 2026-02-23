@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
 
@@ -17,7 +20,7 @@ class ConnectionInboxController extends GetxController {
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.microtask(() async {
-        if(PermissionLabelUtils.canShow(PermissionKeys.connectionManager)){
+        if (PermissionLabelUtils.canShow(PermissionKeys.connectionManager)) {
           await fetchIncomingConnections(isLoad: false);
           await fetchOutgoingConnections(isLoad: false);
         }
@@ -34,7 +37,7 @@ class ConnectionInboxController extends GetxController {
         params['status'] = status;
       }
       final response = await apiManager.get(
-        url: "/${APIConstants.incomingConnectionInbox}",
+        url: APIConstants.incomingConnectionInbox,
         // url: myPref.role.val == "connector"
         //     ? APIConstants.connectionConnectorInbox
         //     : APIConstants.connectionInbox,
@@ -47,12 +50,13 @@ class ConnectionInboxController extends GetxController {
       isLoader.value = false;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoader.value = false;
     }
   }
+
   Future<void> fetchOutgoingConnections({String? status, bool? isLoad}) async {
     try {
       isLoader.value = isLoad ?? true;
@@ -61,7 +65,7 @@ class ConnectionInboxController extends GetxController {
         params['status'] = status;
       }
       final response = await apiManager.get(
-        url: "/${APIConstants.outgoingConnectionInbox}",
+        url: APIConstants.outgoingConnectionInbox,
         // url: myPref.role.val == "connector"
         //     ? APIConstants.connectionConnectorInbox
         //     : APIConstants.connectionInbox,
@@ -74,7 +78,7 @@ class ConnectionInboxController extends GetxController {
       isLoader.value = false;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoader.value = false;
@@ -100,23 +104,23 @@ class ConnectionInboxController extends GetxController {
       // filteredConnections.addAll(typeFiltered);
     } else {
       filteredConnections.clear();
-    //   filteredConnections.value = typeFiltered.where((connection) {
-    //     return (connection.connectorName ?? '').toLowerCase().contains(
-    //           value.toLowerCase(),
-    //         ) ||
-    //         (connection.productName ?? '').toLowerCase().contains(
-    //           value.toLowerCase(),
-    //         ) ||
-    //         (connection.serviceName ?? '').toLowerCase().contains(
-    //           value.toLowerCase(),
-    //         ) ||
-    //         (connection.requestMessage ?? '').toLowerCase().contains(
-    //           value.toLowerCase(),
-    //         ) ||
-    //         (connection.merchantName ?? '').toLowerCase().contains(
-    //           value.toLowerCase(),
-    //         );
-    //   }).toList();
+      //   filteredConnections.value = typeFiltered.where((connection) {
+      //     return (connection.connectorName ?? '').toLowerCase().contains(
+      //           value.toLowerCase(),
+      //         ) ||
+      //         (connection.productName ?? '').toLowerCase().contains(
+      //           value.toLowerCase(),
+      //         ) ||
+      //         (connection.serviceName ?? '').toLowerCase().contains(
+      //           value.toLowerCase(),
+      //         ) ||
+      //         (connection.requestMessage ?? '').toLowerCase().contains(
+      //           value.toLowerCase(),
+      //         ) ||
+      //         (connection.merchantName ?? '').toLowerCase().contains(
+      //           value.toLowerCase(),
+      //         );
+      //   }).toList();
     }
   }
 
@@ -148,23 +152,19 @@ class ConnectionInboxController extends GetxController {
     _filterByItemType();
   }
 
-  Future<void> acceptConnection(
-    String connectionId,
-  ) async {
+  Future<void> acceptConnection(String connectionId) async {
     try {
       isLoading.value = true;
       final response = await apiManager.postObject(
-        url: "/${APIConstants.acceptReject}/accept",
-        body: {"connectionId": connectionId??""},
+        url: "${APIConstants.acceptReject}/accept",
+        body: {"connectionId": connectionId},
       );
 
       if (response['success'] == true) {
         SnackBars.successSnackBar(content: 'Connection accepted successfully');
         await fetchIncomingConnections();
       } else {
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to accept connection',
-        );
+        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to accept connection');
       }
     } catch (e) {
       // No need to show error
@@ -173,23 +173,19 @@ class ConnectionInboxController extends GetxController {
     }
   }
 
-  Future<void> rejectConnection(
-    String connectionId,
-  ) async {
+  Future<void> rejectConnection(String connectionId) async {
     try {
       isLoading.value = true;
       final response = await apiManager.postObject(
-        url: "/${APIConstants.acceptReject}/reject",
-        body: {"connectionId": connectionId??""},
+        url: "${APIConstants.acceptReject}/reject",
+        body: {"connectionId": connectionId},
       );
 
       if (response['success'] == true) {
         SnackBars.successSnackBar(content: 'Connection rejected successfully');
         await fetchIncomingConnections();
       } else {
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to reject connection',
-        );
+        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to reject connection');
       }
     } catch (e) {
       // No need to show error
@@ -197,80 +193,66 @@ class ConnectionInboxController extends GetxController {
       isLoading.value = false;
     }
   }
+
   Future<void> removeConnection(String connectionId) async {
     try {
       isLoading.value = true;
 
       final response = await apiManager.postObject(
-        url: "/${APIConstants.acceptReject}/remove",
+        url: "${APIConstants.acceptReject}/remove",
         body: {"connectionId": connectionId},
       );
 
       if (response['success'] == true) {
-        SnackBars.successSnackBar(
-          content: 'Connection removed successfully',
-        );
+        SnackBars.successSnackBar(content: 'Connection removed successfully');
 
         await fetchIncomingConnections();
       } else {
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to remove connection',
-        );
+        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to remove connection');
       }
     } catch (e) {
-      SnackBars.errorSnackBar(
-        content: 'Something went wrong',
-      );
+      SnackBars.errorSnackBar(content: 'Something went wrong');
     } finally {
       isLoading.value = false;
     }
   }
+
   Future<void> blockConnection(String connectionId) async {
     try {
       isLoading.value = true;
 
       final response = await apiManager.postObject(
-        url: "/${APIConstants.acceptReject}/block",
+        url: "${APIConstants.acceptReject}/block",
         body: {"connectionId": connectionId},
       );
 
       if (response['success'] == true) {
-        SnackBars.successSnackBar(
-          content: 'User blocked successfully',
-        );
+        SnackBars.successSnackBar(content: 'User blocked successfully');
 
         await fetchIncomingConnections();
       } else {
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to block user',
-        );
+        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to block user');
       }
     } catch (e) {
-      SnackBars.errorSnackBar(
-        content: 'Something went wrong',
-      );
+      SnackBars.errorSnackBar(content: 'Something went wrong');
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> withdrawRequest(
-    String connectionId,
-  ) async {
+  Future<void> withdrawRequest(String connectionId) async {
     try {
       isLoading.value = true;
       final response = await apiManager.postObject(
-        url: "/${APIConstants.connectionWithdrawRequest}",
-        body: {"connectionId": connectionId??""},
+        url: APIConstants.connectionWithdrawRequest,
+        body: {"connectionId": connectionId},
       );
 
       if (response['success'] == true) {
         SnackBars.successSnackBar(content: 'Connection withdraw  successfully');
         await fetchOutgoingConnections();
       } else {
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to withdraw connection',
-        );
+        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to withdraw connection');
       }
     } catch (e) {
       // No need to show error

@@ -1,3 +1,5 @@
+
+
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -8,9 +10,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
 
 class ConnectionInboxView extends StatelessWidget {
-  final ConnectionInboxController controller = Get.put(
-    ConnectionInboxController(),
-  );
+  final ConnectionInboxController controller = Get.put(ConnectionInboxController());
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +33,7 @@ class ConnectionInboxView extends StatelessWidget {
                   children: [
                     Container(
                       decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(Asset.loginBg),
-                          fit: BoxFit.cover,
-                        ),
+                        image: DecorationImage(image: AssetImage(Asset.loginBg), fit: BoxFit.cover),
                       ),
                     ),
                     Column(
@@ -50,11 +47,7 @@ class ConnectionInboxView extends StatelessWidget {
                             },
                             borderRadius: 22,
                             hintText: 'Search',
-                            prefixIcon: SvgPicture.asset(
-                              Asset.searchIcon,
-                              height: 16,
-                              width: 16,
-                            ),
+                            prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                           ),
                         ),
                         SizedBox(height: 1.5.h),
@@ -73,9 +66,7 @@ class ConnectionInboxView extends StatelessWidget {
                                     onTap: () => controller.onTabChanged(0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color:
-                                            controller.selectedTabIndex.value ==
-                                                0
+                                        color: controller.selectedTabIndex.value == 0
                                             ? MyColors.primary
                                             : Colors.transparent,
                                         borderRadius: BorderRadius.circular(30),
@@ -84,11 +75,7 @@ class ConnectionInboxView extends StatelessWidget {
                                         child: Text(
                                           "Received",
                                           style: MyTexts.medium14.copyWith(
-                                            color:
-                                                controller
-                                                        .selectedTabIndex
-                                                        .value ==
-                                                    0
+                                            color: controller.selectedTabIndex.value == 0
                                                 ? Colors.white
                                                 : MyColors.fontBlack,
                                           ),
@@ -104,9 +91,7 @@ class ConnectionInboxView extends StatelessWidget {
                                     onTap: () => controller.onTabChanged(1),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color:
-                                            controller.selectedTabIndex.value ==
-                                                1
+                                        color: controller.selectedTabIndex.value == 1
                                             ? MyColors.primary
                                             : Colors.transparent,
                                         borderRadius: BorderRadius.circular(30),
@@ -115,11 +100,7 @@ class ConnectionInboxView extends StatelessWidget {
                                         child: Text(
                                           "Sent",
                                           style: MyTexts.medium14.copyWith(
-                                            color:
-                                                controller
-                                                        .selectedTabIndex
-                                                        .value ==
-                                                    1
+                                            color: controller.selectedTabIndex.value == 1
                                                 ? Colors.white
                                                 : MyColors.fontBlack,
                                           ),
@@ -137,16 +118,13 @@ class ConnectionInboxView extends StatelessWidget {
                           child: Obx(() {
                             if (controller.isLoading.value) {
                               return const Center(
-                                child: CircularProgressIndicator(
-                                  color: MyColors.primary,
-                                ),
+                                child: CircularProgressIndicator(color: MyColors.primary),
                               );
                             } else if (controller.filteredConnections.isEmpty) {
                               return SingleChildScrollView(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 child: SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.7,
+                                  height: MediaQuery.of(context).size.height * 0.7,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -176,21 +154,17 @@ class ConnectionInboxView extends StatelessWidget {
                             } else {
                               if (controller.selectedTabIndex.value == 0) {
                                 return ListView.builder(
-                                  itemCount:
-                                      controller.incomingConnections.length,
+                                  itemCount: controller.incomingConnections.length,
                                   itemBuilder: (context, index) {
-                                    final item =
-                                        controller.incomingConnections[index];
+                                    final item = controller.incomingConnections[index];
                                     return ReceivedCard(item: item);
                                   },
                                 );
                               } else {
                                 return ListView.builder(
-                                  itemCount:
-                                      controller.outgoingConnections.length,
+                                  itemCount: controller.outgoingConnections.length,
                                   itemBuilder: (context, index) {
-                                    final item =
-                                        controller.outgoingConnections[index];
+                                    final item = controller.outgoingConnections[index];
                                     return SentCard(item: item);
                                   },
                                 );
@@ -305,11 +279,7 @@ class ConnectionInboxView extends StatelessWidget {
                     ),
                   ],
                 )
-              : const Center(
-                  child: NoPermissionWidget(
-                    message: 'No permission for this section',
-                  ),
-                ),
+              : const Center(child: NoPermissionWidget(message: 'No permission for this section')),
         ),
       ),
     );
@@ -496,7 +466,7 @@ class ConnectionInboxView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "connection.connectorName" ?? 'Unknown',
+                      "connection.connectorName",
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.fontBlack,
                         fontFamily: MyTexts.SpaceGrotesk,
@@ -507,17 +477,14 @@ class ConnectionInboxView extends StatelessWidget {
                       children: [
                         SvgPicture.asset(
                           Asset.location,
-                          colorFilter: const ColorFilter.mode(
-                            MyColors.gra54,
-                            BlendMode.srcIn,
-                          ),
+                          colorFilter: const ColorFilter.mode(MyColors.gra54, BlendMode.srcIn),
                           height: 14,
                           width: 14,
                         ),
                         const Gap(4),
                         Expanded(
                           child: Text(
-                            "connection.connectorAddress" ?? "",
+                            "connection.connectorAddress",
                             maxLines: 2,
                             style: MyTexts.medium13.copyWith(
                               color: MyColors.gra54,
@@ -533,50 +500,34 @@ class ConnectionInboxView extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              ConnectionDialogs.showAcceptConnectionDialog(
-                                context,
-                                connection,
-                              );
+                              ConnectionDialogs.showAcceptConnectionDialog(context, connection);
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 18,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
                               decoration: BoxDecoration(
                                 color: MyColors.greenBtn,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 "Connect",
-                                style: MyTexts.medium13.copyWith(
-                                  color: MyColors.white,
-                                ),
+                                style: MyTexts.medium13.copyWith(color: MyColors.white),
                               ),
                             ),
                           ),
                           const Gap(16),
                           GestureDetector(
                             onTap: () {
-                              ConnectionDialogs.showRejectConnectionDialog(
-                                context,
-                                connection,
-                              );
+                              ConnectionDialogs.showRejectConnectionDialog(context, connection);
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 18,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
                               decoration: BoxDecoration(
                                 color: MyColors.red,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 "Disconnect",
-                                style: MyTexts.medium13.copyWith(
-                                  color: MyColors.white,
-                                ),
+                                style: MyTexts.medium13.copyWith(color: MyColors.white),
                               ),
                             ),
                           ),
@@ -584,21 +535,14 @@ class ConnectionInboxView extends StatelessWidget {
                       ),
                     ] else ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 18,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
                         decoration: BoxDecoration(
-                          color: getStatusColor(
-                            status: connection.status ?? "",
-                          ),
+                          color: getStatusColor(status: connection.status ?? ""),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           connection.status?.capitalizeFirst ?? "",
-                          style: MyTexts.medium13.copyWith(
-                            color: MyColors.gra54,
-                          ),
+                          style: MyTexts.medium13.copyWith(color: MyColors.gra54),
                         ),
                       ),
                     ],
@@ -679,26 +623,17 @@ class ChatBottomSheet extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    "connection.connectorName" ?? "Unknown",
+                    "connection.connectorName",
                     style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                   ),
                 ),
                 PopupMenuButton<String>(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   onSelected: (value) {
                     if (value == 'remove') {
-                      ConnectionDialogs.showRemoveConnectionDialog(
-                        context,
-                        connection,
-                      );
+                      ConnectionDialogs.showRemoveConnectionDialog(context, connection);
                     } else if (value == 'block') {
-                      ConnectionDialogs.showBlockDialog(
-                        context,
-                        connection,
-                        "Block",
-                      );
+                      ConnectionDialogs.showBlockDialog(context, connection, "Block");
                     }
                   },
                   itemBuilder: (_) => [
@@ -718,12 +653,7 @@ class ChatBottomSheet extends StatelessWidget {
                         children: [
                           SvgPicture.asset(Asset.block),
                           const Gap(4),
-                          Text(
-                            'Block',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('Block', style: MyTexts.medium14.copyWith(color: MyColors.red)),
                         ],
                       ),
                     ),
@@ -779,11 +709,7 @@ class ChatBottomSheet extends StatelessWidget {
                     textAlign: TextAlign.right,
                   ),
                   const Gap(16),
-                  RoundedButton(
-                    buttonName: "Connect CRM",
-                    onTap: () {},
-                    width: 160,
-                  ),
+                  RoundedButton(buttonName: "Connect CRM", onTap: () {}, width: 160),
                 ],
               ),
             ),
@@ -828,7 +754,6 @@ class SentCard extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               blurRadius: 12,
-              spreadRadius: 0,
               offset: const Offset(0, 4),
             ),
           ],
@@ -850,10 +775,7 @@ class SentCard extends StatelessWidget {
                     children: [
                       Text(
                         "House owner / other",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                       ),
                       SizedBox(height: 4),
                       Text(
@@ -872,16 +794,13 @@ class SentCard extends StatelessWidget {
               children: [
                 /// Connect Sent Button
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                   decoration: BoxDecoration(
                     color: const Color(0xff1E2A78),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child:  Text(
-                    item.status=="withdrawn"?"${item.status}":"Connect Sent",
+                  child: Text(
+                    item.status == "withdrawn" ? "${item.status}" : "Connect Sent",
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
@@ -890,18 +809,12 @@ class SentCard extends StatelessWidget {
 
                 /// Time Badge
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.blueGrey.shade100,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
-                    "Connected 2h ago",
-                    style: TextStyle(fontSize: 11),
-                  ),
+                  child: const Text("Connected 2h ago", style: TextStyle(fontSize: 11)),
                 ),
               ],
             ),
@@ -932,7 +845,6 @@ class ReceivedCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 12,
-            spreadRadius: 0,
             offset: const Offset(0, 4),
           ),
         ],
@@ -954,10 +866,7 @@ class ReceivedCard extends StatelessWidget {
                   children: [
                     Text(
                       "House owner / other",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: 4),
                     Text(
@@ -981,10 +890,7 @@ class ReceivedCard extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      ConnectionDialogs.showRemoveConnectionDialog(
-                        context,
-                        item,
-                      );
+                      ConnectionDialogs.showRemoveConnectionDialog(context, item);
                     },
                     child: Container(
                       height: 36,
@@ -993,10 +899,7 @@ class ReceivedCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Center(
-                        child: Text(
-                          "Accept",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: Text("Accept", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
@@ -1007,11 +910,7 @@ class ReceivedCard extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      ConnectionDialogs.showBlockDialog(
-                        context,
-                        item,
-                        "Decline",
-                      );
+                      ConnectionDialogs.showBlockDialog(context, item, "Decline");
                     },
                     child: Container(
                       height: 36,
@@ -1020,10 +919,7 @@ class ReceivedCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Center(
-                        child: Text(
-                          "Decline",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: Text("Decline", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
@@ -1042,16 +938,12 @@ class ReceivedCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Center(
-                        child: Text(
-                          "Block",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: Text("Block", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
                 ),
-              ]
-              else ...[
+              ] else ...[
                 Expanded(
                   child: Container(
                     height: 36,
@@ -1059,12 +951,7 @@ class ReceivedCard extends StatelessWidget {
                       color: Colors.blueGrey.shade100,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Center(
-                      child: Text(
-                        "Connected",
-                        style: TextStyle(fontSize: 11),
-                      ),
-                    ),
+                    child: const Center(child: Text("Connected", style: TextStyle(fontSize: 11))),
                   ),
                 ),
                 const SizedBox(width: 7),
@@ -1073,11 +960,7 @@ class ReceivedCard extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      ConnectionDialogs.showBlockDialog(
-                        context,
-                        item,
-                        "Remove",
-                      );
+                      ConnectionDialogs.showBlockDialog(context, item, "Remove");
                     },
                     child: Container(
                       height: 36,
@@ -1086,10 +969,7 @@ class ReceivedCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Center(
-                        child: Text(
-                          "Remove",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: Text("Remove", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ),
@@ -1100,10 +980,7 @@ class ReceivedCard extends StatelessWidget {
 
               /// Time Badge
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.blueGrey.shade100,
                   borderRadius: BorderRadius.circular(20),

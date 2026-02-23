@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
@@ -10,7 +13,7 @@ void showSwitchAccountBottomSheet() {
   Get.printInfo(
     info: '🌐has All Data   : ${commonController.profileDataM.value}',
   );
-  Get.printInfo(info: '🌐has All Data   : ${myPref.profileData}');
+  log( '🌐has All Data   : ${myPref.profileData}');
 
   controller.hasPartnerAccount.value =
       (commonController
@@ -46,8 +49,8 @@ void showSwitchAccountBottomSheet() {
         VoidCallback? onTap;
         IconData? trailingIcon;
 
-        Get.printInfo(info: '🌐has Partner  :$hasPartner');
-        Get.printInfo(info: '🌐has Connector  :$hasConnector');
+        log( '🌐has Partner  :$hasPartner');
+        log( '🌐has Connector  :$hasConnector');
         //if you have only one account then first add the sec account
         //if u have already sec account  then direct call  switch method
         // Decide what to show

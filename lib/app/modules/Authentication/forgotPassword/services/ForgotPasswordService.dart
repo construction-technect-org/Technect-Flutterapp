@@ -1,10 +1,11 @@
-import 'package:construction_technect/app/core/apiManager/api_constants.dart';
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/models/ForgotPasswordOtpModel.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/models/ForgotPasswordResetModel.dart';
-import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:get/get.dart';
 
 class ForgotPasswordService extends GetxService {
@@ -42,7 +43,7 @@ class ForgotPasswordService extends GetxService {
         url: Endpoints.verifyPwdApi,
         body: {"countryCode": countryCode, "phone": mobileNumber, "otp": otp},
       );
-      print("Verified OTP");
+      log("Verified OTP");
       return ForgotPasswordOtpModel.fromJson(response);
     } catch (e) {
       rethrow;

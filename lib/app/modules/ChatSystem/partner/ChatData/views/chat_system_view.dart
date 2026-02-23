@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:construction_technect/app/core/utils/chat_utils.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
@@ -737,7 +738,7 @@ class ChatSystemView extends StatelessWidget {
                         // Show microphone button for recording (WhatsApp style)
                         return GestureDetector(
                           onLongPressStart: (_) => controller.startRecording(),
-                          onLongPressEnd: (_) => controller.stopRecording(send: true),
+                          onLongPressEnd: (_) => controller.stopRecording(),
                           onLongPressCancel: () => controller.stopRecording(send: false),
                           child: Container(
                             padding: const EdgeInsets.all(8),

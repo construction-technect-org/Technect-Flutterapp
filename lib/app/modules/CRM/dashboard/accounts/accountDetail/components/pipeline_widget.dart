@@ -136,7 +136,6 @@ class PipelineView extends StatelessWidget {
                                           color: highlight
                                               ? stage.color.withValues(alpha: .5)
                                               : stage.color.withValues(alpha: .2),
-                                          width: 1,
                                         ),
                                       ),
                                     ),

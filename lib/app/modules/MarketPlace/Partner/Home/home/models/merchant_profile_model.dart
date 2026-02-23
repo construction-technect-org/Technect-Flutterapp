@@ -1,4 +1,3 @@
-import 'package:construction_technect/app/modules/CRM/lead/addLead/model/user_info_model.dart';
 
 class MerchantProfileModel {
   bool? success;
@@ -8,16 +7,14 @@ class MerchantProfileModel {
 
   MerchantProfileModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    merchant = json['merchant'] != null
-        ? Merchant.fromJson(json['merchant'])
-        : null;
+    merchant = json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    if (this.merchant != null) {
-      data['merchant'] = this.merchant?.toJson();
+    data['success'] = success;
+    if (merchant != null) {
+      data['merchant'] = merchant?.toJson();
     }
     return data;
   }
@@ -92,7 +89,9 @@ class Merchant {
     businessEmail = json['businessEmail'];
     businessPhone = json['businessPhone'];
     alternateBusinessPhone = json['alternateBusinessPhone'];
-    yearOfEstablish = json['yearOfEstablish'];
+    yearOfEstablish = json['yearOfEstablish'] is int
+        ? json['yearOfEstablish']
+        : int.tryParse(json['yearOfEstablish']?.toString() ?? "");
     logoKey = json['logo'] != null ? Logo.fromJson(json['logo']) : null;
 
     businessAddress = json['businessAddress'];
@@ -106,9 +105,7 @@ class Merchant {
         certifications?.add(Cert.fromJson(v));
       });
     }
-    pocDetails = json['pocDetails'] != null
-        ? POC.fromJson(json['pocDetails'])
-        : null;
+    pocDetails = json['pocDetails'] != null ? POC.fromJson(json['pocDetails']) : null;
 
     profileStatus = json['profileStatus'];
     version = json['version'];
@@ -119,43 +116,41 @@ class Merchant {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['ownerUserId'] = this.ownerUserId;
-    data['verificationId'] = this.verificationId;
-    data['verificationType'] = this.verificationType;
-    data['gstinHash'] = this.gstinHash;
-    if (this.verificationDetails != null) {
-      data['verificationDetails'] = this.verificationDetails?.toJson();
+    data['id'] = id;
+    data['ownerUserId'] = ownerUserId;
+    data['verificationId'] = verificationId;
+    data['verificationType'] = verificationType;
+    data['gstinHash'] = gstinHash;
+    if (verificationDetails != null) {
+      data['verificationDetails'] = verificationDetails?.toJson();
     }
-    data['verifiedAt'] = this.verifiedAt;
-    data['businessName'] = this.businessName;
-    data['businessType'] = this.businessType;
-    data['businessWebsite'] = this.businessWebsite;
-    data['businessEmail'] = this.businessEmail;
-    data['businessPhone'] = this.businessPhone;
-    data['alternateBusinessPhone'] = this.alternateBusinessPhone;
-    data['yearOfEstablish'] = this.yearOfEstablish;
-    if (this.logoKey != null) {
-      data['logo'] = this.logoKey?.toJson();
+    data['verifiedAt'] = verifiedAt;
+    data['businessName'] = businessName;
+    data['businessType'] = businessType;
+    data['businessWebsite'] = businessWebsite;
+    data['businessEmail'] = businessEmail;
+    data['businessPhone'] = businessPhone;
+    data['alternateBusinessPhone'] = alternateBusinessPhone;
+    data['yearOfEstablish'] = yearOfEstablish;
+    if (logoKey != null) {
+      data['logo'] = logoKey?.toJson();
     }
-    data['businessAddress'] = this.businessAddress;
-    if (this.businessHours != null) {
-      data['businessHours'] = this.businessHours?.toJson();
+    data['businessAddress'] = businessAddress;
+    if (businessHours != null) {
+      data['businessHours'] = businessHours?.toJson();
     }
-    if (this.certifications != null) {
-      data['certifications'] = this.certifications
-          ?.map((v) => v.toJson())
-          .toList();
+    if (certifications != null) {
+      data['certifications'] = certifications?.map((v) => v.toJson()).toList();
     }
-    if (this.pocDetails != null) {
-      data['pocDetails'] = this.pocDetails?.toJson();
+    if (pocDetails != null) {
+      data['pocDetails'] = pocDetails?.toJson();
     }
 
-    data['profileStatus'] = this.profileStatus;
-    data['version'] = this.version;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['deletedAt'] = this.deletedAt;
+    data['profileStatus'] = profileStatus;
+    data['version'] = version;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['deletedAt'] = deletedAt;
     return data;
   }
 }
@@ -179,11 +174,11 @@ class Logo {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['key'] = this.key;
-    data['url'] = this.url;
-    data['contentType'] = this.contentType;
-    data['size'] = this.size;
-    data['originalName'] = this.originalName;
+    data['key'] = key;
+    data['url'] = url;
+    data['contentType'] = contentType;
+    data['size'] = size;
+    data['originalName'] = originalName;
     return data;
   }
 }
@@ -225,15 +220,15 @@ class MerchantVerificationDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['gstNumber'] = this.gstNumber;
-    data['legalName'] = this.legalName;
-    data['tradeName'] = this.tradeName;
-    data['address'] = this.address;
-    data['registrationDate'] = this.registrationDate;
-    data['status'] = this.status;
-    data['businessType'] = this.businessType;
-    data['centerJurisdiction'] = this.centerJurisdiction;
-    data['stateJurisdiction'] = this.stateJurisdiction;
+    data['gstNumber'] = gstNumber;
+    data['legalName'] = legalName;
+    data['tradeName'] = tradeName;
+    data['address'] = address;
+    data['registrationDate'] = registrationDate;
+    data['status'] = status;
+    data['businessType'] = businessType;
+    data['centerJurisdiction'] = centerJurisdiction;
+    data['stateJurisdiction'] = stateJurisdiction;
     return data;
   }
 }
@@ -258,51 +253,37 @@ class MerchantBusninessHours {
   });
 
   MerchantBusninessHours.fromJson(Map json) {
-    monday = json['monday'] != null
-        ? MerchantDay.fromJson(json['monday'])
-        : null;
-    tuesday = json['tuesday'] != null
-        ? MerchantDay.fromJson(json['tuesday'])
-        : null;
-    wednesday = json['wednesday'] != null
-        ? MerchantDay.fromJson(json['wednesday'])
-        : null;
-    thursday = json['thursday'] != null
-        ? MerchantDay.fromJson(json['thursday'])
-        : null;
-    friday = json['friday'] != null
-        ? MerchantDay.fromJson(json['friday'])
-        : null;
-    saturday = json['saturday'] != null
-        ? MerchantDay.fromJson(json['saturday'])
-        : null;
-    sunday = json['sunday'] != null
-        ? MerchantDay.fromJson(json['sunday'])
-        : null;
+    monday = json['monday'] != null ? MerchantDay.fromJson(json['monday']) : null;
+    tuesday = json['tuesday'] != null ? MerchantDay.fromJson(json['tuesday']) : null;
+    wednesday = json['wednesday'] != null ? MerchantDay.fromJson(json['wednesday']) : null;
+    thursday = json['thursday'] != null ? MerchantDay.fromJson(json['thursday']) : null;
+    friday = json['friday'] != null ? MerchantDay.fromJson(json['friday']) : null;
+    saturday = json['saturday'] != null ? MerchantDay.fromJson(json['saturday']) : null;
+    sunday = json['sunday'] != null ? MerchantDay.fromJson(json['sunday']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.monday != null) {
-      data['monday'] = this.monday?.toJson();
+    if (monday != null) {
+      data['monday'] = monday?.toJson();
     }
-    if (this.tuesday != null) {
-      data['tuesday'] = this.tuesday?.toJson();
+    if (tuesday != null) {
+      data['tuesday'] = tuesday?.toJson();
     }
-    if (this.wednesday != null) {
-      data['wednesday'] = this.wednesday?.toJson();
+    if (wednesday != null) {
+      data['wednesday'] = wednesday?.toJson();
     }
-    if (this.thursday != null) {
-      data['thursday'] = this.thursday?.toJson();
+    if (thursday != null) {
+      data['thursday'] = thursday?.toJson();
     }
-    if (this.friday != null) {
-      data['friday'] = this.friday?.toJson();
+    if (friday != null) {
+      data['friday'] = friday?.toJson();
     }
-    if (this.saturday != null) {
-      data['saturday'] = this.saturday?.toJson();
+    if (saturday != null) {
+      data['saturday'] = saturday?.toJson();
     }
-    if (this.sunday != null) {
-      data['sunday'] = this.sunday?.toJson();
+    if (sunday != null) {
+      data['sunday'] = sunday?.toJson();
     }
     return data;
   }
@@ -323,9 +304,9 @@ class MerchantDay {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['open'] = this.open;
-    data['close'] = this.close;
-    data['closed'] = this.closed;
+    data['open'] = open;
+    data['close'] = close;
+    data['closed'] = closed;
     return data;
   }
 }
@@ -337,13 +318,7 @@ class POC {
   String? pocAlternatePhone;
   String? pocEmail;
 
-  POC({
-    this.pocName,
-    this.pocDesignation,
-    this.pocPhone,
-    this.pocAlternatePhone,
-    this.pocEmail,
-  });
+  POC({this.pocName, this.pocDesignation, this.pocPhone, this.pocAlternatePhone, this.pocEmail});
 
   POC.fromJson(Map<String, dynamic> json) {
     pocName = json['pocName'];
@@ -355,11 +330,11 @@ class POC {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['pocName'] = this.pocName;
-    data['pocDesignation'] = this.pocDesignation;
-    data['pocPhone'] = this.pocPhone;
-    data['pocAlternatePhone'] = this.pocAlternatePhone;
-    data['pocEmail'] = this.pocEmail;
+    data['pocName'] = pocName;
+    data['pocDesignation'] = pocDesignation;
+    data['pocPhone'] = pocPhone;
+    data['pocAlternatePhone'] = pocAlternatePhone;
+    data['pocEmail'] = pocEmail;
     return data;
   }
 }
@@ -395,13 +370,13 @@ class Cert {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['url'] = this.url;
-    data['key'] = this.key;
-    data['uploadedAt'] = this.uploadedAt;
-    data['originalName'] = this.originalName;
-    data['size'] = this.size;
-    data['contentType'] = this.contentType;
-    data['title'] = this.title;
+    data['url'] = url;
+    data['key'] = key;
+    data['uploadedAt'] = uploadedAt;
+    data['originalName'] = originalName;
+    data['size'] = size;
+    data['contentType'] = contentType;
+    data['title'] = title;
     return data;
   }
 }

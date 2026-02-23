@@ -2,28 +2,21 @@ class PersonaResponse {
   final bool? success;
   final List<Profile>? profiles;
 
-  PersonaResponse({
-    this.success,
-    this.profiles,
-  });
+  PersonaResponse({this.success, this.profiles});
 
   factory PersonaResponse.fromJson(Map<String, dynamic> json) {
     return PersonaResponse(
       success: json['success'] as bool?,
-      profiles: json['profiles'] != null
-          ? List<Profile>.from(
-        (json['profiles'] as List)
-            .map((x) => Profile.fromJson(x as Map<String, dynamic>)),
-      )
+      profiles: json['profiles'] != null && json['profiles'] is List
+          ? (json['profiles'] as List)
+                .map((x) => Profile.fromJson(Map<String, dynamic>.from(x as Map)))
+                .toList()
           : [],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'profiles': profiles?.map((x) => x.toJson()).toList(),
-    };
+    return {'success': success, 'profiles': profiles?.map((x) => x.toJson()).toList()};
   }
 }
 
@@ -33,12 +26,7 @@ class Profile {
   final String? teamRole;
   final String? profileStatus;
 
-  Profile({
-    this.profileType,
-    this.profileId,
-    this.teamRole,
-    this.profileStatus,
-  });
+  Profile({this.profileType, this.profileId, this.teamRole, this.profileStatus});
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(

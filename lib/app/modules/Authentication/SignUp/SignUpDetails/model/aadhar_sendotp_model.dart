@@ -13,9 +13,9 @@ class AadharSendOTPModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    data['message'] = this.message;
-    data['referenceId'] = this.referenceId;
+    data['success'] = success;
+    data['message'] = message;
+    data['referenceId'] = referenceId;
     return data;
   }
 }

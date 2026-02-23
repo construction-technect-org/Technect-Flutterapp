@@ -28,7 +28,7 @@ class VRMChatListController extends GetxController {
         chatListModel.value = result;
       }
     } catch (e) {
-      print("Hello Error $e");
+      log("Hello Error $e");
       if (kDebugMode) log('Error fetching VRM chat list: $e');
     } finally {
       isLoading.value = false;

@@ -63,8 +63,8 @@ class MerchantProjectViewDetails extends StatelessWidget {
                     height: 30.h,
                     width: double.infinity,
                     child: ClipRRect(
-                      child: Image.asset(Asset.building, fit: BoxFit.cover),
                       borderRadius: const BorderRadius.all(Radius.circular(11)),
+                      child: Image.asset(Asset.building, fit: BoxFit.cover),
                     ),
                   ),
                   Align(
@@ -205,7 +205,6 @@ class MerchantProjectViewDetails extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                   border: Border.all(
                     color: const Color(0xFFE7E7E7),
-                    width: 1.0,
                   ),
                 ),
                 child: Column(
@@ -261,7 +260,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                   const SizedBox(width: 12),
                   const Expanded(
                     child: Column(
-                      children: const [
+                      children: [
                         ActivePhaseCard(),
                         SizedBox(height: 24),
                         CompletedPhaseCard(),
@@ -294,17 +293,16 @@ class MerchantProjectViewDetails extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
                       child: Image.asset(
                         Asset.building,
                         width: 72,
                         height: 72,
                         fit: BoxFit.cover,
                       ),
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
                     ),
                     const Gap(18),
                     Expanded(
@@ -383,7 +381,7 @@ class CompletedPhaseCard extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   "Foundation Pouring",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
@@ -396,9 +394,9 @@ class CompletedPhaseCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.image_outlined, size: 18, color: Colors.grey),
-          const SizedBox(width: 4),
-          const Text("3"),
+          Icon(Icons.image_outlined, size: 18, color: Colors.grey),
+          SizedBox(width: 4),
+          Text("3"),
         ],
       ),
     );

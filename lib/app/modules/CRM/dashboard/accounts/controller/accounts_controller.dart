@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/accounts/model/accounts_model.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/accounts/services/AccountsService.dart';
@@ -43,7 +46,7 @@ class AccountsController extends GetxController {
   }
 
   List<AccountLeads> get filteredOutStanding {
-    print(activeOutStandingStatusFilter.value.toLowerCase());
+    log(activeOutStandingStatusFilter.value.toLowerCase());
     if (activeOutStandingStatusFilter.value.toLowerCase() == "pending") {
       return allFollowUpList.where((e) => e.status == "pending").toList();
     }
@@ -155,7 +158,7 @@ class AccountsController extends GetxController {
       isLoading.value = false;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;
@@ -196,7 +199,7 @@ class AccountsController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;

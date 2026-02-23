@@ -64,7 +64,7 @@ class RequirementController extends GetxController {
         );
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching requirements list: $e');
+      log( 'Error fetching requirements list: $e');
     } finally {
       isLoading.value = false;
     }
@@ -162,7 +162,7 @@ class RequirementController extends GetxController {
 
       await fetchRequirementsList();
     } catch (e) {
-      Get.printError(info: 'Error deleting requirement: $e');
+      log( 'Error deleting requirement: $e');
       SnackBars.errorSnackBar(content: 'Error deleting requirement');
     } finally {
       isLoading.value = false;
@@ -193,7 +193,7 @@ class RequirementController extends GetxController {
         );
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching service requirements list: $e');
+      log( 'Error fetching service requirements list: $e');
     } finally {
       isLoading.value = false;
     }
@@ -296,7 +296,7 @@ class RequirementController extends GetxController {
 
       await fetchServiceRequirementsList();
     } catch (e) {
-      Get.printError(info: 'Error deleting service requirement: $e');
+      log( 'Error deleting service requirement: $e');
     } finally {
       isLoading.value = false;
     }

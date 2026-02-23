@@ -2,9 +2,9 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/widgets/common_product_card.dart';
-import 'package:construction_technect/app/core/widgets/common_service_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/controllers/inventory_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/inventory_item_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/marketplace_category_models.dart';
 
 class InventoryView extends GetView<InventoryController> {
   @override
@@ -19,6 +19,10 @@ class InventoryView extends GetView<InventoryController> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // ─── Filter Section ────────────────────────────────────
+              _buildFilterSection(context),
+
+              // ─── Inventory Type Tabs ──────────────────────────────
               const SizedBox(height: 6),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -28,10 +32,7 @@ class InventoryView extends GetView<InventoryController> {
                     color: MyColors.grayF7,
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 12,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Obx(() {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -40,37 +41,22 @@ class InventoryView extends GetView<InventoryController> {
                         children: [
                           // 🔸 Product toggle
                           GestureDetector(
-                            onTap: () async {
-                              if (controller.selectedStatus.value !=
-                                  "product") {
-                                controller.selectedStatus.value = "product";
-                                controller.searchController.clear();
-                                controller.searchQuery.value = "";
-                                await controller.fetchProducts();
-                              }
-                            },
+                            onTap: () => controller.setInventoryType("product"),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
                               curve: Curves.easeInOut,
                               decoration: BoxDecoration(
                                 color: Colors.white.withAlpha(
-                                  controller.selectedStatus.value == "product"
-                                      ? 255
-                                      : 0,
+                                  controller.selectedStatus.value == "product" ? 255 : 0,
                                 ),
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                  horizontal: 20,
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                                 child: Center(
                                   child: Text(
                                     "Product",
-                                    style: MyTexts.medium15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                   ),
                                 ),
                               ),
@@ -78,37 +64,22 @@ class InventoryView extends GetView<InventoryController> {
                           ),
                           const Gap(10),
                           GestureDetector(
-                            onTap: () async {
-                              if (controller.selectedStatus.value !=
-                                  "service") {
-                                controller.selectedStatus.value = "service";
-                                controller.searchController.clear();
-                                controller.searchQuery.value = "";
-                                await controller.fetchProducts();
-                              }
-                            },
+                            onTap: () => controller.setInventoryType("service"),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
                               curve: Curves.easeInOut,
                               decoration: BoxDecoration(
                                 color: Colors.white.withAlpha(
-                                  controller.selectedStatus.value == "service"
-                                      ? 255
-                                      : 0,
+                                  controller.selectedStatus.value == "service" ? 255 : 0,
                                 ),
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                  horizontal: 20,
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                                 child: Center(
                                   child: Text(
                                     "Service",
-                                    style: MyTexts.medium15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                   ),
                                 ),
                               ),
@@ -117,36 +88,22 @@ class InventoryView extends GetView<InventoryController> {
                           const Gap(10),
 
                           GestureDetector(
-                            onTap: () async {
-                              if (controller.selectedStatus.value != "design") {
-                                controller.selectedStatus.value = "design";
-                                controller.searchController.clear();
-                                controller.searchQuery.value = "";
-                                await controller.fetchProducts();
-                              }
-                            },
+                            onTap: () => controller.setInventoryType("design"),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
                               curve: Curves.easeInOut,
                               decoration: BoxDecoration(
                                 color: Colors.white.withAlpha(
-                                  controller.selectedStatus.value == "design"
-                                      ? 255
-                                      : 0,
+                                  controller.selectedStatus.value == "design" ? 255 : 0,
                                 ),
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                  horizontal: 20,
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                                 child: Center(
                                   child: Text(
                                     "Design",
-                                    style: MyTexts.medium15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                   ),
                                 ),
                               ),
@@ -154,36 +111,22 @@ class InventoryView extends GetView<InventoryController> {
                           ),
                           const Gap(10),
                           GestureDetector(
-                            onTap: () async {
-                              if (controller.selectedStatus.value != "fleet") {
-                                controller.selectedStatus.value = "fleet";
-                                controller.searchController.clear();
-                                controller.searchQuery.value = "";
-                                await controller.fetchProducts();
-                              }
-                            },
+                            onTap: () => controller.setInventoryType("fleet"),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
                               curve: Curves.easeInOut,
                               decoration: BoxDecoration(
                                 color: Colors.white.withAlpha(
-                                  controller.selectedStatus.value == "fleet"
-                                      ? 255
-                                      : 0,
+                                  controller.selectedStatus.value == "fleet" ? 255 : 0,
                                 ),
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                  horizontal: 20,
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                                 child: Center(
                                   child: Text(
                                     "Fleet",
-                                    style: MyTexts.medium15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                   ),
                                 ),
                               ),
@@ -191,36 +134,22 @@ class InventoryView extends GetView<InventoryController> {
                           ),
                           const Gap(10),
                           GestureDetector(
-                            onTap: () async {
-                              if (controller.selectedStatus.value != "tools") {
-                                controller.selectedStatus.value = "tools";
-                                controller.searchController.clear();
-                                controller.searchQuery.value = "";
-                                await controller.fetchProducts();
-                              }
-                            },
+                            onTap: () => controller.setInventoryType("tools"),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
                               curve: Curves.easeInOut,
                               decoration: BoxDecoration(
                                 color: Colors.white.withAlpha(
-                                  controller.selectedStatus.value == "tools"
-                                      ? 255
-                                      : 0,
+                                  controller.selectedStatus.value == "tools" ? 255 : 0,
                                 ),
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                  horizontal: 20,
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                                 child: Center(
                                   child: Text(
                                     "Tools",
-                                    style: MyTexts.medium15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                   ),
                                 ),
                               ),
@@ -228,37 +157,22 @@ class InventoryView extends GetView<InventoryController> {
                           ),
                           const Gap(10),
                           GestureDetector(
-                            onTap: () async {
-                              if (controller.selectedStatus.value !=
-                                  "equipment") {
-                                controller.selectedStatus.value = "equipment";
-                                controller.searchController.clear();
-                                controller.searchQuery.value = "";
-                                await controller.fetchProducts();
-                              }
-                            },
+                            onTap: () => controller.setInventoryType("equipment"),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
                               curve: Curves.easeInOut,
                               decoration: BoxDecoration(
                                 color: Colors.white.withAlpha(
-                                  controller.selectedStatus.value == "equipment"
-                                      ? 255
-                                      : 0,
+                                  controller.selectedStatus.value == "equipment" ? 255 : 0,
                                 ),
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                  horizontal: 20,
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                                 child: Center(
                                   child: Text(
                                     "Equipment",
-                                    style: MyTexts.medium15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                   ),
                                 ),
                               ),
@@ -266,36 +180,22 @@ class InventoryView extends GetView<InventoryController> {
                           ),
                           const Gap(10),
                           GestureDetector(
-                            onTap: () async {
-                              if (controller.selectedStatus.value != "ppe") {
-                                controller.selectedStatus.value = "ppe";
-                                controller.searchController.clear();
-                                controller.searchQuery.value = "";
-                                await controller.fetchProducts();
-                              }
-                            },
+                            onTap: () => controller.setInventoryType("ppe"),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
                               curve: Curves.easeInOut,
                               decoration: BoxDecoration(
                                 color: Colors.white.withAlpha(
-                                  controller.selectedStatus.value == "ppe"
-                                      ? 255
-                                      : 0,
+                                  controller.selectedStatus.value == "ppe" ? 255 : 0,
                                 ),
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                  horizontal: 20,
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                                 child: Center(
                                   child: Text(
                                     "PPE",
-                                    style: MyTexts.medium15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                   ),
                                 ),
                               ),
@@ -319,29 +219,20 @@ class InventoryView extends GetView<InventoryController> {
                   },
                   borderRadius: 22,
                   hintText: 'Search',
-                  prefixIcon: SvgPicture.asset(
-                    Asset.searchIcon,
-                    height: 16,
-                    width: 16,
-                  ),
+                  prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                 ),
               ),
 
-              // 🔹 The rest of your Obx grid section remains unchanged
+              // ─── Unified Inventory List ──────────────────────────
               Obx(() {
-                final isProduct = controller.selectedStatus.value == "product";
-                final isEmptyList = isProduct
-                    ? controller.filteredProducts.isEmpty
-                    : controller.filteredService.isEmpty;
+                final isEmptyList = controller.filteredItems.isEmpty;
 
                 if (isEmptyList && controller.searchQuery.value.isNotEmpty) {
                   return Expanded(
                     child: Center(
                       child: Text(
-                        'No ${isProduct ? "inventory" : "service"} found',
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.dustyGray,
-                        ),
+                        'No items found matching "${controller.searchQuery.value}"',
+                        style: MyTexts.medium14.copyWith(color: MyColors.dustyGray),
                       ),
                     ),
                   );
@@ -349,74 +240,25 @@ class InventoryView extends GetView<InventoryController> {
                   return Expanded(
                     child: Center(
                       child: Text(
-                        'No ${isProduct ? "inventory" : "service"} available',
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.dustyGray,
-                        ),
+                        'No inventory items available',
+                        style: MyTexts.medium14.copyWith(color: MyColors.dustyGray),
                       ),
                     ),
                   );
                 }
 
                 return Expanded(
-                  child: Obx(() {
-                    if (controller.selectedStatus.value == "product") {
-                      return GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.78,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                            ),
-                        itemCount: controller.filteredProducts.length,
-                        itemBuilder: (context, index) {
-                          final item = controller.filteredProducts[index];
-                          return ProductCard(
-                            product: item,
-                            onApiCall: controller.fetchProducts,
-                          );
-                        },
-                      );
-                    } else {
-                      return GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.78,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                            ),
-                        itemCount: controller.filteredService.length,
-                        itemBuilder: (context, index) {
-                          final service = controller.filteredService[index];
-                          return ServiceCard(
-                            service: service,
-                            onTap: () {
-                              Get.toNamed(
-                                Routes.SERVICE_DETAILS,
-                                arguments: {
-                                  "service": service,
-                                  "isEdit": true,
-                                  "onApiCall": () async {
-                                    Get.back();
-                                    Get.back();
-                                    Get.back();
-                                    controller.selectedStatus.value = "service";
-                                    controller.searchController.clear();
-                                    controller.searchQuery.value = "";
-                                    await controller.fetchProducts();
-                                  },
-                                },
-                              );
-                            },
-                          );
-                        },
-                      );
-                    }
-                  }),
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: controller.filteredItems.length,
+                    separatorBuilder: (_, __) => const Gap(12),
+                    itemBuilder: (context, index) {
+                      final item = controller.filteredItems[index];
+                      // Since we are unified now, we will render a list tile style card
+                      // replacing the complex dual-card system temporarily
+                      return _buildInventoryCard(item);
+                    },
+                  ),
                 );
               }),
             ],
@@ -425,11 +267,225 @@ class InventoryView extends GetView<InventoryController> {
             backgroundColor: MyColors.oldLacelight,
             onPressed: () {
               controller.selectedStatus.value == "product"
-                  ? Get.toNamed(Routes.ADD_PRODUCT)
-                  : Get.toNamed(Routes.ADD_SERVICES);
+                  ? Get.toNamed(Routes.ADD_INVENTORY_PRODUCT)
+                  : Get.toNamed(Routes.ADD_INVENTORY_GENERIC);
             },
             child: const Icon(Icons.add, color: Colors.black, size: 32),
           ),
+        ),
+      ),
+    );
+  }
+
+  // ─── Filter Section Components ─────────────────────────────────
+
+  Widget _buildFilterSection(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        title: Text("Filter Categories", style: MyTexts.bold14),
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        children: [
+          Obx(
+            () => Column(
+              children: [
+                _buildDropdown<MarketplaceModule>(
+                  label: "Module",
+                  value: controller.modules.firstWhereOrNull(
+                    (e) => e.id == controller.selectedModuleId.value,
+                  ),
+                  items: controller.modules,
+                  onChanged: (v) => controller.onModuleSelected(v?.id),
+                  itemLabel: (e) => e.name,
+                ),
+                const Gap(8),
+                _buildDropdown<MarketplaceMainCategory>(
+                  label: "Main Category",
+                  value: controller.mainCategories.firstWhereOrNull(
+                    (e) => e.id == controller.selectedMainCategoryId.value,
+                  ),
+                  items: controller.mainCategories,
+                  onChanged: (v) => controller.onMainCategorySelected(v?.id),
+                  itemLabel: (e) => e.name,
+                ),
+                const Gap(8),
+                _buildDropdown<MarketplaceCategory>(
+                  label: "Category",
+                  value: controller.categories.firstWhereOrNull(
+                    (e) => e.id == controller.selectedCategoryId.value,
+                  ),
+                  items: controller.categories,
+                  onChanged: (v) => controller.onCategorySelected(v?.id),
+                  itemLabel: (e) => e.name,
+                ),
+                const Gap(8),
+                _buildDropdown<MarketplaceSubCategory>(
+                  label: "Sub Category",
+                  value: controller.subCategories.firstWhereOrNull(
+                    (e) => e.id == controller.selectedSubCategoryId.value,
+                  ),
+                  items: controller.subCategories,
+                  onChanged: (v) => controller.onSubCategorySelected(v?.id),
+                  itemLabel: (e) => e.name,
+                ),
+                const Gap(8),
+                _buildDropdown<MarketplaceCategoryProduct>(
+                  label: "Category Product",
+                  value: controller.categoryProducts.firstWhereOrNull(
+                    (e) => e.id == controller.selectedCategoryProductId.value,
+                  ),
+                  items: controller.categoryProducts,
+                  onChanged: (v) => controller.onCategoryProductSelected(v?.id),
+                  itemLabel: (e) => e.name,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDropdown<T>({
+    required String label,
+    required T? value,
+    required List<T> items,
+    required void Function(T?) onChanged,
+    required String Function(T) itemLabel,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: items.isEmpty ? MyColors.grayF7 : null,
+        border: Border.all(color: MyColors.grayEA),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 44,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<T>(
+          isExpanded: true,
+          value: value,
+          hint: Text(
+            "All $label",
+            style: MyTexts.medium13.copyWith(
+              color: items.isEmpty ? MyColors.dustyGray : MyColors.primary.withValues(alpha: 0.5),
+            ),
+          ),
+          items: items
+              .map(
+                (e) => DropdownMenuItem<T>(
+                  value: e,
+                  child: Text(itemLabel(e), style: MyTexts.medium14),
+                ),
+              )
+              .toList(),
+          onChanged: items.isEmpty ? null : onChanged,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInventoryCard(InventoryItem item) {
+    return GestureDetector(
+      onTap: () {
+        final type = controller.selectedStatus.value;
+        if (type == 'product') {
+          Get.toNamed(Routes.PRODUCT_DETAILS, arguments: {"product": item, "isEdit": true});
+        } else {
+          Get.toNamed(
+            Routes.SERVICE_DETAILS,
+            arguments: {
+              "service": item,
+              "isEdit": true,
+              "onApiCall": controller.fetchInventoryList,
+            },
+          );
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          border: Border.all(color: MyColors.grayEA),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                height: 80,
+                width: 80,
+                color: MyColors.grayF7,
+                child: item.images != null && item.images!.isNotEmpty
+                    ? Image.network(
+                        item.images!.first.s3Url ?? '',
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const Icon(Icons.image, color: MyColors.grey),
+                      )
+                    : const Icon(Icons.image, color: MyColors.grey),
+              ),
+            ),
+            const Gap(12),
+            // Details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.name ?? 'Unnamed',
+                          style: MyTexts.bold14,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        item.formattedPrice,
+                        style: MyTexts.bold14.copyWith(color: MyColors.primary),
+                      ),
+                    ],
+                  ),
+                  const Gap(4),
+                  Text(
+                    "Type: ${item.inventoryType?.toUpperCase()}",
+                    style: MyTexts.medium12.copyWith(color: MyColors.dustyGray),
+                  ),
+                  const Gap(4),
+                  // Status Pills
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: item.isApproved
+                              ? Colors.green.withValues(alpha: 0.1)
+                              : Colors.orange.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          item.approvalStatus?.toUpperCase() ?? 'PENDING',
+                          style: MyTexts.medium10.copyWith(
+                            color: item.isApproved ? Colors.green : Colors.orange,
+                          ),
+                        ),
+                      ),
+                      const Gap(8),
+                      if (item.stock != null)
+                        Text(
+                          "${item.stock} in stock",
+                          style: MyTexts.medium12.copyWith(color: MyColors.grey),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
