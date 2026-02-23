@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/inventory_item_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/marketplace_category_models.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/services/InventoryService.dart';
@@ -41,9 +42,16 @@ class InventoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Fetch initial filter data and list
+    _initData();
+  }
+
+  Future<void> _initData() async {
+    // Fetch initial filter data in background
     fetchModules();
-    fetchInventoryList();
+    // Await inventory list first as requested by user
+    await fetchInventoryList();
+    // Then sync wishlist IDs
+    await Get.find<CommonController>().syncWishlistIds();
   }
 
   // ─────────────────────────────────────────────────────
@@ -63,6 +71,8 @@ class InventoryController extends GetxController {
         filteredItems.assignAll(result.data ?? []);
         // Re-apply any active search
         searchProducts(searchQuery.value);
+        // Sync wishlist IDs whenever list changes to ensure accuracy
+        Get.find<CommonController>().syncWishlistIds();
       }
     } catch (e) {
       log('Error fetching unified inventory', error: e);

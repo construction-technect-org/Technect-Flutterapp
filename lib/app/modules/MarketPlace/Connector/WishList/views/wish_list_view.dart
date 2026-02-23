@@ -1,5 +1,3 @@
-
-
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -128,8 +126,13 @@ class WishListView extends GetView<WishListController> {
                                       controller.isLoaderWrapper.value = true;
 
                                       await Get.find<CommonController>().wishListApi(
-                                        status: item.isInWishList == true ? "remove" : "add",
-                                        mID: item.id ?? 0,
+                                        status:
+                                            Get.find<CommonController>().wishlistedProductIds
+                                                .contains(item.id.toString())
+                                            ? "remove"
+                                            : "add",
+                                        mID: item.id.toString(),
+                                        moduleType: "product",
                                         onSuccess: () async {
                                           await controller.fetchWishList();
                                         },

@@ -7,17 +7,10 @@ class ProductImage {
 
   ProductImage({this.s3Key, this.s3Url, this.sortOrder});
 
-  factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
-    s3Key: json["s3_key"],
-    s3Url: json["s3_url"],
-    sortOrder: json["sort_order"],
-  );
+  factory ProductImage.fromJson(Map<String, dynamic> json) =>
+      ProductImage(s3Key: json["s3_key"], s3Url: json["s3_url"], sortOrder: json["sort_order"]);
 
-  Map<String, dynamic> toJson() => {
-    "s3_key": s3Key,
-    "s3_url": s3Url,
-    "sort_order": sortOrder,
-  };
+  Map<String, dynamic> toJson() => {"s3_key": s3Key, "s3_url": s3Url, "sort_order": sortOrder};
 }
 
 class ProductListModel {
@@ -27,19 +20,14 @@ class ProductListModel {
 
   ProductListModel({this.success, this.data, this.message});
 
-  factory ProductListModel.fromJson(Map<String, dynamic> json) =>
-      ProductListModel(
-        success: json["success"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+  factory ProductListModel.fromJson(Map<String, dynamic> json) => ProductListModel(
+    success: json["success"],
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
 
-        message: json["message"],
-      );
+    message: json["message"],
+  );
 
-  Map<String, dynamic> toJson() => {
-    "success": success,
-    "data": data?.toJson(),
-    "message": message,
-  };
+  Map<String, dynamic> toJson() => {"success": success, "data": data?.toJson(), "message": message};
 }
 
 class Data {
@@ -52,21 +40,17 @@ class Data {
     products: json["products"] == null
         ? []
         : List<Product>.from(json["products"]!.map((x) => Product.fromJson(x))),
-    statistics: json["statistics"] == null
-        ? null
-        : Statistics.fromJson(json["statistics"]),
+    statistics: json["statistics"] == null ? null : Statistics.fromJson(json["statistics"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "products": products == null
-        ? []
-        : List<dynamic>.from(products!.map((x) => x.toJson())),
+    "products": products == null ? [] : List<dynamic>.from(products!.map((x) => x.toJson())),
     "statistics": statistics?.toJson(),
   };
 }
 
 class Product {
-  final int? id;
+  final dynamic id;
   final int? merchantProfileId;
   final String? productName;
   final String? productImage;
@@ -201,9 +185,7 @@ class Product {
       colour: json["colour"],
       leadCreated: json["lead_created"],
       size: json["size"],
-      distanceKm: json["distance_km"] != null
-          ? json["distance_km"].toString()
-          : "",
+      distanceKm: json["distance_km"] != null ? json["distance_km"].toString() : "",
       price: json["price"],
       address: json["address"],
       gstPercentage: json["gst_percentage"],
@@ -238,17 +220,13 @@ class Product {
       merchantPhone: json["merchant_phone"],
       businessHours: json["business_hours"] == null
           ? []
-          : List<BusinessHours>.from(
-              json["business_hours"]!.map((x) => BusinessHours.fromJson(x)),
-            ),
+          : List<BusinessHours>.from(json["business_hours"]!.map((x) => BusinessHours.fromJson(x))),
       filterValues: json["filter_values"] != null
           ? Map<String, dynamic>.from(json["filter_values"])
           : null,
       images: json["images"] == null
           ? []
-          : List<ProductImage>.from(
-              json["images"].map((x) => ProductImage.fromJson(x)),
-            ),
+          : List<ProductImage>.from(json["images"].map((x) => ProductImage.fromJson(x))),
     );
   }
 
@@ -309,9 +287,7 @@ class Product {
     "has_stock_notification": isNotify,
     "is_in_wishlist": isInWishList,
     "video": productVideo,
-    "images": images == null
-        ? []
-        : List<dynamic>.from(images!.map((x) => x.toJson())),
+    "images": images == null ? [] : List<dynamic>.from(images!.map((x) => x.toJson())),
   };
 }
 
@@ -321,12 +297,7 @@ class Statistics {
   final int? totalInterests;
   final int? featured;
 
-  Statistics({
-    this.totalProducts,
-    this.lowStock,
-    this.totalInterests,
-    this.featured,
-  });
+  Statistics({this.totalProducts, this.lowStock, this.totalInterests, this.featured});
 
   factory Statistics.fromJson(Map<String, dynamic> json) => Statistics(
     totalProducts: json["total_products"],

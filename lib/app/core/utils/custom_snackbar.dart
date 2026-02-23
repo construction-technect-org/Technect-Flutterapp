@@ -6,7 +6,7 @@ class SnackBars {
   ///
   static SnackbarController errorSnackBar({required String content, int? time}) {
     return Get.rawSnackbar(
-      message: content,
+      message: content.isNotEmpty ? content : "An error occurred",
       backgroundColor: Colors.red.withValues(alpha: 0.8),
       margin: const EdgeInsets.all(15),
       borderRadius: 10,
@@ -20,7 +20,7 @@ class SnackBars {
   ///
   static SnackbarController successSnackBar({required String content}) {
     return Get.rawSnackbar(
-      message: content,
+      message: content.isNotEmpty ? content : "Success",
       backgroundColor: Colors.green.withValues(alpha: 0.8),
       margin: const EdgeInsets.all(15),
       borderRadius: 10,

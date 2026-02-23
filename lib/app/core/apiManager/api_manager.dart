@@ -622,9 +622,6 @@ class ApiManager {
         );
 
       case 409:
-        showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
-        );
         throw BadRequestException(
           ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
         );

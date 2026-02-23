@@ -148,11 +148,11 @@ class SwitchAccountController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     final CommonController commonController = Get.find<CommonController>();
-    Get.printInfo(
-      info: '🌐has All Data   : ${commonController.profileData.value}',
-    );
+    Get.printInfo(info: '🌐has All Data   : ${commonController.profileData.value}');
     Future.microtask(() async {
-      await commonController.fetchProfileDataM();
+      if (myPref.role.val == "connector") {
+        await commonController.fetchProfileDataM();
+      }
       currentRole.value = myPref.role.val;
     });
   }

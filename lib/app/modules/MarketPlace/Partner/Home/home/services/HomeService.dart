@@ -37,12 +37,11 @@ class HomeService extends GetxService {
     required List<String?> imageSlots,
     String? videoPath,
   }) async {
-
     final Map<String, dynamic> fields = {
       "name": brandName,
-      "code":"SKY-RES-004",
-      "area":"25000",
-      "address":"Plot 12, Sector 21, Navi Mumbai, Maharashtra 400706",
+      "code": "SKY-RES-004",
+      "area": "25000",
+      "address": "Plot 12, Sector 21, Navi Mumbai, Maharashtra 400706",
       "numberOfFloors": 12,
       "projectType": "Residential",
       "status": "Planning",
@@ -75,9 +74,8 @@ class HomeService extends GetxService {
 
     return jsonDecode(response.body);
   }
-  Future<MainCategoryModel> getMainCategories({
-    required String moduleID,
-  }) async {
+
+  Future<MainCategoryModel> getMainCategories({required String moduleID}) async {
     try {
       final response = await _manageApi.get(
         url: '${Endpoints.mainCatApi}$moduleID&includeInactive=false',
@@ -331,7 +329,6 @@ class HomeService extends GetxService {
       throw Exception('Error in updating Uploading Certificates: $e , $st');
     }
   }
-
 
   Future<bool> updateBizMetrics({
     required String profileID,

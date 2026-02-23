@@ -6,15 +6,22 @@ class WishListServices {
   ApiManager apiManager = ApiManager();
 
   Future<ConnectorSelectedProductModel> wishList({
-    required int mID,
-    required String status,
+    required dynamic wishlistItemId,
+    required String connectorProfileId,
+    required String moduleType,
+    required bool isAdd,
   }) async {
     try {
-      final String url = "${APIConstants.wishList}/$status";
-      final Map<String, dynamic> body = {"merchant_product_id": mID};
-      debugPrint('Calling API: $url');
-      // ✅ Send POST request via your apiManager
-      final response = status == "add"
+      const String url = APIConstants.wishList;
+      final Map<String, dynamic> body = {
+        "connectorProfileId": connectorProfileId,
+        "wishlistItemId": wishlistItemId,
+        "moduleType": moduleType,
+      };
+      debugPrint('Calling API ($url) with Method: ${isAdd ? "POST" : "DELETE"}');
+      debugPrint('Body: $body');
+
+      final response = isAdd
           ? await apiManager.postObject(url: url, body: body)
           : await apiManager.deleteObject(url: url, body: body);
       debugPrint('Response: $response');
@@ -23,13 +30,13 @@ class WishListServices {
     } catch (e, st) {
       debugPrint('Error: $e');
       debugPrint('StackTrace: $st');
-      throw Exception('Error fetching products: $e');
+      rethrow;
     }
   }
 
-  Future<AllWishListModel> allWishList() async {
+  Future<AllWishListModel> allWishList({required String connectorProfileId}) async {
     try {
-      const String url = "${APIConstants.wishList}/list";
+      final String url = "${APIConstants.wishList}?connectorProfileId=$connectorProfileId";
       debugPrint('Calling API: $url');
       final response = await apiManager.get(url: url);
       debugPrint('Response: $response');
@@ -38,7 +45,7 @@ class WishListServices {
     } catch (e, st) {
       debugPrint('Error: $e');
       debugPrint('StackTrace: $st');
-      throw Exception('Error fetching products: $e');
+      rethrow;
     }
   }
 }

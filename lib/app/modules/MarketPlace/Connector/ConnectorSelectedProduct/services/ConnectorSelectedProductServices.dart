@@ -42,10 +42,10 @@ class ConnectorSelectedProductServices {
     }
   }
 
-  Future<ConnectorSelectedProductModel> notifyMe({int? mID}) async {
+  Future<ConnectorSelectedProductModel> notifyMe({dynamic mID}) async {
     try {
       const String url = APIConstants.notifyME;
-      final Map<String, dynamic> body = {"merchant_product_id": mID};
+      final Map<String, dynamic> body = {"merchant_product_id": mID.toString()};
       final response = await apiManager.postObject(url: url, body: body);
 
       return ConnectorSelectedProductModel.fromJson(response);
@@ -55,8 +55,8 @@ class ConnectorSelectedProductServices {
   }
 
   Future<ConnectorSelectedProductModel> addToConnect({
-    int? mID,
-    int? pID,
+    dynamic mID,
+    dynamic pID,
     String? message,
     String? radius,
     String? date,
@@ -66,8 +66,8 @@ class ConnectorSelectedProductServices {
     try {
       const String url = APIConstants.addToConnect;
       final Map<String, dynamic> body = {
-        "merchant_profile_id": mID,
-        "product_id": pID,
+        "merchant_profile_id": mID.toString(),
+        "product_id": pID.toString(),
         "message": "Hi, I would like to connect with you for business opportunities.",
         "note": message ?? "",
         "radius": radius ?? "",

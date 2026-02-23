@@ -1,6 +1,5 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/utils/imports.dart' hide Category;
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/main_category_model.dart';
@@ -41,7 +40,9 @@ class ConnectorHomeController extends GetxController {
     // fetchCategoryServiceHierarchy();
     if (myPref.getToken().isNotEmpty) {
       Future.delayed(const Duration(seconds: 1), () {
-        fetchConnectorModule();
+        if (myPref.role.val == "connector") {
+          fetchConnectorModule();
+        }
       });
     }
     // fetchCategory("08b6213b-5f5e-497a-87ef-aca5a0d80c32");
@@ -70,7 +71,7 @@ class ConnectorHomeController extends GetxController {
       // if (cachedCategoryHierarchy != null) {
       //   categoryHierarchyData.value = cachedCategoryHierarchy;
       // }
-      log( 'Error fetching category hierarchy: $e');
+      log('Error fetching category hierarchy: $e');
     } finally {
       isLoading(false);
     }
@@ -88,7 +89,7 @@ class ConnectorHomeController extends GetxController {
         }
       }
     } catch (e) {
-      log( 'Error fetching category hierarchy: $e');
+      log('Error fetching category hierarchy: $e');
     }
     return;
   }
@@ -126,7 +127,7 @@ class ConnectorHomeController extends GetxController {
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyData.value = cachedCategoryHierarchy;
       }
-      log( 'Error fetching category hierarchy: $e');
+      log('Error fetching category hierarchy: $e');
     } finally {
       isLoading(false);
     }
@@ -153,7 +154,7 @@ class ConnectorHomeController extends GetxController {
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyDataCM.value = cachedCategoryHierarchy;
       }
-      log( 'Error fetching category hierarchy: $e');
+      log('Error fetching category hierarchy: $e');
     } finally {
       isLoading(false);
     }
@@ -192,7 +193,7 @@ class ConnectorHomeController extends GetxController {
         _showMandatoryLocationDialog();
       }
     } catch (e) {
-      log( 'Error fetching location: $e');
+      log('Error fetching location: $e');
     }
   }
 
@@ -236,7 +237,7 @@ class ConnectorHomeController extends GetxController {
                     await Geolocator.openLocationSettings();
                   }
                 } catch (e) {
-                  log( 'Error opening settings: $e');
+                  log('Error opening settings: $e');
                 }
                 const int maxAttempts = 6;
                 const Duration interval = Duration(seconds: 1);

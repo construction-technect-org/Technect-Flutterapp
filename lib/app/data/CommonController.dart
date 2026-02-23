@@ -31,6 +31,7 @@ class CommonController extends GetxController {
   UserMainModel? userMainModel;
   Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
   RxString selectedAddress = ''.obs;
+  RxSet<String> wishlistedProductIds = <String>{}.obs;
 
   void switchToCrm(bool inScreen) {
     if (isCrm.value) {
@@ -315,7 +316,7 @@ class CommonController extends GetxController {
 
   RxInt marketPlace = 0.obs;
 
-  Future<void> notifyMeApi({int? mID, VoidCallback? onSuccess}) async {
+  Future<void> notifyMeApi({dynamic mID, VoidCallback? onSuccess}) async {
     try {
       final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
       if (res.success == true) {
@@ -328,8 +329,8 @@ class CommonController extends GetxController {
   }
 
   Future<void> addToConnectApi({
-    int? mID,
-    int? pID,
+    dynamic mID,
+    dynamic pID,
     String? message,
     String? uom,
     String? quantity,
@@ -357,8 +358,8 @@ class CommonController extends GetxController {
   }
 
   Future<void> addServiceToConnectApi({
-    int? mID,
-    int? sID,
+    dynamic mID,
+    dynamic sID,
     String? message,
     String? date,
     String? radius,
@@ -382,21 +383,105 @@ class CommonController extends GetxController {
   }
 
   Future<void> wishListApi({
-    required int mID,
+    required dynamic mID,
     required String status,
+    String? moduleType,
     VoidCallback? onSuccess,
   }) async {
     try {
-      final res = await WishListServices().wishList(mID: mID, status: status);
-      if (res.success == true) {
-        // final msg = status == "add"
-        //     ? "Added to wishlist!"
-        //     : "Removed from wishlist!";
-        // SnackBars.successSnackBar(content: msg);
-        if (onSuccess != null) onSuccess();
+      final role = myPref.role.val;
+      if (role == "connector") {
+        final connectorProfileId = profileDataM.value.connectorProfile?.id?.toString();
+        if (connectorProfileId == null) {
+          SnackBars.errorSnackBar(content: "Connector profile not found.");
+          return;
+        }
+        final res = await WishListServices().wishList(
+          wishlistItemId: mID.toString(),
+          connectorProfileId: connectorProfileId,
+          moduleType: moduleType ?? "product",
+          isAdd: status == "add",
+        );
+        // Treat as success if res.success is true OR if it's a valid response object (backend sometimes omits success flag)
+        if (res.success == true || (res.message == "" && status == "add")) {
+          if (status == "add") {
+            wishlistedProductIds.add(mID.toString());
+            SnackBars.successSnackBar(content: "Added to Wishlist");
+          } else {
+            wishlistedProductIds.remove(mID.toString());
+            SnackBars.successSnackBar(content: "Removed from Wishlist");
+          }
+          if (onSuccess != null) onSuccess();
+        } else {
+          SnackBars.errorSnackBar(
+            content: res.message.isNotEmpty ? res.message : "Unable to update wishlist.",
+          );
+        }
+      } else {
+        debugPrint("Wishlist for role $role not implemented.");
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: "Unable to update wishlist.");
+      debugPrint("Error in wishListApi: $e");
+      String errorMessage = e.toString();
+      if (errorMessage.startsWith("Exception: ")) {
+        errorMessage = errorMessage.replaceFirst("Exception: ", "");
+      }
+      // Strip common AppException prefixes for a cleaner UI
+      errorMessage = errorMessage.replaceFirst("Invalid Request: ", "");
+      errorMessage = errorMessage.replaceFirst("Error During Communication: ", "");
+      errorMessage = errorMessage.replaceFirst("Unauthorised: ", "");
+
+      SnackBars.errorSnackBar(
+        content: errorMessage.isNotEmpty ? errorMessage : "Unable to update wishlist.",
+      );
+    }
+  }
+
+  Future<void> syncWishlistIds() async {
+    try {
+      if (myPref.getToken().isEmpty) return;
+
+      if (profileDataM.value.connectorProfile?.id == null) {
+        debugPrint("🔍 [WishlistSync] Profile missing, fetching fresh profile data...");
+        await fetchProfileDataM();
+      }
+
+      int retries = 0;
+      while (profileDataM.value.connectorProfile?.id == null && retries < 3) {
+        debugPrint(
+          "🔍 [WishlistSync] Connector profile ID not found, waiting... (try ${retries + 1})",
+        );
+        await Future.delayed(const Duration(milliseconds: 500));
+        retries++;
+      }
+
+      final connectorProfileId = profileDataM.value.connectorProfile?.id?.toString();
+      debugPrint("🔍 [WishlistSync] Syncing for connectorProfileId: $connectorProfileId");
+      if (connectorProfileId == null) {
+        debugPrint("🔍 [WishlistSync] Connector profile ID still not found, skipping sync.");
+        return;
+      }
+
+      final res = await WishListServices().allWishList(connectorProfileId: connectorProfileId);
+      debugPrint(
+        "🔍 [WishlistSync] API Response - Success: ${res.success}, Data Count: ${res.data?.length}",
+      );
+
+      if (res.success == true) {
+        final Set<String> collectedIds = {};
+        for (final p in (res.data ?? [])) {
+          final pid = p.id?.toString();
+          if (pid != null) collectedIds.add(pid);
+        }
+        if (res.wishlistItemIds != null) {
+          collectedIds.addAll(res.wishlistItemIds!);
+        }
+
+        wishlistedProductIds.assignAll(collectedIds);
+        debugPrint("🔍 [WishlistSync] Updated wishlistedProductIds: $wishlistedProductIds");
+      }
+    } catch (e) {
+      debugPrint("🔍 [WishlistSync] Error during sync: $e");
     }
   }
 
@@ -535,8 +620,9 @@ class CommonController extends GetxController {
 
       if (savedToken.isNotEmpty) {
         Future.delayed(const Duration(seconds: 1), () async {
-          if (_appHiveService.token.isNotEmpty) {
+          if (_appHiveService.token.isNotEmpty && myPref.role.val == "connector") {
             await fetchProfileDataM();
+            await syncWishlistIds();
           }
           // fetchProfileData();
         });
