@@ -108,9 +108,12 @@ class RoleManagementView extends GetView<RoleManagementController> {
                       const Spacer(),
                       Obx(() {
                         return GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             if (controller.showRoles.value) {
-                              Get.toNamed(Routes.ADD_ROLE);
+                             final result =await  Get.toNamed(Routes.ADD_ROLE);
+                             if (result == true) {
+                               Get.find<RoleManagementController>().fetchRoles(); // ✅ wapas aane par refresh
+                             }
                             } else {
                               if (controller.roles.isEmpty) {
                                 SnackBars.errorSnackBar(

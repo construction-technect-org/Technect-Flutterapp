@@ -266,7 +266,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                         return null;
                                       },
                                       selectedValue: controller.selectedRole!,
-                                      itemLabel: (item) => item.roleTitle ?? '',
+                                      itemLabel: (item) => item.roleName ?? '',
                                     )
                                   : const SizedBox.shrink(),
                             ),

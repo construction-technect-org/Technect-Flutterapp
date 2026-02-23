@@ -250,12 +250,14 @@ class AddRoleView extends GetView<AddRoleController> {
                 buttonName: controller.isEdit.value ? 'Update' : 'Add',
                 onTap: controller.isLoading.value
                     ? null
-                    : () {
+                    : () async {
                         if (controller.formKey.currentState!.validate()) {
+
                           log("roles saved ${controller.getSelectedIds()}");
                           log("Code saved ${controller.getCodeID()}");
 
-                          //controller.saveRole();
+                          await controller.saveRole();
+                          Get.back(result: true);
                         }
                       },
               );

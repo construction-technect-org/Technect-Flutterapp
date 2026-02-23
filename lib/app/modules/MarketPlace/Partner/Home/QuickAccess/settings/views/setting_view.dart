@@ -111,8 +111,8 @@ class SettingView extends GetView<SettingController> {
                               "Are you sure to deactivate your account ? you can reactivate it anytime by  back in.",
                           confirmText: "Deactivate",
                           onConfirm: () {
-                            Get.back();
-                            Get.to(() => AccountActionScreen(actionType: "deactivate"));
+                            controller.deactivateAccount();
+                            // Get.to(() => AccountActionScreen(actionType: "deactivate"));
                           },
                         );
                       },

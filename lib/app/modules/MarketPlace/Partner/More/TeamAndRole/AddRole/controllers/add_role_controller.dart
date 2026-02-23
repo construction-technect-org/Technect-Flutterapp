@@ -2,6 +2,8 @@ import "dart:developer";
 
 
 import 'package:construction_technect/app/core/utils/permission_utils.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/AddRolemodel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/UpdatedRoleModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/permissions_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/AddRoleService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/role_service.dart';
@@ -9,6 +11,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 
 class AddRoleController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -34,7 +37,7 @@ class AddRoleController extends GetxController {
   List<String> finalSelectedIds = <String>[];
   List<String> finalSelectedCode = <String>[];
 
-  int? roleId;
+  String? roleId;
   RxBool isEdit = false.obs;
   final List<PermissionItem> functionalities =
       PermissionLabelUtils.permissionItems;
@@ -139,19 +142,29 @@ class AddRoleController extends GetxController {
     }
   }
 
+
   void loadRoleData(GetAllRole role) {
     isEdit.value = true;
     roleId = role.id;
 
-    roleController.text = role.roleTitle ?? '';
-    roleDescription.text = role.roleDescription ?? '';
+    roleController.text = role.roleName ?? '';
+    roleDescription.text = role.description ?? '';
 
-    final functionalityValue = role.functionalities ?? '';
+    // ✅ Direct List assign karo — split ki zaroorat nahi
+    selectedFunctionalities.value = role.permissions ?? [];
 
-    selectedFunctionalities.value = functionalityValue
-        .split(',')
-        .map((e) => e.trim())
-        .toList();
+    // ✅ Checkboxes pre-select karo
+    selected.clear();
+    for (final perm in role.permissions ?? []) {
+      for (final perms in groupedPermissions.values) {
+        for (final p in perms) {
+          if (p?.code == perm) {
+            selected[p!.id!] = true;
+          }
+        }
+      }
+    }
+    selected.refresh();
   }
 
   void toggleFunctionality(String key) {
@@ -167,47 +180,77 @@ class AddRoleController extends GetxController {
   }
 
   Future<void> saveRole() async {
-    if (selectedFunctionalities.isEmpty) {
-      Get.snackbar("Error", "Please select a functionality");
+    if (!formKey.currentState!.validate()) return;
+
+    final selectedCodes = getCodeID();
+
+    if (selectedCodes.isEmpty) {
+      Get.rawSnackbar(
+        title: "Error",
+        message: "Please select at least one permission",
+        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
       return;
     }
 
-    isLoading.value = true;
-
     try {
-      if (isEdit.value && roleId != null) {
-        final result = await RoleService.updateRole(
-          roleId: roleId!,
-          roleTitle: roleController.text,
-          roleDescription: roleDescription.text,
-          functionalities: selectedFunctionalities.join(','),
-          isActive: true,
+      isLoading.value = true;
+
+      if (isEdit.value && roleId.toString() != "") {
+        // ✅ Update Role
+        final UpdatedRoleModel result = await RoleService.updateRole(
+          roleId: roleId.toString()??"",
+          roleName: roleController.text.trim(),
+          description: roleDescription.text.trim(),
+          permissions: selectedCodes,
         );
 
-        if (result.success) {
-          await _refreshRoleManagement();
-          Get.back();
+        if (result.success == true) {
+          Get.back(result: true);
+          Get.rawSnackbar(
+            title: "Success",
+            message: result.message ?? "Role updated successfully",
+            backgroundColor: Colors.green,
+            icon: const Icon(Icons.check_circle, color: Colors.white),
+            snackPosition: SnackPosition.BOTTOM,
+            duration: const Duration(seconds: 3),
+          );
         }
       } else {
-        final result = await RoleService.createRole(
-          roleTitle: roleController.text,
-          roleDescription: roleDescription.text,
-          functionalities: selectedFunctionalities.join(','),
-          isActive: true,
+        // ✅ Create Role
+        final AddRoleModel result = await RoleService.createRole(
+          roleName: roleController.text.trim(),
+          description: roleDescription.text.trim(),
+          permissions: selectedCodes,
         );
 
-        if (result.success) {
-          await _refreshRoleManagement();
-          Get.back();
+        if (result.success == true) {
+          Get.back(result: true);
+          Get.rawSnackbar(
+            title: "Success",
+            message: result.message ?? "Role created successfully",
+            backgroundColor: Colors.green,
+            icon: const Icon(Icons.check_circle, color: Colors.white),
+            snackPosition: SnackPosition.BOTTOM,
+            duration: const Duration(seconds: 3),
+          );
         }
       }
     } catch (e) {
-      // ignore: avoid_print
+      Get.printError(info: 'saveRole error: $e');
+      Get.rawSnackbar(
+        title: "Error",
+        message: "Something went wrong",
+        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
     } finally {
       isLoading.value = false;
     }
   }
-
   Future<void> _refreshRoleManagement() async {
     try {
       if (Get.isRegistered<RoleManagementController>()) {

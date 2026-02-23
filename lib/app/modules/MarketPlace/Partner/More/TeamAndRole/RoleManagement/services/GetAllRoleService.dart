@@ -24,10 +24,10 @@ class GetAllRoleService {
     }
   }
 
-  Future<void> deleteRole(int roleId) async {
+  Future<void> deleteRole(String roleId) async {
     try {
       await _apiManager.delete(
-        url: APIConstants.deleteRole + roleId.toString(),
+        url: APIConstants.deleteRole + roleId,
       );
     } catch (e, st) {
       throw Exception('Error deleting role: $e , $st');

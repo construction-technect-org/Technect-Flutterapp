@@ -7,6 +7,11 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 class SettingService {
   final ApiManager _apiManager = ApiManager();
 
+  Future<dynamic> deactivateAccount() async {
+    return await _apiManager.delete(
+      url: APIConstants.softDeleteAccount, // ✅ apna endpoint add karo
+    );
+  }
   Future<SendOtpModel> sendOtp({
     required bool isDeactivate,
     required String countryCode,

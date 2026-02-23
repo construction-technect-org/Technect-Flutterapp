@@ -24,7 +24,13 @@ class RoleManagementController extends GetxController {
     if (Get.arguments != null) {
       showRoles.value = Get.arguments["isRole"] ?? true;
     }
-    //loadRoles();
+    loadRoles();
+  }
+  @override
+  void onReady() {
+    super.onReady();
+    // screen visible hone par fetch karo
+    fetchRoles();
   }
 
   Future<void> loadRoles() async {
@@ -33,11 +39,11 @@ class RoleManagementController extends GetxController {
 
   Future<void> _loadRolesFromStorage() async {
     final cachedRoleModel = myPref.getRoleModelData();
-    if (cachedRoleModel != null && cachedRoleModel.data.isNotEmpty) {
-      roles.assignAll(cachedRoleModel.data);
-      if (cachedRoleModel.statistics != null) {
-        statistics.value = cachedRoleModel.statistics!;
-      }
+    if (cachedRoleModel != null && cachedRoleModel.customRoles!.isNotEmpty) {
+      roles.assignAll(cachedRoleModel.customRoles??[]);
+      // if (cachedRoleModel.statistics != null) {
+      //   statistics.value = cachedRoleModel.statistics!;
+      // }
       fetchRoles();
     } else {
       await fetchRoles();
@@ -52,8 +58,8 @@ class RoleManagementController extends GetxController {
     try {
       isLoading.value = true;
       final result = await GetAllRoleService().fetchAllRoles();
-      roles.assignAll(result.data);
-      statistics.value = result.statistics!;
+      roles.assignAll(result.customRoles??[]);
+      // statistics.value = result.statistics!;
       myPref.setRoleModelData(result);
     } catch (e) {
       // ignore: avoid_print
@@ -79,7 +85,7 @@ class RoleManagementController extends GetxController {
     await fetchRoles();
   }
 
-  Future<void> deleteRole(int roleId) async {
+  Future<void> deleteRole(String roleId) async {
     try {
       isLoading.value = true;
       await GetAllRoleService().deleteRole(roleId);

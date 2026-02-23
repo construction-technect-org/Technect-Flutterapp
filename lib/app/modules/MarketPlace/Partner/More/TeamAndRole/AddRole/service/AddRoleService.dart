@@ -2,48 +2,46 @@ import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/AddRolemodel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/UpdatedRoleModel.dart';
+import 'package:construction_technect/main.dart';
 
 class RoleService {
   static final ApiManager _apiManager = ApiManager();
 
-  static Future<AddRolemodel> createRole({
-    required String roleTitle,
-    required String roleDescription,
-    required String functionalities,
-    required bool isActive,
+  static Future<AddRoleModel> createRole({
+    required String roleName,
+    required String description,
+    required List<String> permissions,
   }) async {
     try {
       final response = await _apiManager.postObject(
         url: APIConstants.addRole,
         body: {
-          "role_title": roleTitle,
-          "role_description": roleDescription,
-          "functionalities": functionalities,
-          "is_active": isActive,
+          "profileId": myPref.profileId.val,
+          "profileType": myPref.getRole() == "partner" ? "merchant" : myPref.getRole(),
+          "roleName": roleName,           // ✅ API field
+          "description": description,     // ✅ API field
+          "permissions": permissions,     // ✅ API field — codes list
         },
       );
-
-      return AddRolemodel.fromJson(response);
+      return AddRoleModel.fromJson(response);
     } catch (e) {
       rethrow;
     }
   }
 
   static Future<UpdatedRoleModel> updateRole({
-    required int roleId,
-    required String roleTitle,
-    required String roleDescription,
-    required String functionalities,
-    required bool isActive,
+    required String roleId,
+    required String roleName,
+    required String description,
+    required List<String> permissions,
   }) async {
     try {
       final response = await _apiManager.putObject(
         url: "${APIConstants.updateRole}/$roleId",
         body: {
-          "role_title": roleTitle,
-          "role_description": roleDescription,
-          "functionalities": functionalities,
-          "is_active": isActive,
+          "roleName": roleName,           // ✅ updated field
+          "description": description,     // ✅ updated field
+          "permissions": permissions,     // ✅ updated field
         },
       );
 

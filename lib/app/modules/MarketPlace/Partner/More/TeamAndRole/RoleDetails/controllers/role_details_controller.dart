@@ -8,7 +8,7 @@ class RoleDetailsController extends GetxController {
   RxString roleTitle = "Admin".obs;
   RxString roleId = "".obs;
   RxString roleDescription = "".obs;
-  RxString functionalities = "".obs;
+  RxList<String> functionalities = <String>[].obs;
   RxString roleStatus = "Active".obs;
   RxBool isLoading = false.obs;
   RoleService roleService = RoleService();
@@ -24,12 +24,12 @@ class RoleDetailsController extends GetxController {
     final arguments = Get.arguments;
     roleDetailsModel = arguments?['getRole'] ?? GetAllRole();
     roleId.value = (roleDetailsModel?.id ?? 0).toString();
-    roleTitle.value = roleDetailsModel?.roleTitle ?? "Admin";
-    roleStatus.value = roleDetailsModel?.isActive == true
-        ? "Active"
-        : "InActive";
-    roleDescription.value = roleDetailsModel?.roleDescription ?? '';
-    functionalities.value = roleDetailsModel?.functionalities ?? '';
+    roleTitle.value = roleDetailsModel?.roleName ?? "Admin";
+    // roleStatus.value = roleDetailsModel?.isActive == true
+    //     ? "Active"
+    //     : "InActive";
+    roleDescription.value = roleDetailsModel?.description ?? '';
+    functionalities.value = roleDetailsModel?.permissions ?? [];
   }
 
   Future<void> deleteRole(String id) async {

@@ -96,6 +96,9 @@ class ConnectorHomeService extends GetxService {
       if (moduleFor == "partner") {
         moduleFor = "merchant";
       }
+      if (moduleFor.isEmpty) {
+        return ModulesResponse(); // empty response return karo
+      }
       final response = await _apiManager.get(
         url: '${APIConstants.getConnectorModule}?moduleFor=$moduleFor&includeInactive=false',
       );

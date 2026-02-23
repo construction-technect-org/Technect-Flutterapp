@@ -4,7 +4,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 class FeedbackService {
   final ApiManager _apiManager = ApiManager();
 
-  Future<AddRolemodel> addFeedback({
+  Future<AddRoleModel> addFeedback({
     required int rating,
     required String text,
   }) async {
@@ -21,13 +21,13 @@ class FeedbackService {
         },
       );
 
-      return AddRolemodel.fromJson(response);
+      return AddRoleModel.fromJson(response);
     } catch (e) {
       throw Exception('Error adding feedback: $e');
     }
   }
 
-  Future<AddRolemodel> addConnectorFeedback({
+  Future<AddRoleModel> addConnectorFeedback({
     required int rating,
     required String text,
     required int id,
@@ -38,7 +38,7 @@ class FeedbackService {
         body: {"rating": rating, "review_text": text, "is_anonymous": false},
       );
 
-      return AddRolemodel.fromJson(response);
+      return AddRoleModel.fromJson(response);
     } catch (e) {
       throw Exception('Error adding connector feedback: $e');
     }

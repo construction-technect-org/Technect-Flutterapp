@@ -42,7 +42,40 @@ class SettingController extends GetxController {
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
 
-  void startTimer() {
+  Future<void> deactivateAccount() async {
+    try {
+      isLoading.value = true;
+
+      final response = await settingService.deactivateAccount();
+
+      if (response["message"].toString().isNotEmpty) {
+        // ✅ Local data clear karo
+        await myPref.logout();
+        Get.offAllNamed(Routes.ON_BOARDING);
+
+        Get.rawSnackbar(
+          title: "Account Deactivated",
+          message: response["message"] ?? "Your account has been deactivated",
+          backgroundColor: Colors.orange,
+          icon: const Icon(Icons.pause_circle_filled, color: Colors.white),
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      } else {
+        Get.rawSnackbar(
+          title: "Error",
+          message: response["message"] ?? "Something went wrong",
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      }
+    } catch (e) {
+      Get.printError(info: 'Error deactivating account: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }  void startTimer() {
     isResendVisible.value = false;
     countdownController.restart();
   }

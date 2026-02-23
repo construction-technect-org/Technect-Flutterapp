@@ -105,6 +105,7 @@ class AppSharedPreference {
   final mainCategoriesInteriorId = HiveValue<String>('mainCategoriesInteriorId', '');
   final roleStatsData = HiveValue<Map<String, dynamic>>('roleStatsData', {});
 
+
   void setToken(String authToken) {
     log("Token: $authToken");
     token.val = authToken;

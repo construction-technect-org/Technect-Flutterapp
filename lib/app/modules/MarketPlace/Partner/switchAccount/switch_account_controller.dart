@@ -32,6 +32,7 @@ class SwitchAccountController extends GetxController {
         await switchProfile(connector.profileId!, connector.profileType ?? "");
         currentRole.value = 'connector';
         myPref.setRole("connector");
+        myPref.role.val = currentRole.value;
         await controller.fetchConnectorModule();
         await EditProductController().fetchProjects();
       }
@@ -46,6 +47,8 @@ class SwitchAccountController extends GetxController {
         await switchProfile(merchant.profileId!, merchant.profileType ?? "");
         currentRole.value = 'partner';
         myPref.setRole("partner");
+        myPref.role.val = currentRole.value;
+
         await controller.fetchConnectorModule();
       }
     }
@@ -69,21 +72,19 @@ class SwitchAccountController extends GetxController {
   }
 
   Future<void> addConnectorAccount() async {
-    if(myPref.role.val=="partner"){
+    if (myPref.role.val == "partner") {
       await becomeConnector();
       currentRole.value = 'connector';
       myPref.setRole("connector");
+      myPref.role.val = currentRole.value;
       await controller.fetchConnectorModule();
       await EditProductController().fetchProjects();
-      myPref.role.val = currentRole.value;
       Get.back();
       Get.offAllNamed(Routes.MAIN);
-    }
-    else{
+    } else {
       Get.back();
       Get.toNamed(Routes.CONNECTOR_PROFILE, arguments: {"isSwitch": true});
     }
-
   }
 
   final ApiManager apiManager = ApiManager();
@@ -94,7 +95,7 @@ class SwitchAccountController extends GetxController {
       log("body $body");
 
       final switchResponse = await apiManager.postObject(
-        url: "/${APIConstants.switchAccount}",
+        url: "${APIConstants.switchAccount}",
         body: body,
       );
       final String? token = switchResponse["token"];
@@ -108,12 +109,12 @@ class SwitchAccountController extends GetxController {
       Get.printInfo(info: "❌ Switch Profile Error: $e");
     }
   }
+
   Future<void> becomeConnector() async {
     try {
-
       final becomeConnectorResponse = await apiManager.postObject(
         url: "/v1/api/auth/profiles/merchant/become-connector",
-        body: {}
+        body: {},
       );
       final String? token = becomeConnectorResponse["token"];
 

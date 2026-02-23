@@ -30,8 +30,8 @@ class APIConstants {
   // static const String merchantSubmit = "/v1/api/business/merchant/submit";
   static const String deleteDocument = "/v1/api/business/merchant/documents/";
   // static const String merchantUpdate = "/v1/api/business/merchant/update";
-  static const String addRole = "/v1/api/business/roles/custom/create";
-  static const String getAllRole = "/v1/api/business/roles/custom/list";
+  static const String addRole = "/v1/api/business/roles/custom";
+  static const String getAllRole = "/v1/api/business/roles/custom";
   static const String updateRole = "/v1/api/business/roles/custom";
   static const String deleteRole = "/v1/api/business/roles/custom/";
   static const String team = "/v1/api/business/team";
@@ -71,6 +71,7 @@ class APIConstants {
 
   // Service Persona List APIs
   static const String getPersonaList = "/v1/api/auth/profiles/list";
+  static const String softDeleteAccount = "/v1/api/auth/profiles/soft-delete";
 
   //Switch Account Apis
   static const String switchAccount = "/v1/api/auth/profiles/switch";

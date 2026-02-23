@@ -35,7 +35,7 @@ class RoleCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                role.roleTitle?.capitalizeFirst ?? '',
+                                role.roleName?.capitalizeFirst ?? '',
                                 style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -43,7 +43,7 @@ class RoleCard extends StatelessWidget {
                               ),
                               const Gap(2),
                               Text(
-                                role.roleDescription ?? '',
+                                role.description ?? '',
                                 style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -53,9 +53,14 @@ class RoleCard extends StatelessWidget {
                         ),
                         const Gap(20),
                         GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.ADD_ROLE, arguments: {"isEdit": true, "data": role});
-                          },
+                          onTap: () async {
+                            final result = await Get.toNamed(
+                              Routes.ADD_ROLE,
+                              arguments: {"isEdit": true, "data": role},
+                            );
+                            if (result == true) {
+                              Get.find<RoleManagementController>().fetchRoles(); // ✅ wapas aane par refresh
+                            }                          },
                           behavior: HitTestBehavior.translucent,
                           child: SvgPicture.asset(Asset.edit),
                         ),
@@ -64,7 +69,7 @@ class RoleCard extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             DeleteRoleDialog.showDeleteRoleDialog(context, () {
-                              Get.find<RoleManagementController>().deleteRole(role.id!);
+                              Get.find<RoleManagementController>().deleteRole(role.id!??"");
                             });
                           },
                           behavior: HitTestBehavior.translucent,
@@ -73,19 +78,19 @@ class RoleCard extends StatelessWidget {
                       ],
                     ),
                     const Gap(12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: MyColors.grayEA),
-                        color: MyColors.grayF7,
-                      ),
-                      child: Text(
-                        PermissionLabelUtils.format(role.functionalities),
-                        style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
-                      ),
-
-                    ),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(8),
+                    //     border: Border.all(color: MyColors.grayEA),
+                    //     color: MyColors.grayF7,
+                    //   ),
+                    //   child: Text(
+                    //     PermissionLabelUtils.format(role.functionalities),
+                    //     style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
+                    //   ),
+                    //
+                    // ),
                   ],
                 ),
               ),
@@ -103,7 +108,7 @@ class RoleCard extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    "Users - ${role.teamMemberCount ?? '0'} ",
+                    "Users - ${role.roleName ?? '0'} ",
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.gray2E,
                       fontFamily: MyTexts.SpaceGrotesk,

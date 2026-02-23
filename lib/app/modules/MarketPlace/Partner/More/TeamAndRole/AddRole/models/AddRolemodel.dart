@@ -1,67 +1,61 @@
-class AddRolemodel {
-  final bool success;
-  final AddRole? data;
-  final String message;
+class AddRoleModel {
+  final bool? success;
+  final String? message;
+  final CustomRole? customRole;
 
-  AddRolemodel({required this.success, required this.data, required this.message});
+  AddRoleModel({
+    this.success,
+    this.message,
+    this.customRole,
+  });
 
-  factory AddRolemodel.fromJson(Map<String, dynamic> json) {
-    return AddRolemodel(
-      success: json['success'] ?? false,
-      data: json['data'] != null ? AddRole.fromJson(json['data']) : null,
-      message: json['message'] ?? '',
+  factory AddRoleModel.fromJson(Map<String, dynamic> json) {
+    return AddRoleModel(
+      success: json['success'],
+      message: json['message'],
+      customRole: json['customRole'] != null
+          ? CustomRole.fromJson(json['customRole'])
+          : null,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'success': success, 'data': data?.toJson(), 'message': message};
   }
 }
 
-class AddRole {
-  final int id;
-  final int merchantProfileId;
-  final String roleTitle;
-  final String roleDescription;
-  final String functionalities;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+class CustomRole {
+  final String? id;
+  final String? profileId;
+  final String? profileType;
+  final String? roleName;
+  final String? description;
+  final String? createdBy;
+  final List<String>? permissions;
+  final String? createdAt;
+  final String? updatedAt;
 
-  AddRole({
-    required this.id,
-    required this.merchantProfileId,
-    required this.roleTitle,
-    required this.roleDescription,
-    required this.functionalities,
-    required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
+  CustomRole({
+    this.id,
+    this.profileId,
+    this.profileType,
+    this.roleName,
+    this.description,
+    this.createdBy,
+    this.permissions,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  factory AddRole.fromJson(Map<String, dynamic> json) {
-    return AddRole(
-      id: json['id'] ?? 0,
-      merchantProfileId: json['merchant_profile_id'] ?? 0,
-      roleTitle: json['role_title']?.trim() ?? '',
-      roleDescription: json['role_description'] ?? '',
-      functionalities: json['functionalities']?.toString() ?? '',
-      isActive: json['is_active'] ?? false,
-      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
-      updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
+  factory CustomRole.fromJson(Map<String, dynamic> json) {
+    return CustomRole(
+      id: json['id'],
+      profileId: json['profileId'],
+      profileType: json['profileType'],
+      roleName: json['roleName'],
+      description: json['description'],
+      createdBy: json['createdBy'],
+      permissions: json['permissions'] != null
+          ? List<String>.from(json['permissions'])
+          : [],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'merchant_profile_id': merchantProfileId,
-      'role_title': roleTitle,
-      'role_description': roleDescription,
-      'functionalities': functionalities,
-      'is_active': isActive,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-    };
   }
 }

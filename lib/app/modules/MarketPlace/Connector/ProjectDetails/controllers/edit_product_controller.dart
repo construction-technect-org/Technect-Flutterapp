@@ -14,6 +14,7 @@ class EditProductController extends GetxController {
     Future.delayed(const Duration(seconds: 1), () {
       fetchProjects();
     });
+
   }
   final isEditLoading = false.obs;
   final formKey = GlobalKey<FormState>();
@@ -182,6 +183,7 @@ class EditProductController extends GetxController {
 
   Future<void> fetchProjects() async {
     try {
+      if (myPref.getRole() != "connector") return;
       isLoading.value = true;
 
       final response = await connectorHomeService.getProjects();
