@@ -22,10 +22,21 @@ class AddManufacturerAddressController extends GetxController {
   RxBool isSearching = false.obs;
   RxString selectedAddress = ''.obs;
 
-  late GoogleMapController mapController;
+  RxBool isFullScreenMap = false.obs;
+  void toggleFullScreen() {
+    isFullScreenMap.value = !isFullScreenMap.value;
+  }
+
+  GoogleMapController? mapController;
   Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
   RxDouble mapZoom = 14.0.obs;
   Rx<MapType> mapType = MapType.normal.obs;
+
+  RxString selectedAddressType = 'Manufacturing Unit'.obs;
+
+  void setAddressType(String type) {
+    selectedAddressType.value = type;
+  }
 
   @override
   void onInit() {
@@ -61,6 +72,10 @@ class AddManufacturerAddressController extends GetxController {
           // NO Error
         }
       }
+
+      if (arguments['addressType'] != null) {
+        selectedAddressType.value = arguments['addressType'];
+      }
     }
   }
 
@@ -71,8 +86,7 @@ class AddManufacturerAddressController extends GetxController {
       final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         SnackBars.errorSnackBar(
-          content:
-              'Location services are disabled. Please enable location services.',
+          content: 'Location services are disabled. Please enable location services.',
         );
         return;
       }
@@ -87,25 +101,30 @@ class AddManufacturerAddressController extends GetxController {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        SnackBars.errorSnackBar(
-          content: 'Location permissions are permanently denied.',
-        );
+        SnackBars.errorSnackBar(content: 'Location permissions are permanently denied.');
         return;
       }
 
       final Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
 
       currentPosition.value = LatLng(position.latitude, position.longitude);
+
+      if (mapController != null) {
+        mapController!.animateCamera(CameraUpdate.newLatLng(currentPosition.value));
+      }
+
       _getAddressFromCoordinates(position.latitude, position.longitude);
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error getting current location: $e');
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> goToCurrentLocation() async {
+    await _getCurrentLocation();
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -119,10 +138,7 @@ class AddManufacturerAddressController extends GetxController {
   void onCameraIdle() {
     if (isSearching.value == false) {
       searchController.clear();
-      _getAddressFromCoordinates(
-        currentPosition.value.latitude,
-        currentPosition.value.longitude,
-      );
+      _getAddressFromCoordinates(currentPosition.value.latitude, currentPosition.value.longitude);
     } else {
       isSearching.value = false;
     }
@@ -130,15 +146,17 @@ class AddManufacturerAddressController extends GetxController {
 
   Future<void> _getAddressFromCoordinates(double lat, double lng) async {
     try {
-      final List<Placemark> placemarks = await placemarkFromCoordinates(
-        lat,
-        lng,
-      );
+      final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks.isNotEmpty) {
         final Placemark place = placemarks[0];
         final String address =
             '${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
         selectedAddress.value = address;
+
+        // Auto-fill the search text field unless in edit mode with a pre-existing value
+        if (!isEditMode.value || searchController.text.isEmpty) {
+          searchController.text = address;
+        }
       }
     } catch (e) {
       selectedAddress.value = 'Address not found';
@@ -167,6 +185,7 @@ class AddManufacturerAddressController extends GetxController {
 
       final Map<String, dynamic> manufacturerAddress = {
         "address_name": addressNameController.text.trim(),
+        "address_type": selectedAddressType.value,
         "full_address": selectedAddress.value,
         "landmark": landmarkController.text.trim(),
         "latitude": currentPosition.value.latitude,
@@ -180,9 +199,7 @@ class AddManufacturerAddressController extends GetxController {
           manufacturerAddress,
         );
       } else {
-        await AddManufacturerAddressService.submitManufacturerAddress(
-          manufacturerAddress,
-        );
+        await AddManufacturerAddressService.submitManufacturerAddress(manufacturerAddress);
       }
 
       await Get.find<CommonController>().fetchProfileData();

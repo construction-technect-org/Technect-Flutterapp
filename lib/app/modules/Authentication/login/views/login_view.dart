@@ -1,3 +1,5 @@
+import "dart:developer";
+
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
@@ -176,16 +178,16 @@ class LoginView extends GetView<LoginController> {
                               // try {
                               //   final AppSharedPreference pref = AppSharedPreference();
                               //   await pref.logout();
-                              //   print("Data cleared");
+                              //   log("Data cleared");
                               //   return;
                               // } catch (e) {
-                              //   print("Error clearing data $e");
+                              //   log("Error clearing data $e");
                               // }
                               // return;
                               controller.loginError.value = "";
                               controller.mobileValidationError.value = "";
                               controller.isValid.value = -1;
-                              print("IsValid123 ${controller.isValid.value}");
+                              log("IsValid123 ${controller.isValid.value}");
 
                               final mobileNumber = controller.mobileController.text.trim();
                               if (!controller.formKey.currentState!.validate()) {
@@ -202,11 +204,11 @@ class LoginView extends GetView<LoginController> {
                                   controller.isValid.value = 1;
                                   return;
                                 }
-                                print("IsValid ${controller.isValid.value}");
+                                log("IsValid ${controller.isValid.value}");
                               }
 
                               if (controller.formKey.currentState?.validate() ?? false) {
-                                print(controller.isValid.value);
+                                log('${controller.isValid.value}');
                                 hideKeyboard();
                                 controller.login();
                               }

@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/OtpModel.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPassword/model/SignUpModel.dart';
@@ -24,7 +27,7 @@ class SignUpService {
           if ((website ?? "").isNotEmpty) "website": website,
         },
       );
-      print("AuthCheckAvailability Response : $response");
+      log("AuthCheckAvailability Response : $response");
       final data = response["data"] ?? {};
       if ((email ?? '').isNotEmpty) {
         final emailData = data["email"];
@@ -71,17 +74,17 @@ class SignUpService {
     }
   }
 
-  Future<OtpModel> sendOtp({required String mobileNumber}) async {
+  Future<OtpModel> sendOtp({required String mobileNumber, required String email}) async {
     try {
-      print("URL : ${APIConstants.sendOtp}");
-      print("Body : countryCode : +91, $mobileNumber : mobileNumber}");
+      log("URL : ${APIConstants.sendOtp}");
+      log("Body : countryCode : +91, $mobileNumber : mobileNumber}");
       final response = await apiManager.postObjectWithoutToken(
         // url: APIConstants.sendOtp,
         url: "auth/user/signup/phone",
-        body: {"countryCode": "+91", "phone": mobileNumber, "email": "chandanmk2738@gmail.com"},
+        body: {"countryCode": "+91", "phone": mobileNumber, "email": email},
         // body: {"countryCode": "+91", "mobileNumber": mobileNumber},
       );
-      print("SendOtp Response : $response");
+      log("SendOtp Response : $response");
 
       return OtpModel.fromJson(response);
     } catch (e, st) {

@@ -11,7 +11,7 @@ class ModuleModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
+    data['success'] = success;
     if (this.data != null) {
       data['data'] = this.data?.toJson();
     }
@@ -35,8 +35,8 @@ class ModuleData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.modules != null) {
-      data['modules'] = this.modules?.map((v) => v.toJson()).toList();
+    if (modules != null) {
+      data['modules'] = modules?.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -75,16 +75,16 @@ class Modules {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['isActive'] = this.isActive;
-    data['sortOrder'] = this.sortOrder;
-    data['moduleFor'] = this.moduleFor;
-    if (this.image != null) {
-      data['image'] = this.image?.toJson();
+    data['id'] = id;
+    data['name'] = name;
+    data['isActive'] = isActive;
+    data['sortOrder'] = sortOrder;
+    data['moduleFor'] = moduleFor;
+    if (image != null) {
+      data['image'] = image?.toJson();
     }
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }
@@ -114,11 +114,11 @@ class ModuleImage {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['key'] = this.key;
-    data['url'] = this.url;
-    data['contentType'] = this.contentType;
-    data['size'] = this.size;
-    data['originalName'] = this.originalName;
+    data['key'] = key;
+    data['url'] = url;
+    data['contentType'] = contentType;
+    data['size'] = size;
+    data['originalName'] = originalName;
     return data;
   }
 }

@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/permission_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/permissions_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/AddRoleService.dart';
@@ -45,7 +48,7 @@ class AddRoleController extends GetxController {
         setPermissions(userPer);
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -57,7 +60,7 @@ class AddRoleController extends GetxController {
     groupByCategory(list);
 
     /// default unselected
-    for (var item in list) {
+    for (final item in list) {
       selected[item?.id ?? ""] = false;
     }
   }
@@ -65,7 +68,7 @@ class AddRoleController extends GetxController {
   void groupByCategory(List<UserPermissions?> list) {
     final Map<String, List<UserPermissions?>> grouped = {};
 
-    for (var item in list) {
+    for (final item in list) {
       final String key = item?.category ?? "Other";
 
       if (grouped.containsKey(key)) {
@@ -107,17 +110,17 @@ class AddRoleController extends GetxController {
 
   /// 🔵 select all in category
   void selectAllCategory(String category, bool value) {
-    var list = groupedPermissions[category];
+    final list = groupedPermissions[category];
     if (list == null) return;
 
-    for (var item in list) {
+    for (final item in list) {
       selected[item!.id ?? ""] = value;
     }
   }
 
   /// 🔵 select all global
   void selectAll(bool value) {
-    for (var item in allPermissions) {
+    for (final item in allPermissions) {
       selected[item?.id ?? ""] = value;
     }
   }

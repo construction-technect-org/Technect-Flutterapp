@@ -1,3 +1,5 @@
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -101,7 +103,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                       //     ?.verificationStatus
                       //     ?.qualityAssurance ??
                       //     true);
-                      // print(  controller
+                      // log(  controller
                       //     .merchantProfile
                       //     ?.verificationStatus
                       //     ?.qualityAssurance);

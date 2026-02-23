@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
@@ -64,15 +67,15 @@ class ConnectorProfileController extends GetxController {
         .profileId ??
         "";
 
-    Get.printInfo(info: '✅  C ProfileId : ${profileId}');
+    log( '✅  C ProfileId : $profileId');
     if (profileId.isNotEmpty) {
       myPref.setProfileId(profileId);
       try {
         final response = await AddKycService().getPointOfContact(profileId);
         if (response.success == true) {
-          Get.printInfo(info: '✅ POC Name Response: ${response.connector?.pocDetails?.pocName??"Null"}');
+          log( '✅ POC Name Response: ${response.connector?.pocDetails?.pocName??"Null"}');
           profileDatas.value = response;
-          Get.printInfo(info: '✅ POC Name Response: ${profileDatas.value?.connector?.pocDetails?.pocName??"Null"}');
+          log( '✅ POC Name Response: ${profileDatas.value?.connector?.pocDetails?.pocName??"Null"}');
 
         }
       } catch (e) {

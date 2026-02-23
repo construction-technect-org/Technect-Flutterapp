@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
@@ -11,7 +10,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/subcategory_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
@@ -84,7 +82,7 @@ class MainHomeController extends GetxController {
 
   void removeImageAt(int index) {
     if (imageSlots[index] != null) {
-      print("Removed");
+      log("Removed");
       removedImages["remove_image_${index + 1}"] = "remove";
       imageSlots[index] = null;
     }
@@ -129,9 +127,7 @@ class MainHomeController extends GetxController {
 
   void gstCalculate() {
     final double amount =
-        double.parse(
-          priceController.text.isEmpty ? '0.0' : priceController.text,
-        ) *
+        double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
         double.parse(
           selectedGST.value.toString().replaceAll("%", "").isEmpty
               ? '0.0'
@@ -139,8 +135,7 @@ class MainHomeController extends GetxController {
         ) /
         100;
     gstPriceController.text = amount.toStringAsFixed(2);
-    amountController.text = (amount + double.parse(priceController.text))
-        .toStringAsFixed(2);
+    amountController.text = (amount + double.parse(priceController.text)).toStringAsFixed(2);
   }
 
   void selectSiteAddress(ManufacturerAddress? site) {
@@ -159,7 +154,7 @@ class MainHomeController extends GetxController {
     List<XFile> results = [];
     try {
       final remainingSlots = 5 - pickedFilePathList.length;
-      print("RS $remainingSlots PFL ${pickedFilePathList.length}");
+      log("RS $remainingSlots PFL ${pickedFilePathList.length}");
       if (remainingSlots <= 0) {
         SnackBars.errorSnackBar(content: "You can only upload up to 5 images");
         return;
@@ -167,9 +162,7 @@ class MainHomeController extends GetxController {
 
       if (remainingSlots == 1) {
         // 🔴 Android requires single picker
-        final XFile? file = await ImagePicker().pickImage(
-          source: ImageSource.gallery,
-        );
+        final XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
         if (file != null) {
           results.add(file);
         }
@@ -179,9 +172,7 @@ class MainHomeController extends GetxController {
       }
 
       if (results.length > remainingSlots) {
-        SnackBars.errorSnackBar(
-          content: "You can only upload up to $remainingSlots images",
-        );
+        SnackBars.errorSnackBar(content: "You can only upload up to $remainingSlots images");
         return;
       }
 
@@ -189,7 +180,7 @@ class MainHomeController extends GetxController {
         pickedFilePathList.addAll(results.map((e) => e.path));
       }
     } catch (e) {
-      print("Failed pick");
+      log("Failed pick");
       SnackBars.errorSnackBar(content: 'Failed to pick images: $e', time: 3);
     }
   }
@@ -198,7 +189,7 @@ class MainHomeController extends GetxController {
     List<XFile> pickedFiles = [];
     try {
       final empSlots = imageSlots.where((e) => e == null).length;
-      print("Empty $empSlots");
+      log("Empty $empSlots");
 
       if (empSlots <= 0) {
         SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
@@ -207,9 +198,7 @@ class MainHomeController extends GetxController {
 
       if (empSlots == 1) {
         // 🔴 Android requires single picker
-        final XFile? file = await ImagePicker().pickImage(
-          source: ImageSource.gallery,
-        );
+        final XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
         if (file != null) {
           pickedFiles.add(file);
         }
@@ -219,9 +208,7 @@ class MainHomeController extends GetxController {
       }
 
       if (pickedFiles.length > empSlots) {
-        SnackBars.errorSnackBar(
-          content: "You can only select up to $empSlots more images.",
-        );
+        SnackBars.errorSnackBar(content: "You can only select up to $empSlots more images.");
         // You must exit the function here to prevent processing the excess images.
         return;
       }
@@ -229,9 +216,7 @@ class MainHomeController extends GetxController {
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
-          if (index >= 0 &&
-              index < imageSlots.length &&
-              imageSlots[index] != null) {
+          if (index >= 0 && index < imageSlots.length && imageSlots[index] != null) {
             toRemove.add(key);
           }
         });
@@ -251,9 +236,7 @@ class MainHomeController extends GetxController {
         if (hasAnyImage) {
           removedImages.removeWhere((key, _) {
             final index = int.parse(key.split('_').last) - 1;
-            return index >= 0 &&
-                index < imageSlots.length &&
-                imageSlots[index] != null;
+            return index >= 0 && index < imageSlots.length && imageSlots[index] != null;
           });
         }
       }
@@ -267,10 +250,16 @@ class MainHomeController extends GetxController {
     super.onInit();
 
     imageSlots.value = List<String?>.filled(5, null);
-    fetchMainCategoryForProduct("connector", 'Material');
+    if (storage.token.isNotEmpty) {
+      fetchMainCategoryForProduct("connector", 'Material');
+    }
   }
 
   Future<void> fetchMainCategoryForProduct(String mFor, String matType) async {
+    if (storage.token.isEmpty) {
+      log("Skipping fetchMainCategoryForProduct: No token");
+      return;
+    }
     String? modID;
     try {
       isLoading.value = true;
@@ -285,9 +274,7 @@ class MainHomeController extends GetxController {
               for (int i = 0; i < res.data!.modules!.length; i++) {
                 if (res.data!.modules![i].name == matType) {
                   modID = res.data!.modules![i].id;
-                  final response = await _homeService.getMainCategories(
-                    moduleID: modID!,
-                  );
+                  final response = await _homeService.getMainCategories(moduleID: modID!);
                   if (response.success == true) {
                     if (response.data != null) {
                       mainCatList.addAll(response.data!);
@@ -303,7 +290,7 @@ class MainHomeController extends GetxController {
         }
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -324,7 +311,7 @@ class MainHomeController extends GetxController {
         }
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -345,7 +332,7 @@ class MainHomeController extends GetxController {
         }
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -366,7 +353,7 @@ class MainHomeController extends GetxController {
         }
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -378,20 +365,20 @@ class MainHomeController extends GetxController {
     } catch (_) {}
 
     final playerController = isNetwork
-        ? VideoPlayerController.network(videoPath)
+        ? VideoPlayerController.networkUrl(Uri.parse(videoPath))
         : VideoPlayerController.file(File(videoPath));
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (_) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
             try {
-              await playerController.pause();
-              await playerController.dispose();
+              playerController.pause();
+              playerController.dispose();
             } catch (_) {}
-            return true;
           },
           child: Dialog(
             insetPadding: const EdgeInsets.all(16),
@@ -449,11 +436,7 @@ class MainHomeController extends GetxController {
                                       ),
                                     ],
                                   ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
+                                  child: const Icon(Icons.close, color: Colors.white, size: 20),
                                 ),
                               ),
                             ),
@@ -557,9 +540,7 @@ class MainHomeController extends GetxController {
     if (videoPlayerController != null) {
       final size = videoPlayerController!.value.size;
       isVideoPortrait.value = size.height > size.width;
-      log(
-        'Video Size: ${size.width}x${size.height}, Is Portrait: ${isVideoPortrait.value}',
-      );
+      log('Video Size: ${size.width}x${size.height}, Is Portrait: ${isVideoPortrait.value}');
     }
   }
 
@@ -579,10 +560,8 @@ class MainHomeController extends GetxController {
 
     selectedMainCatName.value = categoryName;
 
-    final selected = mainCatList.firstWhereOrNull(
-      (c) => c?.name == categoryName,
-    );
-    print("Selected ${selected?.name}, ${selected?.id} ");
+    final selected = mainCatList.firstWhereOrNull((c) => c?.name == categoryName);
+    log("Selected ${selected?.name}, ${selected?.id} ");
     selectedMainCategoryId.value = selected?.id ?? "";
     if (selected != null) {
       fetchCategoryForProduct(selected.id ?? "");
@@ -599,9 +578,7 @@ class MainHomeController extends GetxController {
 
   void onSubCategorySelected(String? subCategoryName) {
     selectedSubCatName.value = subCategoryName;
-    final selected = subCatList.firstWhereOrNull(
-      (c) => c?.name == subCategoryName,
-    );
+    final selected = subCatList.firstWhereOrNull((c) => c?.name == subCategoryName);
     if (selected != null) {
       fetchCCForProduct(selected.id ?? "");
     }

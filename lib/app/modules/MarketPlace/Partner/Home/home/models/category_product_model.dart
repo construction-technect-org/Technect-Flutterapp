@@ -16,7 +16,7 @@ class CategoryProductModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
+    data['success'] = success;
     if (this.data != null) {
       data['data'] = this.data?.map((v) => v.toJson()).toList();
     }
@@ -32,6 +32,10 @@ class CategoryProductData {
   int? sortOrder;
   String? createdAt;
   CategoryProductImage? image;
+  List<String>? images;
+  String? categoryName;
+  String? price;
+  String? unit;
   String? updatedAt;
 
   CategoryProductData({
@@ -42,6 +46,10 @@ class CategoryProductData {
     this.sortOrder,
     this.createdAt,
     this.image,
+    this.images,
+    this.categoryName,
+    this.price,
+    this.unit,
     this.updatedAt,
   });
 
@@ -52,24 +60,34 @@ class CategoryProductData {
     isActive = json['isActive'];
     sortOrder = json['sortOrder'];
     createdAt = json['createdAt'];
-    image = json['image'] != null
-        ? CategoryProductImage.fromJson(json['image'])
-        : null;
+    image = json['image'] != null ? CategoryProductImage.fromJson(json['image']) : null;
+    if (json['images'] != null) {
+      images = List<String>.from(json['images']);
+    } else if (image?.url != null) {
+      images = [image!.url!];
+    }
+    categoryName = json['categoryName'];
+    price = json['price']?.toString();
+    unit = json['unit'];
     updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['subCategoryId'] = this.subCategoryId;
-    data['name'] = this.name;
-    data['isActive'] = this.isActive;
-    data['sortOrder'] = this.sortOrder;
-    data['createdAt'] = this.createdAt;
-    if (this.image != null) {
-      data['image'] = this.image?.toJson();
+    data['id'] = id;
+    data['subCategoryId'] = subCategoryId;
+    data['name'] = name;
+    data['isActive'] = isActive;
+    data['sortOrder'] = sortOrder;
+    data['createdAt'] = createdAt;
+    if (image != null) {
+      data['image'] = image?.toJson();
     }
-    data['updatedAt'] = this.updatedAt;
+    data['images'] = images;
+    data['categoryName'] = categoryName;
+    data['price'] = price;
+    data['unit'] = unit;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }
@@ -81,13 +99,7 @@ class CategoryProductImage {
   int? size;
   String? originalName;
 
-  CategoryProductImage({
-    this.key,
-    this.url,
-    this.contentType,
-    this.size,
-    this.originalName,
-  });
+  CategoryProductImage({this.key, this.url, this.contentType, this.size, this.originalName});
 
   CategoryProductImage.fromJson(Map<String, dynamic> json) {
     key = json['key'];
@@ -99,11 +111,11 @@ class CategoryProductImage {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['key'] = this.key;
-    data['url'] = this.url;
-    data['contentType'] = this.contentType;
-    data['size'] = this.size;
-    data['originalName'] = this.originalName;
+    data['key'] = key;
+    data['url'] = url;
+    data['contentType'] = contentType;
+    data['size'] = size;
+    data['originalName'] = originalName;
     return data;
   }
 }

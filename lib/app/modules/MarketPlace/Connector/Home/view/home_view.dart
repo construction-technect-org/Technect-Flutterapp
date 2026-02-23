@@ -1,20 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
-import 'package:construction_technect/app/core/utils/imports.dart'
-    hide Category;
+import 'package:construction_technect/app/core/utils/imports.dart' hide Category;
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/main_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/module_models.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/view/sub_category_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 
 class ConnectorHomeView extends StatelessWidget {
   final CommonController commonController = Get.find();
   final ConnectorHomeController controller = Get.put(ConnectorHomeController());
-  final DashBoardController _controller = Get.find<DashBoardController>();
 
   CachedNetworkImage getImageView({
     required String finalUrl,
@@ -35,10 +31,7 @@ class ConnectorHomeView extends StatelessWidget {
         width: width,
         decoration: const BoxDecoration(color: MyColors.grayF7),
         child: const Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: MyColors.primary,
-          ),
+          child: CircularProgressIndicator(strokeWidth: 2, color: MyColors.primary),
         ),
       ),
       errorWidget: (context, url, error) => SizedBox(
@@ -48,12 +41,7 @@ class ConnectorHomeView extends StatelessWidget {
           height: height,
           width: width,
           // decoration: const BoxDecoration(color: MyColors.grayD4, shape: BoxShape.circle),
-          child: Image.asset(
-            Asset.appLogo,
-            height: height,
-            width: width,
-            fit: BoxFit.contain,
-          ),
+          child: Image.asset(Asset.appLogo, height: height, width: width, fit: BoxFit.contain),
         ),
       ),
     );
@@ -72,10 +60,7 @@ class ConnectorHomeView extends StatelessWidget {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.categoryBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
                 ),
               ),
               Column(
@@ -108,13 +93,7 @@ class ConnectorHomeView extends StatelessWidget {
                                           ?.teamMember
                                           ?.profilePhoto ??
                                       ''
-                                : commonController
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.user
-                                          ?.image ??
-                                      '';
+                                : commonController.profileData.value.data?.user?.image ?? '';
 
                             if (profileImage.isEmpty) {
                               return const Icon(
@@ -126,8 +105,7 @@ class ConnectorHomeView extends StatelessWidget {
 
                             return ClipOval(
                               child: getImageView(
-                                finalUrl:
-                                    "${APIConstants.bucketUrl}$profileImage",
+                                finalUrl: "${APIConstants.bucketUrl}$profileImage",
                                 fit: BoxFit.cover,
                                 height: 48,
                                 width: 48,
@@ -142,40 +120,6 @@ class ConnectorHomeView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Obx(() {
-                                final isTeamLogin = myPref.getIsTeamLogin();
-
-                                final firstName = isTeamLogin
-                                    ? commonController
-                                              .profileData
-                                              .value
-                                              .data
-                                              ?.teamMember
-                                              ?.firstName ??
-                                          ''
-                                    : commonController
-                                              .profileData
-                                              .value
-                                              .data
-                                              ?.user
-                                              ?.firstName ??
-                                          '';
-
-                                final lastName = isTeamLogin
-                                    ? commonController
-                                              .profileData
-                                              .value
-                                              .data
-                                              ?.teamMember
-                                              ?.lastName ??
-                                          ''
-                                    : commonController
-                                              .profileData
-                                              .value
-                                              .data
-                                              ?.user
-                                              ?.lastName ??
-                                          '';
-
                                 return RichText(
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -183,7 +127,7 @@ class ConnectorHomeView extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text:
-                                            '${_controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${_controller.userMainModel?.lastName?.capitalizeFirst ?? ''}',
+                                            '${commonController.userMainModel?.firstName?.capitalizeFirst ?? ''} ${commonController.userMainModel?.lastName?.capitalizeFirst ?? ''}',
                                         // '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}! Connector',
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
@@ -200,9 +144,7 @@ class ConnectorHomeView extends StatelessWidget {
                                     ? null
                                     : () {
                                         if (myPref.role.val == "partner") {
-                                          Get.toNamed(
-                                            Routes.MANUFACTURER_ADDRESS,
-                                          );
+                                          Get.toNamed(Routes.MANUFACTURER_ADDRESS);
                                         } else {
                                           Get.toNamed(Routes.DELIVERY_LOCATION);
                                         }
@@ -228,16 +170,13 @@ class ConnectorHomeView extends StatelessWidget {
                                             children: [
                                               TextSpan(
                                                 text:
-                                                    "Lat: ${_controller.currentPosition.value.latitude}, "
-                                                    "Lng: ${_controller.currentPosition.value.longitude}",
+                                                    "Lat: ${commonController.currentPosition.value.latitude}, "
+                                                    "Lng: ${commonController.currentPosition.value.longitude}",
                                               ),
                                               const WidgetSpan(
-                                                alignment:
-                                                    PlaceholderAlignment.middle,
+                                                alignment: PlaceholderAlignment.middle,
                                                 child: Padding(
-                                                  padding: EdgeInsets.only(
-                                                    left: 4,
-                                                  ),
+                                                  padding: EdgeInsets.only(left: 4),
                                                   child: Icon(
                                                     Icons.keyboard_arrow_down,
                                                     size: 16,
@@ -284,19 +223,14 @@ class ConnectorHomeView extends StatelessWidget {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: MyColors.white,
-                              border: Border.all(
-                                color: MyColors.custom('EAEAEA'),
-                              ),
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
                             child: SvgPicture.asset(
                               Asset.notification,
                               width: 24,
                               height: 24,
-                              colorFilter: ColorFilter.mode(
-                                MyColors.black,
-                                BlendMode.srcIn,
-                              ),
+                              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -309,19 +243,14 @@ class ConnectorHomeView extends StatelessWidget {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: MyColors.white,
-                              border: Border.all(
-                                color: MyColors.custom('EAEAEA'),
-                              ),
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
                             child: SvgPicture.asset(
                               Asset.info,
                               width: 24,
                               height: 24,
-                              colorFilter: ColorFilter.mode(
-                                MyColors.black,
-                                BlendMode.srcIn,
-                              ),
+                              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -334,19 +263,14 @@ class ConnectorHomeView extends StatelessWidget {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: MyColors.white,
-                              border: Border.all(
-                                color: MyColors.custom('EAEAEA'),
-                              ),
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
                             child: SvgPicture.asset(
                               Asset.chat,
                               width: 24,
                               height: 24,
-                              colorFilter: ColorFilter.mode(
-                                MyColors.black,
-                                BlendMode.srcIn,
-                              ),
+                              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -405,36 +329,24 @@ class ConnectorHomeView extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: List.generate(
-                            controller
-                                    .connectorModuleData
-                                    .value
-                                    .data
-                                    ?.modules
-                                    ?.length ??
-                                0,
+                            controller.connectorModuleData.value.data?.modules?.length ?? 0,
                             (index) {
-                              final module = controller
-                                  .connectorModuleData
-                                  .value
-                                  .data
-                                  ?.modules?[index];
+                              final module =
+                                  controller.connectorModuleData.value.data?.modules?[index];
 
                               return Padding(
                                 padding: const EdgeInsets.only(right: 12),
                                 child: tabBar(
-                                  onTap: ()async {
+                                  onTap: () async {
                                     hideKeyboard();
-                                    Get.printInfo(
-                                      info: '✅ Module Name : ${module?.name}',
-                                    );
+                                    Get.printInfo(info: '✅ Module Name : ${module?.name}');
                                     await controller.fetchMainCategory(module?.id);
                                     controller.marketPlace.value = index;
                                   },
                                   icon: _getIconFromModule(module),
                                   // explained below
                                   name: module?.name ?? "-",
-                                  isMarketPlace:
-                                      controller.marketPlace.value == index,
+                                  isMarketPlace: controller.marketPlace.value == index,
                                 ),
                               );
                             },
@@ -572,12 +484,7 @@ class ConnectorHomeView extends StatelessWidget {
                             Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    0,
-                                    8,
-                                    16,
-                                    0,
-                                  ),
+                                  padding: const EdgeInsets.fromLTRB(0, 8, 16, 0),
                                   child: Container(
                                     width: 70.w,
 
@@ -586,9 +493,7 @@ class ConnectorHomeView extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(50),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: MyColors.grayEA.withValues(
-                                            alpha: 0.32,
-                                          ),
+                                          color: MyColors.grayEA.withValues(alpha: 0.32),
                                           blurRadius: 4,
                                         ),
                                       ],
@@ -628,9 +533,7 @@ class ConnectorHomeView extends StatelessWidget {
                                     padding: const EdgeInsets.all(6),
                                     decoration: BoxDecoration(
                                       color: MyColors.white,
-                                      border: Border.all(
-                                        color: MyColors.custom('EAEAEA'),
-                                      ),
+                                      border: Border.all(color: MyColors.custom('EAEAEA')),
                                       shape: BoxShape.circle,
                                     ),
                                     child: SvgPicture.asset(
@@ -653,9 +556,7 @@ class ConnectorHomeView extends StatelessWidget {
                                     padding: const EdgeInsets.all(6),
                                     decoration: BoxDecoration(
                                       color: MyColors.white,
-                                      border: Border.all(
-                                        color: MyColors.custom('EAEAEA'),
-                                      ),
+                                      border: Border.all(color: MyColors.custom('EAEAEA')),
                                       shape: BoxShape.circle,
                                     ),
                                     child: SvgPicture.asset(
@@ -736,9 +637,7 @@ class ConnectorHomeView extends StatelessWidget {
                                   begin: AlignmentGeometry.topCenter,
                                   end: AlignmentGeometry.bottomCenter,
                                   colors: [
-                                    MyColors.custom(
-                                      'FFF9BD',
-                                    ).withValues(alpha: 0.1),
+                                    MyColors.custom('FFF9BD').withValues(alpha: 0.1),
                                     MyColors.white,
                                   ],
                                 ),
@@ -748,30 +647,21 @@ class ConnectorHomeView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Obx(() {
-                                  if (Get.find<ConnectorHomeController>()
-                                          .marketPlace
-                                          .value ==
-                                      0) {
+                                  if (Get.find<ConnectorHomeController>().marketPlace.value == 0) {
                                     /// ------------------- MATERIAL MARKETPLACE -------------------
-                                    final materialList =
-                                        controller.mainCategories;
+                                    final materialList = controller.mainCategories;
 
                                     if (materialList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
                                     return ListView.builder(
                                       shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          controller.mainCategories.length,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: controller.mainCategories.length,
                                       itemBuilder: (context, index) {
-                                        final mainCategory =
-                                            controller.mainCategories[index];
+                                        final mainCategory = controller.mainCategories[index];
                                         final categories =
-                                            controller.categoryMap[mainCategory
-                                                .id] ??
-                                            [];
+                                            controller.categoryMap[mainCategory.id] ?? [];
 
                                         return _buildCategorySection(
                                           context,
@@ -781,30 +671,21 @@ class ConnectorHomeView extends StatelessWidget {
                                         );
                                       },
                                     );
-                                  } else if (Get.find<CommonController>()
-                                          .marketPlace
-                                          .value ==
-                                      1) {
+                                  } else if (Get.find<CommonController>().marketPlace.value == 1) {
                                     /// ------------------- CONSTRUCTION MARKETPLACE -------------------
-                                    final materialList =
-                                        controller.mainCategories;
+                                    final materialList = controller.mainCategories;
 
                                     if (materialList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
                                     return ListView.builder(
                                       shrinkWrap: true,
-                                      physics:
-                                      const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                      controller.mainCategories.length,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: controller.mainCategories.length,
                                       itemBuilder: (context, index) {
-                                        final mainCategory =
-                                        controller.mainCategories[index];
+                                        final mainCategory = controller.mainCategories[index];
                                         final categories =
-                                            controller.categoryMap[mainCategory
-                                                .id] ??
-                                                [];
+                                            controller.categoryMap[mainCategory.id] ?? [];
 
                                         return _buildCategorySection(
                                           context,
@@ -833,13 +714,9 @@ class ConnectorHomeView extends StatelessWidget {
                                     // );
                                   } else {
                                     /// ------------------- TOOLS MARKETPLACE -------------------
-                                    final toolsList = controller
-                                        .categoryHierarchyData2
-                                        .value
-                                        .data;
+                                    final toolsList = controller.categoryHierarchyData2.value.data;
 
-                                    if (toolsList == null ||
-                                        toolsList.isEmpty) {
+                                    if (toolsList == null || toolsList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
                                     return const Text("TOOLS MARKETPLACE");
@@ -871,77 +748,6 @@ class ConnectorHomeView extends StatelessWidget {
       ),
     );
   }
-
-  /// ============================
-  /// MATERIAL MARKETPLACE VIEW
-  /// ============================
-  Widget _buildMaterialList(BuildContext context, List<MainCategory> data) {
-    return ListView.builder(
-      padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: data.length,
-      itemBuilder: (context, mainIndex) {
-        final mainCategory = controller.mainCategories[mainIndex];
-        final categories = controller.categoryMap[mainCategory.id] ?? [];
-
-        // if(mainCategory?.name=="Interior Material"){
-        //   return _buildCategorySection(
-        //     context,
-        //     mainCategory,
-        //     interiorData,
-        //     route: Routes.SELECT_PRODUCT,
-        //   );
-        // }
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          categories,
-          route: Routes.SELECT_PRODUCT,
-        );
-      },
-    );
-  }
-
-  /// ============================
-  /// CONSTRUCTION MARKETPLACE VIEW
-  /// ============================
-  // Widget _buildServiceList(BuildContext context, List<dynamic> data) {
-  //   return ListView.builder(
-  //     padding: EdgeInsets.zero,
-  //     shrinkWrap: true,
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     itemCount: data.length,
-  //     itemBuilder: (context, mainIndex) {
-  //       final mainCategory = data[mainIndex];
-  //       return _buildCategorySection(
-  //         context,
-  //         mainCategory,
-  //         route: Routes.SELECT_SERVICE,
-  //       );
-  //     },
-  //   );
-  // }
-
-  /// ============================
-  /// TOOLS & EQUIPMENT MARKETPLACE VIEW
-  /// ============================
-  // Widget _buildToolsList(BuildContext context, List<dynamic> data) {
-  //   return ListView.builder(
-  //     shrinkWrap: true,
-  //     padding: EdgeInsets.zero,
-  //     physics: const NeverScrollableScrollPhysics(),
-  //     itemCount: data.length,
-  //     itemBuilder: (context, mainIndex) {
-  //       final mainCategory = data[mainIndex];
-  //       return _buildCategorySection(
-  //         context,
-  //         mainCategory,
-  //         route: Routes.SEARCH_SERVICE, // create this route if not already
-  //       );
-  //     },
-  //   );
-  // }
 
   /// ============================
   /// COMMON CATEGORY SECTION BUILDER
@@ -1054,13 +860,10 @@ class ConnectorHomeView extends StatelessWidget {
                                 (subCategory.image ??
                                     'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
                             fit: BoxFit.fill,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.category,
-                              color: MyColors.primary,
-                            ),
+                            placeholder: (context, url) =>
+                                const Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.category, color: MyColors.primary),
                           ),
                         ),
                       ),
@@ -1113,42 +916,6 @@ class ConnectorHomeView extends StatelessWidget {
     );
   }
 
-  void _showAddAddressDialog() {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          "Add Your Address",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        content: const Text(
-          "To view a product, please add your address first.",
-          style: TextStyle(fontSize: 14),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              Get.toNamed(Routes.DELIVERY_LOCATION);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text("Add Address"),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
-  }
-
   String _getIconFromModule(ModuleModel? module) {
     switch (module?.name?.toLowerCase()) {
       case 'material':
@@ -1180,10 +947,7 @@ class HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium17.copyWith(
-        color: MyColors.black,
-        fontFamily: MyTexts.SpaceGrotesk,
-      ),
+      style: MyTexts.medium17.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }
 }

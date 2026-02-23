@@ -23,13 +23,13 @@ class VerifyOTPModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.user != null) {
-      data['user'] = this.user?.toJson();
+    data['success'] = success;
+    data['message'] = message;
+    if (user != null) {
+      data['user'] = user?.toJson();
     }
-    data['token'] = this.token;
-    data['tokenType'] = this.tokenType;
+    data['token'] = token;
+    data['tokenType'] = tokenType;
     return data;
   }
 }
@@ -62,12 +62,12 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['phone'] = this.phone;
-    data['email'] = this.email;
-    data['phoneVerified'] = this.phoneVerified;
-    data['status'] = this.status;
-    data['countryCode'] = this.countryCode;
+    data['id'] = id;
+    data['phone'] = phone;
+    data['email'] = email;
+    data['phoneVerified'] = phoneVerified;
+    data['status'] = status;
+    data['countryCode'] = countryCode;
     return data;
   }
 }

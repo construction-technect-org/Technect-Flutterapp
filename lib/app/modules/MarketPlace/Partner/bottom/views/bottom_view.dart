@@ -1,11 +1,11 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/menu_view.dart';
@@ -25,14 +25,8 @@ class BottomBarView extends GetView<BottomController> {
     return OfflineBuilder(
       child: _buildUpgradeAlert(context),
       connectivityBuilder:
-          (
-            BuildContext context,
-            List<ConnectivityResult> connectivity,
-            Widget child,
-          ) {
-            final bool connected = !connectivity.contains(
-              ConnectivityResult.none,
-            );
+          (BuildContext context, List<ConnectivityResult> connectivity, Widget child) {
+            final bool connected = !connectivity.contains(ConnectivityResult.none);
 
             if (!connected && !controller.isBottomSheetOpen.value) {
               controller.isBottomSheetOpen.value = true;
@@ -44,12 +38,9 @@ class BottomBarView extends GetView<BottomController> {
                   isScrollControlled: true,
                   backgroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16.0),
-                    ),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
                   ),
-                  builder: (_) =>
-                      PopScope(canPop: false, child: NoInternetBottomSheet()),
+                  builder: (_) => PopScope(canPop: false, child: NoInternetBottomSheet()),
                 ).whenComplete(() {
                   controller.isBottomSheetOpen.value = false;
                 });
@@ -60,9 +51,8 @@ class BottomBarView extends GetView<BottomController> {
 
               WidgetsBinding.instance.addPostFrameCallback((val) async {
                 await Get.find<CommonController>().fetchProfileData();
-                await Get.find<HomeController>().fetchCategoryHierarchy();
-                await Get.find<HomeController>()
-                    .fetchCategoryServiceHierarchy();
+                // await Get.find<HomeController>().fetchCategoryHierarchy();
+                // await Get.find<HomeController>().fetchCategoryServiceHierarchy();
               });
             }
 
@@ -92,9 +82,7 @@ class BottomBarView extends GetView<BottomController> {
       case 0:
         return Dashboard();
       case 1:
-        return myPref.getRole() == "connector"
-            ? ConnectorHomeView()
-            : HomeView();
+        return myPref.getRole() == "connector" ? ConnectorHomeView() : HomeView();
       case 2:
         return ConnectionInboxView();
       case 3:
@@ -114,10 +102,7 @@ class BottomBarView extends GetView<BottomController> {
             Expanded(
               child: Container(
                 //margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   gradient: const LinearGradient(
@@ -157,9 +142,7 @@ class BottomBarView extends GetView<BottomController> {
                       index: 1,
                     ),
                     //Gap(5.5.w),
-                    if (PermissionLabelUtils.canShow(
-                      PermissionKeys.catalogManager,
-                    ))
+                    if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
                       bottomBar(
                         Asset.add,
                         Asset.add,
@@ -193,7 +176,7 @@ class BottomBarView extends GetView<BottomController> {
             if (myPref.getIsTeamLogin() == false)
               GestureDetector(
                 onTap: () async {
-                 await commonController.fetchProfileDataM();
+                  await commonController.fetchProfileDataM();
 
                   Get.put<SwitchAccountController>(SwitchAccountController());
                   showSwitchAccountBottomSheet();
@@ -204,20 +187,13 @@ class BottomBarView extends GetView<BottomController> {
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
                     color: Color(0xFF1B2F62),
-                    shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
                   child: Column(
                     children: [
-                      const Icon(
-                        Icons.autorenew,
-                        color: Colors.white,
-                        size: 30,
-                      ),
+                      const Icon(Icons.autorenew, color: Colors.white, size: 30),
                       Text(
-                        myPref.getRole() == "partner"
-                            ? "Merchant"
-                            : "Connector",
+                        myPref.getRole() == "partner" ? "Merchant" : "Connector",
                         style: MyTexts.medium12.copyWith(color: Colors.white),
                       ),
                     ],
@@ -231,41 +207,29 @@ class BottomBarView extends GetView<BottomController> {
   }
 
   void onSellTap() {
+    log("commonController.hasProfileComplete.value: ${commonController.hasProfileComplete.value}");
+    log("marketPlace.value: ${Get.find<CommonController>().marketPlace.value}");
     if (Get.find<CommonController>().marketPlace.value == 0) {
-      if(myPref.role.val=="connector"){
-        Get.to(() => EditProjectView());
+      if (myPref.role.val != "connector") {
+        if (!commonController.hasProfileComplete.value) {
+          _showProfileIncompleteDialog();
+        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
+          _showAddAddressDialog();
+        } else {
+          _showProductOptions();
+        }
+      } else {
+        Get.toNamed(Routes.ADD_REQUIREMENT);
       }
-      // if (myPref.role.val != "connector") {
-      //   if (!commonController.hasProfileComplete.value) {
-      //     _showProfileIncompleteDialog();
-      //   } else if ((Get.find<CommonController>()
-      //               .profileData
-      //               .value
-      //               .data
-      //               ?.addresses ??
-      //           [])
-      //       .isEmpty) {
-      //     _showAddAddressDialog();
-      //   } else {
-      //     _showProductOptions();
-      //   }
-      // } else {
-      //   Get.toNamed(Routes.ADD_REQUIREMENT);
-      // }
     } else if (Get.find<CommonController>().marketPlace.value == 1) {
       if (myPref.role.val != "connector") {
         if (!commonController.hasProfileComplete.value) {
           _showProfileIncompleteDialog();
-        } else if ((Get.find<CommonController>()
-                    .profileData
-                    .value
-                    .data
-                    ?.addresses ??
-                [])
-            .isEmpty) {
+        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
           _showAddAddressDialog();
         } else {
-          // _showServiceOptions();
+          _showProductOptions(); // Fallback to product options or some other logic if needed?
+          // Actually, let's just leave it empty or show a dialog for now if service options are not ready.
         }
       } else {
         Get.toNamed(Routes.ADD_SERVICE_REQUIREMENT);
@@ -299,9 +263,7 @@ class BottomBarView extends GetView<BottomController> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: const Text("Complete Now"),
           ),
@@ -335,9 +297,7 @@ class BottomBarView extends GetView<BottomController> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: const Text("Add Address"),
           ),
@@ -388,47 +348,6 @@ class BottomBarView extends GetView<BottomController> {
     );
   }
 
-  void _showServiceOptions() {
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sheetHandle(),
-            const Text(
-              "Select an Option",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            ListTile(
-              leading: SvgPicture.asset(Asset.add),
-              title: const Text("Add New Service"),
-              onTap: () {
-                Get.back();
-                Get.toNamed(Routes.ADD_SERVICES);
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: SvgPicture.asset(Asset.inventory),
-              title: const Text("Manage Services"),
-              onTap: () {
-                Get.back();
-                Get.toNamed(Routes.INVENTORY);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   void _showComingSoonSheet() {
     showModalBottomSheet(
       context: Get.context!,
@@ -442,13 +361,7 @@ class BottomBarView extends GetView<BottomController> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           padding: const EdgeInsets.all(16),
-          child: Center(
-            child: Image.asset(
-              Asset.comingSoon,
-              height: 316,
-              fit: BoxFit.cover,
-            ),
-          ),
+          child: Center(child: Image.asset(Asset.comingSoon, height: 316, fit: BoxFit.cover)),
         );
       },
     );
@@ -460,21 +373,12 @@ class BottomBarView extends GetView<BottomController> {
         width: 50,
         height: 5,
         margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(5),
-        ),
+        decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(5)),
       ),
     );
   }
 
-  Widget bottomBar(
-    String icon,
-    String icon2,
-    String name, {
-    void Function()? onTap,
-    int? index,
-  }) {
+  Widget bottomBar(String icon, String icon2, String name, {void Function()? onTap, int? index}) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
@@ -507,10 +411,7 @@ class HearderText extends StatelessWidget {
       text,
       style:
           textStyle ??
-          MyTexts.medium18.copyWith(
-            color: MyColors.black,
-            fontFamily: MyTexts.SpaceGrotesk,
-          ),
+          MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }
 }

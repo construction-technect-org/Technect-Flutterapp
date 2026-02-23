@@ -825,7 +825,7 @@ class ConnectorSelectedProductController extends GetxController {
       );
 
       if (result.success == true) {
-        allFilters.value = (result.data as List<FilterData>)
+        allFilters.value = (result.data!)
             .map((e) => e)
             .toList();
       } else {

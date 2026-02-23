@@ -1,5 +1,4 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
-import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
@@ -41,13 +40,7 @@ class Dashboard extends StatelessWidget {
                                       ?.teamMember
                                       ?.profilePhoto ??
                                   ''
-                            : commonController
-                                      .profileData
-                                      .value
-                                      .data
-                                      ?.user
-                                      ?.image ??
-                                  '';
+                            : commonController.profileData.value.data?.user?.image ?? '';
 
                         if (profileImage.isEmpty) {
                           return const Icon(
@@ -119,14 +112,9 @@ class Dashboard extends StatelessWidget {
                                           color: MyColors.custom('545454'),
                                         ),
                                         children: [
-                                          TextSpan(
-                                            text: _controller
-                                                .selectedAddress
-                                                .value,
-                                          ),
+                                          TextSpan(text: _controller.selectedAddress.value),
                                           const WidgetSpan(
-                                            alignment:
-                                                PlaceholderAlignment.middle,
+                                            alignment: PlaceholderAlignment.middle,
                                             child: Padding(
                                               padding: EdgeInsets.only(left: 4),
                                               child: Icon(
@@ -148,24 +136,6 @@ class Dashboard extends StatelessWidget {
                       ),
                     ),
                     const Gap(10),
-                    /* if (myPref.getIsTeamLogin() == false)
-                      GestureDetector(
-                        onTap: () {
-                          Get.put<SwitchAccountController>(SwitchAccountController());
-                          showSwitchAccountBottomSheet();
-                          // Get.to(() => const ExploreView());
-                        },
-                        child: Stack(
-                          alignment: AlignmentGeometry.center,
-                          children: [
-                            Image.asset(Asset.explore, width: 18.w),
-                            Text(
-                              "Switch",
-                              style: MyTexts.medium14.copyWith(color: MyColors.white),
-                            ),
-                          ],
-                        ),
-                      ), */
                     GestureDetector(
                       onTap: () {
                         Get.toNamed(Routes.NOTIFICATIONS);
@@ -181,10 +151,7 @@ class Dashboard extends StatelessWidget {
                           Asset.notification,
                           width: 24,
                           height: 24,
-                          colorFilter: ColorFilter.mode(
-                            MyColors.black,
-                            BlendMode.srcIn,
-                          ),
+                          colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                         ),
                       ),
                     ),
@@ -204,10 +171,7 @@ class Dashboard extends StatelessWidget {
                           Asset.info,
                           width: 24,
                           height: 24,
-                          colorFilter: ColorFilter.mode(
-                            MyColors.black,
-                            BlendMode.srcIn,
-                          ),
+                          colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                         ),
                       ),
                     ),
@@ -227,10 +191,7 @@ class Dashboard extends StatelessWidget {
                           Asset.chat,
                           width: 24,
                           height: 24,
-                          colorFilter: ColorFilter.mode(
-                            MyColors.black,
-                            BlendMode.srcIn,
-                          ),
+                          colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                         ),
                       ),
                     ),

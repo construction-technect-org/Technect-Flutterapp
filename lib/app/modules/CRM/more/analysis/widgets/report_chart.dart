@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/more/analysis/controller/analysis_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/views/report_view.dart';
@@ -8,7 +11,7 @@ class ReportChart extends GetView<AnalysisController> {
   @override
   Widget build(BuildContext context) {
     if (kDebugMode) {
-      print(myPref.role.val);
+      log(myPref.role.val);
     }
     return Obx(() {
       if (!controller.isReport.value) {

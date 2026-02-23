@@ -72,7 +72,7 @@ class EventCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color, width: 1),
+        border: Border.all(color: color),
       ),
       child: Text(text, style: MyTexts.bold12.copyWith(color: color)),
     );
@@ -100,7 +100,6 @@ class EventCardWidget extends StatelessWidget {
           color: isMine
               ? Colors.white.withValues(alpha: 0.3)
               : MyColors.primary.withValues(alpha: 0.2),
-          width: 1,
         ),
       ),
       child: Column(

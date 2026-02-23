@@ -1,3 +1,5 @@
+
+
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
@@ -6,10 +8,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class ConnectionDialogs {
-  static void showAcceptConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+  static void showAcceptConnectionDialog(BuildContext context, Connection connection) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Welcome! Let's connect";
 
@@ -18,15 +17,10 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -38,10 +32,7 @@ class ConnectionDialogs {
                 SizedBox(height: 2.h),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 12,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: const Color(0xFFFEF7E8),
@@ -100,10 +91,7 @@ class ConnectionDialogs {
     );
   }
 
-  static void showRejectConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+  static void showRejectConnectionDialog(BuildContext context, Connection connection) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Not interested at this time";
     showDialog(
@@ -111,15 +99,10 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -131,10 +114,7 @@ class ConnectionDialogs {
                 SizedBox(height: 2.h),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 12,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: const Color(0xFFFEF7E8),
@@ -203,8 +183,7 @@ class ConnectionDialogs {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     final TextEditingController messageController = TextEditingController();
-    final TextEditingController deliveryDateController =
-        TextEditingController();
+    final TextEditingController deliveryDateController = TextEditingController();
     final TextEditingController radiusController = TextEditingController();
     //
     // messageController.text =
@@ -216,9 +195,7 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: GestureDetector(
             onTap: hideKeyboard,
             child: Container(
@@ -242,10 +219,7 @@ class ConnectionDialogs {
 
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                        horizontal: 12,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: const Color(0xFFFEF7E8),
@@ -263,10 +237,7 @@ class ConnectionDialogs {
                       controller: deliveryDateController,
                       headerText: "Estimated Delivery Date",
                       hintText: "Select estimate delivery date",
-                      suffixIcon: const Icon(
-                        Icons.calendar_today,
-                        color: Colors.black,
-                      ),
+                      suffixIcon: const Icon(Icons.calendar_today, color: Colors.black),
                       maxLine: 1,
                       readOnly: true,
                       validator: (val) {
@@ -400,9 +371,7 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: GestureDetector(
             onTap: hideKeyboard,
             child: Container(
@@ -424,10 +393,7 @@ class ConnectionDialogs {
                     SizedBox(height: 2.h),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                        horizontal: 12,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: const Color(0xFFFEF7E8),
@@ -444,10 +410,7 @@ class ConnectionDialogs {
                       controller: dateController,
                       headerText: "Estimated Delivery Date",
                       hintText: "Select estimate delivery date",
-                      suffixIcon: const Icon(
-                        Icons.calendar_today,
-                        color: Colors.black,
-                      ),
+                      suffixIcon: const Icon(Icons.calendar_today, color: Colors.black),
                       maxLine: 1,
                       readOnly: true,
                       validator: (val) {
@@ -555,24 +518,16 @@ class ConnectionDialogs {
     );
   }
 
-  static void showRemoveConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+  static void showRemoveConnectionDialog(BuildContext context, Connection connection) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -593,10 +548,8 @@ class ConnectionDialogs {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "connection.merchantName" ?? "",
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.black,
-                          ),
+                          "connection.merchantName",
+                          style: MyTexts.medium14.copyWith(color: MyColors.black),
                           textAlign: TextAlign.center,
                         ),
                         Row(
@@ -608,10 +561,8 @@ class ConnectionDialogs {
                             ),
                             const Gap(4),
                             Text(
-                              "connection.productName" ?? "",
-                              style: MyTexts.regular13.copyWith(
-                                color: MyColors.black,
-                              ),
+                              "connection.productName",
+                              style: MyTexts.regular13.copyWith(color: MyColors.black),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -653,8 +604,9 @@ class ConnectionDialogs {
                     Expanded(
                       child: RoundedButton(
                         onTap: () {
-                          Get.find<ConnectionInboxController>()
-                              .acceptConnection(connection.id ?? "");
+                          Get.find<ConnectionInboxController>().acceptConnection(
+                            connection.id ?? "",
+                          );
                           Navigator.pop(context);
                         },
                         buttonName: 'Confirm',
@@ -674,25 +626,16 @@ class ConnectionDialogs {
     );
   }
 
-  static void showBlockDialog(
-    BuildContext context,
-    Connection connection,
-    String? text,
-  ) {
+  static void showBlockDialog(BuildContext context, Connection connection, String? text) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -713,10 +656,8 @@ class ConnectionDialogs {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "connection.merchantName" ?? "",
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.black,
-                          ),
+                          "connection.merchantName",
+                          style: MyTexts.medium14.copyWith(color: MyColors.black),
                           textAlign: TextAlign.center,
                         ),
                         Row(
@@ -728,10 +669,8 @@ class ConnectionDialogs {
                             ),
                             const Gap(4),
                             Text(
-                              "connection.productName" ?? "",
-                              style: MyTexts.regular13.copyWith(
-                                color: MyColors.black,
-                              ),
+                              "connection.productName",
+                              style: MyTexts.regular13.copyWith(color: MyColors.black),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -774,21 +713,23 @@ class ConnectionDialogs {
                       child: RoundedButton(
                         onTap: () {
                           if (text == "Block") {
-                            Get.find<ConnectionInboxController>()
-                                .blockConnection(connection.id ?? "");
+                            Get.find<ConnectionInboxController>().blockConnection(
+                              connection.id ?? "",
+                            );
                             Navigator.pop(context);
-                          } else if(text=="Decline") {
-                            Get.find<ConnectionInboxController>()
-                                .rejectConnection(connection.id ?? "");
+                          } else if (text == "Decline") {
+                            Get.find<ConnectionInboxController>().rejectConnection(
+                              connection.id ?? "",
+                            );
                             Navigator.pop(context);
-                          }else  {
-                            Get.find<ConnectionInboxController>()
-                                .removeConnection(connection.id ?? "");
+                          } else {
+                            Get.find<ConnectionInboxController>().removeConnection(
+                              connection.id ?? "",
+                            );
                             Navigator.pop(context);
                           }
-
                         },
-                        buttonName: text??"",
+                        buttonName: text ?? "",
                         borderRadius: 12,
                         verticalPadding: 0,
                         height: 45,

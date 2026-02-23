@@ -1,3 +1,5 @@
+import "dart:developer";
+
 import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
@@ -48,7 +50,7 @@ class DashBoardController extends GetxController {
       }
 
       final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
 
       currentPosition.value = LatLng(position.latitude, position.longitude);
@@ -76,80 +78,77 @@ class DashBoardController extends GetxController {
     try {
       isLoading.value = true;
       final personaResponse = await homeService.getPersona();
-      print("Persona Response : ${personaResponse}");
+      log("Persona Response : $personaResponse");
       if (personaResponse.success == true) {
-        print("Success");
-        print("Persona Response : ${personaResponse.personas?.length}");
+        log("Success");
+        log("Persona Response : ${personaResponse.personas?.length}");
         for (int i = 0; i < personaResponse.personas!.length; i++) {
-          print("Persona Response : ${personaResponse.personas?[i].profileType}");
+          log("Persona Response : ${personaResponse.personas?[i].profileType}");
         }
         await storage.setPersonaDetail(personaResponse);
         profileFetch();
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching profile: $e');
+      log('Error fetching profile: $e');
     } finally {
       isLoading.value = false;
-      print("Fetched");
+      log("Fetched");
     }
   }
 
   Future<void> profileFetch() async {
-    print("Profile Fetched");
-    String? merchantID, connectorID;
+    log("Profile Fetched");
+    String? merchantID;
+    String? connectorID;
 
     try {
       isLoading.value = true;
 
-      print("Hy there ${storage.personaDetail}");
-      final PersonaProfileModel? _persona = storage.personaDetail;
-      print("Persona : ${_persona}");
-      if (_persona == null) {
-        print("Yes Null");
+      log("Hy there ${storage.personaDetail}");
+      final PersonaProfileModel? persona = storage.personaDetail;
+      log("Persona : $persona");
+      if (persona == null) {
+        log("Yes Null");
       }
-      print("Length ${_persona!.personas!.length}");
-      for (int i = 0; i < _persona!.personas!.length; i++) {
-        print("Persona : ${_persona?.personas?[i]}");
-        print("YEs ${_persona?.personas?[i].profileType}");
-        if (_persona?.personas?[i].profileType == "merchant") {
-          merchantID = _persona?.personas?[i].profileId;
+      log("Length ${persona!.personas!.length}");
+      for (int i = 0; i < persona.personas!.length; i++) {
+        log("Persona : ${persona.personas?[i]}");
+        log("YEs ${persona.personas?[i].profileType}");
+        if (persona.personas?[i].profileType == "merchant") {
+          merchantID = persona.personas?[i].profileId;
         } else {
-          connectorID = _persona?.personas?[i].profileId;
+          connectorID = persona.personas?[i].profileId;
         }
       }
 
       if (merchantID != null && merchantID.isNotEmpty) {
-        if(myPref.role.val!="connector") {
-          profileResponse.value =
-          await homeService.getMerchantProfile(merchantID);
-          print("Merchant Response : ${profileResponse.value}");
-          await storage.setMerchantID(merchantID);
-          print("Merchant ID : ${merchantID}");
-          if (profileResponse.value.merchant != null) {
-            print("Merchant NotNull");
-            print("Biz Hrs ${profileResponse.value.merchant!.businessHours}");
-            if (profileResponse.value.merchant!.businessHours != null) {
-              print("Storign BIz HOurs");
-              await storage.setMerchantBizHours(
-                  profileResponse.value.merchant!.businessHours);
-            }
-            if (profileResponse.value.merchant!.pocDetails != null) {
-              await storage.setPOC(profileResponse.value.merchant!.pocDetails);
-            }
-            await storage.setBM(profileResponse.value.merchant!);
-            if (profileResponse.value.merchant!.verificationDetails != null) {
-              await storage.setGstNumber(
-                profileResponse.value.merchant!.verificationDetails!.gstNumber!,
-              );
-            }
+        profileResponse.value = await homeService.getMerchantProfile(merchantID);
+        log("Merchant Response : ${profileResponse.value}");
+        await storage.setMerchantID(merchantID);
+        log("Merchant ID : $merchantID");
+        if (profileResponse.value.merchant != null) {
+          log("Merchant NotNull");
+          log("Biz Hrs ${profileResponse.value.merchant!.businessHours}");
+          if (profileResponse.value.merchant!.businessHours != null) {
+            log("Storign BIz HOurs");
+            await storage.setMerchantBizHours(profileResponse.value.merchant!.businessHours);
+          }
+          if (profileResponse.value.merchant!.pocDetails != null) {
+            await storage.setPOC(profileResponse.value.merchant!.pocDetails);
+          }
+          await storage.setBM(profileResponse.value.merchant!);
+          if (profileResponse.value.merchant!.verificationDetails != null) {
+            await storage.setGstNumber(
+              profileResponse.value.merchant!.verificationDetails!.gstNumber!,
+            );
           }
         }
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching profile: $e');
+      log('Error fetching profile: $e');
     } finally {
       isLoading.value = false;
-      print("Fetched");
+      log("Fetched");
     }
   }
 
@@ -158,21 +157,23 @@ class DashBoardController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     getCurrentLocation();
-    personaFetch();
-    profileFetch();
+    if (myPref.getToken().isNotEmpty && myPref.getRole() == "partner") {
+      personaFetch();
+      profileFetch();
+    }
 
-    print("Address Imm ${addressImmediate.value}");
-    print("Oninit123");
+    log("Address Imm ${addressImmediate.value}");
+    log("Oninit123");
     final savedToken = storage.token;
     //myPref.getToken();
     final savedTokenType = storage.tokenType;
     //myPref.getTokenType();
-    print("Saved $savedTokenType");
+    log("Saved $savedTokenType");
     if (savedTokenType == "ACCESS") {
-      print("HeyToke");
+      log("HeyToke");
       userMainModel = storage.user;
       //myPref.getUserModel();
-      print("First Name ${userMainModel?.firstName}");
+      log("First Name ${userMainModel?.firstName}");
     }
   }
 }

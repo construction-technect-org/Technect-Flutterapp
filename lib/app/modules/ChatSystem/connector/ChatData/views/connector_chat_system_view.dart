@@ -771,7 +771,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                           // Show microphone button for recording (WhatsApp style)
                           return GestureDetector(
                             onLongPressStart: (_) => controller.startRecording(),
-                            onLongPressEnd: (_) => controller.stopRecording(send: true),
+                            onLongPressEnd: (_) => controller.stopRecording(),
                             onLongPressCancel: () => controller.stopRecording(send: false),
                             child: Container(
                               padding: const EdgeInsets.all(8),

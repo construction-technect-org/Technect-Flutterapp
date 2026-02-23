@@ -1,11 +1,14 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/core/widgets/verifying_otp_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/services/ForgotPasswordService.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/reset_password_view.dart';
-import 'package:timer_count_down/timer_controller.dart';
 import 'package:phone_number_hint/phone_number_hint.dart';
+import 'package:timer_count_down/timer_controller.dart';
 
 class ForgotPasswordController extends GetxController {
   final phoneEmailController = TextEditingController();
@@ -88,7 +91,7 @@ class ForgotPasswordController extends GetxController {
     } catch (e) {
       otpSend.value = false;
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;
@@ -235,7 +238,7 @@ class ForgotPasswordController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;

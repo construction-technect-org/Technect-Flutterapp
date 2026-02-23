@@ -1,9 +1,10 @@
-import 'dart:convert';
+import "dart:developer";
 
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/profile_model.dart'
+    as connector;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
@@ -11,6 +12,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/dynamic_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/main_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_projects.model.dart';
@@ -107,14 +109,31 @@ class HomeService extends GetxService {
     }
   }
 
-  Future<CategoryProductModel> getCategoriesProduct({required String subCatID}) async {
+  Future<CategoryProductModel> getCategoriesProduct({
+    required String subCatID,
+    String? sort,
+    double? radius,
+  }) async {
     try {
-      final response = await _manageApi.get(
-        url: '${Endpoints.catProdApi}$subCatID&includeInactive=false',
-      );
+      String url = '${Endpoints.catProdApi}$subCatID&includeInactive=true';
+      if (sort != null) url += '&sort=$sort';
+      if (radius != null) url += '&radius=$radius';
+
+      final response = await _manageApi.get(url: url);
       return CategoryProductModel.fromJson(response);
     } catch (e, st) {
-      throw Exception('Error in getting  Categories Product: $e , $st');
+      throw Exception('Error in getting Categories Product: $e , $st');
+    }
+  }
+
+  Future<DynamicFilterModel> getDynamicFilters({required String categoryProductId}) async {
+    try {
+      final response = await _manageApi.get(
+        url: '${Endpoints.dynamicFilterApi}$categoryProductId&includeInactive=true',
+      );
+      return DynamicFilterModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in getting Dynamic Filters: $e , $st');
     }
   }
 
@@ -128,11 +147,10 @@ class HomeService extends GetxService {
       throw Exception('Error in getting Modules: $e , $st');
     }
   }
+
   Future<ProjectResponse> getMerchantProjects() async {
     try {
-      final response = await _manageApi.get(
-        url: Endpoints.merchantProjects,
-      );
+      final response = await _manageApi.get(url: Endpoints.merchantProjects);
       return ProjectResponse.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in getting Modules: $e , $st');
@@ -151,12 +169,12 @@ class HomeService extends GetxService {
     }
   }
 
-  Future<ProfileModelM> getProfileM() async {
+  Future<connector.ProfileModel> getProfileM() async {
     try {
       final response = await _apiManager.get(
         url: myPref.isTeamLogin.val == true ? APIConstants.teamProfile : APIConstants.profile,
       );
-      return ProfileModelM.fromJson(response);
+      return connector.ProfileModel.fromJson(response);
     } catch (e) {
       rethrow;
     }
@@ -210,7 +228,7 @@ class HomeService extends GetxService {
 
   Future<CategoryModel> getCategoryHierarchy() async {
     try {
-      final response = await _apiManager.get(url: 'merchant/hierarchy');
+      final response = await _apiManager.get(url: '/v1/api/business/merchant/hierarchy');
       return CategoryModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -219,7 +237,7 @@ class HomeService extends GetxService {
 
   Future<ServiceCategoryModel> getCategoryServiceHierarchy() async {
     try {
-      final response = await _apiManager.get(url: 'service-categories/hierarchy');
+      final response = await _apiManager.get(url: '/v1/api/business/service-categories/hierarchy');
       return ServiceCategoryModel.fromJson(response);
     } catch (e) {
       rethrow;
@@ -229,7 +247,7 @@ class HomeService extends GetxService {
   Future<bool> updateBusinessHours(String profileID, Map<String, dynamic> bizHours) async {
     try {
       final json = {"businessHours": bizHours};
-      print(json);
+      log('$json');
       final response = await _manageApi.patch(url: Endpoints.bizHoursApi, body: json);
       if (response["success"] == true) {
         return true;
@@ -238,6 +256,28 @@ class HomeService extends GetxService {
       }
     } catch (e, st) {
       throw Exception('Error in updating Business Hours: $e , $st');
+    }
+  }
+
+  Future<bool> updateUserInfo({
+    required String businessEmail,
+    required String businessPhone,
+    required String alternateBusinessPhone,
+  }) async {
+    try {
+      final json = {
+        "businessEmail": businessEmail,
+        "businessPhone": businessPhone,
+        "alternateBusinessPhone": alternateBusinessPhone,
+      };
+      final response = await _manageApi.patch(url: Endpoints.userInfoApi, body: json);
+      if (response["success"] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, st) {
+      throw Exception('Error in updating User Info: $e , $st');
     }
   }
 
@@ -319,7 +359,7 @@ class HomeService extends GetxService {
         fields: json,
         files: fileJson,
       );
-      print("Response from merchant profile: ${response}");
+      log("Response from merchant profile: $response");
       if (response["success"] == true) {
         return true;
       } else {

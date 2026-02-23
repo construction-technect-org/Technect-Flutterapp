@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -70,7 +73,7 @@ class AnalysisController extends GetxController {
         analysisModel.value = result.data ?? Analysis();
       }
     } catch (e) {
-      if (kDebugMode) print("Error: $e");
+      if (kDebugMode) log("Error: $e");
     } finally {
       isLoading.value = false;
     }
@@ -95,7 +98,7 @@ class AnalysisController extends GetxController {
         analysisModel.value = result.data ?? Analysis();
       }
     } catch (e) {
-      if (kDebugMode) print("Error: $e");
+      if (kDebugMode) log("Error: $e");
     } finally {
       isLoading.value = false;
     }
@@ -181,7 +184,7 @@ class AnalysisController extends GetxController {
         );
       }
     } catch (e) {
-      if (kDebugMode) print("Error downloading PDF: $e");
+      if (kDebugMode) log("Error downloading PDF: $e");
       Get.defaultDialog(
         title: "Error",
         middleText: "Something went wrong",

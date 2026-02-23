@@ -112,13 +112,13 @@ class LoginController extends GetxController {
   Future<void> login() async {
     isLoading.value = true;
     loginError.value = ""; //
-    print("Login Started");
+    log("Login Started");
 
     try {
       // Get FCM token and device type
       final fcmToken = await FCMService.getFCMToken();
       final deviceType = FCMService.getDeviceType();
-      print("Login Done Started1234");
+      log("Login Done Started1234");
       final loginResponse = await loginService.login(
         countryCode: countryCode.value,
         mobileNumber: mobileController.text,
@@ -126,14 +126,14 @@ class LoginController extends GetxController {
         fcmToken: fcmToken,
         deviceType: deviceType,
       );
-      print("Login Done Started123456");
+      log("Login Done Started123456");
       if (loginResponse.success == true) {
         // print all data here
-        print("message ${loginResponse.message}");
-        print("token ${loginResponse.token}");
-        print("tokenType ${loginResponse.tokenType}");
-        print("user ${loginResponse.user}");
-        print("success ${loginResponse.success}");
+        log("message ${loginResponse.message}");
+        log("token ${loginResponse.token}");
+        log("tokenType ${loginResponse.tokenType}");
+        log("user ${loginResponse.user}");
+        log("success ${loginResponse.success}");
 
         myPref.setIsTeamLogin(false);
         loginError.value = "";
@@ -149,7 +149,7 @@ class LoginController extends GetxController {
         if (loginResponse.user != null) {
           await _appHiveService.setUser(loginResponse.user ?? UserMainModel());
           myPref.setUserModel(loginResponse.user ?? UserMainModel());
-          print("LAst ${loginResponse.user?.firstName}");
+          log("LAst ${loginResponse.user?.firstName}");
         }
 
         if ((loginResponse.user?.lastActiveProfileType ?? "").toLowerCase() == "merchant") {
@@ -182,16 +182,16 @@ class LoginController extends GetxController {
       }
     } catch (e) {
       loginError.value = "Invalid mobile number or password";
-      print("Login NOt done123");
+      log("Login NOt done123");
     } finally {
       isLoading.value = false;
-      print("Login NOt done");
+      log("Login NOt done");
     }
   }
 
   void showBottomSheet() {
     Get.bottomSheet(
-      SignUpDetailsView(),
+      const SignUpDetailsView(),
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
     ).whenComplete(() {
@@ -536,7 +536,7 @@ class LoginController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     }
   } */

@@ -46,25 +46,15 @@ class Data {
     connectorProfile: json["connectorProfile"] == null
         ? null
         : ConnectorProfile.fromJson(json["connectorProfile"]),
-    referral: json["referral"] == null
-        ? null
-        : Referral.fromJson(json["referral"]),
+    referral: json["referral"] == null ? null : Referral.fromJson(json["referral"]),
     siteLocations: json["siteLocations"] == null
         ? []
-        : List<SiteLocation>.from(
-            json["siteLocations"]!.map((x) => SiteLocation.fromJson(x)),
-          ),
+        : (json["siteLocations"] as List).map((x) => SiteLocation.fromJson(x)).toList(),
     addresses: json["addresses"] == null
         ? []
-        : List<ManufacturerAddress>.from(
-            json["addresses"]!.map((x) => ManufacturerAddress.fromJson(x)),
-          ),
-    statistics: json["statistics"] == null
-        ? null
-        : StatisticsMC.fromJson(json["statistics"]),
-    teamMember: json["teamMember"] == null
-        ? null
-        : TeamMemberModel.fromJson(json["teamMember"]),
+        : (json["addresses"] as List).map((x) => ManufacturerAddress.fromJson(x)).toList(),
+    statistics: json["statistics"] == null ? null : StatisticsMC.fromJson(json["statistics"]),
+    teamMember: json["teamMember"] == null ? null : TeamMemberModel.fromJson(json["teamMember"]),
     isTeamLogin: json["isTeamLogin"],
   );
 
@@ -76,9 +66,7 @@ class Data {
     "siteLocations": siteLocations == null
         ? []
         : List<dynamic>.from(siteLocations!.map((x) => x.toJson())),
-    "addresses": addresses == null
-        ? []
-        : List<dynamic>.from(addresses!.map((x) => x.toJson())),
+    "addresses": addresses == null ? [] : List<dynamic>.from(addresses!.map((x) => x.toJson())),
     "statistics": statistics?.toJson(),
   };
 }
@@ -89,12 +77,7 @@ class Referral {
   int? totalEarnings;
   List<ReferralUser>? recentReferrals;
 
-  Referral({
-    this.myReferralCode,
-    this.totalReferrals,
-    this.totalEarnings,
-    this.recentReferrals,
-  });
+  Referral({this.myReferralCode, this.totalReferrals, this.totalEarnings, this.recentReferrals});
 
   factory Referral.fromJson(Map<String, dynamic> json) => Referral(
     myReferralCode: json["my_referral_code"],
@@ -102,9 +85,7 @@ class Referral {
     totalEarnings: json["total_earnings"],
     recentReferrals: json["recent_referrals"] == null
         ? []
-        : List<ReferralUser>.from(
-            json["recent_referrals"]!.map((x) => ReferralUser.fromJson(x)),
-          ),
+        : List<ReferralUser>.from(json["recent_referrals"]!.map((x) => ReferralUser.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -130,18 +111,13 @@ class ReferralUser {
     joinedAt: json["joined_at"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "email": email,
-    "joined_at": joinedAt,
-  };
+  Map<String, dynamic> toJson() => {"id": id, "name": name, "email": email, "joined_at": joinedAt};
 }
 
 class MerchantProfile {
-  int? id;
+  dynamic id;
   String? businessName;
-  String? merchantLogo;
+  dynamic merchantLogo;
   String? gstinNumber;
   String? businessEmail;
   String? businessContactNumber;
@@ -193,56 +169,60 @@ class MerchantProfile {
     this.updatedAt,
   });
 
-  factory MerchantProfile.fromJson(Map<String, dynamic> json) =>
-      MerchantProfile(
-        id: json["id"],
-        businessName: json["businessName"],
-        merchantLogo: json["logo"],
-        gstinNumber: json["gstinNumber"],
-        website: json["website"],
-        businessEmail: json["businessEmail"],
-        businessContactNumber: json["businessContactNumber"],
-        businessWebsite: json["businessWebsite"],
-        yearsInBusiness: json["yearOfEstablished"],
-        projectsCompleted: json["projectsCompleted"],
-        profileCompletionPercentage: json["profileCompletionPercentage"],
-        isProfileComplete: json["isProfileComplete"],
-        alternativeBusinessContactNumber:
-            json["alternativeBusinessContactNumber"],
-        identityVerified: json["identityVerified"],
-        businessLicense: json["businessLicense"],
-        qualityAssurance: json["qualityAssurance"],
-        verificationStatus: json["verificationStatus"] == null
-            ? null
-            : VerificationStatus.fromJson(json["verificationStatus"]),
-        trustScore: json["trustScore"],
-        marketplaceTier: json["marketplaceTier"],
-        memberSince: json["memberSince"],
-        businessHours: json["businessHours"] == null
-            ? []
-            : List<BusinessHours>.from(
-                json["businessHours"]!.map((x) => BusinessHours.fromJson(x)),
-              ),
-        documents: json["documents"] == null
-            ? []
-            : List<Documents>.from(
-                json["documents"]!.map((x) => Documents.fromJson(x)),
-              ),
-        pointOfContact: json["pointOfContact"] == null
-            ? null
-            : PointOfContact.fromJson(json["pointOfContact"]),
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
-      );
+  factory MerchantProfile.fromJson(Map<String, dynamic> json) => MerchantProfile(
+    id: json["id"],
+    businessName: json["businessName"],
+    merchantLogo: json["logo"] is Map ? json["logo"]["url"] : json["logo"],
+    gstinNumber: json["gstinNumber"] ?? json["gstNumber"],
+    website: json["website"] ?? json["businessWebsite"],
+    businessEmail: json["businessEmail"],
+    businessContactNumber: json["businessContactNumber"] ?? json["businessPhone"],
+    businessWebsite: json["businessWebsite"] ?? json["website"],
+    yearsInBusiness: json["yearOfEstablish"] is int
+        ? json["yearOfEstablish"]
+        : int.tryParse(json["yearOfEstablish"]?.toString() ?? ""),
+    projectsCompleted: json["projectsCompleted"],
+    profileCompletionPercentage: json["profileCompletionPercentage"],
+    isProfileComplete: json["isProfileComplete"],
+    alternativeBusinessContactNumber:
+        json["alternativeBusinessContactNumber"] ?? json["alternateBusinessPhone"],
+    identityVerified: json["identityVerified"],
+    businessLicense: json["businessLicense"],
+    qualityAssurance: json["qualityAssurance"],
+    verificationStatus: json["verificationStatus"] == null
+        ? null
+        : VerificationStatus.fromJson(json["verificationStatus"]),
+    trustScore: json["trustScore"],
+    marketplaceTier: json["marketplaceTier"],
+    memberSince: json["memberSince"],
+    businessHours: json["businessHours"] == null
+        ? []
+        : json["businessHours"] is List
+        ? List<BusinessHours>.from(
+            (json["businessHours"] as List).map((x) => BusinessHours.fromJson(x)),
+          )
+        : BusinessHours.fromMap(json["businessHours"]),
+    documents: json["documents"] == null || json["documents"] is! List
+        ? []
+        : List<Documents>.from((json["documents"] as List).map((x) => Documents.fromJson(x))),
+    pointOfContact: json["pointOfContact"] == null
+        ? null
+        : PointOfContact.fromJson(json["pointOfContact"]),
+    createdAt: json["createdAt"],
+    updatedAt: json["updatedAt"],
+  );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "businessName": businessName,
     "gstinNumber": gstinNumber,
+    "gstNumber": gstinNumber,
     "logo": merchantLogo,
     "businessEmail": businessEmail,
     "businessContactNumber": businessContactNumber,
+    "businessPhone": businessContactNumber,
     "businessWebsite": businessWebsite,
+    "yearOfEstablish": yearsInBusiness,
     "yearOfEstablished": yearsInBusiness,
     "projectsCompleted": projectsCompleted,
     "profileCompletionPercentage": profileCompletionPercentage,
@@ -256,12 +236,11 @@ class MerchantProfile {
     "memberSince": memberSince,
     "website": website,
     "alternativeBusinessContactNumber": alternativeBusinessContactNumber,
+    "alternateBusinessPhone": alternativeBusinessContactNumber,
     "businessHours": businessHours == null
         ? []
         : List<dynamic>.from(businessHours!.map((x) => x.toJson())),
-    "documents": documents == null
-        ? []
-        : List<dynamic>.from(documents!.map((x) => x.toJson())),
+    "documents": documents == null ? [] : List<dynamic>.from(documents!.map((x) => x.toJson())),
     "pointOfContact": pointOfContact?.toJson(),
     "createdAt": createdAt,
     "updatedAt": updatedAt,
@@ -273,18 +252,13 @@ class VerificationStatus {
   bool? businessLicense;
   bool? qualityAssurance;
 
-  VerificationStatus({
-    this.identityVerified,
-    this.businessLicense,
-    this.qualityAssurance,
-  });
+  VerificationStatus({this.identityVerified, this.businessLicense, this.qualityAssurance});
 
-  factory VerificationStatus.fromJson(Map<String, dynamic> json) =>
-      VerificationStatus(
-        identityVerified: json["identityVerified"],
-        businessLicense: json["businessLicense"],
-        qualityAssurance: json["qualityAssurance"],
-      );
+  factory VerificationStatus.fromJson(Map<String, dynamic> json) => VerificationStatus(
+    identityVerified: json["identityVerified"],
+    businessLicense: json["businessLicense"],
+    qualityAssurance: json["qualityAssurance"],
+  );
 
   Map<String, dynamic> toJson() => {
     "identityVerified": identityVerified,
@@ -312,12 +286,43 @@ class BusinessHours {
 
   factory BusinessHours.fromJson(Map<String, dynamic> json) => BusinessHours(
     id: json["id"],
-    isOpen: json["is_open"],
+    isOpen: json["is_open"] ?? (json["closed"] == null ? null : !(json["closed"] as bool)),
     dayName: json["day_name"],
-    openTime: json["open_time"],
-    closeTime: json["close_time"],
+    openTime: json["open_time"] ?? json["open"],
+    closeTime: json["close_time"] ?? json["close"],
     dayOfWeek: json["day_of_week"],
   );
+
+  static List<BusinessHours> fromMap(Map<String, dynamic> map) {
+    final List<BusinessHours> list = [];
+    final days = {
+      'monday': 0,
+      'tuesday': 1,
+      'wednesday': 2,
+      'thursday': 3,
+      'friday': 4,
+      'saturday': 5,
+      'sunday': 6,
+    };
+
+    days.forEach((day, index) {
+      if (map.containsKey(day)) {
+        final dayData = map[day];
+        if (dayData is Map<String, dynamic>) {
+          list.add(
+            BusinessHours(
+              dayName: day[0].toUpperCase() + day.substring(1),
+              dayOfWeek: index,
+              isOpen: dayData["closed"] == null ? true : !(dayData["closed"] as bool),
+              openTime: dayData["open"],
+              closeTime: dayData["close"],
+            ),
+          );
+        }
+      }
+    });
+    return list;
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -330,7 +335,7 @@ class BusinessHours {
 }
 
 class ConnectorProfile {
-  int? id;
+  dynamic id;
   String? aadhaarNumber;
   String? panNumber;
   int? profileCompletionPercentage;
@@ -381,9 +386,7 @@ class ConnectorProfile {
     pointOfContact = json['pointOfContact'] == null
         ? null
         : PointOfContact.fromJson(json['pointOfContact']);
-    teamMembers = json['teamMembers'] == null
-        ? null
-        : TeamMember.fromJson(json['teamMembers']);
+    teamMembers = json['teamMembers'] == null ? null : TeamMember.fromJson(json['teamMembers']);
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -415,7 +418,7 @@ class ConnectorProfile {
 }
 
 class Documents {
-  int? id;
+  dynamic id;
   String? filePath;
   int? fileSize;
   String? mimeType;
@@ -461,20 +464,13 @@ class DeleteDocumentResponse {
 
   DeleteDocumentResponse({this.success, this.message, this.data});
 
-  factory DeleteDocumentResponse.fromJson(Map<String, dynamic> json) =>
-      DeleteDocumentResponse(
-        success: json["success"],
-        message: json["message"],
-        data: json["data"] == null
-            ? null
-            : DeleteDocumentData.fromJson(json["data"]),
-      );
+  factory DeleteDocumentResponse.fromJson(Map<String, dynamic> json) => DeleteDocumentResponse(
+    success: json["success"],
+    message: json["message"],
+    data: json["data"] == null ? null : DeleteDocumentData.fromJson(json["data"]),
+  );
 
-  Map<String, dynamic> toJson() => {
-    "success": success,
-    "message": message,
-    "data": data?.toJson(),
-  };
+  Map<String, dynamic> toJson() => {"success": success, "message": message, "data": data?.toJson()};
 }
 
 class DeleteDocumentData {
@@ -490,17 +486,16 @@ class DeleteDocumentData {
     this.verificationStatus,
   });
 
-  factory DeleteDocumentData.fromJson(Map<String, dynamic> json) =>
-      DeleteDocumentData(
-        deletedDocument: json["deleted_document"] == null
-            ? null
-            : Documents.fromJson(json["deleted_document"]),
-        profileCompletionPercentage: json["profile_completion_percentage"],
-        isProfileComplete: json["is_profile_complete"],
-        verificationStatus: json["verification_status"] == null
-            ? null
-            : VerificationStatus.fromJson(json["verification_status"]),
-      );
+  factory DeleteDocumentData.fromJson(Map<String, dynamic> json) => DeleteDocumentData(
+    deletedDocument: json["deleted_document"] == null
+        ? null
+        : Documents.fromJson(json["deleted_document"]),
+    profileCompletionPercentage: json["profile_completion_percentage"],
+    isProfileComplete: json["is_profile_complete"],
+    verificationStatus: json["verification_status"] == null
+        ? null
+        : VerificationStatus.fromJson(json["verification_status"]),
+  );
 
   Map<String, dynamic> toJson() => {
     "deleted_document": deletedDocument?.toJson(),
@@ -511,7 +506,7 @@ class DeleteDocumentData {
 }
 
 class SiteLocation {
-  int? id;
+  dynamic id;
   String? siteName;
   String? fullAddress;
   String? landmark;
@@ -567,7 +562,7 @@ class SiteLocation {
 }
 
 class ManufacturerAddress {
-  int? id;
+  dynamic id;
   String? addressName;
   String? fullAddress;
   String? landmark;
@@ -589,18 +584,17 @@ class ManufacturerAddress {
     this.updatedAt,
   });
 
-  factory ManufacturerAddress.fromJson(Map<String, dynamic> json) =>
-      ManufacturerAddress(
-        id: json["id"],
-        addressName: json["addressName"],
-        fullAddress: json["fullAddress"],
-        landmark: json["landmark"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
-        isDefault: json["isDefault"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
-      );
+  factory ManufacturerAddress.fromJson(Map<String, dynamic> json) => ManufacturerAddress(
+    id: json["id"],
+    addressName: json["addressName"],
+    fullAddress: json["fullAddress"],
+    landmark: json["landmark"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
+    isDefault: json["isDefault"],
+    createdAt: json["createdAt"],
+    updatedAt: json["updatedAt"],
+  );
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -619,10 +613,7 @@ class StatisticsMC {
   int? totalMerchantProfilesCreated;
   int? totalConnectorProfilesCreated;
 
-  StatisticsMC({
-    this.totalMerchantProfilesCreated,
-    this.totalConnectorProfilesCreated,
-  });
+  StatisticsMC({this.totalMerchantProfilesCreated, this.totalConnectorProfilesCreated});
 
   factory StatisticsMC.fromJson(Map<String, dynamic> json) => StatisticsMC(
     totalMerchantProfilesCreated: json["totalMerchantProfilesCreated"],
@@ -658,11 +649,11 @@ class PointOfContact {
 
   factory PointOfContact.fromJson(Map<String, dynamic> json) => PointOfContact(
     id: json["id"],
-    name: json["name"],
-    relation: json["relation"],
-    phoneNumber: json["phoneNumber"],
-    alternativePhoneNumber: json["alternativePhoneNumber"],
-    email: json["email"],
+    name: json["name"] ?? json["pocName"],
+    relation: json["relation"] ?? json["pocDesignation"],
+    phoneNumber: json["phoneNumber"] ?? json["pocPhone"],
+    alternativePhoneNumber: json["alternativePhoneNumber"] ?? json["pocAlternatePhone"],
+    email: json["email"] ?? json["pocEmail"],
     createdAt: json["createdAt"],
     updatedAt: json["updatedAt"],
   );

@@ -1,3 +1,5 @@
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class VRMHomeController extends GetxController {
@@ -23,7 +25,7 @@ class VRMHomeController extends GetxController {
   //       }
   //     }
   //   } catch (e) {
-  //     Get.printError(info: 'Error fetching profile: $e');
+  //     log( 'Error fetching profile: $e');
   //   } finally {
   //     isLoading.value = false;
   //   }
@@ -80,7 +82,7 @@ class VRMHomeController extends GetxController {
   //     myPref.setTeamModelData(result);
   //   } catch (e) {
   //     if (kDebugMode) {
-  //       print(e);
+  //       log(e.toString());
   //     }
   //   } finally {
   //     isLoading.value = false;

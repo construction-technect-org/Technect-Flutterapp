@@ -30,7 +30,7 @@ class ConnectorAllChatListController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;

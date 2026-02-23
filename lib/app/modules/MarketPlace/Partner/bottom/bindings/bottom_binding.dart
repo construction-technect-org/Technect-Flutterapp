@@ -6,6 +6,6 @@ class BottomBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<BottomController>(() => BottomController());
-    Get.put<DashBoardController>(DashBoardController(), permanent: true);
+    Get.lazyPut<DashBoardController>(() => DashBoardController());
   }
 }

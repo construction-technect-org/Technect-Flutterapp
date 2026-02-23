@@ -198,7 +198,7 @@ class AddServiceRequirementController extends GetxController {
           estimateStartDate.value = DateTime.parse(args['estimate_start_date']);
           estimateStartDateController.text = formattedEstimateStartDate;
         } catch (e) {
-          Get.printError(info: 'Error parsing date: $e');
+          log( 'Error parsing date: $e');
         }
       }
 

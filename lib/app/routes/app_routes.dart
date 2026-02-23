@@ -103,6 +103,8 @@ abstract class Routes {
   static const VRM_CHAT_LIST = _Paths.VRM_CHAT_LIST;
   static const CRM_CHAT_LIST = _Paths.CRM_CHAT_LIST;
   static const TEAM_EDIT = _Paths.TEAM_EDIT;
+  static const ADD_INVENTORY_PRODUCT = _Paths.ADD_INVENTORY_PRODUCT;
+  static const ADD_INVENTORY_GENERIC = _Paths.ADD_INVENTORY_GENERIC;
 }
 
 abstract class _Paths {
@@ -207,4 +209,6 @@ abstract class _Paths {
   static const VRM_CHAT_LIST = '/vrm-chat-list';
   static const CRM_CHAT_LIST = '/crm-chat-list';
   static const TEAM_EDIT = '/team-edit';
+  static const ADD_INVENTORY_PRODUCT = '/add-inventory-product';
+  static const ADD_INVENTORY_GENERIC = '/add-inventory-generic';
 }

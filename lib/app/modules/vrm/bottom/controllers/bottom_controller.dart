@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class VRMBottomController extends GetxController {
@@ -11,8 +14,8 @@ class VRMBottomController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print("MyRole ${myPref.role.val}");
+    log("MyRole ${myPref.role.val}");
     myRole.value = myPref.role.val;
-    print("MyRole $myRole");
+    log("MyRole $myRole");
   }
 }

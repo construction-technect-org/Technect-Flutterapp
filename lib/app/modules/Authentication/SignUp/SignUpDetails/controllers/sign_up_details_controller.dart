@@ -73,7 +73,7 @@ class SignUpDetailsController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    print("Init called again");
+    log("Init called again");
     mobileNumberController.text = "";
     emailController.text = "";
     //emailError.value = "";
@@ -132,7 +132,10 @@ class SignUpDetailsController extends GetxController {
 
       // Send OTP if mobile number is available
       if (!otpSend.value) {
-        final otpResponse = await signUpService.sendOtp(mobileNumber: mobileNumberController.text);
+        final otpResponse = await signUpService.sendOtp(
+          mobileNumber: mobileNumberController.text,
+          email: emailController.text,
+        );
 
         if (otpResponse.success == true) {
           SnackBars.successSnackBar(
@@ -205,7 +208,7 @@ class SignUpDetailsController extends GetxController {
         countryCode: countryCode.value,
       );
 
-      print("OTP response = $otpResponse");
+      log("OTP response = $otpResponse");
 
       if (otpResponse.success == true) {
         if (isOTPLoading.value) {
@@ -214,8 +217,8 @@ class SignUpDetailsController extends GetxController {
               header: "Verifying the OTP",
               onTap: () {
                 if (otpResponse.user?.phoneVerified == true) {
-                  print("Token Verification");
-                  print("Token ${otpResponse.token}");
+                  log("Token Verification");
+                  log("Token ${otpResponse.token}");
                   otpVerify.value = true;
                   myPref.setToken(otpResponse.token!);
                   myPref.setTokenType(otpResponse.tokenType!);
@@ -246,7 +249,7 @@ class SignUpDetailsController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isOTPLoading.value = false;

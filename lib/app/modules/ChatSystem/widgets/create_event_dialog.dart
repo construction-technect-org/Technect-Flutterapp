@@ -1,3 +1,5 @@
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:intl/intl.dart';
@@ -46,8 +48,6 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary: MyColors.primary,
-              onPrimary: Colors.white,
-              onSurface: Colors.black,
             ),
           ),
           child: child!,
@@ -72,8 +72,6 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary: MyColors.primary,
-              onPrimary: Colors.white,
-              onSurface: Colors.black,
             ),
           ),
           child: child!,

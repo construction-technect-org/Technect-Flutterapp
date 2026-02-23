@@ -2,43 +2,36 @@ class PersonaProfileModel {
   final bool? success;
   final List<Personas>? personas;
 
-  PersonaProfileModel({
-    this.success,
-    this.personas,
-  });
+  PersonaProfileModel({this.success, this.personas});
 
-  factory PersonaProfileModel.fromJson(Map<dynamic, dynamic> json) {
+  factory PersonaProfileModel.fromJson(Map<String, dynamic> json) {
     return PersonaProfileModel(
-      success: json['success'],
-      personas: json['profiles'] != null
-          ? List<Personas>.from(
-        json['profiles'].map((x) => Personas.fromJson(x)),
-      )
+      success: json['success'] as bool?,
+      personas: json['profiles'] is List
+          ? (json['profiles'] as List).map((e) {
+              return Personas.fromJson(Map<String, dynamic>.from(e as Map));
+            }).toList()
           : [],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    if (this.personas != null) {
-      data['profiles'] = this.personas?.map((v) => v.toJson()).toList();
+    data['success'] = success;
+    if (personas != null) {
+      data['profiles'] = personas?.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
+
 class Personas {
   final String? profileType;
   final String? profileId;
   final String? teamRole;
   final String? profileStatus;
 
-  Personas({
-    this.profileType,
-    this.profileId,
-    this.teamRole,
-    this.profileStatus,
-  });
+  Personas({this.profileType, this.profileId, this.teamRole, this.profileStatus});
 
   factory Personas.fromJson(Map<String, dynamic> json) {
     return Personas(

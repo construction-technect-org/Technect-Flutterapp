@@ -1,10 +1,12 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/widget/file_icon_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:open_filex/open_filex.dart';
 
 class CertificationsComponent extends StatelessWidget {
   final ProfileController controller = Get.find<ProfileController>();
@@ -12,13 +14,16 @@ class CertificationsComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ...controller.certs.asMap().entries.map((entry) {
             final index = entry.key;
             final cert = entry.value;
-            print("Index $index, Entry ${entry.value.title}, ${entry.value.url}");
+            log("Index $index, Entry ${entry.value.title}, ${entry.value.url}");
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +131,7 @@ class CertificationsComponent extends StatelessWidget {
               onTap: () {
                 Get.to(() => AddCertificate())?.then((_) {
                   controller.loadMerchantCertificates();
-                  print("Certsres ${controller.certs.last.title}");
+                  log("Certsres ${controller.certs.last.title}");
                 });
               },
               child: RoundedButton(

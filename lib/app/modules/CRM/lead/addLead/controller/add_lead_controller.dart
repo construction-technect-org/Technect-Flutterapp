@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
@@ -207,7 +210,7 @@ class AddLeadController extends GetxController {
       isInfoLoad.value = false;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isInfoLoad.value = false;
@@ -253,7 +256,7 @@ class AddLeadController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;

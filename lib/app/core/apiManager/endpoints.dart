@@ -13,6 +13,7 @@ class Endpoints {
   static const String getUserApi = "/v1/api/user/me";
   static const String personaApi = "/v1/api/auth/profiles/list";
   static const String merchantProfileApi = "/v1/api/business/merchant";
+  static const String userInfoApi = "/v1/api/business/merchant/user-info";
   static const String bizHoursApi = "/v1/api/business/merchant/business-hours";
   static const String pocApi = "/v1/api/business/merchant/poc-details";
   static const String bizDetailsApi = "/v1/api/business/merchant/business-details";
@@ -23,8 +24,8 @@ class Endpoints {
   static const String catApi = "/v1/api/marketplace/categories?mainCategoryId=";
   static const String subCatApi = "/v1/api/marketplace/sub-categories?categoryId=";
   static const String catProdApi = "/v1/api/marketplace/category-products?subCategoryId=";
+  static const String dynamicFilterApi = "/v1/api/marketplace/dynamic-filters?categoryProductId=";
   static const String getAllPermissionApi = "/v1/api/business/permissions?permissionFor=";
-  static const String merchantProjects =
-      "/v1/api/business/merchant/projects";
+  static const String merchantProjects = "/v1/api/business/merchant/projects";
   static const String createRoleApi = "/v1/api/business/roles/custom/";
 }

@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/CRM/switchAccount/switchCRMAccountController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 
 void showSwitchCRMAccountBottomSheet() {
   final controller = Get.find<SwitchCRMAccountController>();

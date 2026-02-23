@@ -41,7 +41,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
             SafeArea(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
+                child: ColoredBox(
                   color: Colors.black.withOpacity(0.15),
                   child: Stack(
                     children: [

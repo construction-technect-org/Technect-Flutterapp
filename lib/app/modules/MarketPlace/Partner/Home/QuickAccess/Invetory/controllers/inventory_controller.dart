@@ -1,73 +1,73 @@
-import 'package:construction_technect/app/core/utils/globals.dart';
+import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/inventory_item_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/marketplace_category_models.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/services/InventoryService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/main_category_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/subcategory_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/services/marketplace_category_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/service/product_management_service.dart';
 
 class InventoryController extends GetxController {
-  final ProductManagementService _productService = ProductManagementService();
-
   final HomeService _homeService = Get.find<HomeService>();
+  final InventoryService _inventoryService = InventoryService();
+  final MarketplaceCategoryService _categoryService = MarketplaceCategoryService();
 
   RxBool isLoading = false.obs;
-  Rx<ProductListModel> productListModel = ProductListModel().obs;
-  RxList<Product> filteredProducts = <Product>[].obs;
 
-  Rx<AllServiceModel> serviceListModel = AllServiceModel().obs;
-  RxList<Service> filteredService = <Service>[].obs;
+  // New Unified Inventory List State
+  Rx<InventoryListResponse> inventoryList = InventoryListResponse().obs;
+  RxList<InventoryItem> filteredItems = <InventoryItem>[].obs;
+
   RxString searchQuery = ''.obs;
 
+  // inventoryType currently selected (matches API enum: product, service, design, etc.)
   RxString selectedStatus = "product".obs;
-  /*  (Get.find<CommonController>().marketPlace.value == 0
-              ? "product"
-              : "service")
-          .obs; */
 
   TextEditingController searchController = TextEditingController();
+
+  // ─────────────────────────────────────────────────────
+  // 5-Tier Category Hierarchy for Filtering
+  // ─────────────────────────────────────────────────────
+  final modules = <MarketplaceModule>[].obs;
+  final mainCategories = <MarketplaceMainCategory>[].obs;
+  final categories = <MarketplaceCategory>[].obs;
+  final subCategories = <MarketplaceSubCategory>[].obs;
+  final categoryProducts = <MarketplaceCategoryProduct>[].obs;
+
+  final selectedModuleId = Rxn<String>();
+  final selectedMainCategoryId = Rxn<String>();
+  final selectedCategoryId = Rxn<String>();
+  final selectedSubCategoryId = Rxn<String>();
+  final selectedCategoryProductId = Rxn<String>();
 
   @override
   void onInit() {
     super.onInit();
-    _loadProductsFromStorage();
-    //fetchProducts();
+    // Fetch initial filter data and list
+    fetchModules();
+    fetchInventoryList();
   }
 
-  Future<void> _loadProductsFromStorage() async {
-    final cachedProductListModel = myPref.getProductListModel();
-    if (cachedProductListModel != null) {
-      productListModel.value = cachedProductListModel;
-      filteredProducts.assignAll(cachedProductListModel.data?.products ?? []);
-    }
-  }
+  // ─────────────────────────────────────────────────────
+  // Inventory List Fetching
+  // ─────────────────────────────────────────────────────
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchInventoryList() async {
     try {
       isLoading.value = true;
-      if (selectedStatus.value == "product") {
-        final result = await _productService.getProductList();
-        if (result.success == true) {
-          productListModel.value = result;
-          filteredProducts.assignAll(result.data?.products ?? []);
-          myPref.setProductListModel(result);
-        } else {
-          await _loadProductsFromStorage();
-        }
-      } else {
-        final result = await InventoryService().getServiceList();
-        if (result.success == true) {
-          serviceListModel.value = result;
-          filteredService.assignAll(result.data ?? []);
-        }
+      final result = await _inventoryService.fetchInventoryItems(
+        inventoryType: selectedStatus.value,
+        categoryProductId: selectedCategoryProductId.value,
+      );
+
+      if (result.success == true) {
+        inventoryList.value = result;
+        filteredItems.assignAll(result.data ?? []);
+        // Re-apply any active search
+        searchProducts(searchQuery.value);
       }
     } catch (e) {
-      // ignore: avoid_print
+      log('Error fetching unified inventory', error: e);
     } finally {
       isLoading.value = false;
     }
@@ -75,64 +75,145 @@ class InventoryController extends GetxController {
 
   void searchProducts(String? value) {
     searchQuery.value = value ?? '';
-    if (selectedStatus.value == "product") {
-      if (value == null || value.isEmpty) {
-        filteredProducts.assignAll(productListModel.value.data?.products ?? []);
-      } else {
-        filteredProducts.assignAll(
-          (productListModel.value.data?.products ?? [])
-              .where(
-                (product) =>
-                    (product.productName?.toLowerCase().contains(
-                          value.toLowerCase(),
-                        ) ??
-                        false) ||
-                    (product.mainCategoryName?.toLowerCase().contains(
-                          value.toLowerCase(),
-                        ) ??
-                        false) ||
-                    (product.subCategoryName?.toLowerCase().contains(
-                          value.toLowerCase(),
-                        ) ??
-                        false) ||
-                    (product.categoryProductName?.toLowerCase().contains(
-                          value.toLowerCase(),
-                        ) ??
-                        false) ||
-                    (product.address?.toLowerCase().contains(
-                          value.toLowerCase(),
-                        ) ??
-                        false) ||
-                    (product.brand?.toLowerCase().contains(
-                          value.toLowerCase(),
-                        ) ??
-                        false),
-              )
-              .toList(),
-        );
-      }
+    final allItems = inventoryList.value.data ?? [];
+
+    if (value == null || value.isEmpty) {
+      filteredItems.assignAll(allItems);
     } else {
-      if (value == null || value.isEmpty) {
-        filteredService.assignAll(serviceListModel.value.data ?? []);
-      } else {
-        filteredService.assignAll(
-          (serviceListModel.value.data ?? []).where(
-            (s) =>
-                (s.mainCategoryName?.toLowerCase().contains(
-                      value.toLowerCase(),
-                    ) ??
-                    false) ||
-                (s.subCategoryName?.toLowerCase().contains(
-                      value.toLowerCase(),
-                    ) ??
-                    false) ||
-                (s.serviceCategoryName?.toLowerCase().contains(
-                      value.toLowerCase(),
-                    ) ??
-                    false),
-          ),
-        );
-      }
+      final q = value.toLowerCase();
+      filteredItems.assignAll(
+        allItems.where((item) {
+          return (item.name?.toLowerCase().contains(q) ?? false) ||
+              (item.brand?.toLowerCase().contains(q) ?? false) ||
+              (item.categoryProductName.toLowerCase().contains(q));
+        }).toList(),
+      );
     }
+  }
+
+  Future<void> setInventoryType(String type) async {
+    if (selectedStatus.value != type) {
+      selectedStatus.value = type;
+      searchController.clear();
+      searchQuery.value = "";
+      await fetchInventoryList();
+    }
+  }
+
+  // ─────────────────────────────────────────────────────
+  // Category Fetching Methods (Filters)
+  // ─────────────────────────────────────────────────────
+
+  Future<void> fetchModules() async {
+    try {
+      final response = await _categoryService.getModules();
+      if (response.success && response.data.isNotEmpty) {
+        modules.assignAll(response.data);
+      }
+    } catch (e) {
+      log("Error fetching modules filter: $e");
+    }
+  }
+
+  Future<void> onModuleSelected(String? moduleId) async {
+    selectedModuleId.value = moduleId;
+    selectedMainCategoryId.value = null;
+    selectedCategoryId.value = null;
+    selectedSubCategoryId.value = null;
+    selectedCategoryProductId.value = null;
+    mainCategories.clear();
+    categories.clear();
+    subCategories.clear();
+    categoryProducts.clear();
+
+    // Trigger list fetch
+    fetchInventoryList();
+
+    if (moduleId == null) return;
+    try {
+      isLoading.value = true;
+      final response = await _categoryService.getMainCategories(moduleId);
+      if (response.success) {
+        mainCategories.assignAll(response.data);
+      }
+    } catch (e) {
+      log("Error fetching main categories filter: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> onMainCategorySelected(String? mainCatId) async {
+    selectedMainCategoryId.value = mainCatId;
+    selectedCategoryId.value = null;
+    selectedSubCategoryId.value = null;
+    selectedCategoryProductId.value = null;
+    categories.clear();
+    subCategories.clear();
+    categoryProducts.clear();
+
+    fetchInventoryList();
+
+    if (mainCatId == null) return;
+    try {
+      isLoading.value = true;
+      final response = await _categoryService.getCategories(mainCatId);
+      if (response.success) {
+        categories.assignAll(response.data);
+      }
+    } catch (e) {
+      log("Error: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> onCategorySelected(String? catId) async {
+    selectedCategoryId.value = catId;
+    selectedSubCategoryId.value = null;
+    selectedCategoryProductId.value = null;
+    subCategories.clear();
+    categoryProducts.clear();
+
+    fetchInventoryList();
+
+    if (catId == null) return;
+    try {
+      isLoading.value = true;
+      final response = await _categoryService.getSubCategories(catId);
+      if (response.success) {
+        subCategories.assignAll(response.data);
+      }
+    } catch (e) {
+      log("Error: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> onSubCategorySelected(String? subCatId) async {
+    selectedSubCategoryId.value = subCatId;
+    selectedCategoryProductId.value = null;
+    categoryProducts.clear();
+
+    fetchInventoryList();
+
+    if (subCatId == null) return;
+    try {
+      isLoading.value = true;
+      final response = await _categoryService.getCategoryProducts(subCatId);
+      if (response.success) {
+        categoryProducts.assignAll(response.data);
+      }
+    } catch (e) {
+      log("Error: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void onCategoryProductSelected(String? prodId) {
+    selectedCategoryProductId.value = prodId;
+    fetchInventoryList();
   }
 }

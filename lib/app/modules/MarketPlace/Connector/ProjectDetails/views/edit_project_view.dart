@@ -160,7 +160,6 @@ class EditProjectView extends StatelessWidget {
                       },
                       child: DottedBorder(
                         options: const RectDottedBorderOptions(
-                          color: Colors.black, // border color
                           strokeWidth: 2, // border width
                           dashPattern: [8, 4], // dash length and gap
                         ),
@@ -215,46 +214,13 @@ class EditProjectView extends StatelessWidget {
                         : const SizedBox(height: 20), */
                     RoundedButton(
                       buttonName: "Add",
-                      onTap: () async {
-                        if (!controller.formKey.currentState!.validate()) return;
-
-                        final bool result = await controller.submitProject();
-
-                        if (result) {
-                          // ✅ Back navigate karo
-                          Get.back();
-                          Navigator.pop(context);
-                          await controller.fetchProjects();
-
-                          // ✅ rawSnackbar use karo
-                          Get.rawSnackbar(
-                            title: "Success",
-                            message: "Project created successfully",
-                            backgroundColor: Colors.green,
-                            icon: const Icon(Icons.check_circle, color: Colors.white),
-                            snackPosition: SnackPosition.BOTTOM,
-                            duration: const Duration(seconds: 3),
-                          );
-                        } else {
-                          Get.rawSnackbar(
-                            title: "Error",
-                            message: "Something went wrong",
-                            backgroundColor: Colors.red,
-                            icon: const Icon(Icons.error, color: Colors.white),
-                            snackPosition: SnackPosition.BOTTOM,
-                            duration: const Duration(seconds: 3),
-                          );
+                      onTap: () {
+                        if (!controller.formKey.currentState!.validate()) {
+                          return;
                         }
+                        Get.toNamed(Routes.SIGN_UP_PASSWORD);
                       },
                     ),
-                    // RoundedButton(
-                    //   buttonName: "Add",
-                    //   onTap: () {
-                    //     if (!controller.formKey.currentState!.validate())
-                    //       return;
-                    //     Get.toNamed(Routes.SIGN_UP_PASSWORD);
-                    //   },
-                    // ),
 
                     // Buttons
                   ],

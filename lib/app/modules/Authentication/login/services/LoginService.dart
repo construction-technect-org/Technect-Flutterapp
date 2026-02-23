@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -31,12 +34,9 @@ class LoginService extends GetxService {
       if (deviceType != null && deviceType.isNotEmpty) {
         body["deviceType"] = deviceType;
       }
-      print("YEs strange");
-      final response = await _manageApi.postObject(
-        url: Endpoints.loginAPI,
-        body: body,
-      );
-      print("Started");
+      log("YEs strange");
+      final response = await _manageApi.postObjectBeforeSignUp(url: Endpoints.loginAPI, body: body);
+      log("Started");
       return CompleteSignUpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in login: $e , $st');
@@ -50,10 +50,7 @@ class LoginService extends GetxService {
     String? deviceType,
   }) async {
     try {
-      final Map<String, dynamic> body = {
-        "mobileNumber": mobileNumber,
-        "otp": otp,
-      };
+      final Map<String, dynamic> body = {"mobileNumber": mobileNumber, "otp": otp};
 
       // Add FCM token and device type if provided
       if (fcmToken != null && fcmToken.isNotEmpty) {
@@ -63,10 +60,7 @@ class LoginService extends GetxService {
         body["deviceType"] = deviceType;
       }
 
-      final response = await apiManager.postObject(
-        url: APIConstants.teamLogIn,
-        body: body,
-      );
+      final response = await apiManager.postObject(url: APIConstants.teamLogIn, body: body);
 
       final result = LoginModel.fromJson(response);
 
@@ -115,10 +109,7 @@ class LoginService extends GetxService {
         body['deviceType'] = deviceType;
       }
 
-      final response = await apiManager.postObject(
-        url: 'auth/social-login',
-        body: body,
-      );
+      final response = await apiManager.postObject(url: 'auth/social-login', body: body);
 
       return LoginModel.fromJson(response);
     } catch (e, st) {

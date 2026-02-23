@@ -1,13 +1,14 @@
+import "dart:developer";
+
 import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 
 class BusinessHoursController extends GetxController {
   RxBool isEnabled = true.obs;
 
-  final DashBoardController _dashBoardController = Get.find<DashBoardController>();
+  // final DashBoardController _dashBoardController = Get.find<DashBoardController>();
   Rx<MerchantBusninessHours?>? busninessHours1 = Rx<MerchantBusninessHours?>(null);
   final HomeService _homeService = Get.find<HomeService>();
 
@@ -37,9 +38,9 @@ class BusinessHoursController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print("SAtFRi ${storage.merchnatBizHours?.saturday}");
+    log("SAtFRi ${storage.merchnatBizHours?.saturday}");
     busninessHours1?.value = storage.merchnatBizHours;
-    print("Saturday ${busninessHours1?.value?.saturday}");
+    log("Saturday ${busninessHours1?.value?.saturday}");
 
     daysEnabled = {
       "Monday": busninessHours1?.value?.monday?.closed?.obs ?? true.obs,
@@ -63,10 +64,10 @@ class BusinessHoursController extends GetxController {
   @override
   void onClose() {
     for (final controller in fromControllers.values) {
-      controller?.dispose();
+      controller.dispose();
     }
     for (final controller in toControllers.values) {
-      controller?.dispose();
+      controller.dispose();
     }
     super.onClose();
   }
@@ -130,7 +131,7 @@ class BusinessHoursController extends GetxController {
 
       if (hour == null || minute == null) return "Invalid time";
 
-      final period = hour >= 12 ? "PM" : "AM";
+      // final period = hour >= 12 ? "PM" : "AM";
       final displayHour = hour % 12 == 0 ? 12 : hour % 12;
       final displayMinute = minute.toString().padLeft(2, '0');
 
@@ -141,7 +142,7 @@ class BusinessHoursController extends GetxController {
   }
 
   void loadPreviousBusinessHours(List<Map<String, dynamic>> previousData) {
-    Get.printInfo(info: '📅 Loading previous business hours data');
+    log('📅 Loading previous business hours data');
 
     for (final dayData in previousData) {
       final dayName = dayData['day_name'] as String;
@@ -163,11 +164,11 @@ class BusinessHoursController extends GetxController {
           fromControllers[dayName]?.text = removeAmPm(openHour);
           toControllers[dayName]?.text = removeAmPm(closeHour);
 
-          Get.printInfo(info: '📅 Restored $dayName: $openHour - $closeHour');
+          log('📅 Restored $dayName: $openHour - $closeHour');
         } else {
           fromControllers[dayName]?.text = '';
           toControllers[dayName]?.text = '';
-          Get.printInfo(info: '📅 $dayName is closed');
+          log('📅 $dayName is closed');
         }
       }
     }
@@ -242,7 +243,7 @@ class BusinessHoursController extends GetxController {
         }
       }
 
-      final Map<String, dynamic> _addDays = {};
+      final Map<String, dynamic> addDays = {};
 
       for (final day in daysEnabled.keys) {
         final bool isOpen = daysEnabled[day]!.value;
@@ -252,17 +253,17 @@ class BusinessHoursController extends GetxController {
           final String openTime = fromControllers[day]!.text.trim();
           final String closeTime = toControllers[day]!.text.trim();
 
-          _addDays[day.toLowerCase()] = {"open": openTime, "close": closeTime, "closed": false};
+          addDays[day.toLowerCase()] = {"open": openTime, "close": closeTime, "closed": false};
         } else {
           // Day is closed
-          _addDays[day.toLowerCase()] = {"open": null, "close": null, "closed": true};
+          addDays[day.toLowerCase()] = {"open": null, "close": null, "closed": true};
         }
       }
 
-      print(_addDays);
-      final response = await _homeService.updateBusinessHours(storage.merchantID, _addDays);
+      log('$addDays');
+      final response = await _homeService.updateBusinessHours(storage.merchantID, addDays);
       if (response) {
-        await storage.setMerchantBizHours(MerchantBusninessHours.fromJson(_addDays));
+        await storage.setMerchantBizHours(MerchantBusninessHours.fromJson(addDays));
         loadPreviousHours();
         Get.back(result: true);
         SnackBars.successSnackBar(content: "Successfully updated Business Hours");
@@ -270,7 +271,7 @@ class BusinessHoursController extends GetxController {
         SnackBars.errorSnackBar(content: "Business Hours Update Failed");
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
       SnackBars.errorSnackBar(content: "Business Hours Update Failed, try again later");
     }
   }

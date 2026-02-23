@@ -1,3 +1,5 @@
+import "dart:developer";
+
 import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
@@ -54,7 +56,7 @@ class SwitchAccountController extends GetxController {
     //   currentRole.value = 'partner';
     // }
     // myPref.role.val = currentRole.value;
-    print("Roleach ${myPref.role.val}");
+    log("Roleach ${myPref.role.val}");
     Get.back();
     // Get.delete<ConnectorHomeController>(force: true);
     // Get.delete<CommonController>(force: true);
@@ -89,6 +91,7 @@ class SwitchAccountController extends GetxController {
   Future<void> switchProfile(String profileId, String profileType) async {
     try {
       final body = {"profileId": profileId, "profileType": profileType};
+      log("body $body");
 
       final switchResponse = await apiManager.postObject(
         url: "/${APIConstants.switchAccount}",
@@ -138,6 +141,7 @@ class SwitchAccountController extends GetxController {
       SnackBars.errorSnackBar(content: "Update failed: $e $st");
     } finally {}
   }
+
   @override
   void onInit() {
     // TODO: implement onInit

@@ -58,16 +58,11 @@ class ServiceDetailController extends GetxController {
     await _initializeVideosForService(service.value, token: currentToken);
   }
 
-  Future<void> _initializeVideosForService(
-    Service svc, {
-    required int token,
-  }) async {
+  Future<void> _initializeVideosForService(Service svc, {required int token}) async {
     final List<Future<void>> inits = [];
 
-    if (svc.reference != null &&
-        svc.reference?.referenceType?.toLowerCase() == 'video') {
-      final refPath =
-          svc.reference?.referenceS3Key ?? svc.reference?.referenceUrl ?? '';
+    if (svc.reference != null && svc.reference?.referenceType?.toLowerCase() == 'video') {
+      final refPath = svc.reference?.referenceS3Key ?? svc.reference?.referenceUrl ?? '';
       if (refPath.isNotEmpty) {
         inits.add(_initializeReferenceVideo(refPath, token: token));
       }
@@ -90,9 +85,7 @@ class ServiceDetailController extends GetxController {
       vController.pause();
       final size = vController.value.size;
       final bool isVideoPortrait = size.height > size.width;
-      log(
-        'Video Size: ${size.width}x${size.height}, Is Portrait: $isVideoPortrait',
-      );
+      log('Video Size: ${size.width}x${size.height}, Is Portrait: $isVideoPortrait');
 
       return isVideoPortrait ? 9 / 16 : 16 / 9;
     } else {
@@ -100,10 +93,7 @@ class ServiceDetailController extends GetxController {
     }
   }
 
-  Future<void> _initializeReferenceVideo(
-    String referencePath, {
-    required int token,
-  }) async {
+  Future<void> _initializeReferenceVideo(String referencePath, {required int token}) async {
     final referenceVideoUrl = referencePath.startsWith('http')
         ? referencePath
         : APIConstants.bucketUrl + referencePath;
@@ -112,20 +102,14 @@ class ServiceDetailController extends GetxController {
     try {
       final localController = VideoPlayerController.networkUrl(
         Uri.parse(referenceVideoUrl),
-        httpHeaders: {
-          'Range': 'bytes=0-',
-          'Accept': 'video/*',
-          'User-Agent': 'Mozilla/5.0',
-        },
+        httpHeaders: {'Range': 'bytes=0-', 'Accept': 'video/*', 'User-Agent': 'Mozilla/5.0'},
         videoPlayerOptions: VideoPlayerOptions(),
       );
 
       await localController.initialize().timeout(
         const Duration(seconds: 30),
         onTimeout: () {
-          throw TimeoutException(
-            'Reference video initialization took too long',
-          );
+          throw TimeoutException('Reference video initialization took too long');
         },
       );
 
@@ -170,23 +154,14 @@ class ServiceDetailController extends GetxController {
     update();
   }
 
-  Future<void> _initializeMainVideo(
-    String videoPath, {
-    required int token,
-  }) async {
-    final videoUrl = videoPath.startsWith('http')
-        ? videoPath
-        : APIConstants.bucketUrl + videoPath;
+  Future<void> _initializeMainVideo(String videoPath, {required int token}) async {
+    final videoUrl = videoPath.startsWith('http') ? videoPath : APIConstants.bucketUrl + videoPath;
     log('Main video path: $videoPath');
     log('Full main video URL: $videoUrl');
     try {
       final localController = VideoPlayerController.networkUrl(
         Uri.parse(videoUrl),
-        httpHeaders: {
-          'Range': 'bytes=0-',
-          'Accept': 'video/*',
-          'User-Agent': 'Mozilla/5.0',
-        },
+        httpHeaders: {'Range': 'bytes=0-', 'Accept': 'video/*', 'User-Agent': 'Mozilla/5.0'},
         videoPlayerOptions: VideoPlayerOptions(),
       );
 
@@ -223,11 +198,7 @@ class ServiceDetailController extends GetxController {
   void onEditService() {
     Get.toNamed(
       Routes.ADD_SERVICES,
-      arguments: {
-        "isEdit": isEdit.value,
-        'service': service.value,
-        "onApiCall": onApiCall,
-      },
+      arguments: {"isEdit": isEdit.value, 'service': service.value, "onApiCall": onApiCall},
     );
   }
 
@@ -260,11 +231,7 @@ class ServiceDetailController extends GetxController {
       try {
         videoPlayerController = VideoPlayerController.networkUrl(
           Uri.parse(videoUrl),
-          httpHeaders: {
-            'Range': 'bytes=0-',
-            'Accept': 'video/*',
-            'User-Agent': 'Mozilla/5.0',
-          },
+          httpHeaders: {'Range': 'bytes=0-', 'Accept': 'video/*', 'User-Agent': 'Mozilla/5.0'},
           videoPlayerOptions: VideoPlayerOptions(),
         );
 
@@ -282,7 +249,7 @@ class ServiceDetailController extends GetxController {
       } catch (e) {
         log('Error retrying video initialization: $e');
         if (kDebugMode) {
-          print('Video retry failed: $e');
+          log('Video retry failed: $e');
         }
         update();
       }
@@ -297,9 +264,7 @@ class ServiceDetailController extends GetxController {
       update();
 
       final referencePath =
-          service.value.reference?.referenceS3Key ??
-          service.value.reference?.referenceUrl ??
-          "";
+          service.value.reference?.referenceS3Key ?? service.value.reference?.referenceUrl ?? "";
 
       if (referencePath.isEmpty) {
         log('No reference video path available for retry');
@@ -316,11 +281,7 @@ class ServiceDetailController extends GetxController {
       try {
         refVideoPlayerController = VideoPlayerController.networkUrl(
           Uri.parse(referenceVideoUrl),
-          httpHeaders: {
-            'Range': 'bytes=0-',
-            'Accept': 'video/*',
-            'User-Agent': 'Mozilla/5.0',
-          },
+          httpHeaders: {'Range': 'bytes=0-', 'Accept': 'video/*', 'User-Agent': 'Mozilla/5.0'},
           videoPlayerOptions: VideoPlayerOptions(),
         );
 
@@ -338,7 +299,7 @@ class ServiceDetailController extends GetxController {
       } catch (e) {
         log('Error retrying reference video initialization: $e');
         if (kDebugMode) {
-          print('Reference video retry failed: $e');
+          log('Reference video retry failed: $e');
         }
         update();
       }
@@ -351,20 +312,20 @@ class ServiceDetailController extends GetxController {
     } catch (_) {}
 
     final playerController = isNetwork
-        ? VideoPlayerController.network(videoPath)
+        ? VideoPlayerController.networkUrl(Uri.parse(videoPath))
         : VideoPlayerController.file(File(videoPath));
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (_) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
             try {
-              await playerController.pause();
-              await playerController.dispose();
+              playerController.pause();
+              playerController.dispose();
             } catch (_) {}
-            return true;
           },
           child: Dialog(
             insetPadding: const EdgeInsets.all(16),
@@ -422,11 +383,7 @@ class ServiceDetailController extends GetxController {
                                       ),
                                     ],
                                   ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
+                                  child: const Icon(Icons.close, color: Colors.white, size: 20),
                                 ),
                               ),
                             ),
@@ -458,7 +415,7 @@ class ServiceDetailController extends GetxController {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
       } else {
         if (kDebugMode) {
-          print('Could not launch $url');
+          log('Could not launch $url');
         }
       }
     } catch (e) {
@@ -471,12 +428,10 @@ class ServiceDetailController extends GetxController {
   Future<void> serviceDetails(int id) async {
     try {
       isLoading.value = true;
-      productDetailsModel.value = await AddServiceService().serviceDetails(
-        id: id.toString(),
-      );
+      productDetailsModel.value = await AddServiceService().serviceDetails(id: id.toString());
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;

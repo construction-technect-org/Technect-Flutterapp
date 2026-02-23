@@ -223,7 +223,7 @@ class AddRequirementController extends GetxController {
         selectedUOM.value = null;
       }
     } catch (e) {
-      Get.printError(info: 'Error fetching filters: $e');
+      log( 'Error fetching filters: $e');
       filters.clear();
       uomFilter = null;
       uomOptions.clear();
@@ -369,7 +369,7 @@ class AddRequirementController extends GetxController {
           );
           estimateDeliveryDateController.text = formattedEstimateDeliveryDate;
         } catch (e) {
-          Get.printError(info: 'Error parsing date: $e');
+          log( 'Error parsing date: $e');
         }
       }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import "dart:developer";
 import 'dart:io';
 
 import 'package:construction_technect/app/core/apiManager/api_exception.dart';
@@ -15,14 +16,14 @@ class ApiManager {
   static const String baseUrl = "https://api.constructiontechnect.com";
 
   /// Check if response contains invalid/expired token
-  void _checkTokenValidity(dynamic response) {
+  Future<void> _checkTokenValidity(dynamic response) async {
     if (response is Map<String, dynamic>) {
       final success = response['success'];
       final message = response['message']?.toString();
 
-      Get.printInfo(info: '🔍 Token Validation Check:');
-      Get.printInfo(info: '   Success: $success');
-      Get.printInfo(info: '   Message: $message');
+      log('🔍 Token Validation Check:');
+      log('   Success: $success');
+      log('   Message: $message');
 
       // Check for exact message "Invalid or expired token" or similar variations
       if (success == false &&
@@ -31,16 +32,16 @@ class ApiManager {
               message?.toLowerCase().contains("invalid") == true &&
                   message?.toLowerCase().contains("expired") == true &&
                   message?.toLowerCase().contains("token") == true)) {
-        Get.printInfo(info: '🔑 Invalid/Expired Token Detected: $message');
-        _handleTokenExpiry();
+        log('🔑 Invalid/Expired Token Detected: $message');
+        await _handleTokenExpiry();
       }
     }
   }
 
   /// Handle token expiry by clearing data and redirecting to login
-  void _handleTokenExpiry() {
+  Future<void> _handleTokenExpiry() async {
     // Clear user data and token
-    myPref.logout();
+    await myPref.logout();
 
     // Show message to user
     SnackBars.errorSnackBar(content: 'Session expired. Please login again.');
@@ -57,34 +58,37 @@ class ApiManager {
   }) async {
     try {
       final token = myPref.getToken();
-      // Build full URL with query parameters
-      if (token.isNotEmpty) {
-        final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
-        final uri = Uri.parse(
-          baseUrl + url,
-        ).replace(queryParameters: params?.map((key, value) => MapEntry(key, value.toString())));
-        Get.printInfo(info: '🌐 API GET Request:');
-        Get.printInfo(info: '   URL: $uri');
-        Get.printInfo(info: '   Headers: $headers');
-
-        final request = http.Request('GET', uri);
-        request.headers.addAll(headers);
-
-        final http.StreamedResponse response = await request.send();
-        final map = await _returnResponse(response);
-
-        // Check for invalid/expired token
-        // _checkTokenValidity(map);
-
-        Get.printInfo(info: '✅ Parsed Response: $map');
-        return map;
+      if (token.isEmpty) {
+        log('🌐 No authentication token found in ApiManager');
+        throw UnauthorisedException('No authentication token found');
       }
+
+      // Build full URL with query parameters
+      final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
+      final uri = Uri.parse(
+        baseUrl + url,
+      ).replace(queryParameters: params?.map((key, value) => MapEntry(key, value.toString())));
+      log('🌐 API GET Request:');
+      log('   URL: $uri');
+      log('   Headers: $headers');
+
+      final request = http.Request('GET', uri);
+      request.headers.addAll(headers);
+
+      final http.StreamedResponse response = await request.send();
+      final map = await _returnResponse(response);
+
+      // Check for invalid/expired token
+      // _checkTokenValidity(map);
+
+      log('✅ Parsed Response: $map');
+      return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -93,15 +97,16 @@ class ApiManager {
   /// POST method for JSON body requests
   Future<dynamic> postObject({required String url, required Object body}) async {
     try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
-      };
+      final token = myPref.getToken();
+      if (token.isEmpty) {
+        throw UnauthorisedException('No authentication token found');
+      }
+      final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
 
-      Get.printInfo(info: '🌐 API POST Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: $headers');
-      Get.printInfo(info: '   Body: $body');
+      log('🌐 API POST Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: $headers');
+      log('   Body: $body');
 
       final request = http.Request('POST', Uri.parse(baseUrl + url));
       request.body = json.encode(body);
@@ -109,23 +114,23 @@ class ApiManager {
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -133,16 +138,17 @@ class ApiManager {
 
   Future<dynamic> postObjectWithoutToken({required String url, required Object body}) async {
     try {
+      final token = myPref.getToken();
       final headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
+        if (token.isNotEmpty) 'Authorization': 'Bearer $token',
       };
-      String baseUrl = "https://api.constructiontechnect.com/v1/api/";
+      const String baseUrl = "https://api.constructiontechnect.com/v1/api";
 
-      Get.printInfo(info: '🌐 API POST Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: $headers');
-      Get.printInfo(info: '   Body: $body');
+      log('🌐 API POST Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: $headers');
+      log('   Body: $body');
 
       final request = http.Request('POST', Uri.parse(baseUrl + url));
       request.body = json.encode(body);
@@ -150,23 +156,21 @@ class ApiManager {
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
-
       // Check for invalid/expired token in response body
       // _checkTokenValidity(map);
-
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -175,15 +179,16 @@ class ApiManager {
   ///PATCH Method for JSON body requests
   Future<dynamic> patchObject({required String url, required Object body}) async {
     try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
-      };
+      final token = myPref.getToken();
+      if (token.isEmpty) {
+        throw UnauthorisedException('No authentication token found');
+      }
+      final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
 
-      Get.printInfo(info: '🌐 API PATCH Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: $headers');
-      Get.printInfo(info: '   Body: $body');
+      log('🌐 API PATCH Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: $headers');
+      log('   Body: $body');
 
       final request = http.Request('PATCH', Uri.parse(baseUrl + url));
 
@@ -192,23 +197,23 @@ class ApiManager {
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
 
       // Optional token validation
       // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       throw FetchDataException('Unexpected error: $e');
     }
   }
@@ -216,37 +221,38 @@ class ApiManager {
   /// PUT method for JSON body requests
   Future<dynamic> put({required String url}) async {
     try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
-      };
+      final token = myPref.getToken();
+      if (token.isEmpty) {
+        throw UnauthorisedException('No authentication token found');
+      }
+      final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
 
-      Get.printInfo(info: '🌐 API PUT Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: $headers');
+      log('🌐 API PUT Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: $headers');
 
       final request = http.Request('PUT', Uri.parse(baseUrl + url));
       request.headers.addAll(headers);
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -259,10 +265,10 @@ class ApiManager {
         'Authorization': 'Bearer ${myPref.getToken()}',
       };
 
-      Get.printInfo(info: '🌐 API PUT Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: $headers');
-      Get.printInfo(info: '   Body: $body');
+      log('🌐 API PUT Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: $headers');
+      log('   Body: $body');
 
       final request = http.Request('PUT', Uri.parse(baseUrl + url));
       request.body = json.encode(body);
@@ -270,23 +276,23 @@ class ApiManager {
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -312,7 +318,20 @@ class ApiManager {
       // Add files
       if (files != null) {
         for (final entry in files.entries) {
-          final file = File(entry.value);
+          final String path = entry.value;
+
+          // Defensive check: If the path is a URL or empty, skip it
+          if (path.isEmpty || path.startsWith('http')) {
+            log('⏭️ Skipping non-local file: $path');
+            continue;
+          }
+
+          final file = File(path);
+          if (!file.existsSync()) {
+            log('⚠️ File does not exist, skipping: $path');
+            continue;
+          }
+
           final fileName = file.path.split('/').last;
           final fileExtension = fileName.split('.').last.toLowerCase();
 
@@ -345,31 +364,31 @@ class ApiManager {
         }
       }
 
-      Get.printInfo(info: '🌐 API POST Multipart Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: ${request.headers}');
-      Get.printInfo(info: '   Fields: $fields');
-      Get.printInfo(info: '   Files: $files');
+      log('🌐 API POST Multipart Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: ${request.headers}');
+      log('   Fields: $fields');
+      log('   Files: $files');
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -395,7 +414,20 @@ class ApiManager {
       // Add files
       if (files != null) {
         for (final entry in files.entries) {
-          final file = File(entry.value);
+          final String path = entry.value;
+
+          // Defensive check: If the path is a URL or empty, skip it
+          if (path.isEmpty || path.startsWith('http')) {
+            log('⏭️ Skipping non-local file: $path');
+            continue;
+          }
+
+          final file = File(path);
+          if (!file.existsSync()) {
+            log('⚠️ File does not exist, skipping: $path');
+            continue;
+          }
+
           final fileName = file.path.split('/').last;
           final fileExtension = fileName.split('.').last.toLowerCase();
 
@@ -428,31 +460,31 @@ class ApiManager {
         }
       }
 
-      Get.printInfo(info: '🌐 API PUT Multipart Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: ${request.headers}');
-      Get.printInfo(info: '   Fields: $fields');
-      Get.printInfo(info: '   Files: $files');
+      log('🌐 API PUT Multipart Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: ${request.headers}');
+      log('   Fields: $fields');
+      log('   Files: $files');
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -461,37 +493,38 @@ class ApiManager {
   /// DELETE method for requests with authorization header
   Future<dynamic> delete({required String url}) async {
     try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
-      };
+      final token = myPref.getToken();
+      if (token.isEmpty) {
+        throw UnauthorisedException('No authentication token found');
+      }
+      final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
 
-      Get.printInfo(info: '🌐 API DELETE Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: $headers');
+      log('🌐 API DELETE Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: $headers');
 
       final request = http.Request('DELETE', Uri.parse(baseUrl + url));
       request.headers.addAll(headers);
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -499,15 +532,16 @@ class ApiManager {
 
   Future<dynamic> deleteObject({required String url, required Object body}) async {
     try {
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${myPref.getToken()}',
-      };
+      final token = myPref.getToken();
+      if (token.isEmpty) {
+        throw UnauthorisedException('No authentication token found');
+      }
+      final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
 
-      Get.printInfo(info: '🌐 API POST Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
-      Get.printInfo(info: '   Headers: $headers');
-      Get.printInfo(info: '   Body: $body');
+      log('🌐 API DELETE Request:');
+      log('   URL: ${baseUrl + url}');
+      log('   Headers: $headers');
+      log('   Body: $body');
 
       final request = http.Request('DELETE', Uri.parse(baseUrl + url));
       request.body = json.encode(body);
@@ -515,23 +549,23 @@ class ApiManager {
 
       final http.StreamedResponse response = await request.send();
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
+      log('📡 API Response:');
+      log('   Status: ${response.statusCode}');
+      log('   Headers: ${response.headers}');
 
       final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       // _checkTokenValidity(map);
 
-      Get.printInfo(info: '✅ Parsed Response: $map');
+      log('✅ Parsed Response: $map');
       return map;
     } on SocketException {
-      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      log('❌ Network Error: No Internet Connection');
       SnackBars.errorSnackBar(content: 'No Internet Connection');
       throw FetchDataException('No Internet connection');
     } catch (e) {
-      Get.printInfo(info: '❌ Unexpected Error: $e');
+      log('❌ Unexpected Error: $e');
       //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
@@ -564,14 +598,14 @@ class ApiManager {
             (message?.toLowerCase().contains("invalid") == true &&
                 message?.toLowerCase().contains("expired") == true &&
                 message?.toLowerCase().contains("token") == true)) {
-          Get.printInfo(info: '🔑 401 Unauthorized - Token Expired: $message');
-          _handleTokenExpiry();
+          log('🔑 401 Unauthorized - Token Expired: $message');
+          await _handleTokenExpiry();
           return responseJson; // Return response but don't throw exception
         }
 
         // For non-token-expiry 401 errors (like login failures), return the response
         // so the caller can handle it (e.g., show specific error messages)
-        Get.printInfo(info: '⚠️ 401 Unauthorized - Authentication Error: $message');
+        log('⚠️ 401 Unauthorized - Authentication Error: $message');
         showErrorSheet(message ?? 'Unauthorized');
         return responseJson; // Return response instead of throwing
 

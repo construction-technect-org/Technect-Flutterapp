@@ -1,7 +1,8 @@
+import "dart:developer";
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
@@ -32,10 +33,7 @@ class HomeView extends StatelessWidget {
         width: width,
         decoration: const BoxDecoration(color: MyColors.grayF7),
         child: const Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: MyColors.primary,
-          ),
+          child: CircularProgressIndicator(strokeWidth: 2, color: MyColors.primary),
         ),
       ),
       errorWidget: (context, url, error) => SizedBox(
@@ -45,12 +43,7 @@ class HomeView extends StatelessWidget {
           height: height,
           width: width,
           // decoration: const BoxDecoration(color: MyColors.grayD4, shape: BoxShape.circle),
-          child: Image.asset(
-            Asset.appLogo,
-            height: height,
-            width: width,
-            fit: BoxFit.contain,
-          ),
+          child: Image.asset(Asset.appLogo, height: height, width: width, fit: BoxFit.contain),
         ),
       ),
     );
@@ -69,16 +62,13 @@ class HomeView extends StatelessWidget {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.categoryBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
                 ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Gap(50),
+                  const Gap(40),
                   /* Center(
                     child: Text(
                       "MarketPlace",
@@ -97,23 +87,17 @@ class HomeView extends StatelessWidget {
                           child: Obx(() {
                             final isTeamLogin = myPref.getIsTeamLogin();
 
-                            final profileImage = isTeamLogin
-                                ? Get.find<CommonController>()
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.teamMember
-                                          ?.profilePhoto ??
-                                      ''
-                                : commonController
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.user
-                                          ?.image ??
-                                      '';
+                            String? profileImage;
+                            if (isTeamLogin) {
+                              profileImage =
+                                  commonController.profileData.value.data?.teamMember?.profilePhoto;
+                            } else {
+                              profileImage =
+                                  commonController.profileData.value.data?.user?.image ??
+                                  commonController.profileDataM.value.user?.image;
+                            }
 
-                            if (profileImage.isEmpty) {
+                            if (profileImage == null || profileImage.isEmpty) {
                               return const Icon(
                                 Icons.account_circle_sharp,
                                 color: Colors.black,
@@ -123,8 +107,7 @@ class HomeView extends StatelessWidget {
 
                             return ClipOval(
                               child: getImageView(
-                                finalUrl:
-                                    "${APIConstants.bucketUrl}$profileImage",
+                                finalUrl: "${APIConstants.bucketUrl}$profileImage",
                                 fit: BoxFit.cover,
                                 height: 48,
                                 width: 48,
@@ -141,37 +124,36 @@ class HomeView extends StatelessWidget {
                               Obx(() {
                                 final isTeamLogin = myPref.getIsTeamLogin();
 
-                                final firstName = isTeamLogin
-                                    ? commonController
-                                              .profileData
-                                              .value
-                                              .data
-                                              ?.teamMember
-                                              ?.firstName ??
-                                          ''
-                                    : commonController
-                                              .profileData
-                                              .value
-                                              .data
-                                              ?.user
-                                              ?.firstName ??
-                                          '';
+                                String firstName = "";
+                                String lastName = "";
 
-                                final lastName = isTeamLogin
-                                    ? commonController
-                                              .profileData
-                                              .value
-                                              .data
-                                              ?.teamMember
-                                              ?.lastName ??
-                                          ''
-                                    : commonController
-                                              .profileData
-                                              .value
-                                              .data
-                                              ?.user
-                                              ?.lastName ??
-                                          '';
+                                if (isTeamLogin) {
+                                  firstName =
+                                      commonController
+                                          .profileData
+                                          .value
+                                          .data
+                                          ?.teamMember
+                                          ?.firstName ??
+                                      '';
+                                  lastName =
+                                      commonController
+                                          .profileData
+                                          .value
+                                          .data
+                                          ?.teamMember
+                                          ?.lastName ??
+                                      '';
+                                } else {
+                                  firstName =
+                                      commonController.profileData.value.data?.user?.firstName ??
+                                      commonController.profileDataM.value.user?.firstName ??
+                                      '';
+                                  lastName =
+                                      commonController.profileData.value.data?.user?.lastName ??
+                                      commonController.profileDataM.value.user?.lastName ??
+                                      '';
+                                }
 
                                 return RichText(
                                   overflow: TextOverflow.ellipsis,
@@ -180,7 +162,7 @@ class HomeView extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text:
-                                            '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}!',
+                                            '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}',
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
                                           fontFamily: MyTexts.SpaceGrotesk,
@@ -196,10 +178,8 @@ class HomeView extends StatelessWidget {
                                     ? null
                                     : () {
                                         if (myPref.role.val == "partner") {
-                                          Get.toNamed(
-                                            Routes.MANUFACTURER_ADDRESS,
-                                          );
-                                          } else {
+                                          Get.toNamed(Routes.MANUFACTURER_ADDRESS);
+                                        } else {
                                           Get.toNamed(Routes.DELIVERY_LOCATION);
                                         }
                                       },
@@ -223,17 +203,12 @@ class HomeView extends StatelessWidget {
                                             ),
                                             children: [
                                               TextSpan(
-                                                text: commonController
-                                                    .getCurrentAddress()
-                                                    .value,
+                                                text: commonController.getCurrentAddress().value,
                                               ),
                                               const WidgetSpan(
-                                                alignment:
-                                                    PlaceholderAlignment.middle,
+                                                alignment: PlaceholderAlignment.middle,
                                                 child: Padding(
-                                                  padding: EdgeInsets.only(
-                                                    left: 4,
-                                                  ),
+                                                  padding: EdgeInsets.only(left: 4),
                                                   child: Icon(
                                                     Icons.keyboard_arrow_down,
                                                     size: 16,
@@ -280,19 +255,14 @@ class HomeView extends StatelessWidget {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: MyColors.white,
-                              border: Border.all(
-                                color: MyColors.custom('EAEAEA'),
-                              ),
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
                             child: SvgPicture.asset(
                               Asset.notification,
                               width: 24,
                               height: 24,
-                              colorFilter: ColorFilter.mode(
-                                MyColors.black,
-                                BlendMode.srcIn,
-                              ),
+                              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -305,19 +275,14 @@ class HomeView extends StatelessWidget {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: MyColors.white,
-                              border: Border.all(
-                                color: MyColors.custom('EAEAEA'),
-                              ),
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
                             child: SvgPicture.asset(
                               Asset.info,
                               width: 24,
                               height: 24,
-                              colorFilter: ColorFilter.mode(
-                                MyColors.black,
-                                BlendMode.srcIn,
-                              ),
+                              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -330,19 +295,14 @@ class HomeView extends StatelessWidget {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: MyColors.white,
-                              border: Border.all(
-                                color: MyColors.custom('EAEAEA'),
-                              ),
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
                             child: SvgPicture.asset(
                               Asset.chat,
                               width: 24,
                               height: 24,
-                              colorFilter: ColorFilter.mode(
-                                MyColors.black,
-                                BlendMode.srcIn,
-                              ),
+                              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -396,28 +356,27 @@ class HomeView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Obx(
-                          () => SingleChildScrollView(
+                      () => SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: List.generate(
                             controller.connectorModuleData.value.data?.modules?.length ?? 0,
-                                (index) {
-                              final module = controller
-                                  .connectorModuleData.value.data?.modules?[index];
+                            (index) {
+                              final module =
+                                  controller.connectorModuleData.value.data?.modules?[index];
 
                               return Padding(
                                 padding: const EdgeInsets.only(right: 12),
                                 child: tabBar(
                                   onTap: () async {
                                     hideKeyboard();
-                                    Get.printInfo(
-                                      info: '✅ Module Name : ${module?.name}',
-                                    );
+                                    log('✅ Module Name : ${module?.name}');
                                     await controller.fetchMainCategory(module?.id);
                                     controller.marketPlace.value = index;
                                   },
                                   icon: Asset.MM,
+
                                   /// 🔥 IMAGE INSTEAD OF ICON
                                   // icon: module?.image?.url != null
                                   //     ? Image.network(
@@ -430,10 +389,8 @@ class HomeView extends StatelessWidget {
                                   //   },
                                   // )
                                   //     : const Icon(Icons.image_not_supported, size: 24),
-
                                   name: module?.name ?? "-",
-                                  isMarketPlace:
-                                  controller.marketPlace.value == index,
+                                  isMarketPlace: controller.marketPlace.value == index,
                                 ),
                               );
                             },
@@ -621,9 +578,7 @@ class HomeView extends StatelessWidget {
                                   begin: AlignmentGeometry.topCenter,
                                   end: AlignmentGeometry.bottomCenter,
                                   colors: [
-                                    MyColors.custom(
-                                      'FFF9BD',
-                                    ).withValues(alpha: 0.1),
+                                    MyColors.custom('FFF9BD').withValues(alpha: 0.1),
                                     MyColors.white,
                                   ],
                                 ),
@@ -633,30 +588,21 @@ class HomeView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Obx(() {
-                                  if (Get.find<CommonController>()
-                                          .marketPlace
-                                          .value ==
-                                      0) {
+                                  if (Get.find<CommonController>().marketPlace.value == 0) {
                                     /// ------------------- MATERIAL MARKETPLACE -------------------
-                                    final materialList =
-                                        controller.mainCategories;
+                                    final materialList = controller.mainCategories;
 
                                     if (materialList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
                                     return ListView.builder(
                                       shrinkWrap: true,
-                                      physics:
-                                      const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                      controller.mainCategories.length,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: controller.mainCategories.length,
                                       itemBuilder: (context, index) {
-                                        final mainCategory =
-                                        controller.mainCategories[index];
+                                        final mainCategory = controller.mainCategories[index];
                                         final categories =
-                                            controller.categoryMap[mainCategory
-                                                .id] ??
-                                                [];
+                                            controller.categoryMap[mainCategory.id] ?? [];
 
                                         return _buildCategorySection(
                                           context,
@@ -666,31 +612,21 @@ class HomeView extends StatelessWidget {
                                         );
                                       },
                                     );
-                                  } else if (Get.find<CommonController>()
-                                          .marketPlace
-                                          .value ==
-                                      1) {
+                                  } else if (Get.find<CommonController>().marketPlace.value == 1) {
                                     /// ------------------- CONSTRUCTION MARKETPLACE -------------------
-                                    final serviceList = controller
-                                        .categoryHierarchyDataCM
-                                        .value
-                                        .data;
+                                    final serviceList =
+                                        controller.categoryHierarchyDataCM.value.data;
 
-                                    if (serviceList == null ||
-                                        serviceList.isEmpty) {
+                                    if (serviceList == null || serviceList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
 
                                     return const Text("TOOLS MARKETPLACE");
                                   } else {
                                     /// ------------------- TOOLS MARKETPLACE -------------------
-                                    final toolsList = controller
-                                        .categoryHierarchyData2
-                                        .value
-                                        .data;
+                                    final toolsList = controller.categoryHierarchyData2.value.data;
 
-                                    if (toolsList == null ||
-                                        toolsList.isEmpty) {
+                                    if (toolsList == null || toolsList.isEmpty) {
                                       return _buildComingSoon(context);
                                     }
 
@@ -787,11 +723,11 @@ class HomeView extends StatelessWidget {
   /// COMMON CATEGORY SECTION BUILDER
   /// ============================
   Widget _buildCategorySection(
-      BuildContext context,
-      dynamic mainCategory,
-      List<CCategory> category, {
-        required String route,
-      }) {
+    BuildContext context,
+    dynamic mainCategory,
+    List<CCategory> category, {
+    required String route,
+  }) {
     // final category = controller
     //     .categoryData
     //     .value;
@@ -824,7 +760,7 @@ class HomeView extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(mainCategory.name ?? '', style: MyTexts.bold18),
+              Expanded(child: Text(mainCategory.name ?? '', style: MyTexts.bold18)),
               const Icon(Icons.arrow_forward_ios, size: 20),
             ],
           ),
@@ -868,7 +804,7 @@ class HomeView extends StatelessWidget {
                     Get.to(
                       MerchantHomeView(),
                       arguments: {
-                        "selectedSubCategoryIdIndex": subIndex ?? 0,
+                        "selectedSubCategoryIdIndex": subIndex,
                         "categoryData": category,
                         "mainCategoryName": mainCategory.name ?? '',
                       },
@@ -890,17 +826,14 @@ class HomeView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: CachedNetworkImage(
                             imageUrl:
-                            APIConstants.bucketUrl +
+                                APIConstants.bucketUrl +
                                 (subCategory.image ??
                                     'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
                             fit: BoxFit.fill,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.category,
-                              color: MyColors.primary,
-                            ),
+                            placeholder: (context, url) =>
+                                const Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.category, color: MyColors.primary),
                           ),
                         ),
                       ),
@@ -920,6 +853,7 @@ class HomeView extends StatelessWidget {
       ],
     );
   }
+
   Widget tabBar({
     required String icon,
     required String name,
@@ -976,9 +910,7 @@ class HomeView extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: const Text("Add Address"),
           ),
@@ -1019,10 +951,7 @@ class HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium17.copyWith(
-        color: MyColors.black,
-        fontFamily: MyTexts.SpaceGrotesk,
-      ),
+      style: MyTexts.medium17.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }
 }

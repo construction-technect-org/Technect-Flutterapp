@@ -16,7 +16,7 @@ class FullSubCategoryModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
+    data['success'] = success;
     if (this.data != null) {
       data['data'] = this.data?.map((v) => v.toJson()).toList();
     }
@@ -60,16 +60,16 @@ class SubCategoryData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['categoryId'] = this.categoryId;
-    data['name'] = this.name;
-    data['isActive'] = this.isActive;
-    data['sortOrder'] = this.sortOrder;
-    data['createdAt'] = this.createdAt;
-    if (this.image != null) {
-      data['image'] = this.image?.toJson();
+    data['id'] = id;
+    data['categoryId'] = categoryId;
+    data['name'] = name;
+    data['isActive'] = isActive;
+    data['sortOrder'] = sortOrder;
+    data['createdAt'] = createdAt;
+    if (image != null) {
+      data['image'] = image?.toJson();
     }
-    data['updatedAt'] = this.updatedAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }
@@ -99,11 +99,11 @@ class SubCategoryImage {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['key'] = this.key;
-    data['url'] = this.url;
-    data['contentType'] = this.contentType;
-    data['size'] = this.size;
-    data['originalName'] = this.originalName;
+    data['key'] = key;
+    data['url'] = url;
+    data['contentType'] = contentType;
+    data['size'] = size;
+    data['originalName'] = originalName;
     return data;
   }
 }

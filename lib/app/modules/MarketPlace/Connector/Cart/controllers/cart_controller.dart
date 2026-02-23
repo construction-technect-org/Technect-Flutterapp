@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/model/cart_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/services/CartService.dart';
@@ -29,7 +32,7 @@ class CartListController extends GetxController {
       isLoading.value = false;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;

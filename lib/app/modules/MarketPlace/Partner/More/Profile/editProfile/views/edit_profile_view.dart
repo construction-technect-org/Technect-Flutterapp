@@ -7,19 +7,12 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    return TextEditingValue(
-      text: newValue.text.toUpperCase(),
-      selection: newValue.selection,
-    );
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(text: newValue.text.toUpperCase(), selection: newValue.selection);
   }
 }
 
 class EditProfileView extends GetView<EditProfileControllerr> {
-
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -47,19 +40,9 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                     // controller.isValid.value = 1;
                     return;
                   }
-                  final response = await controller.updateMetrcis();
-                  SnackBars.successSnackBar(content: '$response');
-                  // dashBoardController.profileResponse.value = await homeService
-                  //     .getMerchantProfile("");
-                  // dashBoardController.businessModel1.value=dashBoardController.profileResponse.value;
-
-                  if(response!=null) {
-                    Navigator.pop(context);
-                  }
-                  else{
-                    SnackBars.successSnackBar(content: 'Not Update please fill all filled');
-                  }
-
+                  await controller.updateMetrcis();
+                  // No need to show another snackbar here as controller.updateMetrcis() handles it.
+                  // Navigation (Get.back()) is also handled inside the controller on success.
                 },
               ).paddingOnly(bottom: 30, right: 20, left: 20),
             ],
@@ -70,10 +53,7 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                 width: double.infinity,
                 height: double.infinity,
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.moreIBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
                 ),
               ),
 
@@ -87,11 +67,7 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                       onTap: () => Get.back(),
                       child: const Padding(
                         padding: EdgeInsets.zero,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_sharp,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
                   ),
@@ -107,18 +83,12 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                             alignment: Alignment.bottomRight,
                             children: [
                               GestureDetector(
-                                onTap: () =>
-                                    controller.pickImageBottomSheet(context),
+                                onTap: () => controller.pickImageBottomSheet(context),
                                 child: Obx(() {
-                                  if (Get.find<ProfileController>()
-                                          .selectedImage
-                                          .value !=
-                                      null) {
+                                  if (Get.find<ProfileController>().selectedImage.value != null) {
                                     return ClipOval(
                                       child: Image.file(
-                                        Get.find<ProfileController>()
-                                            .selectedImage
-                                            .value!,
+                                        Get.find<ProfileController>().selectedImage.value!,
                                         width: 78,
                                         height: 78,
                                         fit: BoxFit.cover,
@@ -126,8 +96,7 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                                     );
                                   }
 
-                                  final imagePath =
-                                      Get.find<ProfileController>().image.value;
+                                  final imagePath = Get.find<ProfileController>().image.value;
                                   final imageUrl = imagePath.isNotEmpty
                                       ? "${APIConstants.bucketUrl}$imagePath"
                                       : null;
@@ -135,11 +104,7 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                                     return CircleAvatar(
                                       radius: 50,
                                       backgroundColor: MyColors.grayEA,
-                                      child: SvgPicture.asset(
-                                        Asset.add,
-                                        height: 24,
-                                        width: 24,
-                                      ),
+                                      child: SvgPicture.asset(Asset.add, height: 24, width: 24),
                                     );
                                   }
 
@@ -158,8 +123,7 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                                 bottom: 0,
                                 right: 0,
                                 child: GestureDetector(
-                                  onTap: () =>
-                                      controller.pickImageBottomSheet(context),
+                                  onTap: () => controller.pickImageBottomSheet(context),
                                   child: Container(
                                     height: 32,
                                     width: 32,
@@ -169,11 +133,7 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(4.0),
-                                      child: SvgPicture.asset(
-                                        Asset.edit,
-                                        height: 12,
-                                        width: 12,
-                                      ),
+                                      child: SvgPicture.asset(Asset.edit, height: 12, width: 12),
                                     ),
                                   ),
                                 ),
@@ -181,10 +141,7 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                             ],
                           ),
                           Gap(3.h),
-                          BusinessDetailsStep(
-                            controller: controller,
-                            formKey: controller.formKey,
-                          ),
+                          BusinessDetailsStep(controller: controller, formKey: controller.formKey),
                           SizedBox(height: 4.h),
                         ],
                       ),

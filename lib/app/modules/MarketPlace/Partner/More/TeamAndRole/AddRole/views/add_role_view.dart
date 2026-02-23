@@ -1,3 +1,6 @@
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -126,7 +129,7 @@ class AddRoleView extends GetView<AddRoleController> {
                                   children: controller.groupedPermissions.entries.map((
                                     entry,
                                   ) {
-                                    String category = entry.key;
+                                    final String category = entry.key;
                                     final List<UserPermissions?> permissions =
                                         entry.value;
 
@@ -151,7 +154,7 @@ class AddRoleView extends GetView<AddRoleController> {
                                               children: [
                                                 const Text("Select All"),
                                                 Obx(() {
-                                                  bool allSelected = permissions
+                                                  final bool allSelected = permissions
                                                       .every(
                                                         (p) =>
                                                             controller
@@ -190,10 +193,10 @@ class AddRoleView extends GetView<AddRoleController> {
                                                 childAspectRatio: 4,
                                               ),
                                           itemBuilder: (context, index) {
-                                            var perm = permissions[index];
-                                            String nm = perm!.code!;
-                                            var parts = nm.split(".");
-                                            String finalName = parts.last
+                                            final perm = permissions[index];
+                                            final String nm = perm!.code!;
+                                            final parts = nm.split(".");
+                                            final String finalName = parts.last
                                                 .toUpperCase();
 
                                             return Obx(
@@ -202,7 +205,7 @@ class AddRoleView extends GetView<AddRoleController> {
                                                   Checkbox(
                                                     value:
                                                         controller
-                                                            .selected[perm!
+                                                            .selected[perm
                                                             .id] ??
                                                         false,
                                                     onChanged: (val) {
@@ -249,8 +252,8 @@ class AddRoleView extends GetView<AddRoleController> {
                     ? null
                     : () {
                         if (controller.formKey.currentState!.validate()) {
-                          print("roles saved ${controller.getSelectedIds()}");
-                          print("Code saved ${controller.getCodeID()}");
+                          log("roles saved ${controller.getSelectedIds()}");
+                          log("Code saved ${controller.getCodeID()}");
 
                           //controller.saveRole();
                         }

@@ -1,4 +1,6 @@
-import 'package:construction_technect/app/core/utils/globals.dart';
+import "dart:developer";
+
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/point_of_contact.dart';
@@ -28,7 +30,7 @@ class MetricsScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(() => PointOfContentScreen())?.then((_) {
-                  print("Value ert123");
+                  log("Value ert123");
                   _controller.loadPOC();
                 });
               },
@@ -107,10 +109,9 @@ class MetricsScreen extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             Get.to(() => PointOfContentScreen())?.then((_) {
-              print("Value ert123");
+              log("Value ert123");
               _controller.loadPOC();
             });
-            ;
           },
           child: Container(
             width: double.infinity,

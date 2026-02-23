@@ -222,7 +222,7 @@ class MarketingController extends GetxController {
       isLoading.value = false;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;
@@ -263,7 +263,7 @@ class MarketingController extends GetxController {
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        log(e.toString());
       }
     } finally {
       isLoading.value = false;
