@@ -23,11 +23,11 @@ class SupportRequestService {
       if (response != null) {
         return AddRoleModel.fromJson(response);
       } else {
-        return AddRoleModel(success: false, customRole: null, message: "Null response from server");
+        return AddRoleModel(success: false, message: "Null response from server");
       }
     } catch (e) {
       log("❌ Error: $e");
-      return AddRoleModel(success: false, customRole: null, message: e.toString());
+      return AddRoleModel(success: false, message: e.toString());
     }
   }
 

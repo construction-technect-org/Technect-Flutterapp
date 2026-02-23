@@ -302,6 +302,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               ? "remove"
                                               : "add",
                                           mID: controller.product.id.toString(),
+                                          // moduleType helps API target specific entities
                                           moduleType: "product",
                                           onSuccess: () {
                                             controller.onApiCall?.call();

@@ -9,7 +9,7 @@ class SettingService {
 
   Future<dynamic> deactivateAccount() async {
     return await _apiManager.delete(
-      url: APIConstants.softDeleteAccount, // ✅ apna endpoint add karo
+      url: APIConstants.softDeleteAccount,
     );
   }
   Future<SendOtpModel> sendOtp({
