@@ -1,6 +1,5 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/utils/permission_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/AddRolemodel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/UpdatedRoleModel.dart';
@@ -29,8 +28,7 @@ class AddRoleController extends GetxController {
   RxList<UserPermissions?> allPermissions = <UserPermissions?>[].obs;
 
   /// grouped by category
-  RxMap<String, List<UserPermissions?>> groupedPermissions =
-      <String, List<UserPermissions?>>{}.obs;
+  RxMap<String, List<UserPermissions?>> groupedPermissions = <String, List<UserPermissions?>>{}.obs;
 
   /// selected permission ids
   RxMap<String, bool> selected = <String, bool>{}.obs;
@@ -39,8 +37,7 @@ class AddRoleController extends GetxController {
 
   String? roleId;
   RxBool isEdit = false.obs;
-  final List<PermissionItem> functionalities =
-      PermissionLabelUtils.permissionItems;
+  final List<PermissionItem> functionalities = PermissionLabelUtils.permissionItems;
 
   Future<void> fetchAllPermissions() async {
     try {
@@ -91,10 +88,7 @@ class AddRoleController extends GetxController {
 
   /// 🔵 get selected ids for API
   List<String> getSelectedIds() {
-    finalSelectedIds = selected.entries
-        .where((e) => e.value == true)
-        .map((e) => e.key)
-        .toList();
+    finalSelectedIds = selected.entries.where((e) => e.value == true).map((e) => e.key).toList();
     return finalSelectedIds;
   }
 
@@ -141,7 +135,6 @@ class AddRoleController extends GetxController {
       loadRoleData(dataModel.value);
     }
   }
-
 
   void loadRoleData(GetAllRole role) {
     isEdit.value = true;
@@ -198,10 +191,10 @@ class AddRoleController extends GetxController {
     try {
       isLoading.value = true;
 
-      if (isEdit.value && roleId.toString() != "") {
+      if (isEdit.value && roleId != null && roleId!.isNotEmpty) {
         // ✅ Update Role
         final UpdatedRoleModel result = await RoleService.updateRole(
-          roleId: roleId.toString()??"",
+          roleId: roleId!,
           roleName: roleController.text.trim(),
           description: roleDescription.text.trim(),
           permissions: selectedCodes,
@@ -251,6 +244,7 @@ class AddRoleController extends GetxController {
       isLoading.value = false;
     }
   }
+
   Future<void> _refreshRoleManagement() async {
     try {
       if (Get.isRegistered<RoleManagementController>()) {

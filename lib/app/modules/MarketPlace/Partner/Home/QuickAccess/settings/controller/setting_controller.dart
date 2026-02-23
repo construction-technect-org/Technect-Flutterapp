@@ -58,7 +58,6 @@ class SettingController extends GetxController {
           message: response["message"] ?? "Your account has been deactivated",
           backgroundColor: Colors.orange,
           icon: const Icon(Icons.pause_circle_filled, color: Colors.white),
-          snackPosition: SnackPosition.BOTTOM,
           duration: const Duration(seconds: 3),
         );
       } else {
@@ -66,7 +65,6 @@ class SettingController extends GetxController {
           title: "Error",
           message: response["message"] ?? "Something went wrong",
           backgroundColor: Colors.red,
-          snackPosition: SnackPosition.BOTTOM,
           duration: const Duration(seconds: 3),
         );
       }
@@ -75,7 +73,9 @@ class SettingController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }  void startTimer() {
+  }
+
+  void startTimer() {
     isResendVisible.value = false;
     countdownController.restart();
   }
@@ -84,10 +84,7 @@ class SettingController extends GetxController {
     isResendVisible.value = true;
   }
 
-  Future<void> requestOtp({
-    required bool isDeactivate,
-    required String actionType,
-  }) async {
+  Future<void> requestOtp({required bool isDeactivate, required String actionType}) async {
     if (!_validateInputs()) return;
     isLoading.value = true;
 
@@ -123,9 +120,7 @@ class SettingController extends GetxController {
         );
         SnackBars.successSnackBar(content: 'OTP sent successfully');
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to send OTP',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
       }
     } catch (e) {
       isLoading.value = false;
@@ -134,10 +129,7 @@ class SettingController extends GetxController {
     }
   }
 
-  Future<void> confirmAction({
-    String? actionType,
-    required bool isDeactivate,
-  }) async {
+  Future<void> confirmAction({String? actionType, required bool isDeactivate}) async {
     if (otpController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Please enter OTP');
       return;
@@ -159,9 +151,7 @@ class SettingController extends GetxController {
         myPref.clear();
         Get.offAll(() => SuccessAction(actionType: actionType ?? ""));
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'OTP verification failed',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'OTP verification failed');
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Something went wrong");
@@ -178,20 +168,13 @@ class SettingController extends GetxController {
       );
 
       if (otpResponse.success == true) {
-        Get.find<CommonController>()
-                .profileData
-                .value
-                .data
-                ?.user
-                ?.isNotificationSend =
+        Get.find<CommonController>().profileData.value.data?.user?.isNotificationSend =
             isNotification;
         Get.find<CommonController>().profileData.refresh();
 
         SnackBars.successSnackBar(content: otpResponse.message ?? "");
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to send OTP',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
       }
     } catch (e) {
       isLoading.value = false;
@@ -205,12 +188,6 @@ class SettingController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     isNotification.value =
-        Get.find<CommonController>()
-            .profileData
-            .value
-            .data
-            ?.user
-            ?.isNotificationSend ??
-        false;
+        Get.find<CommonController>().profileData.value.data?.user?.isNotificationSend ?? false;
   }
 }

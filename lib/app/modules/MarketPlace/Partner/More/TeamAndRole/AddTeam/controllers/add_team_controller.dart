@@ -26,9 +26,7 @@ class AddTeamController extends GetxController {
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile == null) return;
-    final compressedFile = await CommonConstant().compressImage(
-      File(pickedFile.path),
-    );
+    final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
     selectedImage.value = File(compressedFile.path);
   }
 
@@ -58,10 +56,7 @@ class AddTeamController extends GetxController {
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt, color: MyColors.gray2E),
-              title: Text(
-                "Camera",
-                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-              ),
+              title: Text("Camera", style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.camera);
@@ -69,10 +64,7 @@ class AddTeamController extends GetxController {
             ),
             ListTile(
               leading: const Icon(Icons.photo, color: MyColors.gray2E),
-              title: Text(
-                "Gallery",
-                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-              ),
+              title: Text("Gallery", style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.gallery);
@@ -98,7 +90,7 @@ class AddTeamController extends GetxController {
     emialIdController.text = teamDetailsModel.value.emailId ?? '';
     phoneNumberController.text = teamDetailsModel.value.mobileNumber ?? '';
     selectedRole!.value = roles.firstWhere(
-      (element) => element.id == teamDetailsModel.value.teamRoleId,
+      (element) => element.id == teamDetailsModel.value.teamRoleId.toString(),
       orElse: () {
         return roles.first;
       },
@@ -140,12 +132,12 @@ class AddTeamController extends GetxController {
           files: files,
           id: '${teamDetailsModel.value.id ?? ''}',
         );
-        await  Get.find<CommonController>().refreshTeamList();
+        await Get.find<CommonController>().refreshTeamList();
         isLoading.value = false;
         Get.back();
       } else {
         await addTeamService.addTeam(fields: fields, files: files);
-        await  Get.find<CommonController>().refreshTeamList();
+        await Get.find<CommonController>().refreshTeamList();
         isLoading.value = false;
         Get.back();
       }
@@ -158,8 +150,8 @@ class AddTeamController extends GetxController {
     try {
       isLoading.value = true;
       await addTeamService.deleteTeamMember(teamMemberId);
-      await  Get.find<CommonController>().refreshTeamList();
-      await  Get.find<CommonController>().fetchTeamList();
+      await Get.find<CommonController>().refreshTeamList();
+      await Get.find<CommonController>().fetchTeamList();
     } catch (e) {
       // ignore: avoid_print
     } finally {
