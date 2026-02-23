@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -21,7 +23,58 @@ class HomeService extends GetxService {
   final ApiManager _apiManager = ApiManager();
   final ManageApi _manageApi = Get.find<ManageApi>();
 
-  Future<MainCategoryModel> getMainCategories({required String moduleID}) async {
+  Future<dynamic> createProject({
+    required String brandName,
+    required String stock,
+    required String note,
+    required String terms,
+    required String price,
+    required String gstPrice,
+    required String amount,
+    required List<String?> imageSlots,
+    String? videoPath,
+  }) async {
+
+    final Map<String, dynamic> fields = {
+      "name": brandName,
+      "code":"SKY-RES-004",
+      "area":"25000",
+      "address":"Plot 12, Sector 21, Navi Mumbai, Maharashtra 400706",
+      "numberOfFloors": 12,
+      "projectType": "Residential",
+      "status": "Planning",
+      "description": "Premium 2 & 3 BHK residences with clubhouse and swimming pool.",
+    };
+
+    final Map<String, String> files = {};
+
+    /// 🖼 Multiple Images
+    for (int i = 0; i < imageSlots.length; i++) {
+      if (imageSlots[i] != null && imageSlots[i]!.isNotEmpty) {
+        files["file"] = imageSlots[i]!;
+        // ⚠ If backend expects images[] change key
+      }
+    }
+
+    /// 🎥 Video
+    if (videoPath != null && videoPath.isNotEmpty) {
+      files["file"] = videoPath;
+    }
+
+    final response = await _manageApi.postMultipart(
+      url: "/v1/api/business/connector/projects",
+      fields: fields,
+      files: files,
+    );
+
+    print("STATUS CODE: ${response.statusCode}");
+    print("RESPONSE BODY: ${response.body}");
+
+    return jsonDecode(response.body);
+  }
+  Future<MainCategoryModel> getMainCategories({
+    required String moduleID,
+  }) async {
     try {
       final response = await _manageApi.get(
         url: '${Endpoints.mainCatApi}$moduleID&includeInactive=false',
@@ -121,7 +174,6 @@ class HomeService extends GetxService {
   Future<MerchantProfileModel> getMerchantProfile(String profileID) async {
     try {
       final response = await _manageApi.get(url: Endpoints.merchantProfileApi);
-
       return MerchantProfileModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in getting Merchant Profile: $e , $st');
@@ -238,6 +290,7 @@ class HomeService extends GetxService {
       throw Exception('Error in updating Uploading Certificates: $e , $st');
     }
   }
+
 
   Future<bool> updateBizMetrics({
     required String profileID,

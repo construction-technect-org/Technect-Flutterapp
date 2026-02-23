@@ -3,12 +3,11 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/explore_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/merchant_home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
@@ -233,23 +232,26 @@ class BottomBarView extends GetView<BottomController> {
 
   void onSellTap() {
     if (Get.find<CommonController>().marketPlace.value == 0) {
-      if (myPref.role.val != "connector") {
-        if (!commonController.hasProfileComplete.value) {
-          _showProfileIncompleteDialog();
-        } else if ((Get.find<CommonController>()
-                    .profileData
-                    .value
-                    .data
-                    ?.addresses ??
-                [])
-            .isEmpty) {
-          _showAddAddressDialog();
-        } else {
-          _showProductOptions();
-        }
-      } else {
-        Get.toNamed(Routes.ADD_REQUIREMENT);
+      if(myPref.role.val=="connector"){
+        Get.to(() => EditProjectView());
       }
+      // if (myPref.role.val != "connector") {
+      //   if (!commonController.hasProfileComplete.value) {
+      //     _showProfileIncompleteDialog();
+      //   } else if ((Get.find<CommonController>()
+      //               .profileData
+      //               .value
+      //               .data
+      //               ?.addresses ??
+      //           [])
+      //       .isEmpty) {
+      //     _showAddAddressDialog();
+      //   } else {
+      //     _showProductOptions();
+      //   }
+      // } else {
+      //   Get.toNamed(Routes.ADD_REQUIREMENT);
+      // }
     } else if (Get.find<CommonController>().marketPlace.value == 1) {
       if (myPref.role.val != "connector") {
         if (!commonController.hasProfileComplete.value) {

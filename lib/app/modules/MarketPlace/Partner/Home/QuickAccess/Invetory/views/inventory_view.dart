@@ -67,7 +67,7 @@ class InventoryView extends GetView<InventoryController> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "Product",
+                                    "Material",
                                     style: MyTexts.medium15.copyWith(
                                       color: MyColors.gray2E,
                                     ),
@@ -105,7 +105,7 @@ class InventoryView extends GetView<InventoryController> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "Service",
+                                    "Construction",
                                     style: MyTexts.medium15.copyWith(
                                       color: MyColors.gray2E,
                                     ),

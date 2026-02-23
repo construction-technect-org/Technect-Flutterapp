@@ -2,32 +2,24 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 
-void showSwitchAccountBottomSheet() {
+Future<void> showSwitchAccountBottomSheet() async { // ✅ async
   final controller = Get.find<SwitchAccountController>();
   final CommonController commonController = Get.find<CommonController>();
 
   controller.currentRole.value = myPref.role.val;
-  Get.printInfo(
-    info: '🌐has All Data   : ${commonController.profileDataM.value}',
-  );
-  Get.printInfo(info: '🌐has All Data   : ${myPref.profileData}');
 
-  controller.hasPartnerAccount.value =
-      (commonController
-                  .profileDataM
-                  .value
-                  .merchantProfile?.verificationId??"").isNotEmpty
-          ;
-  Get.printInfo(
-    info: '🌐has Partner n  : ${controller.hasPartnerAccount.value}',
-  );
+  // ✅  data fetch
+  await commonController.fetchProfileDataM();
+
+  Get.printInfo(info: '🌐 profileDataM: ${commonController.profileDataM.value}');
+
+  controller.hasPartnerAccount.value = (commonController
+      .profileDataM
+      .value
+      .merchantProfile?.verificationId ?? "").isNotEmpty;
 
   controller.hasConnectorAccount.value =
       commonController.profileDataM.value.connectorProfile != null;
-  Get.printInfo(
-    info: '🌐has Connector n : ${controller.hasConnectorAccount.value}',
-  );
-
   Get.bottomSheet(
     Container(
       padding: const EdgeInsets.all(20),

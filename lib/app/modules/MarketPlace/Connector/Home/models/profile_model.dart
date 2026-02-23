@@ -14,9 +14,16 @@ class ProfileModelM {
   });
 
   factory ProfileModelM.fromJson(Map<String, dynamic> json) {
+    // ✅ Debug — kaunsa field complex hai
+    json.forEach((key, value) {
+      if (value is Map || value is List) {
+        print('⚠️ Complex field: $key = $value');
+      }
+    });
+
     return ProfileModelM(
       success: json['success'],
-      message: json['message'],
+      message: _parseString(json['message']),
       user: json['user'] != null ? User.fromJson(json['user']) : null,
       merchantProfile: json['merchantProfile'] != null
           ? MerchantProfile.fromJson(json['merchantProfile'])
@@ -26,8 +33,18 @@ class ProfileModelM {
           : null,
     );
   }
+
+  // ✅ Global helper — String, Map, List sab handle karega
+  static String? _parseString(dynamic raw) {
+    if (raw == null) return null;
+    if (raw is String) return raw;
+    if (raw is Map) return raw.values.join(', ');
+    if (raw is List) return raw.join(', ');
+    return raw.toString();
+  }
 }
 
+// ─────────────────────────────────────────────
 class User {
   final String? id;
   final String? countryCode;
@@ -79,32 +96,33 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      countryCode: json['countryCode'],
-      phone: json['phone'],
-      email: json['email'],
-      passwordHash: json['passwordHash'],
-      provider: json['provider'],
-      providerId: json['providerId'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      address: json['address'],
-      referralCode: json['referralCode'],
-      myReferralCode: json['myReferralCode'],
+      id: ProfileModelM._parseString(json['id']),
+      countryCode: ProfileModelM._parseString(json['countryCode']),
+      phone: ProfileModelM._parseString(json['phone']),
+      email: ProfileModelM._parseString(json['email']),
+      passwordHash: ProfileModelM._parseString(json['passwordHash']),
+      provider: ProfileModelM._parseString(json['provider']),
+      providerId: ProfileModelM._parseString(json['providerId']),
+      firstName: ProfileModelM._parseString(json['firstName']),
+      lastName: ProfileModelM._parseString(json['lastName']),
+      address: ProfileModelM._parseString(json['address']), // ✅ Map safe
+      referralCode: ProfileModelM._parseString(json['referralCode']),
+      myReferralCode: ProfileModelM._parseString(json['myReferralCode']),
       phoneVerified: json['phoneVerified'],
       emailVerified: json['emailVerified'],
-      lastActiveProfileId: json['lastActiveProfileId'],
-      lastActiveProfileType: json['lastActiveProfileType'],
-      status: json['status'],
-      signupStatus: json['signupStatus'],
+      lastActiveProfileId: ProfileModelM._parseString(json['lastActiveProfileId']),
+      lastActiveProfileType: ProfileModelM._parseString(json['lastActiveProfileType']),
+      status: ProfileModelM._parseString(json['status']),
+      signupStatus: ProfileModelM._parseString(json['signupStatus']),
       sessionVersion: json['sessionVersion'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      deletedAt: json['deletedAt'],
+      createdAt: ProfileModelM._parseString(json['createdAt']),
+      updatedAt: ProfileModelM._parseString(json['updatedAt']),
+      deletedAt: ProfileModelM._parseString(json['deletedAt']),
     );
   }
 }
 
+// ─────────────────────────────────────────────
 class MerchantProfile {
   final String? id;
   final String? ownerUserId;
@@ -160,34 +178,35 @@ class MerchantProfile {
 
   factory MerchantProfile.fromJson(Map<String, dynamic> json) {
     return MerchantProfile(
-      id: json['id'],
-      ownerUserId: json['ownerUserId'],
-      verificationId: json['verificationId'],
-      verificationType: json['verificationType'],
-      gstinHash: json['gstinHash'],
+      id: ProfileModelM._parseString(json['id']),
+      ownerUserId: ProfileModelM._parseString(json['ownerUserId']),
+      verificationId: ProfileModelM._parseString(json['verificationId']),
+      verificationType: ProfileModelM._parseString(json['verificationType']),
+      gstinHash: ProfileModelM._parseString(json['gstinHash']),
       verificationDetails: json['verificationDetails'],
-      verifiedAt: json['verifiedAt'],
-      businessName: json['businessName'],
-      businessType: json['businessType'],
-      businessWebsite: json['businessWebsite'],
-      businessEmail: json['businessEmail'],
-      businessPhone: json['businessPhone'],
-      alternateBusinessPhone: json['alternateBusinessPhone'],
-      yearOfEstablish: json['yearOfEstablish'],
-      logo: json['logo'],
-      businessAddress: json['businessAddress'],
+      verifiedAt: ProfileModelM._parseString(json['verifiedAt']),
+      businessName: ProfileModelM._parseString(json['businessName']),
+      businessType: ProfileModelM._parseString(json['businessType']),
+      businessWebsite: ProfileModelM._parseString(json['businessWebsite']),
+      businessEmail: ProfileModelM._parseString(json['businessEmail']),
+      businessPhone: ProfileModelM._parseString(json['businessPhone']),
+      alternateBusinessPhone: ProfileModelM._parseString(json['alternateBusinessPhone']),
+      yearOfEstablish: ProfileModelM._parseString(json['yearOfEstablish']),
+      logo: ProfileModelM._parseString(json['logo']),
+      businessAddress: ProfileModelM._parseString(json['businessAddress']),
       businessHours: json['businessHours'],
       certifications: json['certifications'],
       pocDetails: json['pocDetails'],
-      profileStatus: json['profileStatus'],
+      profileStatus: ProfileModelM._parseString(json['profileStatus']),
       version: json['version'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      deletedAt: json['deletedAt'],
+      createdAt: ProfileModelM._parseString(json['createdAt']),
+      updatedAt: ProfileModelM._parseString(json['updatedAt']),
+      deletedAt: ProfileModelM._parseString(json['deletedAt']),
     );
   }
 }
 
+// ─────────────────────────────────────────────
 class ConnectorProfile {
   final String? id;
   final String? ownerUserId;
@@ -223,20 +242,20 @@ class ConnectorProfile {
 
   factory ConnectorProfile.fromJson(Map<String, dynamic> json) {
     return ConnectorProfile(
-      id: json['id'],
-      ownerUserId: json['ownerUserId'],
-      verificationId: json['verificationId'],
-      verificationType: json['verificationType'],
-      aadhaarHash: json['aadhaarHash'],
+      id: ProfileModelM._parseString(json['id']),
+      ownerUserId: ProfileModelM._parseString(json['ownerUserId']),
+      verificationId: ProfileModelM._parseString(json['verificationId']),
+      verificationType: ProfileModelM._parseString(json['verificationType']),
+      aadhaarHash: ProfileModelM._parseString(json['aadhaarHash']),
       verificationDetails: json['verificationDetails'],
-      verifiedAt: json['verifiedAt'],
+      verifiedAt: ProfileModelM._parseString(json['verifiedAt']),
       pocDetails: json['pocDetails'],
       certifications: json['certifications'],
-      profileStatus: json['profileStatus'],
+      profileStatus: ProfileModelM._parseString(json['profileStatus']),
       version: json['version'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      deletedAt: json['deletedAt'],
+      createdAt: ProfileModelM._parseString(json['createdAt']),
+      updatedAt: ProfileModelM._parseString(json['updatedAt']),
+      deletedAt: ProfileModelM._parseString(json['deletedAt']),
     );
   }
 }

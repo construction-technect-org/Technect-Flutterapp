@@ -2,10 +2,11 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/add_kyc_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/poc_edit_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/controllers/edit_product_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/models/connector_Project_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
-import 'package:get_storage/get_storage.dart';
 
 class ConnectorInfoMetricsComponent extends StatelessWidget {
   const ConnectorInfoMetricsComponent({super.key});
@@ -13,12 +14,13 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
   ConnectorProfileController get controller =>
       Get.find<ConnectorProfileController>();
 
-  // final  ConnectorProfileController controllers = Get.put(ConnectorProfileController());
+   // final  EditProductController editControllers = Get.find<EditProductController>();
 
   @override
   Widget build(BuildContext context) {
     final connectorProfile = controller.connectorProfile;
     final connectorProfileData = controller.profileDatas;
+    final editController = Get.find<EditProductController>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,33 +87,6 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           ),
         ],
         SizedBox(height: 2.h),
-
-        // ---------- Project Section ----------
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Project details',
-                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-              ),
-              const Spacer(),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => EditProjectView());
-                },
-                behavior: HitTestBehavior.translucent,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SvgPicture.asset(Asset.edit),
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 1.h),
-        _buildProjectDetails(),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
@@ -128,10 +103,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                 onTap: () {
                   final isNew = controller.profileDatas.value == null;
 
-                  Get.to(
-                          () => EditPocProfile(),
-                      arguments: isNew
-                  );
+                  Get.to(() => EditPocProfile(), arguments: isNew);
                 },
                 behavior: HitTestBehavior.translucent,
                 child: Padding(
@@ -166,6 +138,54 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
             {"title": "Email", "value": poc?.pocEmail ?? "Null"},
           ]);
         }),
+        // SizedBox(height: 2.h),
+        // ---------- Project Section ----------
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Project details',
+                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => EditProjectView());
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: SvgPicture.asset(Asset.edit),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Obx(() {
+          if (editController.projectList.isEmpty) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text("No Project Found"),
+            );
+          }
+
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: editController.projectList.length,
+            itemBuilder: (context, index) {
+              final project = editController.projectList[index];
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _buildProjectDetails(project),
+              );
+            },
+          );
+        }),
+
         SizedBox(height: 2.h),
       ],
     );
@@ -260,7 +280,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildProjectDetails() {
+  Widget _buildProjectDetails(ConnectorProject project) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -272,21 +292,67 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildRow(title: "Project Name", data: "Adarsh" ?? "-"),
+          buildRow(
+            title: "Project Name",
+            data: project.name.isNotEmpty ? project.name : "-",
+          ),
           const Gap(6),
-          buildRow(title: "Project Code", data: "CT-PRJ001" ?? "-"),
+          buildRow(
+            title: "Project Code",
+            data: project.code.isNotEmpty ? project.code : "-",
+          ),
           const Gap(6),
-          buildRow(title: "Area", data: "1600 sqft" ?? "-"),
+          buildRow(
+            title: "Area",
+            data: project.area.isNotEmpty ? project.area : "-",
+          ),
           const Gap(6),
-          buildRow(title: "Project Type", data: "Residential Project" ?? "-"),
+          buildRow(
+            title: "Project Type",
+            data: project.projectType.isNotEmpty ? project.projectType : "-",
+          ),
           const Gap(6),
-          buildRow(title: "No. of floor", data: "2" ?? "-"),
+          buildRow(
+            title: "No. of floor",
+            data: project.numberOfFloors.toString(),
+          ),
           const Gap(6),
-          buildRow(title: "Project Status", data: "Ongoing" ?? "-"),
+          buildRow(
+            title: "Project Status",
+            data: project.status.isNotEmpty ? project.status : "-",
+          ),
         ],
       ),
     );
   }
+
+  // Widget _buildProjectDetails() {
+  //   return Container(
+  //     width: double.infinity,
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       color: MyColors.white,
+  //       border: Border.all(color: MyColors.grayEA),
+  //       borderRadius: BorderRadius.circular(12),
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         buildRow(title: "Project Name", data: "Adarsh" ?? "-"),
+  //         const Gap(6),
+  //         buildRow(title: "Project Code", data: "CT-PRJ001" ?? "-"),
+  //         const Gap(6),
+  //         buildRow(title: "Area", data: "1600 sqft" ?? "-"),
+  //         const Gap(6),
+  //         buildRow(title: "Project Type", data: "Residential Project" ?? "-"),
+  //         const Gap(6),
+  //         buildRow(title: "No. of floor", data: "2" ?? "-"),
+  //         const Gap(6),
+  //         buildRow(title: "Project Status", data: "Ongoing" ?? "-"),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildProjectDetailsPoint(List<Map<dynamic, dynamic>> allData) {
     return Container(

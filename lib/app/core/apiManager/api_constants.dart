@@ -57,6 +57,8 @@ class APIConstants {
 
   static const String connectorAnalytics = "connector/analytics";
   static const String connectorReport = "connector/analytics/pdf";
+  static const String projectAdd = "/v1/api/business/connector/projects";
+  static const String projectGet = "/v1/api/business/connector/projects";
 
   // Service Management APIs
   // static const String getServiceList = "service/merchant/list";

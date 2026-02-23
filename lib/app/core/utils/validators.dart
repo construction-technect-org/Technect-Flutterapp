@@ -32,3 +32,15 @@ String? validatePinCode(String? value) {
   }
   return null;
 }
+String? validateNumber(String? value, {String fieldName = "Field"}) {
+  if (value == null || value.trim().isEmpty) {
+    return "Please enter $fieldName";
+  }
+  if (int.tryParse(value.trim()) == null) {
+    return "$fieldName must be a valid number";
+  }
+  if (int.parse(value.trim()) <= 0) {
+    return "$fieldName must be greater than 0";
+  }
+  return null;
+}

@@ -4,6 +4,7 @@ import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/models/persona_profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/services/AddKycService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/controllers/edit_product_controller.dart';
 
 class SwitchAccountController extends GetxController {
   final AppHiveService _appHiveService = Get.find<AppHiveService>();
@@ -30,7 +31,7 @@ class SwitchAccountController extends GetxController {
         currentRole.value = 'connector';
         myPref.setRole("connector");
         await controller.fetchConnectorModule();
-
+        await EditProductController().fetchProjects();
       }
     } else {
       // 🔹 Switch to merchant (partner)
@@ -46,9 +47,7 @@ class SwitchAccountController extends GetxController {
         await controller.fetchConnectorModule();
       }
     }
-
     myPref.role.val = currentRole.value;
-
     // if (currentRole.value == 'partner') {
     //   currentRole.value = 'connector';
     // } else {
@@ -67,9 +66,22 @@ class SwitchAccountController extends GetxController {
     Get.toNamed(Routes.PROFILE, arguments: {"isSwitch": true});
   }
 
-  void addConnectorAccount() {
-    Get.back();
-    Get.toNamed(Routes.CONNECTOR_PROFILE, arguments: {"isSwitch": true});
+  Future<void> addConnectorAccount() async {
+    if(myPref.role.val=="partner"){
+      await becomeConnector();
+      currentRole.value = 'connector';
+      myPref.setRole("connector");
+      await controller.fetchConnectorModule();
+      await EditProductController().fetchProjects();
+      myPref.role.val = currentRole.value;
+      Get.back();
+      Get.offAllNamed(Routes.MAIN);
+    }
+    else{
+      Get.back();
+      Get.toNamed(Routes.CONNECTOR_PROFILE, arguments: {"isSwitch": true});
+    }
+
   }
 
   final ApiManager apiManager = ApiManager();
@@ -91,6 +103,24 @@ class SwitchAccountController extends GetxController {
       }
     } catch (e) {
       Get.printInfo(info: "❌ Switch Profile Error: $e");
+    }
+  }
+  Future<void> becomeConnector() async {
+    try {
+
+      final becomeConnectorResponse = await apiManager.postObject(
+        url: "/v1/api/auth/profiles/merchant/become-connector",
+        body: {}
+      );
+      final String? token = becomeConnectorResponse["token"];
+
+      if (token != null && token.isNotEmpty) {
+        await _appHiveService.setToken(token);
+        myPref.setToken(token);
+        Get.printInfo(info: "✅ New token stored successfully");
+      }
+    } catch (e) {
+      Get.printInfo(info: "❌ becomeConnector Error: $e");
     }
   }
 
@@ -116,21 +146,9 @@ class SwitchAccountController extends GetxController {
     Get.printInfo(
       info: '🌐has All Data   : ${commonController.profileData.value}',
     );
-    commonController.fetchProfileDataM();
-    currentRole.value = myPref.role.val;
-    // hasPartnerAccount.value =
-    //     (commonController
-    //                 .profileData
-    //                 .value
-    //                 .data
-    //                 ?.merchantProfile
-    //                 ?.ver ??
-    //             "")
-    //         .isNotEmpty;
-    // Get.printInfo(info: '🌐has Partner n  : ${hasPartnerAccount.value}');
-    //
-    // hasConnectorAccount.value =
-    //     commonController.profileData.value.data?.connectorProfile != null;
-    // Get.printInfo(info: '🌐has Connector n : ${hasConnectorAccount.value}');
+    Future.microtask(() async {
+      await commonController.fetchProfileDataM();
+      currentRole.value = myPref.role.val;
+    });
   }
 }

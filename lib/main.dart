@@ -3,9 +3,11 @@ import 'package:construction_technect/app/core/services/app_service.dart';
 import 'package:construction_technect/app/core/services/fcm_service.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/controller/sub_category_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/controller/sub_category_item_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/controllers/edit_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/main_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
@@ -84,6 +86,8 @@ class InitialBinding implements Bindings {
     Get.put<SubCategoryController>(SubCategoryController(), permanent: true);
     Get.put<SubCategoryItemController>(SubCategoryItemController(), permanent: true);
     Get.put<MainHomeController>(MainHomeController(), permanent: true);
+    Get.put<ConnectorProfileController>(ConnectorProfileController(), permanent: true);
+    Get.put<EditProductController>(EditProductController(), permanent: true);
     myPref = Get.find();
   }
 }

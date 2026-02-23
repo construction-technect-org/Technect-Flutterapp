@@ -90,6 +90,43 @@ class MainHomeController extends GetxController {
     }
   }
 
+  Future createProduct() async {
+    try {
+      isLoading.value = true;
+
+      final response = await _homeService.createProject(
+        brandName: brandNameController.text.trim(),
+        stock: stockController.text.trim(),
+        note: noteController.text.trim(),
+        terms: termsController.text.trim(),
+        price: priceController.text.trim(),
+        gstPrice: gstPriceController.text.trim(),
+        amount: amountController.text.trim(),
+        imageSlots: imageSlots,
+        videoPath: selectedVideo.value?.path, // ✅ FIXED
+      );
+
+      if (response["success"] == true) {
+        Get.snackbar(
+          "Success",
+          response["message"] ?? "Product created successfully",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          response["message"] ?? "Something went wrong",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.printError(info: "Create Product Error: $e");
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void gstCalculate() {
     final double amount =
         double.parse(

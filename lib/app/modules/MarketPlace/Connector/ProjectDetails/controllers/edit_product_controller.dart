@@ -1,12 +1,20 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/services/connector_home_service.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/models/connector_Project_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/media_bottom_sheet.dart';
 import 'package:get/get.dart';
 import 'dart:io';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 
 class EditProductController extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    Future.delayed(const Duration(seconds: 1), () {
+      fetchProjects();
+    });
+  }
   final isEditLoading = false.obs;
   final formKey = GlobalKey<FormState>();
   final TextEditingController pNameController = TextEditingController();
@@ -17,6 +25,10 @@ class EditProductController extends GetxController {
   final TextEditingController pTypeController = TextEditingController();
   final TextEditingController pDescController = TextEditingController();
   RxString selectedValue = "".obs;
+  ConnectorHomeService connectorHomeService = ConnectorHomeService();
+  final isLoading = false.obs;
+  final projectList = <ConnectorProject>[].obs;
+  final totalProjects = 0.obs;
 
   final ImagePicker _picker = ImagePicker();
   RxList<PlatformFile> images = <PlatformFile>[].obs;
@@ -111,6 +123,85 @@ class EditProductController extends GetxController {
       }
     }
   } */
+
+  ///connector  Project Post (Create)
+  Future<bool> submitProject() async {
+    if (!formKey.currentState!.validate()) return false;
+
+    try {
+      isEditLoading.value = true;
+
+      final Map<String, dynamic> fields = {
+        "name": pNameController.text.trim(),
+        "code": pCodeController.text.trim(),
+        "area": pAreaController.text.trim(),
+        "address": pAddressController.text.trim(),
+        "numberOfFloors": pFloorsController.text.trim(),
+        "projectType": pTypeController.text.trim(),
+        "status": selectedValue.value,
+        "description": pDescController.text.trim(),
+      };
+
+      final Map<String, String> files = {};
+
+      /// Multiple Images
+      for (int i = 0; i < images.length; i++) {
+        if (images[i].path != null) {
+          files["image_$i"] = images[i].path!;
+        }
+      }
+
+      /// Video
+      if (video.value?.path != null) {
+        files["video"] = video.value!.path!;
+      }
+
+      /// PDFs
+      for (int i = 0; i < pdfs.length; i++) {
+        if (pdfs[i].path != null) {
+          files["pdf_$i"] = pdfs[i].path!;
+        }
+      }
+
+      final response = await connectorHomeService.createProject(
+        fields: fields,
+        files: files,
+      );
+
+      if (response["success"] == true) {
+        return true; // ✅ sirf true return karo — snackbar UI se dikhega
+      } else {
+        return false; // ✅ sirf false return karo
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return false;
+    } finally {
+      isEditLoading.value = false;
+    }
+  }
+  ///connector  Project Get (fetch)
+
+  Future<void> fetchProjects() async {
+    try {
+      isLoading.value = true;
+
+      final response = await connectorHomeService.getProjects();
+
+      // final model = ProjectListModel.fromJson(response);
+
+      if (response.success) {
+        projectList.value = response.data;
+        totalProjects.value = response.total;
+      } else {
+        Get.snackbar("Error", "Failed to fetch projects");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   // Add Video
   Future<void> pickVideo() async {

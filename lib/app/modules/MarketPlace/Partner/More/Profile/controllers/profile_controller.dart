@@ -333,7 +333,10 @@ class ProfileController extends GetxController {
       }
 
       if (merchantID != null && merchantID.isNotEmpty) {
-        profileResponse1.value = await _homeService.getMerchantProfile(merchantID);
+        if(myPref.role.val!="connector") {
+          profileResponse1.value =
+          await _homeService.getMerchantProfile(merchantID);
+        }
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');

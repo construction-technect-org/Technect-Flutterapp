@@ -5,6 +5,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/mod
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/module_models.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/sub_category_item_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/sub_category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/models/connector_Project_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
@@ -15,6 +16,17 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 class ConnectorHomeService extends GetxService {
   final ApiManager _apiManager = ApiManager();
   final ManageApi _manageApi = Get.find<ManageApi>();
+
+  Future<dynamic> createProject({
+    required Map<String, dynamic> fields,
+    required Map<String, String> files,
+  }) async {
+    return await _apiManager.postMultipart(
+      url: APIConstants.projectAdd,
+      fields: fields,
+      files: files,
+    );
+  }
 
   Future<ProfileModel> getProfile() async {
     try {
@@ -29,6 +41,18 @@ class ConnectorHomeService extends GetxService {
       rethrow;
     }
   }
+
+  Future<ProjectListModel> getProjects() async {
+    try {
+      final response = await _apiManager.get(
+        url:APIConstants.projectGet,
+      );
+      return ProjectListModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
   Future<AddressModel> getAddress() async {
     try {

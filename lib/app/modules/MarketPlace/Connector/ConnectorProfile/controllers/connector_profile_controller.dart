@@ -86,7 +86,9 @@ class ConnectorProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    pointOfContact();
+    if(myPref.role.val=="connector") {
+      pointOfContact();
+    }
     if (Get.arguments != null) {
       isSwitch.value = true;
     }

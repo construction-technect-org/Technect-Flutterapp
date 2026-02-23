@@ -119,26 +119,29 @@ class DashBoardController extends GetxController {
       }
 
       if (merchantID != null && merchantID.isNotEmpty) {
-        profileResponse.value = await homeService.getMerchantProfile(merchantID);
-        print("Merchant Response : ${profileResponse.value}");
-        await storage.setMerchantID(merchantID);
-        print("Merchant ID : ${merchantID}");
-        if (profileResponse.value.merchant != null) {
-
-          print("Merchant NotNull");
-          print("Biz Hrs ${profileResponse.value.merchant!.businessHours}");
-          if (profileResponse.value.merchant!.businessHours != null) {
-            print("Storign BIz HOurs");
-            await storage.setMerchantBizHours(profileResponse.value.merchant!.businessHours);
-          }
-          if (profileResponse.value.merchant!.pocDetails != null) {
-            await storage.setPOC(profileResponse.value.merchant!.pocDetails);
-          }
-          await storage.setBM(profileResponse.value.merchant!);
-          if (profileResponse.value.merchant!.verificationDetails != null) {
-            await storage.setGstNumber(
-              profileResponse.value.merchant!.verificationDetails!.gstNumber!,
-            );
+        if(myPref.role.val!="connector") {
+          profileResponse.value =
+          await homeService.getMerchantProfile(merchantID);
+          print("Merchant Response : ${profileResponse.value}");
+          await storage.setMerchantID(merchantID);
+          print("Merchant ID : ${merchantID}");
+          if (profileResponse.value.merchant != null) {
+            print("Merchant NotNull");
+            print("Biz Hrs ${profileResponse.value.merchant!.businessHours}");
+            if (profileResponse.value.merchant!.businessHours != null) {
+              print("Storign BIz HOurs");
+              await storage.setMerchantBizHours(
+                  profileResponse.value.merchant!.businessHours);
+            }
+            if (profileResponse.value.merchant!.pocDetails != null) {
+              await storage.setPOC(profileResponse.value.merchant!.pocDetails);
+            }
+            await storage.setBM(profileResponse.value.merchant!);
+            if (profileResponse.value.merchant!.verificationDetails != null) {
+              await storage.setGstNumber(
+                profileResponse.value.merchant!.verificationDetails!.gstNumber!,
+              );
+            }
           }
         }
       }

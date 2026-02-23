@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validators.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/controllers/edit_product_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -22,7 +23,7 @@ class EditProjectView extends StatelessWidget {
         child: Scaffold(
           backgroundColor: MyColors.white,
           appBar: const CommonAppBar(
-            title: Text('Project Details'),
+            title: Text('Project Add'),
             isCenter: false,
           ),
           body: SingleChildScrollView(
@@ -86,18 +87,17 @@ class EditProjectView extends StatelessWidget {
                           validateName(value, fieldName: "Address"),
                     ),
                     const Gap(16),
-                    CommonTextField(
-                      hintText: "Enter floor numbers",
-                      headerText: "No. of Floors",
-                      controller: controller.pFloorsController,
-                      //autofillHints: const [AutofillHints.givenName],
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(30),
-                        NameInputFormatter(),
-                      ],
-                      validator: (value) =>
-                          validateName(value, fieldName: "No. of Floors"),
-                    ),
+                  CommonTextField(
+                    hintText: "Enter floor numbers",
+                    headerText: "No. of Floors",
+                    controller: controller.pFloorsController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(3),
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    validator: (value) => validateNumber(value, fieldName: "No. of Floors"), // ✅
+                  ),
                     const Gap(16),
                     CommonTextField(
                       hintText: "Enter Project  Type",
@@ -215,12 +215,46 @@ class EditProjectView extends StatelessWidget {
                         : const SizedBox(height: 20), */
                     RoundedButton(
                       buttonName: "Add",
-                      onTap: () {
-                        if (!controller.formKey.currentState!.validate())
-                          return;
-                        Get.toNamed(Routes.SIGN_UP_PASSWORD);
+                      onTap: () async {
+                        if (!controller.formKey.currentState!.validate()) return;
+
+                        final bool result = await controller.submitProject();
+
+                        if (result) {
+                          // ✅ Back navigate karo
+                          Get.back();
+                          Navigator.pop(context);
+                          await controller.fetchProjects();
+
+                          // ✅ rawSnackbar use karo
+                          Get.rawSnackbar(
+                            title: "Success",
+                            message: "Project created successfully",
+                            backgroundColor: Colors.green,
+                            icon: const Icon(Icons.check_circle, color: Colors.white),
+                            snackPosition: SnackPosition.BOTTOM,
+                            duration: const Duration(seconds: 3),
+                          );
+                        } else {
+                          Get.rawSnackbar(
+                            title: "Error",
+                            message: "Something went wrong",
+                            backgroundColor: Colors.red,
+                            icon: const Icon(Icons.error, color: Colors.white),
+                            snackPosition: SnackPosition.BOTTOM,
+                            duration: const Duration(seconds: 3),
+                          );
+                        }
                       },
                     ),
+                    // RoundedButton(
+                    //   buttonName: "Add",
+                    //   onTap: () {
+                    //     if (!controller.formKey.currentState!.validate())
+                    //       return;
+                    //     Get.toNamed(Routes.SIGN_UP_PASSWORD);
+                    //   },
+                    // ),
 
                     // Buttons
                   ],
