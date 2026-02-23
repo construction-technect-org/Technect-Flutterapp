@@ -1,5 +1,3 @@
-
-
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -35,11 +33,7 @@ class CartListView extends GetView<CartListController> {
                       },
                       child: const Padding(
                         padding: EdgeInsets.zero,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_sharp,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
                     action: [Obx(() => _buildStatusDropdown(controller))],
@@ -62,10 +56,7 @@ class CartListView extends GetView<CartListController> {
                                     color: MyColors.grayF7,
                                     borderRadius: BorderRadius.circular(24),
                                   ),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 4,
-                                    horizontal: 4,
-                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -75,25 +66,16 @@ class CartListView extends GetView<CartListController> {
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color:
-                                                  controller
-                                                          .selectedTabIndex
-                                                          .value ==
-                                                      0
+                                              color: controller.selectedTabIndex.value == 0
                                                   ? MyColors.primary
                                                   : Colors.transparent,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
+                                              borderRadius: BorderRadius.circular(20),
                                             ),
                                             child: Center(
                                               child: Text(
                                                 'Product',
                                                 style: MyTexts.medium15.copyWith(
-                                                  color:
-                                                      controller
-                                                              .selectedTabIndex
-                                                              .value ==
-                                                          0
+                                                  color: controller.selectedTabIndex.value == 0
                                                       ? Colors.white
                                                       : MyColors.gray2E,
                                                 ),
@@ -109,25 +91,16 @@ class CartListView extends GetView<CartListController> {
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color:
-                                                  controller
-                                                          .selectedTabIndex
-                                                          .value ==
-                                                      1
+                                              color: controller.selectedTabIndex.value == 1
                                                   ? MyColors.primary
                                                   : Colors.transparent,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
+                                              borderRadius: BorderRadius.circular(20),
                                             ),
                                             child: Center(
                                               child: Text(
                                                 'Service',
                                                 style: MyTexts.medium15.copyWith(
-                                                  color:
-                                                      controller
-                                                              .selectedTabIndex
-                                                              .value ==
-                                                          1
+                                                  color: controller.selectedTabIndex.value == 1
                                                       ? Colors.white
                                                       : MyColors.gray2E,
                                                 ),
@@ -149,11 +122,7 @@ class CartListView extends GetView<CartListController> {
                               },
                               borderRadius: 22,
                               hintText: 'Search',
-                              prefixIcon: SvgPicture.asset(
-                                Asset.searchIcon,
-                                height: 16,
-                                width: 16,
-                              ),
+                              prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                             ),
                             const Gap(10),
                             Obx(() {
@@ -163,14 +132,11 @@ class CartListView extends GetView<CartListController> {
                                     controller.searchQuery.value.isNotEmpty) {
                                   return Padding(
                                     padding: EdgeInsets.only(
-                                      top:
-                                          MediaQuery.of(context).size.height /
-                                          3,
+                                      top: MediaQuery.of(context).size.height / 3,
                                     ),
                                     child: Center(
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'No products found',
@@ -181,27 +147,20 @@ class CartListView extends GetView<CartListController> {
                                           SizedBox(height: 0.5.h),
                                           Text(
                                             'Try searching with different keywords',
-                                            style: MyTexts.regular14.copyWith(
-                                              color: MyColors.grey,
-                                            ),
+                                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
                                           ),
                                         ],
                                       ),
                                     ),
                                   );
-                                } else if (controller
-                                    .filteredProducts
-                                    .isEmpty) {
+                                } else if (controller.filteredProducts.isEmpty) {
                                   return Padding(
                                     padding: EdgeInsets.only(
-                                      top:
-                                          MediaQuery.of(context).size.height /
-                                          3,
+                                      top: MediaQuery.of(context).size.height / 3,
                                     ),
                                     child: Center(
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'No products available',
@@ -212,9 +171,7 @@ class CartListView extends GetView<CartListController> {
                                           SizedBox(height: 0.5.h),
                                           Text(
                                             'Add your first product to get started',
-                                            style: MyTexts.regular14.copyWith(
-                                              color: MyColors.grey,
-                                            ),
+                                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
                                           ),
                                           const Gap(20),
                                         ],
@@ -226,20 +183,16 @@ class CartListView extends GetView<CartListController> {
                                 return GridView.builder(
                                   shrinkWrap: true,
                                   physics: const ScrollPhysics(),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 0.6,
+                                    crossAxisSpacing: 12,
+                                    mainAxisSpacing: 12,
                                   ),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 0.6,
-                                        crossAxisSpacing: 12,
-                                        mainAxisSpacing: 12,
-                                      ),
                                   itemCount: controller.filteredProducts.length,
                                   itemBuilder: (context, index) {
-                                    final item =
-                                        controller.filteredProducts[index];
+                                    final item = controller.filteredProducts[index];
                                     return ProductCard(
                                       isFromAdd: false,
                                       isFromConnector: true,
@@ -249,35 +202,29 @@ class CartListView extends GetView<CartListController> {
                                       },
                                       onWishlistTap: () async {
                                         controller.isLoading.value = true;
-                                        await Get.find<CommonController>()
-                                            .wishListApi(
-                                              status: item.isInWishList == true
-                                                  ? "remove"
-                                                  : "add",
-                                              mID: item.id ?? 0,
-                                              onSuccess: () async {
-                                                await controller
-                                                    .fetchCartList();
-                                              },
-                                            );
+                                        await Get.find<CommonController>().wishListApi(
+                                          status: item.isInWishList == true ? "remove" : "add",
+                                          mID: item.id.toString(),
+                                          moduleType: "product",
+                                          onSuccess: () async {
+                                            await controller.fetchCartList();
+                                          },
+                                        );
                                         controller.isLoading.value = false;
                                       },
                                       onNotifyTap: () async {
                                         controller.isLoading.value = true;
-                                        await Get.find<CommonController>()
-                                            .notifyMeApi(
-                                              mID: item.id ?? 0,
-                                              onSuccess: () async {
-                                                await controller
-                                                    .fetchCartList();
-                                              },
-                                            );
+                                        await Get.find<CommonController>().notifyMeApi(
+                                          mID: item.id.toString(),
+                                          onSuccess: () async {
+                                            await controller.fetchCartList();
+                                          },
+                                        );
                                         controller.isLoading.value = false;
                                       },
                                       onConnectTap: () {
                                         final bool isConnect =
-                                            item.leadCreated == true &&
-                                            item.status != null;
+                                            item.leadCreated == true && item.status != null;
                                         ConnectionDialogs.showSendConnectionDialog(
                                           context,
                                           item,
@@ -286,26 +233,19 @@ class CartListView extends GetView<CartListController> {
                                           onTap: (message, date, radius) async {
                                             Get.back();
                                             controller.isLoading.value = true;
-                                            await Get.find<CommonController>()
-                                                .addToConnectApi(
-                                                  mID:
-                                                      item.merchantProfileId ??
-                                                      0,
-                                                  message: message,
-                                                  radius: radius,
-                                                  date: date,
-                                                  pID: item.id ?? 0,
-                                                  uom:
-                                                      item.filterValues?["uom"]["value"] ??
-                                                      "",
+                                            await Get.find<CommonController>().addToConnectApi(
+                                              mID: item.merchantProfileId ?? 0,
+                                              message: message,
+                                              radius: radius,
+                                              date: date,
+                                              pID: item.id ?? 0,
+                                              uom: item.filterValues?["uom"]["value"] ?? "",
 
-                                                  quantity: item.stockQty
-                                                      .toString(),
-                                                  onSuccess: () async {
-                                                    await controller
-                                                        .fetchCartList();
-                                                  },
-                                                );
+                                              quantity: item.stockQty.toString(),
+                                              onSuccess: () async {
+                                                await controller.fetchCartList();
+                                              },
+                                            );
                                             controller.isLoading.value = false;
                                           },
                                         );
@@ -319,14 +259,11 @@ class CartListView extends GetView<CartListController> {
                                     controller.searchQuery.value.isNotEmpty) {
                                   return Padding(
                                     padding: EdgeInsets.only(
-                                      top:
-                                          MediaQuery.of(context).size.height /
-                                          3,
+                                      top: MediaQuery.of(context).size.height / 3,
                                     ),
                                     child: Center(
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'No services found',
@@ -337,27 +274,20 @@ class CartListView extends GetView<CartListController> {
                                           SizedBox(height: 0.5.h),
                                           Text(
                                             'Try searching with different keywords',
-                                            style: MyTexts.regular14.copyWith(
-                                              color: MyColors.grey,
-                                            ),
+                                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
                                           ),
                                         ],
                                       ),
                                     ),
                                   );
-                                } else if (controller
-                                    .filteredServices
-                                    .isEmpty) {
+                                } else if (controller.filteredServices.isEmpty) {
                                   return Padding(
                                     padding: EdgeInsets.only(
-                                      top:
-                                          MediaQuery.of(context).size.height /
-                                          3,
+                                      top: MediaQuery.of(context).size.height / 3,
                                     ),
                                     child: Center(
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'No services available',
@@ -368,9 +298,7 @@ class CartListView extends GetView<CartListController> {
                                           SizedBox(height: 0.5.h),
                                           Text(
                                             'Add your first service to get started',
-                                            style: MyTexts.regular14.copyWith(
-                                              color: MyColors.grey,
-                                            ),
+                                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
                                           ),
                                           const Gap(20),
                                         ],
@@ -382,20 +310,16 @@ class CartListView extends GetView<CartListController> {
                                 return GridView.builder(
                                   shrinkWrap: true,
                                   physics: const ScrollPhysics(),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 0.6,
+                                    crossAxisSpacing: 12,
+                                    mainAxisSpacing: 12,
                                   ),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 0.6,
-                                        crossAxisSpacing: 12,
-                                        mainAxisSpacing: 12,
-                                      ),
                                   itemCount: controller.filteredServices.length,
                                   itemBuilder: (context, index) {
-                                    final service =
-                                        controller.filteredServices[index];
+                                    final service = controller.filteredServices[index];
                                     return ServiceCard(
                                       service: service,
                                       onTap: () {
@@ -418,17 +342,13 @@ class CartListView extends GetView<CartListController> {
                                             controller.isLoading.value = true;
                                             await Get.find<CommonController>()
                                                 .addServiceToConnectApi(
-                                                  mID:
-                                                      service
-                                                          .merchantProfileId ??
-                                                      0,
+                                                  mID: service.merchantProfileId ?? 0,
                                                   message: message,
                                                   radius: radius,
                                                   date: date,
                                                   sID: service.id ?? 0,
                                                   onSuccess: () async {
-                                                    await controller
-                                                        .fetchCartList();
+                                                    await controller.fetchCartList();
                                                   },
                                                 );
                                             controller.isLoading.value = false;
@@ -463,8 +383,7 @@ class CartListView extends GetView<CartListController> {
       "cancelled": Colors.red,
     };
 
-    final selectedColor =
-        colorMap[controller.selectedStatus.value] ?? MyColors.fontBlack;
+    final selectedColor = colorMap[controller.selectedStatus.value] ?? MyColors.fontBlack;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
@@ -485,15 +404,8 @@ class CartListView extends GetView<CartListController> {
         child: DropdownButton<String>(
           value: controller.selectedStatus.value,
           dropdownColor: Colors.white,
-          icon: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            size: 18,
-            color: selectedColor,
-          ),
-          style: MyTexts.medium14.copyWith(
-            color: selectedColor,
-            fontFamily: MyTexts.SpaceGrotesk,
-          ),
+          icon: Icon(Icons.keyboard_arrow_down_rounded, size: 18, color: selectedColor),
+          style: MyTexts.medium14.copyWith(color: selectedColor, fontFamily: MyTexts.SpaceGrotesk),
           underline: const SizedBox(),
           isExpanded: true,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -503,11 +415,7 @@ class CartListView extends GetView<CartListController> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.filter_list,
-                    size: 18,
-                    color: MyColors.fontBlack,
-                  ),
+                  const Icon(Icons.filter_list, size: 18, color: MyColors.fontBlack),
                   const SizedBox(width: 8),
                   Text(
                     "All",
@@ -541,11 +449,7 @@ class CartListView extends GetView<CartListController> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.check_circle_outline,
-                    size: 18,
-                    color: Colors.green,
-                  ),
+                  const Icon(Icons.check_circle_outline, size: 18, color: Colors.green),
                   const SizedBox(width: 8),
                   Text(
                     "Accepted",
@@ -562,11 +466,7 @@ class CartListView extends GetView<CartListController> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.cancel_outlined,
-                    size: 18,
-                    color: Colors.red,
-                  ),
+                  const Icon(Icons.cancel_outlined, size: 18, color: Colors.red),
                   const SizedBox(width: 8),
                   Text(
                     "Rejected",
@@ -583,11 +483,7 @@ class CartListView extends GetView<CartListController> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.cancel_outlined,
-                    size: 18,
-                    color: Colors.red,
-                  ),
+                  const Icon(Icons.cancel_outlined, size: 18, color: Colors.red),
                   const SizedBox(width: 8),
                   Text(
                     "Cancelled",
@@ -645,27 +541,16 @@ class CartListView extends GetView<CartListController> {
     );
   }
 
-  Widget _buildSelectedItem(
-    String selectedValue,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
+  Widget _buildSelectedItem(String selectedValue, String value, IconData icon, Color color) {
     final isSelected = selectedValue == value;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          size: 16,
-          color: isSelected ? color : color.withValues(alpha: 0.6),
-        ),
+        Icon(icon, size: 16, color: isSelected ? color : color.withValues(alpha: 0.6)),
         const SizedBox(width: 4),
         Flexible(
           child: Text(
-            value == "All"
-                ? "All"
-                : value.substring(0, 1).toUpperCase() + value.substring(1),
+            value == "All" ? "All" : value.substring(0, 1).toUpperCase() + value.substring(1),
             style: MyTexts.medium14.copyWith(
               color: isSelected ? color : color.withValues(alpha: 0.6),
               fontFamily: MyTexts.SpaceGrotesk,

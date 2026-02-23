@@ -1,5 +1,3 @@
-
-
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -127,7 +125,8 @@ class SearchProductView extends GetView<SearchProductController> {
                         onWishlistTap: () async {
                           await commonController.wishListApi(
                             status: item.isInWishList == true ? "remove" : "add",
-                            mID: item.id ?? 0,
+                            mID: item.id.toString(),
+                            moduleType: "product",
                             onSuccess: () async {
                               await controller.performSearch(
                                 controller.searchQuery.value,
@@ -138,7 +137,7 @@ class SearchProductView extends GetView<SearchProductController> {
                         },
                         onNotifyTap: () async {
                           await commonController.notifyMeApi(
-                            mID: item.id ?? 0,
+                            mID: item.id.toString(),
                             onSuccess: () async {
                               await controller.performSearch(
                                 controller.searchQuery.value,
@@ -148,7 +147,7 @@ class SearchProductView extends GetView<SearchProductController> {
                           );
                         },
                         onConnectTap: () {
-                          final bool isConnect = item.leadCreated==true && item.status!=null;
+                          final bool isConnect = item.leadCreated == true && item.status != null;
                           ConnectionDialogs.showSendConnectionDialog(
                             context,
                             item,

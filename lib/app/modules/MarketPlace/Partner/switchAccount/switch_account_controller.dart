@@ -69,7 +69,7 @@ class SwitchAccountController extends GetxController {
   }
 
   Future<void> addConnectorAccount() async {
-    if(myPref.role.val=="partner"){
+    if (myPref.role.val == "partner") {
       await becomeConnector();
       currentRole.value = 'connector';
       myPref.setRole("connector");
@@ -78,12 +78,10 @@ class SwitchAccountController extends GetxController {
       myPref.role.val = currentRole.value;
       Get.back();
       Get.offAllNamed(Routes.MAIN);
-    }
-    else{
+    } else {
       Get.back();
       Get.toNamed(Routes.CONNECTOR_PROFILE, arguments: {"isSwitch": true});
     }
-
   }
 
   final ApiManager apiManager = ApiManager();
@@ -94,7 +92,7 @@ class SwitchAccountController extends GetxController {
       log("body $body");
 
       final switchResponse = await apiManager.postObject(
-        url: "/${APIConstants.switchAccount}",
+        url: "${APIConstants.switchAccount}",
         body: body,
       );
       final String? token = switchResponse["token"];
@@ -108,12 +106,12 @@ class SwitchAccountController extends GetxController {
       Get.printInfo(info: "❌ Switch Profile Error: $e");
     }
   }
+
   Future<void> becomeConnector() async {
     try {
-
       final becomeConnectorResponse = await apiManager.postObject(
         url: "/v1/api/auth/profiles/merchant/become-connector",
-        body: {}
+        body: {},
       );
       final String? token = becomeConnectorResponse["token"];
 
@@ -147,11 +145,11 @@ class SwitchAccountController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     final CommonController commonController = Get.find<CommonController>();
-    Get.printInfo(
-      info: '🌐has All Data   : ${commonController.profileData.value}',
-    );
+    Get.printInfo(info: '🌐has All Data   : ${commonController.profileData.value}');
     Future.microtask(() async {
-      await commonController.fetchProfileDataM();
+      if (myPref.role.val == "connector") {
+        await commonController.fetchProfileDataM();
+      }
       currentRole.value = myPref.role.val;
     });
   }

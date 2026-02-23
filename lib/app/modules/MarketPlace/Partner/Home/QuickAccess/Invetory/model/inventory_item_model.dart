@@ -130,4 +130,22 @@ class InventoryItem {
   bool get isApproved => approvalStatus == 'approved';
   bool get isPending => approvalStatus == 'pending';
   bool get isRejected => approvalStatus == 'rejected';
+
+  Product toProduct() {
+    return Product(
+      id: id,
+      productName: name,
+      brand: brand,
+      images: images,
+      price: price,
+      gstPercentage: gstPercentage,
+      gstAmount: gstAmount,
+      totalAmount: finalPrice,
+      stockQty: stock,
+      approvalStatus: approvalStatus,
+      status: status,
+      productVideo: videos != null && videos!.isNotEmpty ? videos!.first.toString() : null,
+      merchantProfileId: int.tryParse(merchantProfileId ?? ""),
+    );
+  }
 }

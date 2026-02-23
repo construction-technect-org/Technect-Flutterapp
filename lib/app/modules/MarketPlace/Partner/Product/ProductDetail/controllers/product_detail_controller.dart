@@ -36,9 +36,11 @@ class ProductDetailsController extends GetxController {
     isFromConnector.value = argument["isFromConnector"] ?? false;
     onApiCall = argument["onApiCall"];
     if (isFromAdd.value == false) {
-      fetchReview(product.id ?? 0, isFromConnector.value);
-      if (!(isFromAdd.value == false && isFromConnector.value == false)) {
-        productDetails(product.id ?? 0);
+      if (product.id != null) {
+        fetchReview(product.id, isFromConnector.value);
+        if (!(isFromAdd.value == false && isFromConnector.value == false)) {
+          productDetails(product.id);
+        }
       }
       final timeFormatter = DateFormat.jm();
 
@@ -166,7 +168,7 @@ class ProductDetailsController extends GetxController {
 
   final RxList<Ratings> reviewList = <Ratings>[].obs;
 
-  Future<void> fetchReview(int id, bool? isFromConnector) async {
+  Future<void> fetchReview(dynamic id, bool? isFromConnector) async {
     try {
       isLoading.value = true;
       final result = isFromConnector == false
@@ -196,7 +198,7 @@ class ProductDetailsController extends GetxController {
     }
   }
 
-  Future<void> productDetails(int id) async {
+  Future<void> productDetails(dynamic id) async {
     try {
       isLoading.value = true;
       productDetailsModel.value = await _service.productDetails(id: id.toString());

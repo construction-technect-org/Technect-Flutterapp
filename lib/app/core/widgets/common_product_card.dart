@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 // ignore: must_be_immutable
@@ -278,7 +279,7 @@ class ProductImage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
               color: Colors.white,
               child: Text(
-                "${double.parse(product.distanceKm ?? '0').toStringAsFixed(1)} km",
+                "${double.tryParse(product.distanceKm ?? '0')?.toStringAsFixed(1) ?? '0.0'} km",
                 style: MyTexts.light14,
               ),
             ),
@@ -289,13 +290,16 @@ class ProductImage extends StatelessWidget {
           Flexible(
             child: GestureDetector(
               onTap: onWishlistTap,
-              child: Icon(
-                (product.isInWishList ?? false) ? Icons.favorite : Icons.favorite_border,
-                size: 24,
-                color: (product.isInWishList ?? false)
-                    ? MyColors.custom('E53D26')
-                    : MyColors.gray54,
-              ),
+              child: Obx(() {
+                final isWishlisted = Get.find<CommonController>().wishlistedProductIds.contains(
+                  product.id.toString(),
+                );
+                return Icon(
+                  isWishlisted ? Icons.favorite : Icons.favorite_border,
+                  size: 24,
+                  color: isWishlisted ? MyColors.custom('E53D26') : MyColors.gray54,
+                );
+              }),
             ),
           ),
     ],

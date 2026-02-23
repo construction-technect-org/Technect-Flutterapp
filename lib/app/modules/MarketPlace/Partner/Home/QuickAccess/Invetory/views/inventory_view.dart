@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/controllers/inventory_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/inventory_item_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/marketplace_category_models.dart';
@@ -263,15 +264,17 @@ class InventoryView extends GetView<InventoryController> {
               }),
             ],
           ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: MyColors.oldLacelight,
-            onPressed: () {
-              controller.selectedStatus.value == "product"
-                  ? Get.toNamed(Routes.ADD_INVENTORY_PRODUCT)
-                  : Get.toNamed(Routes.ADD_INVENTORY_GENERIC);
-            },
-            child: const Icon(Icons.add, color: Colors.black, size: 32),
-          ),
+          floatingActionButton: myPref.role.val == "connector"
+              ? null
+              : FloatingActionButton(
+                  backgroundColor: MyColors.oldLacelight,
+                  onPressed: () {
+                    controller.selectedStatus.value == "product"
+                        ? Get.toNamed(Routes.ADD_INVENTORY_PRODUCT)
+                        : Get.toNamed(Routes.ADD_INVENTORY_GENERIC);
+                  },
+                  child: const Icon(Icons.add, color: Colors.black, size: 32),
+                ),
         ),
       ),
     );
@@ -390,7 +393,10 @@ class InventoryView extends GetView<InventoryController> {
       onTap: () {
         final type = controller.selectedStatus.value;
         if (type == 'product') {
-          Get.toNamed(Routes.PRODUCT_DETAILS, arguments: {"product": item, "isEdit": true});
+          Get.toNamed(
+            Routes.PRODUCT_DETAILS,
+            arguments: {"product": item.toProduct(), "isEdit": true},
+          );
         } else {
           Get.toNamed(
             Routes.SERVICE_DETAILS,
@@ -444,6 +450,34 @@ class InventoryView extends GetView<InventoryController> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      if (myPref.role.val == "connector")
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: GestureDetector(
+                            onTap: () {
+                              final commonController = Get.find<CommonController>();
+                              final itemId = item.id ?? "";
+                              final isWishlisted = commonController.wishlistedProductIds.contains(
+                                itemId,
+                              );
+                              commonController.wishListApi(
+                                mID: itemId,
+                                status: isWishlisted ? "remove" : "add",
+                                moduleType: item.inventoryType ?? controller.selectedStatus.value,
+                              );
+                            },
+                            child: Obx(() {
+                              final itemId = item.id ?? "";
+                              final isWishlisted = Get.find<CommonController>().wishlistedProductIds
+                                  .contains(itemId);
+                              return Icon(
+                                isWishlisted ? Icons.favorite : Icons.favorite_border,
+                                color: isWishlisted ? MyColors.custom('E53D26') : MyColors.grey,
+                                size: 20,
+                              );
+                            }),
+                          ),
+                        ),
                       Text(
                         item.formattedPrice,
                         style: MyTexts.bold14.copyWith(color: MyColors.primary),

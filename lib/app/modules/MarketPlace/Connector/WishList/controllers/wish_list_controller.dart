@@ -1,7 +1,7 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/model/wishlist_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
@@ -17,7 +17,17 @@ class WishListController extends GetxController {
   Future<void> fetchWishList({bool? isLoad}) async {
     try {
       isLoading.value = isLoad ?? false;
-      final result = await _service.allWishList();
+      final connectorProfileId = Get.find<CommonController>()
+          .profileDataM
+          .value
+          .connectorProfile
+          ?.id
+          ?.toString();
+      if (connectorProfileId == null) {
+        log("Connector profile ID is null");
+        return;
+      }
+      final result = await _service.allWishList(connectorProfileId: connectorProfileId);
       if (result.success == true) {
         productListModel.value = result;
         filteredProducts.assignAll(result.data ?? []);
@@ -40,39 +50,24 @@ class WishListController extends GetxController {
         (productListModel.value.data ?? [])
             .where(
               (product) =>
-                  (product.productName?.toLowerCase().contains(
-                        value.toLowerCase(),
-                      ) ??
+                  (product.productName?.toLowerCase().contains(value.toLowerCase()) ?? false) ||
+                  (product.mainCategoryName?.toLowerCase().contains(value.toLowerCase()) ??
                       false) ||
-                  (product.mainCategoryName?.toLowerCase().contains(
-                        value.toLowerCase(),
-                      ) ??
+                  (product.subCategoryName?.toLowerCase().contains(value.toLowerCase()) ?? false) ||
+                  (product.categoryProductName?.toLowerCase().contains(value.toLowerCase()) ??
                       false) ||
-                  (product.subCategoryName?.toLowerCase().contains(
-                        value.toLowerCase(),
-                      ) ??
-                      false) ||
-                  (product.categoryProductName?.toLowerCase().contains(
-                        value.toLowerCase(),
-                      ) ??
-                      false) ||
-                  (product.address?.toLowerCase().contains(
-                        value.toLowerCase(),
-                      ) ??
-                      false) ||
-                  (product.brand?.toLowerCase().contains(value.toLowerCase()) ??
-                      false),
+                  (product.address?.toLowerCase().contains(value.toLowerCase()) ?? false) ||
+                  (product.brand?.toLowerCase().contains(value.toLowerCase()) ?? false),
             )
             .toList(),
       );
     }
   }
 
-
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    fetchWishList(isLoad:true);
+    fetchWishList(isLoad: true);
   }
 }

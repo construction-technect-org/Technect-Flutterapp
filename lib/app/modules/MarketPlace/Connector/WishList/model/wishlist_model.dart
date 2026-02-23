@@ -4,22 +4,25 @@ class AllWishListModel {
   bool? success;
   String? message;
   List<Product>? data;
+  List<String>? wishlistItemIds;
   Pagination? pagination;
 
-  AllWishListModel({this.success, this.message, this.data, this.pagination});
+  AllWishListModel({this.success, this.message, this.data, this.wishlistItemIds, this.pagination});
 
   AllWishListModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     if (json['data'] != null) {
       data = <Product>[];
+      wishlistItemIds = <String>[];
       json['data'].forEach((v) {
         data!.add(Product.fromJson(v));
+        if (v['wishlistItemId'] != null) {
+          wishlistItemIds!.add(v['wishlistItemId'].toString());
+        }
       });
     }
-    pagination = json['pagination'] != null
-        ? Pagination.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? Pagination.fromJson(json['pagination']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -35,7 +38,6 @@ class AllWishListModel {
     return data;
   }
 }
-
 
 class Images {
   String? s3Key;
@@ -68,14 +70,15 @@ class Pagination {
   bool? hasNext;
   bool? hasPrev;
 
-  Pagination(
-      {this.total,
-        this.limit,
-        this.offset,
-        this.currentPage,
-        this.totalPages,
-        this.hasNext,
-        this.hasPrev});
+  Pagination({
+    this.total,
+    this.limit,
+    this.offset,
+    this.currentPage,
+    this.totalPages,
+    this.hasNext,
+    this.hasPrev,
+  });
 
   Pagination.fromJson(Map<String, dynamic> json) {
     total = json['total'];

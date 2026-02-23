@@ -370,24 +370,45 @@ class AppHiveService extends GetxService {
     }
   }
 
-  // ================= GENERIC STORAGE =================
-
   T? read<T>(String key, {T? defaultValue}) {
     try {
       final value = _box.get(key, defaultValue: defaultValue);
       if (value == null) return defaultValue;
 
-      if (value is Map && T.toString().contains('Map<String, dynamic>')) {
-        return Map<String, dynamic>.from(value) as T;
+      if (value is Map) {
+        final typeStr = T.toString();
+        if (typeStr.contains('Map<String, dynamic>')) {
+          return _deepConvertMap(value) as T;
+        }
       }
-      if (value is List && T.toString().contains('List<String>')) {
-        return List<String>.from(value) as T;
+      if (value is List) {
+        final typeStr = T.toString();
+        if (typeStr.contains('List<String>')) {
+          return List<String>.from(value) as T;
+        }
       }
       return value as T?;
     } catch (e) {
       log('Error reading Hive key $key: $e');
       return defaultValue;
     }
+  }
+
+  Map<String, dynamic> _deepConvertMap(Map map) {
+    return map.map((key, value) {
+      return MapEntry(
+        key.toString(),
+        (value is Map) ? _deepConvertMap(value) : (value is List ? _deepConvertList(value) : value),
+      );
+    });
+  }
+
+  List _deepConvertList(List list) {
+    return list.map((value) {
+      return (value is Map)
+          ? _deepConvertMap(value)
+          : (value is List ? _deepConvertList(value) : value);
+    }).toList();
   }
 
   Future<void> write<T>(String key, T value) async {

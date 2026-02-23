@@ -30,7 +30,7 @@ class AddKycService {
 
   Future<PocModel> getPointOfContact(String profileId) async {
     try {
-      final response = await apiManager.get(url: "/${APIConstants.getConnectorProfile}");
+      final response = await apiManager.get(url: "${APIConstants.getConnectorProfile}");
       final PocModel data = PocModel.fromJson(response);
       return data;
     } catch (e) {
