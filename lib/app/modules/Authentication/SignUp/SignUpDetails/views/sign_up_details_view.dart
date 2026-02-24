@@ -50,13 +50,32 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              height: 5,
+              width: 50,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Text(
+              "Sign Up",
+              style: MyTexts.medium16.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 25),
             CommonPhoneField(
-              headerText: "Mobile Number",
+              headerText: "Enter Phone Number",
               style: MyTexts.medium14.copyWith(
                 color: MyColors.gra54,
                 fontFamily: MyTexts.SpaceGrotesk,
               ),
-              isRed: true,
+              // isRed: true,
               controller: controller.mobileNumberController,
               focusNode: FocusNode(),
               isValid: controller.isValid,
@@ -91,10 +110,9 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CommonTextField(
-                    headerText: "Email Address",
-                    hintText: "Enter your email address",
-                    isRed: true,
-
+                    headerText: "Enter Email ID",
+                    hintText: "Enter your email id",
+                    // isRed: true,
                     controller: controller.emailController,
                     keyboardType: TextInputType.emailAddress,
                     autofillHints: const [AutofillHints.email],
@@ -130,6 +148,21 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
                   }),
                 ],
               ),
+            ),
+
+            SizedBox(height: 1.8.h),
+            CommonTextField(
+              headerText: "What's your Designation",
+              hintText: "Enter designation",
+              // isRed: true,
+              controller: controller.designationController,
+              focusNode: FocusNode(),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "Please enter Designation";
+                }
+                return null;
+              },
             ),
 
             SizedBox(height: 1.8.h),

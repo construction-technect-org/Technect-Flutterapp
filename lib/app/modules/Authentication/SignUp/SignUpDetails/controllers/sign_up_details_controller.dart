@@ -24,6 +24,7 @@ class SignUpDetailsController extends GetxController {
   final otpController = TextEditingController();
   final gstController = TextEditingController();
   final aadhaarController = TextEditingController();
+  final designationController = TextEditingController();
   SignUpService signUpService = SignUpService();
   final MainSignUpService _mainSignUpService = Get.find<MainSignUpService>();
   final otpSend = false.obs;

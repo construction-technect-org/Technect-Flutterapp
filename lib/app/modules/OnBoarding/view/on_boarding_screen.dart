@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/otp_verification_screen.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/OnBoarding/controller/on_boarding_controller.dart';
+import 'package:flutter/scheduler.dart';
 
 class OnboardingScreen extends GetView<OnBoardingController> {
   const OnboardingScreen({super.key});
@@ -13,13 +15,18 @@ class OnboardingScreen extends GetView<OnBoardingController> {
       onTap: hideKeyboard,
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(22.0),
-              child: Column(
-                children: [
-                  /* Align(
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+            statusBarColor: Colors.white, // ✅ status bar color
+            statusBarIconBrightness: Brightness.dark, // ✅ icons dark
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 0.0),
+                child: Column(
+                  children: [
+                    /* Align(
                     alignment: Alignment.topRight,
                     child: ElevatedButton(
                       onPressed: () {},
@@ -39,235 +46,307 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                       child: Text("Skip Login", style: MyTexts.regular14),
                     ),
                   ), */
-                  //const Gap(16),
-                  CarouselSlider(
-                    items: [
-                      getCarouselItems(Asset.role1),
-                      getCarouselItems(Asset.houseOwner),
-                      getCarouselItems(Asset.architect),
-                    ],
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      height: 20.h,
-                      //aspectRatio: 11 / 5,
-                      viewportFraction: .7,
-                      autoPlayInterval: const Duration(seconds: 2),
-                      // wait time
-                      autoPlayAnimationDuration: const Duration(
-                        milliseconds: 900,
-                      ),
-                      // slide speed
-                      autoPlayCurve: Curves.easeInOut,
-                      onPageChanged: (index, reason) {},
-                    ),
-                  ),
-                  Gap(1.h),
-                  CarouselSlider(
-                    items: [
-                      getCarouselItems(Asset.design),
-                      getCarouselItems(Asset.contractor),
-                      getCarouselItems(Asset.other),
-                    ],
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      height: 20.h,
-                      // aspectRatio: 11 / 5,
-                      viewportFraction: .7,
-                      autoPlayInterval: const Duration(seconds: 2),
-                      // wait time
-                      autoPlayAnimationDuration: const Duration(
-                        milliseconds: 500,
-                      ),
-                      // slide speed
-                      autoPlayCurve: Curves.easeInOut,
-                      onPageChanged: (index, reason) {},
-                    ),
-                  ),
-                  Gap(1.h),
-                  CarouselSlider(
-                    items: [
-                      getCarouselItems(Asset.role1),
-                      getCarouselItems(Asset.houseOwner),
-                      getCarouselItems(Asset.architect),
-                    ],
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      height: 20.h,
-                      //aspectRatio: 11 / 5,
-                      viewportFraction: .7,
-                      autoPlayInterval: const Duration(seconds: 2),
-                      // wait time
-                      autoPlayAnimationDuration: const Duration(
-                        milliseconds: 700,
-                      ),
-                      // slide speed
-                      autoPlayCurve: Curves.easeInOut,
-                      onPageChanged: (index, reason) {},
-                    ),
-                  ),
-                  Gap(2.h),
-                  Text(
-                    "Connecting Construction Worldwide",
-                    style: MyTexts.medium16,
-                  ),
-                  Gap(1.5.h),
-                  RoundedButton(
-                    buttonName: 'Login',
-                    onTap: () async {
-                      final bool isLocationReady = await controller
-                          .checkLocation();
-                      if (isLocationReady) {
-                        controller.showLoginBottomSheet();
-                      }
-                    },
-                  ),
-                  Gap(1.5.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: MyColors.grayD4,
-                          indent: 10.sw,
-                          thickness: 1,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 2.w),
-                        child: Text(
-                          'Or',
-                          style: MyTexts.medium13.copyWith(
-                            color: MyColors.greySecond,
-                            fontFamily: MyTexts.SpaceGrotesk,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: MyColors.grayD4,
-                          endIndent: 10.sw,
-                          thickness: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Gap(1.5.h),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: MyColors.grayD4),
-                          ),
-                          height: 4.sh,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Image.asset(Asset.googleIcon),
-                          ),
-                        ),
-                        onTap: () {},
-                      ),
-                      SizedBox(width: 10.sw),
-                      GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: MyColors.grayD4),
-                          ),
-                          height: 4.sh,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Image.asset(Asset.facebookIcon),
-                          ),
-                        ),
-                        onTap: () {},
-                      ),
-                    ],
-                  ),
-
-                  Gap(1.5.h),
-                  GestureDetector(
-                    onTap: () async{
-                      //if (Get.isBottomSheetOpen == true) return;
-                      final bool isLocationReady = await controller
-                          .checkLocation();
-                      if (isLocationReady) {
-                        controller.showBottomSheet();
-                      }
-                      //Get.toNamed(Routes.SIGN_UP_DETAILS);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    //const Gap(16),
+                    Stack(
                       children: [
-                        Text(
-                          "Don't have an account? ",
-                          style: MyTexts.regular16.copyWith(
-                            fontFamily: MyTexts.SpaceGrotesk,
+                        /// ✅ Background Map Image — clean show hoga
+                        Positioned.fill(
+                          child: Opacity(
+                            opacity: 0.4,
+                            child: Image.asset(
+                              Asset.locationImage,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                        Text(
-                          "Sign-up",
-                          style: MyTexts.bold16.copyWith(
-                            color: MyColors.primary,
-                            fontFamily: MyTexts.SpaceGrotesk,
-                          ),
-                        ),
+
+                        /// ✅ Carousels on top — no overlay
+                        Column(
+                          children: [
+                            Gap(3.h),
+
+                            const AutoScrollRow(
+                              images: [
+                                Asset.role1,
+                                Asset.houseOwner,
+                                Asset.architect,
+                              ],
+                            ),
+
+                            Gap(1.h),
+
+                            const AutoScrollRow(
+                              images: [
+                                Asset.design,
+                                Asset.contractor,
+                                Asset.other,
+                              ],
+                              reverse: true, // opposite direction
+                            ),
+
+                            Gap(1.h),
+
+                            const AutoScrollRow(
+                              images: [
+                                Asset.role1,
+                                Asset.houseOwner,
+                                Asset.architect,
+                              ],
+                            ),
+
+                            Gap(6.h),
+                          ],
+                        )
                       ],
                     ),
-                  ),
-                  //const Gap(32),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(22.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Connecting Construction Worldwide",
+                            style: MyTexts.medium16,
+                          ),
+                          Gap(1.5.h),
+                          RoundedButton(
+                            buttonName: 'Login',
+                            onTap: () async {
+                              // final bool isLocationReady = await controller
+                              //     .checkLocation();
+                              // if (isLocationReady) {
+                                controller.showLoginBottomSheet();
+                              // }
+                            },
+                          ),
+                          Gap(1.5.h),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: MyColors.grayD4,
+                                  indent: 10.sw,
+                                  thickness: 1,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 2.w),
+                                child: Text(
+                                  'Or',
+                                  style: MyTexts.medium13.copyWith(
+                                    color: MyColors.greySecond,
+                                    fontFamily: MyTexts.SpaceGrotesk,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  color: MyColors.grayD4,
+                                  endIndent: 10.sw,
+                                  thickness: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Gap(1.5.h),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: MyColors.grayD4),
+                                  ),
+                                  height: 4.sh,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Image.asset(Asset.googleIcon),
+                                  ),
+                                ),
+                                onTap: () {},
+                              ),
+                              SizedBox(width: 10.sw),
+                              GestureDetector(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: MyColors.grayD4),
+                                  ),
+                                  height: 4.sh,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Image.asset(Asset.facebookIcon),
+                                  ),
+                                ),
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
+
+                          Gap(1.5.h),
+                          GestureDetector(
+                            onTap: () {
+                              if (Get.isBottomSheetOpen == true) return;
+                              // final bool isLocationReady = await controller
+                              //     .checkLocation();
+                              // if (isLocationReady) {
+                                controller.showBottomSheet();
+                              // }
+
+                              // Get.toNamed(Routes.OTP_Verification);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have an account? ",
+                                  style: MyTexts.regular16.copyWith(
+                                    fontFamily: MyTexts.SpaceGrotesk,
+                                  ),
+                                ),
+                                Text(
+                                  "Sign-up",
+                                  style: MyTexts.bold16.copyWith(
+                                    color: MyColors.primary,
+                                    fontFamily: MyTexts.SpaceGrotesk,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+
+                    //const Gap(32),
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
+          ))
       ),
     );
   }
 
   Widget getCarouselItems(String imagePath) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, right: 8),
+      padding: EdgeInsets.only(top: 1.h, right: 2.w),
       child: Container(
-        width: 50.w,
-        height: 100,
+        width: 35.w,
+        height: 5.h, // ✅ responsive
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: MyColors.gra54EA),
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white.withOpacity(0.9),
+          border: Border.all(color: Colors.grey.withOpacity(0.15)),
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        imagePath,
-                        width: 100,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
+        child: Padding(
+          padding: EdgeInsets.all(0.5.h), // ✅ responsive padding
+          child: Center(
+            child: Image.asset(
+              imagePath,
+              width: 20.w,  // ✅ responsive
+              height: 20.h, // ✅ responsive
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ),
+    );
+  }}
+
+class AutoScrollRow extends StatefulWidget {
+  final List<String> images;
+  final bool reverse;
+
+  const AutoScrollRow({
+    super.key,
+    required this.images,
+    this.reverse = false,
+  });
+
+  @override
+  State<AutoScrollRow> createState() => _AutoScrollRowState();
+}
+
+class _AutoScrollRowState extends State<AutoScrollRow>
+    with SingleTickerProviderStateMixin {
+  late final Ticker _ticker;
+  final ScrollController _controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _ticker = createTicker((_) {
+      if (!_controller.hasClients) return;
+
+      final maxScroll = _controller.position.maxScrollExtent;
+      final minScroll = _controller.position.minScrollExtent;
+
+      double newOffset =
+          _controller.offset + (widget.reverse ? -1.1 : 1.4); // 👈 slow speed
+
+      if (newOffset >= maxScroll) {
+        newOffset = minScroll;
+      } else if (newOffset <= minScroll) {
+        newOffset = maxScroll;
+      }
+
+      _controller.jumpTo(newOffset);
+    });
+
+    _ticker.start();
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 18.h,
+      child: ListView.builder(
+        controller: _controller,
+        scrollDirection: Axis.horizontal,
+        reverse: widget.reverse,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: widget.images.length * 20,
+        itemBuilder: (context, index) {
+          final image =
+          widget.images[index % widget.images.length];
+
+          return  Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Container(
+              width: 30.w,
+              height: 11.h, // 👈 pehle approx 18.h area me tha, ab 5.h kam
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                border: Border.all(color: Colors.grey.withOpacity(0.15)),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(1.h),
+                child: Center(
+                  child: Image.asset(
+                    image,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
-
 /*
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/OnBoarding/controller/on_boarding_controller.dart';
