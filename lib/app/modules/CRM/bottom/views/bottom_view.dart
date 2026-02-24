@@ -233,7 +233,7 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                   gradient: const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.white, Color(0xFFFFFCE5)],
+                    colors: [Colors.white, MyColors.tertiary],
                   ),
                 ),
                 child: Row(

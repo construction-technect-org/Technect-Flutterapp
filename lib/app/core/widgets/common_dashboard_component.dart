@@ -13,111 +13,109 @@ class CommonDashboard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Features", style: MyTexts.extraBold18.copyWith(color: MyColors.black)),
-            const Gap(12),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                // final isTablet = constraints.maxWidth >= 550;
-                // log("Con ${constraints.maxWidth}, $isTablet");
-                // const crossAxisCount = 3;
-                // const spacing = 8.0;
-                //
-                // // 1️⃣ Total spacing
-                // const totalSpacing = spacing * (crossAxisCount - 1);
-                //
-                // // 2️⃣ Item width
-                // final itemWidth =
-                //     (constraints.maxWidth - totalSpacing) / crossAxisCount;
-                //
-                // // 3️⃣ Responsive height (based on width)
-                // final itemHeight = itemWidth * 1.3; // 👈 tweak ratio here
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: MyColors.tertiary,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              child: Column(
+                children: [
+                  _buildRoleBanner(context).paddingSymmetric(horizontal: 32),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Features", style: MyTexts.extraBold18.copyWith(color: MyColors.black)),
+                  const Gap(12),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final double itemWidth = (constraints.maxWidth - (2 * 10)) / 3;
+                      final double itemHeight = itemWidth + 5; // Increased to prevent text overflow
 
-                final double itemWidth = (constraints.maxWidth - (2 * 10)) / 3;
-                final double itemHeight = itemWidth + 10;
-
-                // 4️⃣ Aspect ratio
-
-                //final double itemWidth = (constraints.maxWidth - (2 * 10)) / 3;
-                //final double itemHeight = itemWidth + 10;
-                return GridView.builder(
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: controller.features.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 17,
-                    childAspectRatio: itemWidth / itemHeight,
-                  ),
-                  itemBuilder: (context, index) {
-                    final item = controller.features[index];
-                    return Obx(() {
-                      final isSelected = controller.selectedIndex.value == index;
-                      return BuildFeatureCard(
-                        isSelected: isSelected,
-                        item: item,
-                        //itemWidth: itemWidth,
-                        onTap: () {
-                          if (item["available"] == true) {
-                            final index = controller.features.indexOf(item);
-                            if (controller.selectedIndex.value != index) {
-                              controller.selectedIndex.value = index;
-                              myPref.dashboard.val = item["value"].toString();
-                              controller.onFeatureTap(item["value"].toString());
-                              const Duration(seconds: 1);
-                            }
-
-                            controller.onSecondScreenTap(item["value"].toString());
-                          }
+                      return GridView.builder(
+                        padding: EdgeInsets.zero,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: controller.features.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 20,
+                          childAspectRatio: itemWidth / itemHeight,
+                        ),
+                        itemBuilder: (context, index) {
+                          final item = controller.features[index];
+                          return Obx(() {
+                            final isSelected = controller.selectedIndex.value == index;
+                            return BuildFeatureCard(
+                              isSelected: isSelected,
+                              item: item,
+                              onTap: () {
+                                if (item["available"] == true) {
+                                  final index = controller.features.indexOf(item);
+                                  if (controller.selectedIndex.value != index) {
+                                    controller.selectedIndex.value = index;
+                                    myPref.dashboard.val = item["value"].toString();
+                                    controller.onFeatureTap(item["value"].toString());
+                                  }
+                                  controller.onSecondScreenTap(item["value"].toString());
+                                }
+                              },
+                            );
+                          });
                         },
                       );
-                    });
-                  },
-                );
-              },
-            ),
-
-            //SizedBox(height: 1.h),
-            /*Text(
-              "Statics",
-              style: MyTexts.bold18.copyWith(color: MyColors.black),
-            ), */
-            SizedBox(height: 2.h),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildStatCard(
-                    "Merchant",
-                    commonController
-                            .profileData
-                            .value
-                            .data
-                            ?.statistics
-                            ?.totalMerchantProfilesCreated
-                            ?.toString() ??
-                        "0",
-                    "Verified",
-                    Asset.mer,
+                    },
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildStatCard(
-                    "Connector",
-                    commonController
-                            .profileData
-                            .value
-                            .data
-                            ?.statistics
-                            ?.totalConnectorProfilesCreated
-                            ?.toString() ??
-                        "0",
-                    "Active",
-                    Asset.conn,
-                  ),
-                ),
-              ],
+                  /* SizedBox(height: 2.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildStatCard(
+                          "Merchant",
+                          commonController
+                                  .profileData
+                                  .value
+                                  .data
+                                  ?.statistics
+                                  ?.totalMerchantProfilesCreated
+                                  ?.toString() ??
+                              "0",
+                          "Verified",
+                          Asset.mer,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _buildStatCard(
+                          "Connector",
+                          commonController
+                                  .profileData
+                                  .value
+                                  .data
+                                  ?.statistics
+                                  ?.totalConnectorProfilesCreated
+                                  ?.toString() ??
+                              "0",
+                          "Active",
+                          Asset.conn,
+                        ),
+                      ),
+                    ],
+                  ), */
+                ],
+              ),
             ),
           ],
         ),
@@ -125,7 +123,93 @@ class CommonDashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value, String type, String icon) {
+  Widget _buildRoleBanner(BuildContext context) {
+    final role = myPref.getRole();
+    final isConnector = role == "connector";
+    final title = isConnector ? "Connectors" : "Merchants";
+    final illustration = isConnector ? Asset.conn : Asset.mer;
+
+    return Container(
+      width: double.infinity,
+      height: 100, // Slightly increased for comfort
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+          bottomLeft: Radius.circular(36),
+          bottomRight: Radius.circular(36),
+        ),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF3466D1), MyColors.primary],
+        ),
+        image: DecorationImage(image: AssetImage(Asset.maps), fit: BoxFit.cover, opacity: 0.15),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(title, style: MyTexts.bold20.copyWith(color: MyColors.white)),
+                Text(
+                  "Connect. Collaborate. Succeed",
+                  style: MyTexts.medium14.copyWith(color: MyColors.white.withAlpha(180)),
+                ),
+                // const Spacer(),
+                SizedBox(height: 0.7.h),
+                Text(
+                  "100+",
+                  style: MyTexts.bold24.copyWith(
+                    color: const Color.fromARGB(255, 250, 240, 143),
+                    fontSize: 20.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 24,
+            bottom: 32,
+            top: 16,
+            child: Image.asset(illustration, fit: BoxFit.contain),
+          ),
+          Positioned(
+            bottom: 12,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 12,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: MyColors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Container(
+                  width: 20,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: MyColors.white,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /* Widget _buildStatCard(String title, String value, String type, String icon) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double screenWidth = MediaQuery.of(context).size.width;
@@ -210,7 +294,7 @@ class CommonDashboard extends StatelessWidget {
         );
       },
     );
-  }
+  } */
 }
 
 class CommonDashboardController extends GetxController {
@@ -254,10 +338,13 @@ class CommonDashboardController extends GetxController {
     switch (value) {
       case "marketplace":
         Get.offAllNamed(Routes.MAIN);
+        break;
       case "crm":
         Get.offAllNamed(Routes.CRM_MAIN);
+        break;
       default:
         Get.snackbar("Coming Soon", "This feature is not yet available");
+        break;
     }
   }
 
@@ -274,10 +361,13 @@ class CommonDashboardController extends GetxController {
       case "marketplace":
         Get.lazyPut(() => BottomController());
         Get.find<BottomController>().currentIndex.value = 1;
+        break;
       case "crm":
         Get.find<CommonController>().switchToCrmMain();
+        break;
       default:
         Get.snackbar("Coming Soon", "This feature is not yet available");
+        break;
     }
   }
 }
@@ -305,12 +395,20 @@ class BuildFeatureCard extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: isSelected ? BoxBorder.all(color: MyColors.primary) : null,
+              borderRadius: BorderRadius.circular(16),
+              border: isSelected ? Border.all(color: MyColors.primary) : null,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
               gradient: const LinearGradient(
-                begin: AlignmentGeometry.topCenter,
-                end: AlignmentGeometry.bottomCenter,
-                colors: [Color(0xFFFFFCDF), Color(0xFFFFFFFF)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [MyColors.tertiary, MyColors.tertiary],
+                // colors: [MyColors.tertiary, Color(0xFFFFFFFF)],
               ),
             ),
             child: Column(
@@ -337,12 +435,17 @@ class BuildFeatureCard extends StatelessWidget {
                     ),
                   ), */
                 const Spacer(),
-                Image.asset(item['icon'].toString(), height: 6.h),
+                Image.asset(item['icon'].toString(), height: 5.h),
                 const SizedBox(height: 6),
-                Text(
-                  item["title"].toString(),
-                  textAlign: TextAlign.center,
-                  style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    item["title"].toString(),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                  ),
                 ),
                 const Spacer(),
               ],

@@ -17,6 +17,7 @@ class Asset {
   static const String moreBg = '${bg}moreBg.png';
   static const String moreIBg = '${bg}moreIBg.png';
   static const String exploreBg = '${bg}exploreBg.png';
+  static const String maps = '${bg}maps.png';
   static const String rConnector = '${png}rConnector.png';
   static const String rMerchant = '${png}rMerchant.png';
 
@@ -168,10 +169,8 @@ class Asset {
 }
 
 class Constants {
-  static const String privacyPolicy =
-      'https://constructiontechnect.com/privacy-policy';
-  static const String termsCondition =
-      'https://constructiontechnect.com/terms-and-conditions';
+  static const String privacyPolicy = 'https://constructiontechnect.com/privacy-policy';
+  static const String termsCondition = 'https://constructiontechnect.com/terms-and-conditions';
   static const String aboutUS = 'https://constructiontechnect.com/about-us';
   static const String tutorial = 'https://www.youtube.com/watch?v=QI8dFfsZoC0';
 }

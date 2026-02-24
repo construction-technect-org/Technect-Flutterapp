@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
@@ -93,296 +92,107 @@ class BottomBarView extends GetView<BottomController> {
   }
 
   Widget _buildBottomBar() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      clipBehavior: Clip.none,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                //margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  gradient: const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.white, Color(0xFFFFFCE5)],
+        CustomPaint(
+          size: Size(100.w, 100),
+          painter: BNBCustomPainter(),
+          child: Container(
+            height: 100,
+            padding: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _bottomBar(
+                  Asset.home,
+                  Asset.home1,
+                  'Home',
+                  index: 0,
+                  onTap: () => controller.currentIndex.value = 0,
+                ),
+                _bottomBar(
+                  Asset.connection,
+                  Asset.connection1,
+                  'Connect',
+                  index: 2,
+                  onTap: () => controller.currentIndex.value = 2,
+                ),
+                const SizedBox(width: 40),
+                _bottomBar(
+                  Asset.setting,
+                  Asset.setting,
+                  'Settings',
+                  index: 3, // Menu/Setting index
+                  onTap: () => controller.currentIndex.value = 3,
+                ),
+                _bottomBar(
+                  Asset.person,
+                  Asset.person,
+                  'Profile',
+                  index: 4, // Profile index (need to add to controller if not exists)
+                  onTap: () {
+                    // Logic for profile tap
+                    Get.toNamed(Routes.PROFILE);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 12,
+          child: GestureDetector(
+            onTap: () async {
+              await commonController.fetchProfileDataM();
+              Get.put<SwitchAccountController>(SwitchAccountController());
+              showSwitchAccountBottomSheet();
+            },
+            child: Container(
+              width: 65,
+              height: 115,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1B4F92), Color(0xFF1B2F62)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                boxShadow: [
+                  BoxShadow(color: Colors.blue.withOpacity(0.3), spreadRadius: 4, blurRadius: 8),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.autorenew, color: Colors.white, size: 20),
+                  Text(
+                    'Switch',
+                    style: MyTexts.medium10.copyWith(color: Colors.white, fontSize: 8),
                   ),
-                  //color: Colors.white,
-                  /*boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x19000000),
-                      blurRadius: 30,
-                      offset: Offset(5, 0),
-                    ),
-                  ], */
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    bottomBar(
-                      Asset.home,
-                      Asset.home1,
-                      '',
-                      onTap: () {
-                        controller.currentIndex.value = 0;
-                      },
-                      index: 0,
-                    ),
-                    //Gap(5.5.w),
-                    bottomBar(
-                      Asset.category,
-                      Asset.category1,
-                      '',
-                      onTap: () {
-                        controller.currentIndex.value = 1;
-                      },
-                      index: 1,
-                    ),
-                    //Gap(5.5.w),
-                    if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
-                      bottomBar(
-                        Asset.add,
-                        Asset.add,
-                        myPref.role.val != "connector" ? "" : '',
-                        onTap: onSellTap,
-                      ),
-                    //Gap(5.5.w),
-                    bottomBar(
-                      Asset.connection,
-                      Asset.connection1,
-                      '',
-                      onTap: () {
-                        controller.currentIndex.value = 2;
-                      },
-                      index: 2,
-                    ),
-                    //Gap(5.5.w),
-                    bottomBar(
-                      Asset.more,
-                      Asset.more1,
-                      '',
-                      onTap: () {
-                        controller.currentIndex.value = 3;
-                      },
-                      index: 3,
-                    ),
-                  ],
-                ),
+                ],
               ),
             ),
-            if (myPref.getIsTeamLogin() == false)
-              GestureDetector(
-                onTap: () async {
-                  await commonController.fetchProfileDataM();
-
-                  Get.put<SwitchAccountController>(SwitchAccountController());
-                  showSwitchAccountBottomSheet();
-                  // Get.to(() => const ExploreView());
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 20, right: 10),
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF1B2F62),
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                  ),
-                  child: Column(
-                    children: [
-                      const Icon(Icons.autorenew, color: Colors.white, size: 30),
-                      Text(
-                        myPref.getRole() == "partner" ? "Merchant" : "Connector",
-                        style: MyTexts.medium12.copyWith(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
+          ),
         ),
       ],
     );
   }
 
-  void onSellTap() {
-    log("commonController.hasProfileComplete.value: ${commonController.hasProfileComplete.value}");
-    log("marketPlace.value: ${Get.find<CommonController>().marketPlace.value}");
-    if (Get.find<CommonController>().marketPlace.value == 0) {
-      if (myPref.role.val != "connector") {
-        if (!commonController.hasProfileComplete.value) {
-          _showProfileIncompleteDialog();
-        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
-          _showAddAddressDialog();
-        } else {
-          _showProductOptions();
-        }
-      } else {
-        Get.toNamed(Routes.ADD_REQUIREMENT);
-      }
-    } else if (Get.find<CommonController>().marketPlace.value == 1) {
-      if (myPref.role.val != "connector") {
-        if (!commonController.hasProfileComplete.value) {
-          _showProfileIncompleteDialog();
-        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
-          _showAddAddressDialog();
-        } else {
-          _showProductOptions(); // Fallback to product options or some other logic if needed?
-          // Actually, let's just leave it empty or show a dialog for now if service options are not ready.
-        }
-      } else {
-        Get.toNamed(Routes.ADD_SERVICE_REQUIREMENT);
-      }
-    } else {
-      _showComingSoonSheet();
-    }
-  }
-
-  void _showProfileIncompleteDialog() {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          "Complete Your Profile",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        content: const Text(
-          "To add a product, please complete your business profile first.",
-          style: TextStyle(fontSize: 14),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              Get.toNamed(Routes.PROFILE);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            child: const Text("Complete Now"),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
-  }
-
-  void _showAddAddressDialog() {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          "Add Your Address",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        content: const Text(
-          "To add a product, please add your address first.",
-          style: TextStyle(fontSize: 14),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              Get.toNamed(Routes.MANUFACTURER_ADDRESS);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            child: const Text("Add Address"),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
-  }
-
-  void _showProductOptions() {
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sheetHandle(),
-            const Text(
-              "Select an Option",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            /* ListTile(
-              leading: SvgPicture.asset(Asset.add),
-              title: const Text("Add New Product"),
-              onTap: () {
-                Get.back();
-                Get.toNamed(Routes.ADD_PRODUCT);
-              },
-            ), */
-            //const Divider(),
-            ListTile(
-              leading: SvgPicture.asset(Asset.inventory),
-              title: const Text("Manage Products"),
-              onTap: () {
-                Get.back();
-                Get.toNamed(Routes.INVENTORY);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showComingSoonSheet() {
-    showModalBottomSheet(
-      context: Get.context!,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return Container(
-          height: 316,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Center(child: Image.asset(Asset.comingSoon, height: 316, fit: BoxFit.cover)),
-        );
-      },
-    );
-  }
-
-  Widget _sheetHandle() {
-    return Center(
-      child: Container(
-        width: 50,
-        height: 5,
-        margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(5)),
-      ),
-    );
-  }
-
-  Widget bottomBar(String icon, String icon2, String name, {void Function()? onTap, int? index}) {
+  Widget _bottomBar(
+    String icon,
+    String icon2,
+    String name, {
+    required int index,
+    void Function()? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Obx(
@@ -390,12 +200,98 @@ class BottomBarView extends GetView<BottomController> {
               controller.currentIndex.value == index ? icon2 : icon,
               height: 24,
               width: 24,
+              colorFilter: ColorFilter.mode(
+                controller.currentIndex.value == index ? Color(0xFF1B2F62) : Color(0xFF555555),
+                BlendMode.srcIn,
+              ),
             ),
           ),
-          Text(name, style: MyTexts.medium14),
+          const SizedBox(height: 4),
+          Text(
+            name,
+            style: MyTexts.medium13.copyWith(
+              color: controller.currentIndex.value == index ? Color(0xFF1B2F62) : Color(0xFF555555),
+              fontWeight: controller.currentIndex.value == index
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+            ),
+          ),
         ],
       ),
     );
+  }
+}
+
+class BNBCustomPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = MyColors.tertiary
+      ..style = PaintingStyle.fill;
+
+    double cornerRadius = 40.0;
+    double notchWidth = 80.0;
+    double topY = 25.0;
+
+    Path path = Path();
+    path.moveTo(0, size.height);
+    path.lineTo(0, topY + cornerRadius);
+    path.quadraticBezierTo(0, topY, cornerRadius, topY); // Top-left rounded edge
+
+    path.lineTo(size.width / 2 - notchWidth / 2 - 12, topY);
+
+    // Smooth transition into the notch
+    path.quadraticBezierTo(
+      size.width / 2 - notchWidth / 2,
+      topY,
+      size.width / 2 - notchWidth / 2,
+      topY + 8,
+    );
+
+    // The notch circle cutout
+    path.arcToPoint(
+      Offset(size.width / 2 + notchWidth / 2, topY + 8),
+      radius: Radius.circular(notchWidth / 2.2),
+      clockwise: false,
+    );
+
+    // Smooth transition out of the notch
+    path.quadraticBezierTo(
+      size.width / 2 + notchWidth / 2,
+      topY,
+      size.width / 2 + notchWidth / 2 + 12,
+      topY,
+    );
+
+    path.lineTo(size.width - cornerRadius, topY);
+    path.quadraticBezierTo(
+      size.width,
+      topY,
+      size.width,
+      topY + cornerRadius,
+    ); // Top-right rounded edge
+
+    path.lineTo(size.width, size.height);
+
+    // Bottom edge with center curve
+    path.lineTo(size.width / 2 + notchWidth / 2 + 20, size.height);
+    path.quadraticBezierTo(
+      size.width / 2,
+      size.height + 15,
+      size.width / 2 - notchWidth / 2 - 20,
+      size.height,
+    );
+
+    path.lineTo(0, size.height);
+    path.close();
+
+    canvas.drawShadow(path, Colors.black.withOpacity(0.5), 8, true);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }
 

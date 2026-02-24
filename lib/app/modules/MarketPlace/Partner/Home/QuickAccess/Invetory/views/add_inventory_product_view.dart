@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/controllers/add_inventory_controller.dart';
@@ -13,10 +14,7 @@ class AddInventoryProductView extends GetView<AddInventoryController> {
     return LoaderWrapper(
       isLoading: controller.isLoading,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("Add Material Product", style: MyTexts.medium18),
-          centerTitle: true,
-        ),
+        appBar: CommonAppBar(title: Text("Add Material Product", style: MyTexts.medium18)),
         body: Obx(
           () => SingleChildScrollView(
             padding: const EdgeInsets.all(16),

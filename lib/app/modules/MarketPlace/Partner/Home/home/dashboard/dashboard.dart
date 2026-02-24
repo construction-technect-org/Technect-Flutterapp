@@ -16,13 +16,14 @@ class Dashboard extends StatelessWidget {
         onTap: hideKeyboard,
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(55),
-                Row(
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                color: MyColors.tertiary,
+                padding: const EdgeInsets.only(top: 55, bottom: 24),
+                child: Row(
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -196,11 +197,10 @@ class Dashboard extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-                const Gap(24),
-                CommonDashboard(),
-              ],
-            ),
+                ).paddingSymmetric(horizontal: 16),
+              ),
+              CommonDashboard(),
+            ],
           ),
         ),
       ),

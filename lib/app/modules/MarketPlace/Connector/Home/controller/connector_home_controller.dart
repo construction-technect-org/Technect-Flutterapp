@@ -40,7 +40,7 @@ class ConnectorHomeController extends GetxController {
     // fetchCategoryServiceHierarchy();
     if (myPref.getToken().isNotEmpty) {
       Future.delayed(const Duration(seconds: 1), () {
-        if (myPref.role.val == "connector") {
+        if (myPref.role.val == "connector" || myPref.role.val == "partner") {
           fetchConnectorModule();
         }
       });

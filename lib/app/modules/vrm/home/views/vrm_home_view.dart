@@ -15,22 +15,17 @@ class VRMHomeView extends StatelessWidget {
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
-          body: Stack(
+          backgroundColor: Colors.white,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
-                ),
+                width: double.infinity,
+                color: MyColors.tertiary,
+                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, bottom: 16),
+                child: VrmHeader().paddingSymmetric(horizontal: 16),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: MediaQuery.of(context).padding.top + 10),
-                  VrmHeader(),
-                  const Gap(16),
-                  CommonDashboard(),
-                ],
-              ).paddingSymmetric(horizontal: 16),
+              CommonDashboard(),
             ],
           ),
         ),

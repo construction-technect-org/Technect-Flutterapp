@@ -25,14 +25,8 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
     return OfflineBuilder(
       child: _buildUpgradeAlert(context),
       connectivityBuilder:
-          (
-            BuildContext context,
-            List<ConnectivityResult> connectivity,
-            Widget child,
-          ) {
-            final bool connected = !connectivity.contains(
-              ConnectivityResult.none,
-            );
+          (BuildContext context, List<ConnectivityResult> connectivity, Widget child) {
+            final bool connected = !connectivity.contains(ConnectivityResult.none);
 
             if (!connected && !controller.isBottomSheetOpen.value) {
               controller.isBottomSheetOpen.value = true;
@@ -44,12 +38,9 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
                   isScrollControlled: true,
                   backgroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16.0),
-                    ),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
                   ),
-                  builder: (_) =>
-                      PopScope(canPop: false, child: NoInternetBottomSheet()),
+                  builder: (_) => PopScope(canPop: false, child: NoInternetBottomSheet()),
                 ).whenComplete(() {
                   controller.isBottomSheetOpen.value = false;
                 });
@@ -97,10 +88,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
     }
   }
 
-  void _showCrmVrmSwitchSheet(
-    BuildContext context,
-    CommonController commonController,
-  ) {
+  void _showCrmVrmSwitchSheet(BuildContext context, CommonController commonController) {
     Get.bottomSheet(
       myPref.getRole() != "connector"
           ? Container(
@@ -135,9 +123,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
                     asset: Asset.contractor,
                     onTap: () {
                       Get.back();
-                      Get.put<SwitchAccountController>(
-                        SwitchAccountController(),
-                      ).switchAccount();
+                      Get.put<SwitchAccountController>(SwitchAccountController()).switchAccount();
                       log("what123 ${myPref.getRole()}");
                       Get.offAllNamed(Routes.VRM_MAIN);
                     },
@@ -178,9 +164,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
                     asset: Asset.role1,
                     onTap: () {
                       Get.back();
-                      Get.put<SwitchAccountController>(
-                        SwitchAccountController(),
-                      ).switchAccount();
+                      Get.put<SwitchAccountController>(SwitchAccountController()).switchAccount();
                       log("what ${myPref.getRole()}");
                       Get.offAllNamed(Routes.CRM_MAIN);
                     },
@@ -223,15 +207,9 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
-                  ),
+                  Text(title, style: MyTexts.bold16.copyWith(color: MyColors.fontBlack)),
                   const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: MyTexts.regular12.copyWith(color: MyColors.grey),
-                  ),
+                  Text(subtitle, style: MyTexts.regular12.copyWith(color: MyColors.grey)),
                 ],
               ),
             ),
@@ -252,17 +230,14 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.white,
                   gradient: const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.white, Color(0xFFFFFCE5)],
+                    colors: [Colors.white, MyColors.tertiary],
                   ),
                 ),
                 child: Row(
@@ -320,9 +295,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
             if (myPref.getIsTeamLogin() == false)
               GestureDetector(
                 onTap: () {
-                  Get.put<SwitchVRMAccountController>(
-                    SwitchVRMAccountController(),
-                  );
+                  Get.put<SwitchVRMAccountController>(SwitchVRMAccountController());
                   showSwitchVRMAccountBottomSheet();
                   //_showCrmVrmSwitchSheet(context, commonController);
                 },
@@ -335,16 +308,10 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
                   ),
                   child: Column(
                     children: [
-                      const Icon(
-                        Icons.autorenew,
-                        color: Colors.white,
-                        size: 30,
-                      ),
+                      const Icon(Icons.autorenew, color: Colors.white, size: 30),
 
                       Text(
-                        myPref.getRole() == "connector"
-                            ? "Connector"
-                            : "Merchant",
+                        myPref.getRole() == "connector" ? "Connector" : "Merchant",
                         style: MyTexts.medium12.copyWith(color: Colors.white),
                       ),
                     ],
@@ -357,13 +324,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
     );
   }
 
-  Widget bottomBar(
-    String icon,
-    String icon2,
-    String name, {
-    void Function()? onTap,
-    int? index,
-  }) {
+  Widget bottomBar(String icon, String icon2, String name, {void Function()? onTap, int? index}) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
