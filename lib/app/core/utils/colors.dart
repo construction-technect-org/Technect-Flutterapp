@@ -105,6 +105,7 @@ class MyColors {
   static const Color rejectBtn = Color(0xFFFCECE9);
   static const Color grayCD = Color(0xFFCDCDCD);
   static const Color blueBorder = Color(0xFF0B1429);
+  static const Color tertiary = Color.fromARGB(255, 254, 249, 189);
 
   // Text field colors
   static const Color textFieldBorder = Color(0xFFA0A0A0);
