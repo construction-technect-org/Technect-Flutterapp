@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
-import 'package:construction_technect/app/core/utils/imports.dart' hide Category;
+import 'package:construction_technect/app/core/utils/imports.dart'
+    hide Category;
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
@@ -31,7 +32,10 @@ class ConnectorHomeView extends StatelessWidget {
         width: width,
         decoration: const BoxDecoration(color: MyColors.grayF7),
         child: const Center(
-          child: CircularProgressIndicator(strokeWidth: 2, color: MyColors.primary),
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: MyColors.primary,
+          ),
         ),
       ),
       errorWidget: (context, url, error) => SizedBox(
@@ -41,7 +45,12 @@ class ConnectorHomeView extends StatelessWidget {
           height: height,
           width: width,
           // decoration: const BoxDecoration(color: MyColors.grayD4, shape: BoxShape.circle),
-          child: Image.asset(Asset.appLogo, height: height, width: width, fit: BoxFit.contain),
+          child: Image.asset(
+            Asset.appLogo,
+            height: height,
+            width: width,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );
@@ -55,12 +64,15 @@ class ConnectorHomeView extends StatelessWidget {
         behavior: HitTestBehavior.translucent,
         onTap: () => hideKeyboard(),
         child: Scaffold(
-          backgroundColor: MyColors.white,
+          backgroundColor: MyColors.lightWhite,
           body: Stack(
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
+                  image: DecorationImage(
+                    image: AssetImage(Asset.categoryBg),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Positioned.fill(
@@ -94,7 +106,13 @@ class ConnectorHomeView extends StatelessWidget {
                                             ?.teamMember
                                             ?.profilePhoto ??
                                         ''
-                                  : commonController.profileData.value.data?.user?.image ?? '';
+                                  : commonController
+                                            .profileData
+                                            .value
+                                            .data
+                                            ?.user
+                                            ?.image ??
+                                        '';
 
                               if (profileImage.isEmpty) {
                                 return const Icon(
@@ -106,7 +124,8 @@ class ConnectorHomeView extends StatelessWidget {
 
                               return ClipOval(
                                 child: getImageView(
-                                  finalUrl: "${APIConstants.bucketUrl}$profileImage",
+                                  finalUrl:
+                                      "${APIConstants.bucketUrl}$profileImage",
                                   fit: BoxFit.cover,
                                   height: 48,
                                   width: 48,
@@ -121,7 +140,8 @@ class ConnectorHomeView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Obx(() {
-                                  final userProfile = commonController.profileDataM.value;
+                                  final userProfile =
+                                      commonController.profileDataM.value;
                                   return RichText(
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -146,9 +166,13 @@ class ConnectorHomeView extends StatelessWidget {
                                       ? null
                                       : () {
                                           if (myPref.role.val == "partner") {
-                                            Get.toNamed(Routes.MANUFACTURER_ADDRESS);
+                                            Get.toNamed(
+                                              Routes.MANUFACTURER_ADDRESS,
+                                            );
                                           } else {
-                                            Get.toNamed(Routes.DELIVERY_LOCATION);
+                                            Get.toNamed(
+                                              Routes.DELIVERY_LOCATION,
+                                            );
                                           }
                                         },
                                   child: Row(
@@ -167,7 +191,9 @@ class ConnectorHomeView extends StatelessWidget {
                                             maxLines: 1,
                                             text: TextSpan(
                                               style: MyTexts.medium14.copyWith(
-                                                color: MyColors.custom('545454'),
+                                                color: MyColors.custom(
+                                                  '545454',
+                                                ),
                                               ),
                                               children: [
                                                 TextSpan(
@@ -176,9 +202,13 @@ class ConnectorHomeView extends StatelessWidget {
                                                       "Lng: ${commonController.currentPosition.value.longitude}",
                                                 ),
                                                 const WidgetSpan(
-                                                  alignment: PlaceholderAlignment.middle,
+                                                  alignment:
+                                                      PlaceholderAlignment
+                                                          .middle,
                                                   child: Padding(
-                                                    padding: EdgeInsets.only(left: 4),
+                                                    padding: EdgeInsets.only(
+                                                      left: 4,
+                                                    ),
                                                     child: Icon(
                                                       Icons.keyboard_arrow_down,
                                                       size: 16,
@@ -225,14 +255,19 @@ class ConnectorHomeView extends StatelessWidget {
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                border: Border.all(color: MyColors.custom('EAEAEA')),
+                                border: Border.all(
+                                  color: MyColors.custom('EAEAEA'),
+                                ),
                                 shape: BoxShape.circle,
                               ),
                               child: SvgPicture.asset(
                                 Asset.notification,
                                 width: 24,
                                 height: 24,
-                                colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                                colorFilter: ColorFilter.mode(
+                                  MyColors.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ),
@@ -245,14 +280,19 @@ class ConnectorHomeView extends StatelessWidget {
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                border: Border.all(color: MyColors.custom('EAEAEA')),
+                                border: Border.all(
+                                  color: MyColors.custom('EAEAEA'),
+                                ),
                                 shape: BoxShape.circle,
                               ),
                               child: SvgPicture.asset(
                                 Asset.info,
                                 width: 24,
                                 height: 24,
-                                colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                                colorFilter: ColorFilter.mode(
+                                  MyColors.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ),
@@ -265,14 +305,19 @@ class ConnectorHomeView extends StatelessWidget {
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                border: Border.all(color: MyColors.custom('EAEAEA')),
+                                border: Border.all(
+                                  color: MyColors.custom('EAEAEA'),
+                                ),
                                 shape: BoxShape.circle,
                               ),
                               child: SvgPicture.asset(
                                 Asset.chat,
                                 width: 24,
                                 height: 24,
-                                colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                                colorFilter: ColorFilter.mode(
+                                  MyColors.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ),
@@ -331,24 +376,38 @@ class ConnectorHomeView extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: List.generate(
-                              controller.connectorModuleData.value.data?.modules?.length ?? 0,
+                              controller
+                                      .connectorModuleData
+                                      .value
+                                      .data
+                                      ?.modules
+                                      ?.length ??
+                                  0,
                               (index) {
-                                final module =
-                                    controller.connectorModuleData.value.data?.modules?[index];
+                                final module = controller
+                                    .connectorModuleData
+                                    .value
+                                    .data
+                                    ?.modules?[index];
 
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 12),
                                   child: tabBar(
                                     onTap: () async {
                                       hideKeyboard();
-                                      Get.printInfo(info: '✅ Module Name : ${module?.name}');
-                                      await controller.fetchMainCategory(module?.id);
+                                      Get.printInfo(
+                                        info: '✅ Module Name : ${module?.name}',
+                                      );
+                                      await controller.fetchMainCategory(
+                                        module?.id,
+                                      );
                                       controller.marketPlace.value = index;
                                     },
-                                    icon: _getIconFromModule(module),
+                                    iconUrl: module?.image?.url,
                                     // explained below
                                     name: module?.name ?? "-",
-                                    isMarketPlace: controller.marketPlace.value == index,
+                                    isMarketPlace:
+                                        controller.marketPlace.value == index,
                                   ),
                                 );
                               },
@@ -357,125 +416,9 @@ class ConnectorHomeView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    //         () => SingleChildScrollView(
-                    //       scrollDirection: Axis.horizontal,
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         mainAxisSize: MainAxisSize.min,
-                    //         children: [
-                    //           tabBar(
-                    //             onTap: () {
-                    //               hideKeyboard();
-                    //               Get.find<CommonController>().marketPlace.value =
-                    //               0;
-                    //             },
-                    //             icon: Asset.MM,
-                    //             name: 'Material',
-                    //             isMarketPlace:
-                    //             Get.find<CommonController>()
-                    //                 .marketPlace
-                    //                 .value ==
-                    //                 0,
-                    //           ),
-                    //           const Gap(12),
-                    //           tabBar(
-                    //             onTap: () {
-                    //               hideKeyboard();
-                    //               Get.find<CommonController>().marketPlace.value =
-                    //               1;
-                    //             },
-                    //             icon: Asset.CM,
-                    //             name: 'Construction',
-                    //             isMarketPlace:
-                    //             Get.find<CommonController>()
-                    //                 .marketPlace
-                    //                 .value ==
-                    //                 1,
-                    //           ),
-                    //           const Gap(12),
-                    //           tabBar(
-                    //             onTap: () {
-                    //               hideKeyboard();
-                    //               Get.find<CommonController>().marketPlace.value =
-                    //               2;
-                    //             },
-                    //             icon: Asset.design1,
-                    //             name: 'Design',
-                    //             isMarketPlace:
-                    //             Get.find<CommonController>()
-                    //                 .marketPlace
-                    //                 .value ==
-                    //                 2,
-                    //           ),
-                    //           const Gap(12),
-                    //           tabBar(
-                    //             onTap: () {
-                    //               hideKeyboard();
-                    //               Get.find<CommonController>().marketPlace.value =
-                    //               3;
-                    //             },
-                    //             icon: Asset.fleet,
-                    //             name: 'Fleet',
-                    //             isMarketPlace:
-                    //             Get.find<CommonController>()
-                    //                 .marketPlace
-                    //                 .value ==
-                    //                 3,
-                    //           ),
-                    //           const Gap(12),
-                    //           tabBar(
-                    //             onTap: () {
-                    //               hideKeyboard();
-                    //               Get.find<CommonController>().marketPlace.value =
-                    //               4;
-                    //             },
-                    //             icon: Asset.TEM,
-                    //             name: 'Tools',
-                    //             isMarketPlace:
-                    //             Get.find<CommonController>()
-                    //                 .marketPlace
-                    //                 .value ==
-                    //                 4,
-                    //           ),
-                    //           const Gap(12),
-                    //           tabBar(
-                    //             onTap: () {
-                    //               hideKeyboard();
-                    //               Get.find<CommonController>().marketPlace.value =
-                    //               5;
-                    //             },
-                    //             icon: Asset.equipment,
-                    //             name: 'Equipment',
-                    //             isMarketPlace:
-                    //             Get.find<CommonController>()
-                    //                 .marketPlace
-                    //                 .value ==
-                    //                 5,
-                    //           ),
-                    //           const Gap(12),
-                    //           tabBar(
-                    //             onTap: () {
-                    //               hideKeyboard();
-                    //               Get.find<CommonController>().marketPlace.value =
-                    //               6;
-                    //             },
-                    //             icon: Asset.ppe,
-                    //             name: 'PPE',
-                    //             isMarketPlace:
-                    //             Get.find<CommonController>()
-                    //                 .marketPlace
-                    //                 .value ==
-                    //                 6,
-                    //           ),
-                    //           const Gap(12),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    const Gap(24),
 
-                    //const Gap(10),
+                    // Divider(color: Colors.red, height: 2),
+                    const Gap(10),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Padding(
@@ -483,97 +426,145 @@ class ConnectorHomeView extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 8, 16, 0),
-                                    child: Container(
-                                      width: 70.w,
-
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(50),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: MyColors.grayEA.withValues(alpha: 0.32),
-                                            blurRadius: 4,
-                                          ),
-                                        ],
-                                      ),
-                                      child: CommonTextField(
-                                        onChange: (value) {
-                                          //controller.onSearchChanged(value ?? "");
-                                        },
-                                        borderRadius: 50,
-                                        hintText: 'Search',
-                                        prefixIcon: SvgPicture.asset(
-                                          Asset.searchIcon,
-                                          height: 16,
-                                          width: 16,
-                                        ),
-                                        //controller: controller.searchController,
-                                        /*suffixIcon: Obx(
-                                  () => controller.searchQuery.value.isNotEmpty
-                                      ? GestureDetector(
-                                          onTap: controller.clearSearch,
-                                          child: const Icon(
-                                            Icons.clear,
-                                            color: MyColors.gray54,
-                                          ),
-                                        )
-                                      : const SizedBox.shrink(),
-                                ), */
-                                      ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 8, 16, 0),
+                                child: Container(
+                                  width: 88.w,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50),
+                                    // boxShadow: [
+                                    //   BoxShadow(
+                                    //     color: MyColors.grayEA.withValues(
+                                    //         alpha: 0.32),
+                                    //     blurRadius: 4,
+                                    //   ),
+                                    // ],
+                                  ),
+                                  child: CommonTextField(
+                                    onChange: (value) {},
+                                    borderRadius: 50,
+                                    hintText: 'Search for',
+                                    prefixIcon: SvgPicture.asset(
+                                      Asset.searchIcon,
+                                      height: 16,
+                                      width: 16,
+                                    ),
+                                    suffixIcon: const Icon(
+                                      Icons.filter_alt,
+                                      size: 20,
                                     ),
                                   ),
-                                  const Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      //Get.toNamed(Routes.NEWS);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                        color: MyColors.white,
-                                        border: Border.all(color: MyColors.custom('EAEAEA')),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: SvgPicture.asset(
-                                        Asset.location,
-                                        width: 16,
-                                        height: 16,
-                                        colorFilter: ColorFilter.mode(
-                                          MyColors.black,
-                                          BlendMode.srcIn,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const Gap(1),
-                                  GestureDetector(
-                                    onTap: () {
-                                      //Get.toNamed(Routes.NEWS);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                        color: MyColors.white,
-                                        border: Border.all(color: MyColors.custom('EAEAEA')),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: SvgPicture.asset(
-                                        Asset.filter,
-                                        width: 16,
-                                        height: 16,
-                                        colorFilter: ColorFilter.mode(
-                                          MyColors.black,
-                                          BlendMode.srcIn,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
+                              // Row(
+                              //   children: [
+                              //
+                              //     Padding(
+                              //       padding: const EdgeInsets.fromLTRB(
+                              //         0,
+                              //         8,
+                              //         16,
+                              //         0,
+                              //       ),
+                              //       child: Container(
+                              //         width: 85.w,
+                              //
+                              //         decoration: BoxDecoration(
+                              //           color: Colors.white,
+                              //           borderRadius: BorderRadius.circular(50),
+                              //           boxShadow: [
+                              //             BoxShadow(
+                              //               color: MyColors.grayEA.withValues(
+                              //                 alpha: 0.32,
+                              //               ),
+                              //               blurRadius: 4,
+                              //             ),
+                              //           ],
+                              //         ),
+                              //         child: CommonTextField(
+                              //           onChange: (value) {
+                              //             //controller.onSearchChanged(value ?? "");
+                              //           },
+                              //           borderRadius: 50,
+                              //           hintText: 'Search for',
+                              //           prefixIcon: SvgPicture.asset(
+                              //             Asset.searchIcon,
+                              //             height: 16,
+                              //             width: 16,
+                              //           ),
+                              //           suffixIcon: SvgPicture.asset(
+                              //             Asset.filter,
+                              //             height: 16,
+                              //             width: 16,
+                              //           ),
+                              //           //controller: controller.searchController,
+                              //           /*suffixIcon: Obx(
+                              //     () => controller.searchQuery.value.isNotEmpty
+                              //         ? GestureDetector(
+                              //             onTap: controller.clearSearch,
+                              //             child: const Icon(
+                              //               Icons.clear,
+                              //               color: MyColors.gray54,
+                              //             ),
+                              //           )
+                              //         : const SizedBox.shrink(),
+                              //   ), */
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     const Spacer(),
+                              //     // GestureDetector(
+                              //     //   onTap: () {
+                              //     //     //Get.toNamed(Routes.NEWS);
+                              //     //   },
+                              //     //   child: Container(
+                              //     //     padding: const EdgeInsets.all(6),
+                              //     //     decoration: BoxDecoration(
+                              //     //       color: MyColors.white,
+                              //     //       border: Border.all(
+                              //     //         color: MyColors.custom('EAEAEA'),
+                              //     //       ),
+                              //     //       shape: BoxShape.circle,
+                              //     //     ),
+                              //     //     child: SvgPicture.asset(
+                              //     //       Asset.location,
+                              //     //       width: 16,
+                              //     //       height: 16,
+                              //     //       colorFilter: ColorFilter.mode(
+                              //     //         MyColors.black,
+                              //     //         BlendMode.srcIn,
+                              //     //       ),
+                              //     //     ),
+                              //     //   ),
+                              //     // ),
+                              //     // const Gap(1),
+                              //     // GestureDetector(
+                              //     //   onTap: () {
+                              //     //     //Get.toNamed(Routes.NEWS);
+                              //     //   },
+                              //     //   child: Container(
+                              //     //     padding: const EdgeInsets.all(6),
+                              //     //     decoration: BoxDecoration(
+                              //     //       color: MyColors.white,
+                              //     //       border: Border.all(
+                              //     //         color: MyColors.custom('EAEAEA'),
+                              //     //       ),
+                              //     //       shape: BoxShape.circle,
+                              //     //     ),
+                              //     //     child: SvgPicture.asset(
+                              //     //       Asset.filter,
+                              //     //       width: 16,
+                              //     //       height: 16,
+                              //     //       colorFilter: ColorFilter.mode(
+                              //     //         MyColors.black,
+                              //     //         BlendMode.srcIn,
+                              //     //       ),
+                              //     //     ),
+                              //     //   ),
+                              //     // ),
+                              //   ],
+                              // ),
                               // const Gap(24),
                               // Container(
                               //   padding: const EdgeInsets.symmetric(
@@ -632,39 +623,51 @@ class ConnectorHomeView extends StatelessWidget {
                               //     ],
                               //   ),
                               // ),
-                              Container(
-                                height: 2.h,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: AlignmentGeometry.topCenter,
-                                    end: AlignmentGeometry.bottomCenter,
-                                    colors: [
-                                      MyColors.custom('FFF9BD').withValues(alpha: 0.1),
-                                      MyColors.white,
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // Container(
+                              //
+                              //   height: 2.h,
+                              //   decoration: BoxDecoration(
+                              //     gradient: LinearGradient(
+                              //       begin: AlignmentGeometry.topCenter,
+                              //       end: AlignmentGeometry.bottomCenter,
+                              //       colors: [
+                              //         MyColors.custom(
+                              //           'FFF9BD',
+                              //         ).withValues(alpha: 0.1),
+                              //         Colors.white,
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Obx(() {
-                                    if (Get.find<ConnectorHomeController>().marketPlace.value ==
+                                    if (Get.find<ConnectorHomeController>()
+                                            .marketPlace
+                                            .value ==
                                         0) {
                                       /// ------------------- MATERIAL MARKETPLACE -------------------
-                                      final materialList = controller.mainCategories;
+                                      final materialList =
+                                          controller.mainCategories;
 
                                       if (materialList.isEmpty) {
                                         return _buildComingSoon(context);
                                       }
                                       return ListView.builder(
                                         shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        itemCount: controller.mainCategories.length,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount:
+                                            controller.mainCategories.length,
                                         itemBuilder: (context, index) {
-                                          final mainCategory = controller.mainCategories[index];
+                                          final mainCategory =
+                                              controller.mainCategories[index];
                                           final categories =
-                                              controller.categoryMap[mainCategory.id] ?? [];
+                                              controller
+                                                  .categoryMap[mainCategory
+                                                  .id] ??
+                                              [];
 
                                           return _buildCategorySection(
                                             context,
@@ -674,22 +677,31 @@ class ConnectorHomeView extends StatelessWidget {
                                           );
                                         },
                                       );
-                                    } else if (Get.find<CommonController>().marketPlace.value ==
+                                    } else if (Get.find<CommonController>()
+                                            .marketPlace
+                                            .value ==
                                         1) {
                                       /// ------------------- CONSTRUCTION MARKETPLACE -------------------
-                                      final materialList = controller.mainCategories;
+                                      final materialList =
+                                          controller.mainCategories;
 
                                       if (materialList.isEmpty) {
                                         return _buildComingSoon(context);
                                       }
                                       return ListView.builder(
                                         shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        itemCount: controller.mainCategories.length,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount:
+                                            controller.mainCategories.length,
                                         itemBuilder: (context, index) {
-                                          final mainCategory = controller.mainCategories[index];
+                                          final mainCategory =
+                                              controller.mainCategories[index];
                                           final categories =
-                                              controller.categoryMap[mainCategory.id] ?? [];
+                                              controller
+                                                  .categoryMap[mainCategory
+                                                  .id] ??
+                                              [];
 
                                           return _buildCategorySection(
                                             context,
@@ -718,10 +730,13 @@ class ConnectorHomeView extends StatelessWidget {
                                       // );
                                     } else {
                                       /// ------------------- TOOLS MARKETPLACE -------------------
-                                      final toolsList =
-                                          controller.categoryHierarchyData2.value.data;
+                                      final toolsList = controller
+                                          .categoryHierarchyData2
+                                          .value
+                                          .data;
 
-                                      if (toolsList == null || toolsList.isEmpty) {
+                                      if (toolsList == null ||
+                                          toolsList.isEmpty) {
                                         return _buildComingSoon(context);
                                       }
                                       return const Text("TOOLS MARKETPLACE");
@@ -803,7 +818,7 @@ class ConnectorHomeView extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, size: 20),
+              // const Icon(Icons.arrow_forward_ios, size: 20),
             ],
           ),
         ),
@@ -818,10 +833,10 @@ class ConnectorHomeView extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
+              crossAxisCount: 4,
               crossAxisSpacing: 12,
               mainAxisSpacing: 6,
-              childAspectRatio: 0.8,
+              childAspectRatio: 0.49,
             ),
             itemCount: category.length,
             itemBuilder: (context, subIndex) {
@@ -860,32 +875,60 @@ class ConnectorHomeView extends StatelessWidget {
                     //   },
                     // );
                   },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                APIConstants.bucketUrl +
-                                (subCategory.image ??
-                                    'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
-                            fit: BoxFit.fill,
-                            placeholder: (context, url) =>
-                                const Center(child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.category, color: MyColors.primary),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: MyColors.lightWhite,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(60), // more rounded bottom
+                        bottomRight: Radius.circular(60), // more rounded bottom
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        /// 🔹 Title
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Text(
+                            subCategory.name ?? '',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                            ),
+                            maxLines: 2,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        subCategory.name ?? '',
-                        style: MyTexts.medium14,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+
+                        /// 🔹 Circular Image (Large & Bottom Aligned)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 1),
+                          child: Container(
+                            height: 105,
+                            width: 105,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    subCategory.image?.url ??
+                                    "https://via.placeholder.com/150",
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.category, size: 40),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -897,7 +940,7 @@ class ConnectorHomeView extends StatelessWidget {
   }
 
   Widget tabBar({
-    required String icon,
+    required String? iconUrl,
     required String name,
     required bool isMarketPlace,
     required void Function()? onTap,
@@ -906,23 +949,47 @@ class ConnectorHomeView extends StatelessWidget {
       width: 22.w,
       child: GestureDetector(
         onTap: onTap,
-        child: Column(
-          children: [
-            SvgPicture.asset(icon, height: 24, width: 24),
-            Text(name, style: MyTexts.medium14, textAlign: TextAlign.center),
-            const Gap(10),
-            if (isMarketPlace)
-              Container(
-                height: 3,
-                width: 73,
-                decoration: const BoxDecoration(
-                  color: MyColors.primary,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: isMarketPlace
+                ? Colors
+                      .white // 👈 Selected color
+                : null, // 👈 Unselected color
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (iconUrl != null && iconUrl!.isNotEmpty) CachedNetworkImage(
+                imageUrl: iconUrl!,
+                height: 24,
+                width: 24,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                const SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 ),
-              )
-            else
-              const SizedBox(height: 3),
-          ],
+                errorWidget: (context, url, error) =>
+                const Icon(Icons.image, size: 24),
+              ) else const SizedBox(
+                height: 24,
+                width: 24,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                name,
+                style: MyTexts.medium14.copyWith(
+                  color: isMarketPlace ? Colors.black : Colors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );
@@ -959,7 +1026,10 @@ class HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium17.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
+      style: MyTexts.medium17.copyWith(
+        color: MyColors.black,
+        fontFamily: MyTexts.SpaceGrotesk,
+      ),
     );
   }
 }

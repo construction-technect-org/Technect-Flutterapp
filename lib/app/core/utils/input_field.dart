@@ -133,6 +133,8 @@ class CommonTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final BoxConstraints? suffixIconConstraints;
   final TextStyle? style;
+  final EdgeInsets? contentPadding;
+
 
   const CommonTextField({
     super.key,
@@ -166,6 +168,7 @@ class CommonTextField extends StatelessWidget {
     this.suffixIconConstraints,
     this.showDivider = false,
     this.style, // default false
+    this.contentPadding,
   });
 
   @override
@@ -240,7 +243,11 @@ class CommonTextField extends StatelessWidget {
             filled: true,
             fillColor: bgColor ?? Colors.white,
             counterText: "",
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: contentPadding ??
+                const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12, // 👈 Default value
+                ),
             errorStyle: MyTexts.medium13.copyWith(color: MyColors.red33),
             errorMaxLines: 2,
             hintText: hintText,
