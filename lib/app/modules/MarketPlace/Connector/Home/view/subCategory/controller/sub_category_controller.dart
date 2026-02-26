@@ -9,6 +9,8 @@ class SubCategoryController extends GetxController {
   final RxInt selectedIndex = 0.obs;
   final RxBool isLoading = false.obs;
   final selectedCategoryName = ''.obs;
+  final RxBool isGridView = false.obs; // ✅ default list view
+
   Future<void> loadSubCategory({
     required String categoryId,
     required int index,

@@ -1088,15 +1088,13 @@ class MerchantHomeView extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
                                 child: CachedNetworkImage(
-                                  imageUrl:
-                                      APIConstants.bucketUrl +
-                                      (category.image ??
-                                          'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
+                                  imageUrl: category.image?.url ??
+                                      "https://via.placeholder.com/150",
                                   fit: BoxFit.fill,
                                   placeholder: (context, url) =>
-                                      const Center(child: CircularProgressIndicator()),
+                                  const Center(child: CircularProgressIndicator()),
                                   errorWidget: (context, url, error) =>
-                                      const Icon(Icons.category, color: MyColors.primary),
+                                  const Icon(Icons.category, color: MyColors.primary),
                                 ),
                               ),
                             ),

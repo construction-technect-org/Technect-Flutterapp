@@ -113,6 +113,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/bindings/role_management_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/role_management_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/bindings/add_product_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/views/add_generic_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/views/product_detail_view.dart';
@@ -177,6 +178,7 @@ class AppPages {
       binding: BusinessHoursBinding(),
     ),
     GetPage(name: _Paths.ADD_PRODUCT, page: () => AddProductView(), binding: AddProductBinding()),
+    GetPage(name: _Paths.ADD_GENERIC, page: () => AddGenericView(), binding: AddGenericBinding()),
     GetPage(
       name: _Paths.PRODUCT_DETAILS,
       page: () => ProductDetailsView(),

@@ -7,10 +7,12 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/main_home_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/dynamic_filter_model.dart';
 import 'package:flutter/cupertino.dart';
 
-class AddProductView extends GetView<MainHomeController> {
+class AddGenericView extends GetView<MainHomeController> {
+  final String type = Get.arguments?['type'] ?? 'Product';
+  bool get isProduct => type.toLowerCase() == 'product';
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -18,7 +20,7 @@ class AddProductView extends GetView<MainHomeController> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           final currentPage = controller.pageController.page?.toInt() ?? 0;
-          if (currentPage == 0 || currentPage == 5) {
+          if (currentPage == 0 || currentPage == 4) {
             Get.back();
           } else {
             hideKeyboard();
@@ -41,7 +43,7 @@ class AddProductView extends GetView<MainHomeController> {
                 leading: GestureDetector(
                   onTap: () {
                     final currentPage = controller.pageController.page?.toInt() ?? 0;
-                    if (currentPage == 0 || currentPage == 5) {
+                    if (currentPage == 0 || currentPage == 4) {
                       Get.back();
                     } else {
                       hideKeyboard();
@@ -58,7 +60,7 @@ class AddProductView extends GetView<MainHomeController> {
                     child: Icon(Icons.arrow_back_ios, color: MyColors.black),
                   ),
                 ),
-                title: Text(controller.isEdit ? "Edit product" : "Add product"),
+                title: Text(controller.isEdit ? "Edit $type" : "Add $type"),
                 isCenter: false,
               ),
               body: Column(
@@ -74,8 +76,7 @@ class AddProductView extends GetView<MainHomeController> {
                       children: [
                         _buildStep1(context),
                         _buildStep2(context),
-                        _buildStep3(context),
-                        _buildStep4(context),
+                        _buildStep4(context), // This is the Media/Additional Info step
                         _buildPreviewStep(context),
                         _buildSuccessPage(),
                       ],
@@ -85,7 +86,7 @@ class AddProductView extends GetView<MainHomeController> {
               ),
               bottomNavigationBar: Obx(() {
                 final step = controller.currentStep.value;
-                if (step == 4 || step == 5) return const SizedBox.shrink();
+                if (step == 3 || step == 4) return const SizedBox.shrink();
                 return SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
@@ -111,7 +112,13 @@ class AddProductView extends GetView<MainHomeController> {
                         if (step > 0) const Gap(16),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => controller.goNext(),
+                            onPressed: () {
+                              if (!isProduct && step == 2) {
+                                controller.createProduct();
+                              } else {
+                                controller.goNext();
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: MyColors.primary,
                               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -120,7 +127,7 @@ class AddProductView extends GetView<MainHomeController> {
                               ),
                             ),
                             child: Text(
-                              step == 3 ? 'Preview' : 'Next',
+                              step == 2 ? (isProduct ? 'Preview' : 'Add') : 'Next',
                               style: MyTexts.medium16.copyWith(color: Colors.white),
                             ),
                           ),
@@ -138,7 +145,7 @@ class AddProductView extends GetView<MainHomeController> {
   }
 
   Widget _buildProgressBar(int currentStep) {
-    if (currentStep >= 4) return const SizedBox.shrink();
+    if (currentStep >= 3) return const SizedBox.shrink();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -150,7 +157,7 @@ class AddProductView extends GetView<MainHomeController> {
             children: [
               Text("Product", style: MyTexts.medium14.copyWith(color: MyColors.black)),
               Text(
-                "${currentStep + 1}/4 Steps",
+                "${currentStep + 1}/3 Steps",
                 style: MyTexts.medium14.copyWith(color: MyColors.black),
               ),
             ],
@@ -159,7 +166,7 @@ class AddProductView extends GetView<MainHomeController> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
-              value: (currentStep + 1) / 4,
+              value: (currentStep + 1) / 3,
               backgroundColor: MyColors.grayEA,
               valueColor: const AlwaysStoppedAnimation<Color>(Colors.orange),
               minHeight: 6,
@@ -208,7 +215,7 @@ class AddProductView extends GetView<MainHomeController> {
                       border: Border.all(color: MyColors.grayEA),
                     ),
                     child: Text(
-                      'Product', // Or service, tools, etc if passed via arguments
+                      type, // Or service, tools, etc if passed via arguments
                       style: MyTexts.medium14.copyWith(color: MyColors.dustyGray),
                     ),
                   ),
@@ -503,147 +510,6 @@ class AddProductView extends GetView<MainHomeController> {
     );
   }
 
-  Widget _buildStep3(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: controller.formKey1,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(
-              () => Column(
-                children: controller.filters.map((filter) {
-                  return _specTile(context, filter);
-                }).toList(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _specTile(BuildContext context, DynamicFilterData filter) {
-    final title = filter.filterLabel ?? filter.filterName ?? '';
-    final textController = controller.dynamicControllers[filter.filterName];
-    if (textController == null) return const SizedBox.shrink();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Technical Specifications", style: MyTexts.medium16.copyWith(color: MyColors.black)),
-        const Gap(12),
-        ValueListenableBuilder<TextEditingValue>(
-          valueListenable: textController,
-          builder: (context, currentVal, child) {
-            final value = currentVal.text;
-            return GestureDetector(
-              onTap: () => _showSpecInput(context, filter),
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                decoration: BoxDecoration(
-                  color: MyColors.grayF7,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: MyColors.grayEA),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(title, style: MyTexts.medium15.copyWith(color: MyColors.primary)),
-                          if (value.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(
-                                "$value ${filter.unit ?? ''}",
-                                style: MyTexts.regular14.copyWith(color: MyColors.gray54),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    const Icon(Icons.keyboard_arrow_down, color: MyColors.gray54),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  void _showSpecInput(BuildContext context, DynamicFilterData filter) {
-    final isDropdown = (filter.filterOptions ?? []).isNotEmpty;
-    if (isDropdown) {
-      Get.bottomSheet(
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Select ${filter.filterLabel ?? filter.filterName}", style: MyTexts.bold16),
-              const Gap(16),
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: filter.filterOptions!.length,
-                  itemBuilder: (context, index) {
-                    final item = filter.filterOptions![index];
-                    return ListTile(
-                      title: Text(item),
-                      onTap: () {
-                        controller.dynamicControllers[filter.filterName!]?.text = item;
-                        Get.back();
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      Get.bottomSheet(
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Enter ${filter.filterLabel ?? filter.filterName}", style: MyTexts.bold16),
-              const Gap(16),
-              CommonTextField(
-                controller: controller.dynamicControllers[filter.filterName!],
-                hintText: "Enter value",
-                keyboardType: filter.filterType == "number"
-                    ? TextInputType.number
-                    : TextInputType.text,
-                autofocus: true,
-              ),
-              const Gap(20),
-              RoundedButton(buttonName: "Done", onTap: () => Get.back()),
-              const Gap(20),
-            ],
-          ),
-        ),
-      );
-    }
-  }
-
   Widget _buildStep4(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -688,7 +554,18 @@ class AddProductView extends GetView<MainHomeController> {
                               ),
                             ],
                           ),
-                          child: Center(child: Icon(Icons.add, size: 40, color: MyColors.black)),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add, size: 32, color: MyColors.black),
+                                Text(
+                                  "+ Add New",
+                                  style: MyTexts.medium12.copyWith(color: MyColors.black),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     }
@@ -919,20 +796,6 @@ class AddProductView extends GetView<MainHomeController> {
                   controller.selectedUnitOfMesurements.join(", "),
                 ),
                 _buildDetailRow(Asset.todo, "HSN/SAC code", "68768767"),
-
-                // Dynamic Filters from Step 3
-                Obx(
-                  () => Column(
-                    children: controller.filters.map((f) {
-                      final val = controller.dynamicControllers[f.filterName]?.text ?? 'Name';
-                      return _buildDetailRow(
-                        Asset.analysis,
-                        f.filterLabel ?? f.filterName ?? '',
-                        val,
-                      );
-                    }).toList(),
-                  ),
-                ),
 
                 _buildDetailRow(Asset.report, "Description", ""),
                 _buildDetailRow(Asset.todo, "Note", controller.noteController.text),

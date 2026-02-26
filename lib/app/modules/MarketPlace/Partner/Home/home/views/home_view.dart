@@ -104,6 +104,7 @@ class HomeView extends StatelessWidget {
                                 size: 48,
                               );
                             }
+                            print("profileImage: ${APIConstants.bucketUrl}$profileImage");
 
                             return ClipOval(
                               child: getImageView(
@@ -825,15 +826,14 @@ class HomeView extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: CachedNetworkImage(
-                            imageUrl:
-                                APIConstants.bucketUrl +
-                                (subCategory.image ??
-                                    'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
+                            imageUrl: (subCategory.image?.url?.isNotEmpty ?? false)
+                                ? subCategory.image!.url!
+                                : "https://via.placeholder.com/150",
                             fit: BoxFit.fill,
                             placeholder: (context, url) =>
-                                const Center(child: CircularProgressIndicator()),
+                            const Center(child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) =>
-                                const Icon(Icons.category, color: MyColors.primary),
+                            const Icon(Icons.category, color: MyColors.primary),
                           ),
                         ),
                       ),

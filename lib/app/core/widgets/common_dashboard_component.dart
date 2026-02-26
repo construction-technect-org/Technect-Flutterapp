@@ -407,7 +407,7 @@ class BuildFeatureCard extends StatelessWidget {
               gradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [MyColors.tertiary, MyColors.tertiary],
+                colors: [MyColors.tertiary, Color(0xFFFFFFFF)],
                 // colors: [MyColors.tertiary, Color(0xFFFFFFFF)],
               ),
             ),
