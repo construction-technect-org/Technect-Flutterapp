@@ -6,10 +6,10 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/category_product_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/dynamic_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/main_category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/subcategory_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
@@ -19,16 +19,64 @@ class MainHomeController extends GetxController {
   final formKey1 = GlobalKey<FormState>();
   final formKey2 = GlobalKey<FormState>();
   final formKey3 = GlobalKey<FormState>();
+  final formKey4 = GlobalKey<FormState>();
   bool isEdit = false;
   final pageController = PageController();
-  RxList<String> pickedFilePathList = <String>[].obs;
+
   RxList addProduct = [
-    "1.Basic Product Details",
+    "1.Basic details",
     "2.Pricing & Units",
     "3.Technical Specifications",
+    "4.Additional Information",
   ].obs;
+  RxInt currentStep = 0.obs;
+  RxBool isStepValid = true.obs;
 
   RxBool isLoading = false.obs;
+
+  void goNext() {
+    final next = currentStep.value + 1;
+    if (next <= 5) {
+      // Validate current step before proceeding
+      bool isValid = true;
+      if (currentStep.value == 0) {
+        isValid = formKey2.currentState?.validate() ?? false;
+      } else if (currentStep.value == 1) {
+        isValid = formKey3.currentState?.validate() ?? false;
+      } else if (currentStep.value == 2) {
+        isValid = formKey1.currentState?.validate() ?? false;
+      } else if (currentStep.value == 3) {
+        isValid = formKey4.currentState?.validate() ?? false;
+        if (isValid) {
+          final hasImage = imageSlots.any((p) => p != null && p.isNotEmpty);
+          if (!hasImage) {
+            SnackBars.errorSnackBar(content: 'Please upload at least one image');
+            isValid = false;
+          }
+        }
+      }
+
+      if (isValid) {
+        pageController.animateToPage(
+          next,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
+  }
+
+  void goBack() {
+    if (currentStep.value > 0) {
+      pageController.animateToPage(
+        currentStep.value - 1,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      Get.back();
+    }
+  }
 
   final brandNameController = TextEditingController();
   final stockController = TextEditingController();
@@ -49,7 +97,7 @@ class MainHomeController extends GetxController {
   RxList<CategoryProductData?> catProdList = <CategoryProductData?>[].obs;
   RxList<String> catProdListNames = <String>[].obs;
 
-  RxList<FilterData> filters = <FilterData>[].obs;
+  RxList<DynamicFilterData> filters = <DynamicFilterData>[].obs;
 
   Map<String, TextEditingController> dynamicControllers = {};
   final Map<String, Rxn<String>> dropdownValues = {};
@@ -63,7 +111,8 @@ class MainHomeController extends GetxController {
   Rxn<String> selectedCatProdName = Rxn<String>();
   Rxn<String> selectedGST = Rxn<String>();
 
-  RxList<String?> imageSlots = List<String?>.filled(5, null).obs;
+  RxList<String?> imageSlots = List<String?>.filled(10, null).obs;
+
   RxList<String> gstList = <String>["5%", "12%", "18%", "28%"].obs;
   Map<String, String> removedImages = {};
 
@@ -73,12 +122,39 @@ class MainHomeController extends GetxController {
 
   RxList<ManufacturerAddress> siteLocations = <ManufacturerAddress>[].obs;
   Rxn<ManufacturerAddress> selectedSiteAddress = Rxn<ManufacturerAddress>();
+  Rxn<String> selectedShippingAddress = Rxn<String>();
 
   final Rx<File?> selectedVideo = Rx<File?>(null);
   VideoPlayerController? videoPlayerController;
   final RxBool isVideoPortrait = false.obs;
 
   Rxn<String> selectedMainCategoryId = Rxn<String>();
+
+  // --- Added for User's Step 2 UI Edits ---
+  RxList<String> selectedUnitOfMesurements = <String>[].obs;
+  RxList<String> unitOfMesurementListNames = <String>['kg', 'g', 'mg', 'L', 'mL', 'Pcs'].obs;
+
+  Rxn<String> selectedUnitOfMesurementName = Rxn<String>();
+
+  void onUnitOfMesurementSelected(String? val) {
+    selectedUnitOfMesurementName.value = val;
+  }
+
+  void toggleUnitOfMesurement(String unit) {
+    if (selectedUnitOfMesurements.contains(unit)) {
+      selectedUnitOfMesurements.remove(unit);
+    } else {
+      selectedUnitOfMesurements.add(unit);
+    }
+  }
+
+  Rxn<String> selectedWithTaxName = Rxn<String>();
+  RxList<String> withTaxListNames = <String>['Yes', 'No'].obs;
+
+  void onWithTaxSelected(String? val) {
+    selectedWithTaxName.value = val;
+  }
+  // ----------------------------------------
 
   void removeImageAt(int index) {
     if (imageSlots[index] != null) {
@@ -151,36 +227,56 @@ class MainHomeController extends GetxController {
   }
 
   Future<void> pickImage() async {
-    List<XFile> results = [];
+    List<XFile> pickedFiles = [];
     try {
-      final remainingSlots = 5 - pickedFilePathList.length;
-      log("RS $remainingSlots PFL ${pickedFilePathList.length}");
-      if (remainingSlots <= 0) {
-        SnackBars.errorSnackBar(content: "You can only upload up to 5 images");
+      final empSlots = imageSlots.where((e) => e == null).length;
+      if (empSlots <= 0) {
+        SnackBars.errorSnackBar(content: "You can only upload up to 10 images");
         return;
       }
 
-      if (remainingSlots == 1) {
-        // 🔴 Android requires single picker
+      if (empSlots == 1) {
         final XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
-        if (file != null) {
-          results.add(file);
-        }
+        if (file != null) pickedFiles.add(file);
       } else {
-        // ✅ Multi image picker (limit >= 2)
-        results = await ImagePicker().pickMultiImage(limit: remainingSlots);
+        pickedFiles = await ImagePicker().pickMultiImage(limit: empSlots);
       }
 
-      if (results.length > remainingSlots) {
-        SnackBars.errorSnackBar(content: "You can only upload up to $remainingSlots images");
+      if (pickedFiles.length > empSlots) {
+        SnackBars.errorSnackBar(content: "You can only select up to $empSlots more images.");
         return;
       }
 
-      if (results.isNotEmpty) {
-        pickedFilePathList.addAll(results.map((e) => e.path));
+      if (pickedFiles.isNotEmpty) {
+        // Calculate combined size
+        int totalSize = 0;
+        for (final path in imageSlots.whereType<String>()) {
+          if (!path.startsWith('http')) {
+            try {
+              totalSize += File(path).lengthSync();
+            } catch (_) {}
+          }
+        }
+        for (final file in pickedFiles) {
+          totalSize += await file.length();
+        }
+        // 3MB = 3 * 1024 * 1024 bytes
+        if (totalSize > 3 * 1024 * 1024) {
+          SnackBars.errorSnackBar(content: "Combined images size cannot exceed 3MB.", time: 3);
+          return; // Abort
+        }
+
+        for (final path in pickedFiles.map((e) => e.path)) {
+          final emptyIndex = imageSlots.indexWhere((e) => e == null);
+          if (emptyIndex != -1) {
+            imageSlots[emptyIndex] = path;
+          } else {
+            break;
+          }
+        }
       }
     } catch (e) {
-      log("Failed pick");
+      log("Failed pick: $e");
       SnackBars.errorSnackBar(content: 'Failed to pick images: $e', time: 3);
     }
   }
@@ -189,30 +285,41 @@ class MainHomeController extends GetxController {
     List<XFile> pickedFiles = [];
     try {
       final empSlots = imageSlots.where((e) => e == null).length;
-      log("Empty $empSlots");
-
       if (empSlots <= 0) {
-        SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
+        SnackBars.errorSnackBar(content: "Maximum 10 images allowed");
         return;
       }
 
       if (empSlots == 1) {
-        // 🔴 Android requires single picker
         final XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
-        if (file != null) {
-          pickedFiles.add(file);
-        }
+        if (file != null) pickedFiles.add(file);
       } else {
-        // ✅ Multi image picker (limit >= 2)
         pickedFiles = await ImagePicker().pickMultiImage(limit: empSlots);
       }
 
       if (pickedFiles.length > empSlots) {
         SnackBars.errorSnackBar(content: "You can only select up to $empSlots more images.");
-        // You must exit the function here to prevent processing the excess images.
         return;
       }
+
       if (pickedFiles.isNotEmpty) {
+        // Calculate combined size
+        int totalSize = 0;
+        for (final path in imageSlots.whereType<String>()) {
+          if (!path.startsWith('http')) {
+            try {
+              totalSize += File(path).lengthSync();
+            } catch (_) {}
+          }
+        }
+        for (final file in pickedFiles) {
+          totalSize += await file.length();
+        }
+        if (totalSize > 3 * 1024 * 1024) {
+          SnackBars.errorSnackBar(content: "Combined images size cannot exceed 3MB.", time: 3);
+          return;
+        }
+
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
@@ -249,7 +356,8 @@ class MainHomeController extends GetxController {
   void onInit() {
     super.onInit();
 
-    imageSlots.value = List<String?>.filled(5, null);
+    imageSlots.value = List<String?>.filled(10, null);
+
     if (storage.token.isNotEmpty) {
       fetchMainCategoryForProduct("connector", 'Material');
     }
@@ -581,6 +689,52 @@ class MainHomeController extends GetxController {
     final selected = subCatList.firstWhereOrNull((c) => c?.name == subCategoryName);
     if (selected != null) {
       fetchCCForProduct(selected.id ?? "");
+    }
+  }
+
+  void onProductCategorySelected(String? categoryName) {
+    selectedCatProdName.value = categoryName;
+    final selected = catProdList.firstWhereOrNull((c) => c?.name == categoryName);
+    if (selected != null) {
+      fetchFiltersForProductCategory(selected.id ?? "");
+    }
+  }
+
+  Future<void> fetchFiltersForProductCategory(String categoryProductId) async {
+    try {
+      isLoading.value = true;
+      filters.clear();
+      dynamicControllers.clear();
+      // Override dynamic filters per user request with specific static list
+      filters.value = [
+        DynamicFilterData(filterName: "Package size", filterLabel: "Package size"),
+        DynamicFilterData(filterName: "Package type", filterLabel: "Package type"),
+        DynamicFilterData(filterName: "Package weight", filterLabel: "Package weight"),
+        DynamicFilterData(filterName: "Shape", filterLabel: "Shape"),
+        DynamicFilterData(filterName: "Texture", filterLabel: "Texture"),
+        DynamicFilterData(filterName: "Color", filterLabel: "Color"),
+        DynamicFilterData(filterName: "Grain size", filterLabel: "Grain size"),
+        DynamicFilterData(filterName: "Fineness module", filterLabel: "Fineness module"),
+        DynamicFilterData(filterName: "Silt Content", filterLabel: "Silt Content"),
+        DynamicFilterData(
+          filterName: "Clay and Dust content",
+          filterLabel: "Clay and Dust content",
+        ),
+        DynamicFilterData(filterName: "Moisture content", filterLabel: "Moisture content"),
+        DynamicFilterData(filterName: "Specific Gravity", filterLabel: "Specific Gravity"),
+        DynamicFilterData(filterName: "Bulk Density", filterLabel: "Bulk Density"),
+        DynamicFilterData(filterName: "Water Absorption", filterLabel: "Water Absorption"),
+      ];
+
+      for (final filter in filters) {
+        if (filter.filterName != null) {
+          dynamicControllers[filter.filterName!] = TextEditingController();
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 }

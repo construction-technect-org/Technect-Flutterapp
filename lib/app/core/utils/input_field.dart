@@ -133,8 +133,7 @@ class CommonTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final BoxConstraints? suffixIconConstraints;
   final TextStyle? style;
-  final EdgeInsets? contentPadding;
-
+  final bool autofocus;
 
   const CommonTextField({
     super.key,
@@ -146,7 +145,7 @@ class CommonTextField extends StatelessWidget {
     this.textCapitalization,
     this.suffixIcon,
     this.suffixPadding,
-    this.bgColor,
+    this.bgColor = MyColors.grayF7,
     this.isBorder = true,
     this.isRed = false,
     this.maxLength,
@@ -167,8 +166,8 @@ class CommonTextField extends StatelessWidget {
     this.headerText,
     this.suffixIconConstraints,
     this.showDivider = false,
-    this.style, // default false
-    this.contentPadding,
+    this.style,
+    this.autofocus = false,
   });
 
   @override
@@ -192,6 +191,7 @@ class CommonTextField extends StatelessWidget {
             ],
           ),
         TextFormField(
+          autofocus: autofocus,
           textCapitalization: textCapitalization ?? TextCapitalization.none,
           style: MyTexts.medium15.copyWith(color: MyColors.primary),
 
@@ -228,7 +228,7 @@ class CommonTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: MyColors.black),
+              borderSide: const BorderSide(color: MyColors.primary, width: 1.5),
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             focusedErrorBorder: OutlineInputBorder(
@@ -243,11 +243,7 @@ class CommonTextField extends StatelessWidget {
             filled: true,
             fillColor: bgColor ?? Colors.white,
             counterText: "",
-            contentPadding: contentPadding ??
-                const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12, // 👈 Default value
-                ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             errorStyle: MyTexts.medium13.copyWith(color: MyColors.red33),
             errorMaxLines: 2,
             hintText: hintText,

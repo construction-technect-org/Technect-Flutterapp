@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/custom_drawer.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
@@ -70,6 +71,8 @@ class BottomBarView extends GetView<BottomController> {
       upgrader: Upgrader(durationUntilAlertAgain: const Duration(days: 1)),
       child: Obx(() {
         return Scaffold(
+          key: controller.scaffoldKey,
+          drawer: const CustomDrawer(),
           backgroundColor: Colors.white,
           body: _getCurrentScreen(),
           bottomNavigationBar: _buildBottomBar(),

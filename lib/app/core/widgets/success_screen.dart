@@ -6,13 +6,7 @@ class SuccessScreen extends StatefulWidget {
   final String? image;
   final Function()? onTap;
 
-  const SuccessScreen({
-    super.key,
-    this.title,
-    this.header,
-    this.onTap,
-    this.image,
-  });
+  const SuccessScreen({super.key, this.title, this.header, this.onTap, this.image});
 
   @override
   State<SuccessScreen> createState() => _SuccessScreenState();
@@ -23,7 +17,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 1200), () {
-      if (widget.onTap != null) widget.onTap!();
+      widget.onTap?.call();
     });
   }
 
@@ -37,10 +31,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
             width: double.infinity,
             height: double.infinity,
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Asset.loginBg),
-                fit: BoxFit.cover,
-              ),
+              image: DecorationImage(image: AssetImage(Asset.loginBg), fit: BoxFit.cover),
             ),
           ),
           Container(
@@ -53,18 +44,12 @@ class _SuccessScreenState extends State<SuccessScreen> {
             ),
             child: Row(
               children: [
-                const Icon(
-                  Icons.check_circle_outline,
-                  color: Color(0xFF058200),
-                  size: 28,
-                ),
+                const Icon(Icons.check_circle_outline, color: Color(0xFF058200), size: 28),
                 const Gap(16),
                 Expanded(
                   child: Text(
                     widget.header ?? "",
-                    style: MyTexts.bold18.copyWith(
-                      color: const Color(0xFF058200),
-                    ),
+                    style: MyTexts.bold18.copyWith(color: const Color(0xFF058200)),
                     textAlign: TextAlign.left,
                   ),
                 ),
