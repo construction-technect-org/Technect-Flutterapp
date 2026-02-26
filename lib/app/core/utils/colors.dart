@@ -13,6 +13,7 @@ class MyColors {
 
   // Primary colors
   static const Color primary = Color(0xFF1B2F62);
+  static const Color lightWhite = Color(0xFFFFFAC8);
   static const Color grey = Color(0xFF777777);
   static const Color grey1 = Color(0xFFA2A2A2);
   static const Color greySecond = Color(0xFF555555);

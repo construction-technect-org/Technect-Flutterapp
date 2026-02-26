@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/widgets/custom_drawer.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
@@ -12,6 +13,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -180,7 +182,252 @@ class BottomBarView extends GetView<BottomController> {
             ),
           ),
         ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Container(
+                //margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: MyColors.lightWhite,
+                  //color: Colors.white,
+                  /*boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x19000000),
+                      blurRadius: 30,
+                      offset: Offset(5, 0),
+                    ),
+                  ], */
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _bottomBar(
+                      Asset.home,
+                      Asset.home1,
+                      'Home',
+                      onTap: () {
+                        controller.currentIndex.value = 0;
+                      },
+                      index: 0,
+                    ),
+                    //Gap(5.5.w),
+                    _bottomBar(
+                      Asset.category,
+                      Asset.category1,
+                      'Category',
+                      onTap: () {
+                        controller.currentIndex.value = 1;
+                      },
+                      index: 1,
+                    ),
+                    //Gap(5.5.w),
+                    if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
+                      _bottomBar(
+                        Asset.add,
+                        Asset.add,
+                        myPref.role.val != "connector" ? "Manage" : 'Manage',
+                        onTap: onSellTap, index: null,
+                      ),
+                    //Gap(5.5.w),
+                    _bottomBar(
+                      Asset.connection,
+                      Asset.connection1,
+                      'connect',
+                      onTap: () {
+                        controller.currentIndex.value = 2;
+                      },
+                      index: 2,
+                    ),
+                    //Gap(5.5.w),
+                    // bottomBar(
+                    //   Asset.more,
+                    //   Asset.more1,
+                    //   '',
+                    //   onTap: () {
+                    //     controller.currentIndex.value = 3;
+                    //   },
+                    //   index: 3,
+                    // ),
+                  ],
+                ),
+              ),
+            ),
+            if (myPref.getIsTeamLogin() == false)
+              GestureDetector(
+                onTap: () async {
+                  await commonController.fetchProfileDataM();
+
+                  Get.put<SwitchAccountController>(SwitchAccountController());
+                  showSwitchAccountBottomSheet();
+                  // Get.to(() => const ExploreView());
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 5, right: 10,left: 10,top: 5),
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF1B2F62),
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  child: Column(
+                    children: [
+                      const Icon(Icons.autorenew, color: Colors.white, size: 30),
+                      Text(
+                        myPref.getRole() == "partner" ? "Merchant" : "Connector",
+                        style: MyTexts.medium12.copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ],
+    );
+  }
+
+  void onSellTap() {
+    log("commonController.hasProfileComplete.value: ${commonController.hasProfileComplete.value}");
+    log("marketPlace.value: ${Get.find<CommonController>().marketPlace.value}");
+    if (Get.find<CommonController>().marketPlace.value == 0) {
+      if (myPref.role.val != "connector") {
+        if (!commonController.hasProfileComplete.value) {
+          _showProfileIncompleteDialog();
+        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
+          _showAddAddressDialog();
+        } else {
+          _showProductOptions();
+        }
+      } else {
+        Get.toNamed(Routes.ADD_REQUIREMENT);
+      }
+    } else if (Get.find<CommonController>().marketPlace.value == 1) {
+      if (myPref.role.val != "connector") {
+        if (!commonController.hasProfileComplete.value) {
+          _showProfileIncompleteDialog();
+        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
+          _showAddAddressDialog();
+        } else {
+          _showProductOptions(); // Fallback to product options or some other logic if needed?
+          // Actually, let's just leave it empty or show a dialog for now if service options are not ready.
+        }
+      } else {
+        Get.toNamed(Routes.ADD_SERVICE_REQUIREMENT);
+      }
+    } else {
+      _showComingSoonSheet();
+    }
+  }
+
+  void _showProfileIncompleteDialog() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          "Complete Your Profile",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        content: const Text(
+          "To add a product, please complete your business profile first.",
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              Get.toNamed(Routes.PROFILE);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: const Text("Complete Now"),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  void _showAddAddressDialog() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          "Add Your Address",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        content: const Text(
+          "To add a product, please add your address first.",
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              Get.toNamed(Routes.MANUFACTURER_ADDRESS);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: const Text("Add Address"),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  void _showProductOptions() {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+             // _sheetHandle(),
+            const Text(
+              "Select an Option",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            /* ListTile(
+              leading: SvgPicture.asset(Asset.add),
+              title: const Text("Add New Product"),
+              onTap: () {
+                Get.back();
+                Get.toNamed(Routes.ADD_PRODUCT);
+              },
+            ), */
+            //const Divider(),
+            ListTile(
+              leading: SvgPicture.asset(Asset.inventory),
+              title: const Text("Manage Products"),
+              onTap: () {
+                Get.back();
+                Get.toNamed(Routes.INVENTORY);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -219,10 +466,15 @@ class BottomBarView extends GetView<BottomController> {
                   : FontWeight.normal,
             ),
           ),
+          Text(name, style: MyTexts.medium14),
         ],
       ),
     );
   }
+
+  void _showComingSoonSheet() {}
+
+  void _sheetHandle() {}
 }
 
 class BNBCustomPainter extends CustomPainter {
@@ -311,6 +563,92 @@ class HearderText extends StatelessWidget {
       style:
           textStyle ??
           MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
+    );
+  }
+}
+
+class CustomBottomBar extends StatefulWidget {
+  const CustomBottomBar({super.key});
+
+  @override
+  State<CustomBottomBar> createState() => _CustomBottomBarState();
+}
+
+class _CustomBottomBarState extends State<CustomBottomBar> {
+  int selectedIndex = 2; // center button by default
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: CurvedNavigationBar(
+        index: selectedIndex,
+        height: 75,
+        backgroundColor: Colors.transparent,
+        color: const Color(0xFFE8E1B0),
+        buttonBackgroundColor: const Color(0xFF1565C0),
+        animationDuration: const Duration(milliseconds: 300),
+        animationCurve: Curves.easeInOut,
+
+        /// ✅ Custom items — no color change
+        items: [
+          _navItem(Icons.home_outlined, "Home"),
+          _navItem(Icons.grid_view_rounded, "Category"),
+          _switchItem(), // center button
+          _navItem(Icons.add_box_outlined, "Manage"),
+          _navItem(Icons.extension_outlined, "Connect"),
+        ],
+
+        onTap: (index) {
+          // ✅ Update selectedIndex but keep same color
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+      ),
+    );
+  }
+
+  /// 🔹 Normal nav item (no color change)
+  Widget _navItem(IconData icon, String label) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: 24,
+          color: Colors.black87, // ✅ fixed color, not reactive
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            color: Colors.black87, // ✅ fixed color
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 🔹 Center "Switch" button
+  Widget _switchItem() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Icon(Icons.sync, color: Colors.white, size: 28),
+        SizedBox(height: 4),
+        Text(
+          "Switch",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+          ),
+        ),
+      ],
     );
   }
 }
