@@ -836,7 +836,7 @@ class ConnectorHomeView extends StatelessWidget {
               crossAxisCount: 4,
               crossAxisSpacing: 12,
               mainAxisSpacing: 6,
-              childAspectRatio: 0.49,
+              childAspectRatio: 0.45,
             ),
             itemCount: category.length,
             itemBuilder: (context, subIndex) {
@@ -907,8 +907,8 @@ class ConnectorHomeView extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 1),
                           child: Container(
-                            height: 105,
-                            width: 105,
+                            height: 75,
+                            width: 75,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                             ),

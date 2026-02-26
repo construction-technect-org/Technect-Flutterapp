@@ -470,10 +470,10 @@ class SubCategoryScreen extends StatelessWidget {
                                   ],
                                 ),
                                 child: CommonTextField(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 2, // 👈 Default value
-                                  ),
+                                  // contentPadding: const EdgeInsets.symmetric(
+                                  //   horizontal: 12,
+                                  //   vertical: 2, // 👈 Default value
+                                  // ),
                                   onChange: (value) {
                                     //controller.onSearchChanged(value ?? "");
                                   },
