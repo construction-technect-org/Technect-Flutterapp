@@ -17,6 +17,7 @@ abstract class Routes {
   static const BUSINESS_HOURS = _Paths.BUSINESS_HOURS;
   static const UPDATE_YOUR_CERTIFICATION = _Paths.UPDATE_YOUR_CERTIFICATION;
   static const ADD_PRODUCT = _Paths.ADD_PRODUCT;
+  static const ADD_GENERIC = _Paths.ADD_GENERIC;
   static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
   static const ROLE_MANAGEMENT = _Paths.ROLE_MANAGEMENT;
   static const ADD_ROLE = _Paths.ADD_ROLE;
@@ -123,6 +124,7 @@ abstract class _Paths {
   static const BUSINESS_HOURS = '/business-hours';
   static const UPDATE_YOUR_CERTIFICATION = '/update-your-certification';
   static const ADD_PRODUCT = '/Add-product';
+  static const ADD_GENERIC = '/Add-generic';
   static const PRODUCT_DETAILS = '/product-details';
   static const ROLE_MANAGEMENT = '/role-management';
   static const ADD_ROLE = '/add-role';

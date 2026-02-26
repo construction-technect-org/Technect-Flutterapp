@@ -270,8 +270,8 @@ class InventoryView extends GetView<InventoryController> {
                   backgroundColor: MyColors.oldLacelight,
                   onPressed: () {
                     controller.selectedStatus.value == "product"
-                        ? Get.toNamed(Routes.ADD_INVENTORY_PRODUCT)
-                        : Get.toNamed(Routes.ADD_INVENTORY_GENERIC);
+                        ? Get.toNamed(Routes.ADD_PRODUCT)
+                        : Get.toNamed(Routes.ADD_GENERIC);
                   },
                   child: const Icon(Icons.add, color: Colors.black, size: 32),
                 ),

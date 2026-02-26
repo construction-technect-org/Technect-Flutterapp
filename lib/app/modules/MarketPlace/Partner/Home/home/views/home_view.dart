@@ -104,6 +104,7 @@ class HomeView extends StatelessWidget {
                                 size: 48,
                               );
                             }
+                            print("profileImage: ${APIConstants.bucketUrl}$profileImage");
 
                             return ClipOval(
                               child: getImageView(

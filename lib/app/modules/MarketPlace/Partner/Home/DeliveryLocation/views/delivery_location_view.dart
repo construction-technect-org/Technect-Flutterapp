@@ -27,7 +27,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: const Text('Delivery location'),
+                  title: const Text('Select location'),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () {
@@ -35,11 +35,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -51,6 +47,36 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(16),
+                          // Build Search for also i wat border for it
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: MyColors.gra54.withValues(alpha: 0.8)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: MyColors.grayEA.withValues(alpha: 0.32),
+                                  blurRadius: 4,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(12),
+                            child: Row(
+                              children: [
+                                Icon(Icons.search, color: MyColors.gray2E),
+                                const Gap(8),
+                                Text(
+                                  "Search",
+                                  style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+                                ),
+                                const Spacer(),
+                                // microphone icon
+                                Icon(Icons.mic, color: MyColors.gray2E),
+                              ],
+                            ),
+                          ),
+                          const Gap(16),
                           // Add Address Button
                           GestureDetector(
                             onTap: controller.addAddress,
@@ -60,9 +86,33 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: MyColors.grayEA.withValues(
-                                      alpha: 0.32,
-                                    ),
+                                    color: MyColors.grayEA.withValues(alpha: 0.32),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.gps_not_fixed_rounded, color: MyColors.gray2E),
+                                  const Gap(8),
+                                  Text(
+                                    "Use my Current Location",
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: controller.addAddress,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: MyColors.grayEA.withValues(alpha: 0.32),
                                     blurRadius: 4,
                                   ),
                                 ],
@@ -73,10 +123,8 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                   SvgPicture.asset(Asset.add),
                                   const Gap(8),
                                   Text(
-                                    "Add Address",
-                                    style: MyTexts.medium15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
+                                    "Add New Address",
+                                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                   ),
                                   const Spacer(),
                                   const Icon(Icons.arrow_forward_ios),
@@ -87,9 +135,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                           const Gap(16),
                           Text(
                             "Saved Address",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray2E,
-                            ),
+                            style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
                           ),
                           const Gap(16),
                           // Saved Addresses List
@@ -137,49 +183,66 @@ class CommonAddressList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (addresses == null || addresses!.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 3),
-        child: Center(
-          child: Text(
-            'No Address Found',
-            style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
-          ),
-        ),
-      );
-    }
+    final List<dynamic> displayAddresses = (addresses == null || addresses!.isEmpty)
+        ? [
+            {
+              'id': '1',
+              'siteName': 'Manufacturing unit',
+              'fullAddress': 'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
+              'isDefault': true,
+              'siteCode': 'MFG-001',
+            },
+            {
+              'id': '2',
+              'siteName': 'Stockyard',
+              'fullAddress': 'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
+              'isDefault': false,
+              'siteCode': 'STK-402',
+            },
+            {
+              'id': '3',
+              'siteName': 'Billing Address',
+              'fullAddress': 'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
+              'isDefault': false,
+              'siteCode': 'BIL-990',
+            },
+          ]
+        : addresses!;
 
     return ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: const ScrollPhysics(),
-      itemCount: addresses!.length,
+      itemCount: displayAddresses.length,
       itemBuilder: (context, index) {
-        final address = addresses![index];
+        final addressData = displayAddresses[index];
+        // Convert to Map if dynamic
+        final Map<String, dynamic> address = (addressData is Map)
+            ? addressData.cast<String, dynamic>()
+            : {
+                'id': addressData.id?.toString(),
+                'siteName': addressData.siteName,
+                'fullAddress': addressData.fullAddress,
+                'isDefault': addressData.isDefault,
+                'siteCode': addressData.siteCode,
+              };
 
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: MyColors.grayEA.withValues(alpha: 0.32),
-                blurRadius: 4,
-              ),
-            ],
+            boxShadow: [BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4)],
           ),
           child: GestureDetector(
-            onTap: address.isDefault == true
+            onTap: address['isDefault'] == true
                 ? (isBack == true ? () => Get.back() : null)
-                : () => onSetDefault?.call(address.id.toString()),
+                : () => onSetDefault?.call(address['id'].toString()),
             child: Container(
               decoration: BoxDecoration(
-                color: address.isDefault == true
-                    ? MyColors.veryPaleBlue
-                    : Colors.white,
+                color: address['isDefault'] == true ? MyColors.veryPaleBlue : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: address.isDefault == true
+                border: address['isDefault'] == true
                     ? Border.all(color: MyColors.verypaleBlue, width: 1.2)
                     : null,
               ),
@@ -191,6 +254,15 @@ class CommonAddressList extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: MyColors.primary.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.location_on, color: MyColors.primary, size: 18),
+                        ),
+                        const Gap(12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,12 +270,10 @@ class CommonAddressList extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    address.siteName ?? 'Address',
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.black,
-                                    ),
+                                    address['siteName'] ?? 'Address',
+                                    style: MyTexts.medium16.copyWith(color: MyColors.black),
                                   ),
-                                  if (address.isDefault == true) ...[
+                                  if (address['isDefault'] == true) ...[
                                     const Gap(8),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
@@ -216,9 +286,7 @@ class CommonAddressList extends StatelessWidget {
                                       ),
                                       child: Text(
                                         'Default',
-                                        style: MyTexts.medium13.copyWith(
-                                          color: Colors.white,
-                                        ),
+                                        style: MyTexts.medium13.copyWith(color: Colors.white),
                                       ),
                                     ),
                                   ],
@@ -226,51 +294,78 @@ class CommonAddressList extends StatelessWidget {
                               ),
                               const Gap(4),
                               Text(
-                                address.fullAddress ?? '',
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.gray54,
-                                ),
+                                address['fullAddress'] ?? '',
+                                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
                         ),
                         const Gap(8),
-                        GestureDetector(
-                          onTap: () => onEdit?.call(address.id.toString()),
-                          behavior: HitTestBehavior.translucent,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: SvgPicture.asset(Asset.edit),
-                          ),
-                        ),
-                        const Gap(4),
-                        GestureDetector(
-                          onTap: () => onDelete?.call(address.id.toString()),
-                          behavior: HitTestBehavior.translucent,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: SvgPicture.asset(Asset.delete),
-                          ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                // Share functionality (e.g., using share_plus)
+                              },
+                              child: const Icon(
+                                Icons.share_outlined,
+                                size: 20,
+                                color: MyColors.grey,
+                              ),
+                            ),
+                            const Gap(8),
+                            PopupMenuButton<String>(
+                              onSelected: (value) {
+                                if (value == 'edit') {
+                                  onEdit?.call(address['id'].toString());
+                                } else if (value == 'delete') {
+                                  onDelete?.call(address['id'].toString());
+                                }
+                              },
+                              icon: const Icon(Icons.more_horiz, size: 20, color: MyColors.grey),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              itemBuilder: (context) => [
+                                const PopupMenuItem(
+                                  value: 'edit',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.edit_outlined, size: 18),
+                                      Gap(8),
+                                      Text('Edit'),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuItem(
+                                  value: 'delete',
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.delete_outline, color: Colors.red, size: 18),
+                                      Gap(8),
+                                      Text('Delete', style: TextStyle(color: Colors.red)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(16),
                         topRight: Radius.circular(12),
                       ),
-                      color: address.isDefault == true
-                          ? Colors.white
-                          : MyColors.gra54EA,
+                      color: address['isDefault'] == true ? Colors.white : MyColors.gra54EA,
                     ),
                     child: Text(
-                      "Site Code: ${address.siteCode ?? '-'}",
+                      "Site Code: ${address['siteCode'] ?? '-'}",
                       style: MyTexts.medium14.copyWith(color: MyColors.black),
                     ),
                   ),
