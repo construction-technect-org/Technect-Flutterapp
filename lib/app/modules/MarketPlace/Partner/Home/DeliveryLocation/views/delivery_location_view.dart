@@ -81,7 +81,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                           const Gap(16),
                           // Add Address Button
                           GestureDetector(
-                            onTap: controller.addAddress,
+                            onTap: controller.useCurrentLocationAsDefault,
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,

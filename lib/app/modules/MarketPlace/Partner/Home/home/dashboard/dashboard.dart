@@ -113,7 +113,9 @@ class Dashboard extends StatelessWidget {
                                           color: MyColors.custom('545454'),
                                         ),
                                         children: [
-                                          TextSpan(text: _controller.selectedAddress.value),
+                                          TextSpan(
+                                            text: commonController.getCurrentAddress().value,
+                                          ),
                                           const WidgetSpan(
                                             alignment: PlaceholderAlignment.middle,
                                             child: Padding(
@@ -133,6 +135,58 @@ class Dashboard extends StatelessWidget {
                               ],
                             ),
                           ),
+
+                          // GestureDetector(
+                          //   onTap: myPref.getIsTeamLogin()
+                          //       ? null
+                          //       : () {
+                          //           if (myPref.role.val == "partner") {
+                          //             Get.toNamed(Routes.MANUFACTURER_ADDRESS);
+                          //           } else {
+                          //             Get.toNamed(Routes.DELIVERY_LOCATION);
+                          //           }
+                          //         },
+                          //   child: Row(
+                          //     children: [
+                          //       SvgPicture.asset(
+                          //         Asset.location,
+                          //         width: 9,
+                          //         height: 12.22,
+                          //         color: MyColors.custom('545454'),
+                          //       ),
+                          //       SizedBox(width: 0.4.h),
+                          //       Expanded(
+                          //         child: Obx(() {
+                          //           return RichText(
+                          //             overflow: TextOverflow.ellipsis,
+                          //             maxLines: 1,
+                          //             text: TextSpan(
+                          //               style: MyTexts.medium14.copyWith(
+                          //                 color: MyColors.custom('545454'),
+                          //               ),
+                          //               children: [
+                          //                 TextSpan(
+                          //                   text: commonController.getCurrentAddress().value,
+                          //                 ),
+                          //                 const WidgetSpan(
+                          //                   alignment: PlaceholderAlignment.middle,
+                          //                   child: Padding(
+                          //                     padding: EdgeInsets.only(left: 4),
+                          //                     child: Icon(
+                          //                       Icons.keyboard_arrow_down,
+                          //                       size: 16,
+                          //                       color: Colors.black54,
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           );
+                          //         }),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
