@@ -10,6 +10,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/mod
     as connector;
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/services/ConstructionLineServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/models/delivery_address_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
@@ -29,6 +30,8 @@ class CommonController extends GetxController {
   Rx<connector.ProfileModel> profileDataM = connector.ProfileModel().obs;
   RxBool isCrm = true.obs;
   UserMainModel? userMainModel;
+  RxList<DeliveryAddressData> addresses = <DeliveryAddressData>[].obs;
+  RxBool isLoadingAddresses = false.obs;
   Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
   RxString selectedAddress = ''.obs;
   RxSet<String> wishlistedProductIds = <String>{}.obs;
@@ -487,23 +490,28 @@ class CommonController extends GetxController {
   }
 
   void editAddress(String addressId) {
-    final address = Get.find<CommonController>().profileData.value.data?.siteLocations?.firstWhere(
-      (addr) => addr.id.toString() == addressId,
-    );
+    try {
+      final address = addresses.firstWhere((addr) => addr.id.toString() == addressId);
 
-    if (address != null) {
       Get.toNamed(
         Routes.ADD_DELIVERY_ADDRESS,
         arguments: {
           'isEdit': true,
           'addressId': addressId,
-          'addressName': address.siteName,
-          'landmark': address.landmark,
+          'label': address.label,
+          'addressLine1': address.addressLine1,
+          'addressLine2': address.addressLine2,
+          'pincode': address.pincode,
+          'city': address.city,
+          'state': address.state,
+          'country': address.country,
           'fullAddress': address.fullAddress,
           'latitude': address.latitude,
           'longitude': address.longitude,
         },
       );
+    } catch (e) {
+      log("Address not found for editing: $addressId");
     }
   }
 
@@ -569,23 +577,40 @@ class CommonController extends GetxController {
 
   Future<void> deleteDeliveryAddress(String addressId) async {
     try {
-      await DeliveryAddressService.deleteDeliveryAddress(addressId);
-      await Get.find<CommonController>().fetchProfileData();
-      Get.back();
+      await DeliveryAddressService.deleteAddress(addressId);
+      await fetchAddresses();
+      SnackBars.successSnackBar(content: "Address deleted successfully");
     } catch (e) {
       log('Failed to delete address: $e');
+      SnackBars.errorSnackBar(content: "Failed to delete address: $e");
     }
   }
 
   Future<void> setDefaultAddress(String addressId, {VoidCallback? onSuccess}) async {
     try {
-      await DeliveryAddressService.updateDeliveryAddress(addressId, {"is_default": true});
-
-      //await Get.find<CommonController>().fetchProfileData();
+      await DeliveryAddressService.setDefaultAddress(addressId);
+      await fetchAddresses();
+      SnackBars.successSnackBar(content: "Default address updated");
 
       if (onSuccess != null) onSuccess();
     } catch (e) {
       log('Failed to update default address: $e');
+      SnackBars.errorSnackBar(content: "Failed to set default address: $e");
+    }
+  }
+
+  Future<void> fetchAddresses() async {
+    try {
+      isLoadingAddresses.value = true;
+      final response = await DeliveryAddressService.getAddresses();
+      if (response.success == true) {
+        addresses.assignAll(response.addresses ?? []);
+        log("Addresses fetched: ${addresses.length}");
+      }
+    } catch (e) {
+      log('Error fetching addresses: $e');
+    } finally {
+      isLoadingAddresses.value = false;
     }
   }
 
@@ -602,8 +627,10 @@ class CommonController extends GetxController {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (myPref.role.val == "partner") {
         await fetchProfileData();
+        await fetchAddresses();
       } else {
         await fetchProfileDataM();
+        await fetchAddresses();
       }
     });
 
@@ -623,6 +650,7 @@ class CommonController extends GetxController {
         Future.delayed(const Duration(seconds: 1), () async {
           if (_appHiveService.token.isNotEmpty && myPref.role.val == "connector") {
             await fetchProfileDataM();
+            await fetchAddresses();
             await syncWishlistIds();
           }
           // fetchProfileData();

@@ -5,7 +5,6 @@ import 'package:construction_technect/app/core/widgets/custom_drawer.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
@@ -71,7 +70,6 @@ class BottomBarView extends GetView<BottomController> {
       upgrader: Upgrader(durationUntilAlertAgain: const Duration(days: 1)),
       child: Obx(() {
         return Scaffold(
-          key: controller.scaffoldKey,
           drawer: const CustomDrawer(),
           backgroundColor: Colors.white,
           body: _getCurrentScreen(),
@@ -182,8 +180,6 @@ class BottomBarView extends GetView<BottomController> {
             ),
           ),
         ),
-
-
       ],
     );
   }
@@ -301,7 +297,7 @@ class BottomBarView extends GetView<BottomController> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             // _sheetHandle(),
+            // _sheetHandle(),
             const Text(
               "Select an Option",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -358,14 +354,14 @@ class BottomBarView extends GetView<BottomController> {
           const SizedBox(height: 4),
           Text(
             name,
-            style: MyTexts.medium13.copyWith(
+            style: MyTexts.medium14.copyWith(
               color: controller.currentIndex.value == index ? Color(0xFF1B2F62) : Color(0xFF555555),
               fontWeight: controller.currentIndex.value == index
                   ? FontWeight.bold
                   : FontWeight.normal,
             ),
           ),
-          Text(name, style: MyTexts.medium14),
+          // Text(name, style: MyTexts.medium14),
         ],
       ),
     );
@@ -480,9 +476,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       child: CurvedNavigationBar(
         index: selectedIndex,
         height: 75,
@@ -540,13 +534,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
       children: const [
         Icon(Icons.sync, color: Colors.white, size: 28),
         SizedBox(height: 4),
-        Text(
-          "Switch",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-          ),
-        ),
+        Text("Switch", style: TextStyle(color: Colors.white, fontSize: 12)),
       ],
     );
   }

@@ -1,5 +1,3 @@
-
-
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
@@ -520,7 +518,12 @@ class ConnectionDialogs {
     );
   }
 
-  static void showRemoveConnectionDialog(BuildContext context, IncomingConnection connection,IconData? icons,String? text) {
+  static void showRemoveConnectionDialog(
+    BuildContext context,
+    IncomingConnection connection,
+    String? text,
+    IconData? icons,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -550,7 +553,7 @@ class ConnectionDialogs {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(icons,size: 25,),
+                        Icon(icons, size: 25),
                         // Text(
                         //   "${connection.merchantProfile?.businessName}",
                         //   style: MyTexts.medium14.copyWith(color: MyColors.black),
@@ -579,9 +582,7 @@ class ConnectionDialogs {
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: MyTexts.medium15.copyWith(
-                      color: MyColors.black,
-                    ),
+                    style: MyTexts.medium15.copyWith(color: MyColors.black),
                     children: [
                       const TextSpan(text: "Are you sure you want to "),
                       TextSpan(
@@ -591,11 +592,8 @@ class ConnectionDialogs {
                         ),
                       ),
                       TextSpan(
-                          text:
-                          "${connection.connectorProfile?.verificationDetails?.name ?? "N/A"}?",
-                          style: MyTexts.medium15.copyWith(
-                            color: MyColors.black,
-                          )
+                        text: "${connection.connectorProfile?.verificationDetails?.name ?? "N/A"}?",
+                        style: MyTexts.medium15.copyWith(color: MyColors.black),
                       ),
                     ],
                   ),
@@ -603,7 +601,6 @@ class ConnectionDialogs {
                 SizedBox(height: 2.h),
                 Row(
                   children: [
-
                     Expanded(
                       child: RoundedButton(
                         onTap: () {
@@ -642,7 +639,12 @@ class ConnectionDialogs {
     );
   }
 
-  static void showBlockDialog(BuildContext context, IncomingConnection connection, String? text,IconData? icons) {
+  static void showBlockDialog(
+    BuildContext context,
+    IncomingConnection connection,
+    String? text,
+    IconData? icons,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -672,7 +674,7 @@ class ConnectionDialogs {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(icons,size: 25,),
+                        Icon(icons, size: 25),
                         // Text(
                         //   "${connection.merchantProfile?.businessName}",
                         //   style: MyTexts.medium14.copyWith(color: MyColors.black),
@@ -701,9 +703,7 @@ class ConnectionDialogs {
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: MyTexts.medium15.copyWith(
-                      color: MyColors.black,
-                    ),
+                    style: MyTexts.medium15.copyWith(color: MyColors.black),
                     children: [
                       const TextSpan(text: "Are you sure you want to "),
                       TextSpan(
@@ -713,11 +713,8 @@ class ConnectionDialogs {
                         ),
                       ),
                       TextSpan(
-                          text:
-                          "${connection.connectorProfile?.verificationDetails?.name ?? "N/A"}?",
-                          style: MyTexts.medium15.copyWith(
-                            color: MyColors.black,
-                          )
+                        text: "${connection.connectorProfile?.verificationDetails?.name ?? "N/A"}?",
+                        style: MyTexts.medium15.copyWith(color: MyColors.black),
                       ),
                     ],
                   ),
@@ -725,7 +722,6 @@ class ConnectionDialogs {
                 SizedBox(height: 2.h),
                 Row(
                   children: [
-
                     Expanded(
                       child: RoundedButton(
                         onTap: () {
@@ -775,7 +771,13 @@ class ConnectionDialogs {
       },
     );
   }
-  static void showBlockDialogOutgoing(BuildContext context, OutgoingConnection connection, String? text,IconData? icons) {
+
+  static void showBlockDialogOutgoing(
+    BuildContext context,
+    OutgoingConnection connection,
+    String? text,
+    IconData? icons,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -805,7 +807,7 @@ class ConnectionDialogs {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(icons,size: 25,),
+                        Icon(icons, size: 25),
                         // Text(
                         //   "${connection.merchantProfile?.businessName}",
                         //   style: MyTexts.medium14.copyWith(color: MyColors.black),
@@ -834,9 +836,7 @@ class ConnectionDialogs {
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: MyTexts.medium15.copyWith(
-                      color: MyColors.black,
-                    ),
+                    style: MyTexts.medium15.copyWith(color: MyColors.black),
                     children: [
                       const TextSpan(text: "Are you sure you want to "),
                       TextSpan(
@@ -846,11 +846,8 @@ class ConnectionDialogs {
                         ),
                       ),
                       TextSpan(
-                        text:
-                        "${connection.merchantProfile?.businessName ?? "N/A"}?",
-                          style: MyTexts.medium15.copyWith(
-                            color: MyColors.black,
-                          )
+                        text: "${connection.merchantProfile?.businessName ?? "N/A"}?",
+                        style: MyTexts.medium15.copyWith(color: MyColors.black),
                       ),
                     ],
                   ),
@@ -858,7 +855,6 @@ class ConnectionDialogs {
                 SizedBox(height: 2.h),
                 Row(
                   children: [
-
                     Expanded(
                       child: RoundedButton(
                         onTap: () {
@@ -872,12 +868,10 @@ class ConnectionDialogs {
                               connection.id ?? "",
                             );
                             Navigator.pop(context);
-                          }
-                          else if(text=="Withdraw"){
+                          } else if (text == "Withdraw") {
                             // Get.find<ConnectionInboxController>().withdrawRequest(connection.id ?? "");
                             Navigator.pop(context);
-                          }
-                          else {
+                          } else {
                             Get.find<ConnectionInboxController>().removeConnection(
                               connection.id ?? "",
                             );

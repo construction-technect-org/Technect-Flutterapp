@@ -52,6 +52,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/vie
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/views/connector_profile_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/views/connector_selected_product_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/bindings/requirement_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/views/requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/bindings/search_product_binding.dart';
@@ -97,11 +98,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/views/news_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/bindings/business_hours_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/views/business_hours_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/bindings/profile_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/team_edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/bindings/edit_profile_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/views/edit_profile_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/profile_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/my_profile_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/bindings/refer_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/views/refer_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/bindings/add_role_binding.dart';
@@ -117,6 +117,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/views/product_detail_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Projects/bindings/project_detail_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Projects/bindings/projects_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Projects/views/project_detail_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Projects/views/projects_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/bindings/search_service_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/views/search_service_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/bindings/create_new_ticket_binding.dart';
@@ -171,7 +175,7 @@ class AppPages {
       binding: ForgotPasswordBinding(),
     ),
     GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
-    GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
+    GetPage(name: _Paths.PROFILE, page: () => const MyProfileView()),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
@@ -237,6 +241,7 @@ class AppPages {
       page: () => const ConnectorProfileView(),
       binding: ConnectorProfileBinding(),
     ),
+    GetPage(name: Routes.CONNECTOR_MARKET_PLACE, page: () => ConnectorHomeView()),
 
     GetPage(
       name: Routes.REQUEST_DEMO,
@@ -257,6 +262,12 @@ class AppPages {
     GetPage(name: Routes.REPORT, page: () => const ReportView(), binding: ReportBinding()),
     GetPage(name: Routes.INVENTORY, page: () => InventoryView(), binding: InventoryBinding()),
     GetPage(name: Routes.NEWS, page: () => NewsView(), binding: NewsBinding()),
+    GetPage(name: Routes.PROJECTS, page: () => const ProjectsView(), binding: ProjectsBinding()),
+    GetPage(
+      name: Routes.PROJECT_DETAIL,
+      page: () => const ProjectDetailView(),
+      binding: ProjectDetailBinding(),
+    ),
     GetPage(
       name: Routes.NOTIFICATIONS,
       page: () => NotificationView(),
