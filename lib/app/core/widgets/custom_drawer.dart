@@ -1,7 +1,9 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/models/delivery_address_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -246,10 +248,29 @@ class CustomDrawer extends StatelessWidget {
                       }
                       return Column(
                         children: addresses.take(3).map((addr) {
-                          return _buildLocationItem(
-                            addr.label ?? 'Address',
-                            addr.fullAddress,
-                            addr.isDefault == true ? Colors.green : Colors.blue,
+                          String addressId = '';
+                          if (addr is DeliveryAddressData) {
+                            addressId = addr.id ?? "";
+                          } else if (addr is SiteLocation) {
+                            addressId = addr.id?.toString() ?? "";
+                          } else {
+                            try {
+                              addressId = addr.id?.toString() ?? "";
+                            } catch (_) {}
+                          }
+
+                          return GestureDetector(
+                            onTap: () async {
+                              if (addr.isDefault != true && addressId.isNotEmpty) {
+                                await commonController.setDefaultAddress(addressId);
+                              }
+                            },
+                            child: _buildLocationItem(
+                              addr.label ?? 'Address',
+                              addr.fullAddress,
+                              addr.isDefault == true ? Colors.green : Colors.blue,
+                              isDefault: addr.isDefault == true,
+                            ),
                           );
                         }).toList(),
                       );
@@ -320,7 +341,12 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildLocationItem(String title, String subtitle, Color iconColor) {
+  Widget _buildLocationItem(
+    String title,
+    String subtitle,
+    Color iconColor, {
+    bool isDefault = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -336,7 +362,27 @@ class CustomDrawer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: MyTexts.bold14),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(title, style: MyTexts.bold14, overflow: TextOverflow.ellipsis),
+                    ),
+                    if (isDefault) ...[
+                      const Gap(8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: MyColors.primary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Default',
+                          style: MyTexts.medium12.copyWith(color: Colors.white, fontSize: 10),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
                 Text(
                   subtitle,
                   style: MyTexts.medium12.copyWith(color: MyColors.grey),

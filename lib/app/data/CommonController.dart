@@ -122,25 +122,32 @@ class CommonController extends GetxController {
   }
 
   RxString getCurrentAddress() {
+    // 1. Check for Default Address first
     if (myPref.role.val == "partner") {
-      final addresses = profileData.value.data?.addresses;
-      if (addresses != null && addresses.isNotEmpty) {
-        final int index = addresses.indexWhere((e) => e.isDefault == true);
-        final address = index != -1 ? addresses[index] : addresses[0];
-
-        return '${address.fullAddress}, ${address.landmark ?? ''}'.obs;
+      final addressesList = profileData.value.data?.addresses;
+      if (addressesList != null && addressesList.isNotEmpty) {
+        final defaultAddr = addressesList.firstWhereOrNull((e) => e.isDefault == true);
+        if (defaultAddr != null) {
+          return '${defaultAddr.fullAddress}, ${defaultAddr.landmark ?? ''}'.obs;
+        }
       }
     } else {
       final siteLocations = profileData.value.data?.siteLocations;
       if (siteLocations != null && siteLocations.isNotEmpty) {
-        final int index = siteLocations.indexWhere((e) => e.isDefault == true);
-        final address = index != -1 ? siteLocations[index] : siteLocations[0];
-
-        return '${address.fullAddress}, ${address.landmark ?? ''}'.obs;
+        final defaultSite = siteLocations.firstWhereOrNull((e) => e.isDefault == true);
+        if (defaultSite != null) {
+          return '${defaultSite.fullAddress}, ${defaultSite.landmark ?? ''}'.obs;
+        }
       }
     }
 
-    // Fallback to locally selected address if profile addresses are missing
+    // 2. Fallback: Check if there's any address in the list at all (take the first one)
+    if (addresses.isNotEmpty) {
+      final firstAddr = addresses[0];
+      return firstAddr.fullAddress.obs;
+    }
+
+    // 3. Fallback to GPS locally selected address
     if (selectedAddress.value.isNotEmpty) {
       return selectedAddress.value.obs;
     }

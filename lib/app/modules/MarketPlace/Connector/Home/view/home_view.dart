@@ -173,9 +173,7 @@ class ConnectorHomeView extends StatelessWidget {
                                               ),
                                               children: [
                                                 TextSpan(
-                                                  text:
-                                                      "Lat: ${commonController.currentPosition.value.latitude}, "
-                                                      "Lng: ${commonController.currentPosition.value.longitude}",
+                                                  text: commonController.getCurrentAddress().value,
                                                 ),
                                                 const WidgetSpan(
                                                   alignment: PlaceholderAlignment.middle,

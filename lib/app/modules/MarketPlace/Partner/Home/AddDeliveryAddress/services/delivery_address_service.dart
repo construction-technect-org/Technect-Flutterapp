@@ -49,8 +49,8 @@ class DeliveryAddressService {
   static Future setDefaultAddress(String addressId) async {
     try {
       final response = await _apiManager.patchObject(
-        url: '${APIConstants.address}/$addressId',
-        body: {"isDefault": true},
+        url: '${APIConstants.address}/$addressId/default',
+        body: {},
       );
       return response;
     } catch (e) {
