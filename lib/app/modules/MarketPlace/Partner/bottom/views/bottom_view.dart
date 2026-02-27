@@ -5,7 +5,6 @@ import 'package:construction_technect/app/core/widgets/custom_drawer.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ProjectDetails/views/edit_project_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
@@ -71,7 +70,6 @@ class BottomBarView extends GetView<BottomController> {
       upgrader: Upgrader(durationUntilAlertAgain: const Duration(days: 1)),
       child: Obx(() {
         return Scaffold(
-          key: controller.scaffoldKey,
           drawer: const CustomDrawer(),
           backgroundColor: Colors.white,
           body: _getCurrentScreen(),
@@ -181,109 +179,6 @@ class BottomBarView extends GetView<BottomController> {
               ),
             ),
           ),
-        ),
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                //margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: MyColors.lightWhite,
-                  //color: Colors.white,
-                  /*boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x19000000),
-                      blurRadius: 30,
-                      offset: Offset(5, 0),
-                    ),
-                  ], */
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _bottomBar(
-                      Asset.home,
-                      Asset.home1,
-                      'Home',
-                      onTap: () {
-                        controller.currentIndex.value = 0;
-                      },
-                      index: 0,
-                    ),
-                    //Gap(5.5.w),
-                    _bottomBar(
-                      Asset.category,
-                      Asset.category1,
-                      'Category',
-                      onTap: () {
-                        controller.currentIndex.value = 1;
-                      },
-                      index: 1,
-                    ),
-                    //Gap(5.5.w),
-                    if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
-                      _bottomBar(
-                        Asset.add,
-                        Asset.add,
-                        myPref.role.val != "connector" ? "Manage" : 'Manage',
-                        onTap: onSellTap, index: null,
-                      ),
-                    //Gap(5.5.w),
-                    _bottomBar(
-                      Asset.connection,
-                      Asset.connection1,
-                      'connect',
-                      onTap: () {
-                        controller.currentIndex.value = 2;
-                      },
-                      index: 2,
-                    ),
-                    //Gap(5.5.w),
-                    // bottomBar(
-                    //   Asset.more,
-                    //   Asset.more1,
-                    //   '',
-                    //   onTap: () {
-                    //     controller.currentIndex.value = 3;
-                    //   },
-                    //   index: 3,
-                    // ),
-                  ],
-                ),
-              ),
-            ),
-            if (myPref.getIsTeamLogin() == false)
-              GestureDetector(
-                onTap: () async {
-                  await commonController.fetchProfileDataM();
-
-                  Get.put<SwitchAccountController>(SwitchAccountController());
-                  showSwitchAccountBottomSheet();
-                  // Get.to(() => const ExploreView());
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 5, right: 10,left: 10,top: 5),
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF1B2F62),
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                  ),
-                  child: Column(
-                    children: [
-                      const Icon(Icons.autorenew, color: Colors.white, size: 30),
-                      Text(
-                        myPref.getRole() == "partner" ? "Merchant" : "Connector",
-                        style: MyTexts.medium12.copyWith(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
         ),
       ],
     );
@@ -402,7 +297,7 @@ class BottomBarView extends GetView<BottomController> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             // _sheetHandle(),
+            // _sheetHandle(),
             const Text(
               "Select an Option",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -459,14 +354,14 @@ class BottomBarView extends GetView<BottomController> {
           const SizedBox(height: 4),
           Text(
             name,
-            style: MyTexts.medium13.copyWith(
+            style: MyTexts.medium14.copyWith(
               color: controller.currentIndex.value == index ? Color(0xFF1B2F62) : Color(0xFF555555),
               fontWeight: controller.currentIndex.value == index
                   ? FontWeight.bold
                   : FontWeight.normal,
             ),
           ),
-          Text(name, style: MyTexts.medium14),
+          // Text(name, style: MyTexts.medium14),
         ],
       ),
     );
@@ -581,9 +476,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       child: CurvedNavigationBar(
         index: selectedIndex,
         height: 75,
@@ -641,13 +534,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
       children: const [
         Icon(Icons.sync, color: Colors.white, size: 28),
         SizedBox(height: 4),
-        Text(
-          "Switch",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-          ),
-        ),
+        Text("Switch", style: TextStyle(color: Colors.white, fontSize: 12)),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
@@ -12,8 +13,22 @@ class AddDeliveryAddressController extends GetxController {
 
   FocusNode googleFocusNode = FocusNode();
   final TextEditingController searchController = TextEditingController();
-  final TextEditingController addressNameController = TextEditingController();
-  final TextEditingController landmarkController = TextEditingController();
+  final TextEditingController houseNoController = TextEditingController();
+  final TextEditingController buildingBlockController = TextEditingController();
+  final TextEditingController landmarkAreaController = TextEditingController();
+  final TextEditingController pincodeController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+
+  RxString selectedLabel = 'Billing Address'.obs;
+  final List<String> labelOptions = [
+    'Billing Address',
+    'Office Address',
+    'Project Address',
+    'Manufacturing Address',
+  ];
+
   RxBool isEditMode = false.obs;
   RxString editAddressId = ''.obs;
 
@@ -23,7 +38,7 @@ class AddDeliveryAddressController extends GetxController {
 
   late GoogleMapController mapController;
   Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
-  RxDouble mapZoom = 14.0.obs;
+  RxDouble mapZoom = 16.0.obs;
   Rx<MapType> mapType = MapType.normal.obs;
 
   @override
@@ -36,8 +51,13 @@ class AddDeliveryAddressController extends GetxController {
   @override
   void onClose() {
     searchController.dispose();
-    addressNameController.dispose();
-    landmarkController.dispose();
+    houseNoController.dispose();
+    buildingBlockController.dispose();
+    landmarkAreaController.dispose();
+    pincodeController.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    countryController.dispose();
     super.onClose();
   }
 
@@ -46,15 +66,21 @@ class AddDeliveryAddressController extends GetxController {
     if (arguments != null && arguments['isEdit'] == true) {
       isEditMode.value = true;
       editAddressId.value = (arguments['addressId'] ?? 0).toString();
-      addressNameController.text = arguments['addressName'] ?? '';
-      landmarkController.text = arguments['landmark'] ?? '';
+      selectedLabel.value = arguments['label'] ?? arguments['siteName'] ?? 'Billing Address';
+      houseNoController.text = arguments['addressLine1'] ?? arguments['addressName'] ?? '';
+      buildingBlockController.text = arguments['addressLine2'] ?? '';
+      landmarkAreaController.text = arguments['landmark'] ?? '';
+      pincodeController.text = arguments['pincode'] ?? '';
+      cityController.text = arguments['city'] ?? '';
+      stateController.text = arguments['state'] ?? '';
+      countryController.text = arguments['country'] ?? '';
       selectedAddress.value = arguments['fullAddress'] ?? '';
       searchController.text = arguments['fullAddress'] ?? '';
 
       if (arguments['latitude'] != null && arguments['longitude'] != null) {
         try {
-          final lat = double.parse(arguments['latitude']);
-          final lng = double.parse(arguments['longitude']);
+          final lat = double.parse(arguments['latitude'].toString());
+          final lng = double.parse(arguments['longitude'].toString());
           currentPosition.value = LatLng(lat, lng);
         } catch (e) {
           // NO Error
@@ -112,7 +138,6 @@ class AddDeliveryAddressController extends GetxController {
 
   void onCameraIdle() {
     if (isSearching.value == false) {
-      searchController.clear();
       _getAddressFromCoordinates(currentPosition.value.latitude, currentPosition.value.longitude);
     } else {
       isSearching.value = false;
@@ -124,9 +149,25 @@ class AddDeliveryAddressController extends GetxController {
       final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks.isNotEmpty) {
         final Placemark place = placemarks[0];
-        final String address =
-            '${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
+
+        // Auto-fill fields
+        pincodeController.text = place.postalCode ?? '';
+        cityController.text = place.locality ?? place.subAdministrativeArea ?? '';
+        stateController.text = place.administrativeArea ?? '';
+        countryController.text = place.country ?? '';
+        landmarkAreaController.text = place.subLocality ?? '';
+
+        final String address = [
+          place.street,
+          place.subLocality,
+          place.locality,
+          place.administrativeArea,
+          place.postalCode,
+          place.country,
+        ].where((e) => e != null && e.isNotEmpty).join(', ');
+
         selectedAddress.value = address;
+        searchController.text = address;
       }
     } catch (e) {
       selectedAddress.value = 'Address not found';
@@ -134,13 +175,13 @@ class AddDeliveryAddressController extends GetxController {
   }
 
   bool _validateForm() {
-    if (addressNameController.text.trim().isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please enter address name');
+    if (houseNoController.text.trim().isEmpty) {
+      SnackBars.errorSnackBar(content: 'Please enter House no. and floor');
       return false;
     }
 
-    if (landmarkController.text.trim().isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please enter landmark');
+    if (pincodeController.text.trim().isEmpty) {
+      SnackBars.errorSnackBar(content: 'Please enter Pincode');
       return false;
     }
 
@@ -153,26 +194,43 @@ class AddDeliveryAddressController extends GetxController {
     try {
       isLoading.value = true;
 
-      final Map<String, dynamic> deliveryAddress = {
-        "site_name": addressNameController.text.trim(),
-        "full_address": selectedAddress.value,
-        "landmark": landmarkController.text.trim(),
+      final String addressLine2 = [
+        buildingBlockController.text.trim(),
+        landmarkAreaController.text.trim(),
+      ].where((element) => element.isNotEmpty).join(", ");
+
+      final Map<String, dynamic> payload = {
+        "label": selectedLabel.value,
+        "addressLine1": houseNoController.text.trim(),
+        "addressLine2": addressLine2,
+        "city": cityController.text.trim(),
+        "state": stateController.text.trim(),
+        "pincode": pincodeController.text.trim(),
+        "country": countryController.text.trim(),
         "latitude": currentPosition.value.latitude,
         "longitude": currentPosition.value.longitude,
-        "is_default": true,
+        "isDefault": false,
       };
-      log(deliveryAddress.toString());
+
+      log("Address Payload: ${payload.toString()}");
+
       if (isEditMode.value) {
-        await DeliveryAddressService.updateDeliveryAddress(editAddressId.value, deliveryAddress);
+        await DeliveryAddressService.updateAddress(editAddressId.value, payload);
       } else {
-        await DeliveryAddressService.submitDeliveryAddress(deliveryAddress);
+        await DeliveryAddressService.createAddress(payload);
       }
 
       await Get.find<CommonController>().fetchProfileData();
+      await Get.find<CommonController>().fetchAddresses();
 
       Get.back();
+
+      SnackBars.successSnackBar(
+        content: isEditMode.value ? "Address updated successfully" : "Address created successfully",
+      );
     } catch (e) {
-      // No error
+      log("Error submitting address: $e");
+      SnackBars.errorSnackBar(content: "Failed to save address: $e");
     } finally {
       isLoading.value = false;
     }

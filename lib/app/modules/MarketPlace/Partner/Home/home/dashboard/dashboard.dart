@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 
 class Dashboard extends StatelessWidget {
   final CommonController commonController = Get.find<CommonController>();
@@ -28,7 +27,7 @@ class Dashboard extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.find<BottomController>().scaffoldKey.currentState?.openDrawer();
+                        Scaffold.of(context).openDrawer();
                       },
                       behavior: HitTestBehavior.translucent,
                       child: Obx(() {

@@ -2,7 +2,9 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/models/delivery_address_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/controller/delivery_location_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 
 class DeliveryLocationView extends GetView<DeliveryLocationController> {
@@ -134,23 +136,36 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                           ),
                           const Gap(16),
                           Text(
-                            "Saved Address",
-                            style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
+                            'Saved Addresses',
+                            style: MyTexts.bold16.copyWith(color: MyColors.black),
                           ),
                           const Gap(16),
-                          // Saved Addresses List
-                          Obx(
-                            () => CommonAddressList(
-                              addresses: Get.find<CommonController>()
-                                  .profileData
-                                  .value
-                                  .data
-                                  ?.siteLocations,
+                          Obx(() {
+                            // Access addresses here to ensure Obx tracks changes to the list
+                            final addressList = controller.addresses.toList();
+
+                            if (controller.isLoading.value) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(24.0),
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+
+                            return CommonAddressList(
+                              addresses: addressList,
                               onEdit: commonController.editAddress,
-                              onDelete: commonController.deleteAddress,
-                              onSetDefault: commonController.setDefaultAddress,
-                            ),
-                          ),
+                              onDelete: (id) async {
+                                await commonController.deleteDeliveryAddress(id);
+                                controller.fetchAddresses();
+                              },
+                              onSetDefault: (id) async {
+                                await commonController.setDefaultAddress(id);
+                                controller.fetchAddresses();
+                              },
+                            );
+                          }),
                         ],
                       ),
                     ),
@@ -183,49 +198,54 @@ class CommonAddressList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> displayAddresses = (addresses == null || addresses!.isEmpty)
-        ? [
-            {
-              'id': '1',
-              'siteName': 'Manufacturing unit',
-              'fullAddress': 'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
-              'isDefault': true,
-              'siteCode': 'MFG-001',
-            },
-            {
-              'id': '2',
-              'siteName': 'Stockyard',
-              'fullAddress': 'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
-              'isDefault': false,
-              'siteCode': 'STK-402',
-            },
-            {
-              'id': '3',
-              'siteName': 'Billing Address',
-              'fullAddress': 'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
-              'isDefault': false,
-              'siteCode': 'BIL-990',
-            },
-          ]
-        : addresses!;
+    if (addresses == null || addresses!.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            children: [
+              Icon(Icons.location_off_outlined, size: 48, color: MyColors.gray54),
+              const Gap(8),
+              Text(
+                "No saved addresses found",
+                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
-      physics: const ScrollPhysics(),
-      itemCount: displayAddresses.length,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: addresses!.length,
       itemBuilder: (context, index) {
-        final addressData = displayAddresses[index];
-        // Convert to Map if dynamic
-        final Map<String, dynamic> address = (addressData is Map)
-            ? addressData.cast<String, dynamic>()
-            : {
-                'id': addressData.id?.toString(),
-                'siteName': addressData.siteName,
-                'fullAddress': addressData.fullAddress,
-                'isDefault': addressData.isDefault,
-                'siteCode': addressData.siteCode,
-              };
+        final dynamic item = addresses![index];
+
+        // Normalize data based on model type
+        String addressId = "";
+        String label = "Address";
+        String fullAddress = "";
+        bool isDefault = false;
+
+        if (item is DeliveryAddressData) {
+          addressId = item.id ?? "";
+          label = item.label ?? "Address";
+          fullAddress = item.fullAddress;
+          isDefault = item.isDefault ?? false;
+        } else if (item is SiteLocation) {
+          addressId = item.id?.toString() ?? "";
+          label = item.siteName ?? "Address";
+          fullAddress = item.fullAddress ?? "";
+          isDefault = item.isDefault ?? false;
+        } else if (item is Map) {
+          addressId = item['id']?.toString() ?? "";
+          label = item['label'] ?? item['siteName'] ?? "Address";
+          fullAddress = item['fullAddress'] ?? "";
+          isDefault = item['isDefault'] ?? false;
+        }
 
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
@@ -235,14 +255,14 @@ class CommonAddressList extends StatelessWidget {
             boxShadow: [BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4)],
           ),
           child: GestureDetector(
-            onTap: address['isDefault'] == true
+            onTap: isDefault == true
                 ? (isBack == true ? () => Get.back() : null)
-                : () => onSetDefault?.call(address['id'].toString()),
+                : () => onSetDefault?.call(addressId),
             child: Container(
               decoration: BoxDecoration(
-                color: address['isDefault'] == true ? MyColors.veryPaleBlue : Colors.white,
+                color: isDefault == true ? MyColors.veryPaleBlue : Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: address['isDefault'] == true
+                border: isDefault == true
                     ? Border.all(color: MyColors.verypaleBlue, width: 1.2)
                     : null,
               ),
@@ -269,11 +289,14 @@ class CommonAddressList extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    address['siteName'] ?? 'Address',
-                                    style: MyTexts.medium16.copyWith(color: MyColors.black),
+                                  Flexible(
+                                    child: Text(
+                                      label,
+                                      style: MyTexts.medium16.copyWith(color: MyColors.black),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                  if (address['isDefault'] == true) ...[
+                                  if (isDefault == true) ...[
                                     const Gap(8),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
@@ -294,7 +317,7 @@ class CommonAddressList extends StatelessWidget {
                               ),
                               const Gap(4),
                               Text(
-                                address['fullAddress'] ?? '',
+                                fullAddress,
                                 style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -319,9 +342,9 @@ class CommonAddressList extends StatelessWidget {
                             PopupMenuButton<String>(
                               onSelected: (value) {
                                 if (value == 'edit') {
-                                  onEdit?.call(address['id'].toString());
+                                  onEdit?.call(addressId);
                                 } else if (value == 'delete') {
-                                  onDelete?.call(address['id'].toString());
+                                  onDelete?.call(addressId);
                                 }
                               },
                               icon: const Icon(Icons.more_horiz, size: 20, color: MyColors.grey),
@@ -353,20 +376,6 @@ class CommonAddressList extends StatelessWidget {
                           ],
                         ),
                       ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        topRight: Radius.circular(12),
-                      ),
-                      color: address['isDefault'] == true ? Colors.white : MyColors.gra54EA,
-                    ),
-                    child: Text(
-                      "Site Code: ${address['siteCode'] ?? '-'}",
-                      style: MyTexts.medium14.copyWith(color: MyColors.black),
                     ),
                   ),
                 ],

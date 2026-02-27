@@ -3,13 +3,15 @@ import "dart:developer";
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/incoming_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/outgoing_model.dart';
 
 class ConnectionInboxController extends GetxController {
   RxBool isLoading = true.obs;
   RxBool isLoader = false.obs;
-  RxList<Connection> incomingConnections = <Connection>[].obs;
-  RxList<Connection> outgoingConnections = <Connection>[].obs;
-  RxList<Connection> filteredConnections = <Connection>[].obs;
+  RxList<IncomingConnection> incomingConnections = <IncomingConnection>[].obs;
+  RxList<OutgoingConnection> outgoingConnections = <OutgoingConnection>[].obs;
+  // RxList<Connection> filteredConnections = <Connection>[].obs;
   RxString searchQuery = ''.obs;
   // Rx<Statistics> statistics = Statistics().obs;
   RxInt selectedTabIndex = 0.obs;
@@ -38,15 +40,11 @@ class ConnectionInboxController extends GetxController {
       }
       final response = await apiManager.get(
         url: APIConstants.incomingConnectionInbox,
-        // url: myPref.role.val == "connector"
-        //     ? APIConstants.connectionConnectorInbox
-        //     : APIConstants.connectionInbox,
-        // params: params.isNotEmpty ? params : null,
+
       );
-      final connectionModel = ConnectionsModel.fromJson(response);
+      final connectionModel = IncomingConnectionsResponse.fromJson(response);
       incomingConnections.assignAll(connectionModel.connections ?? []);
       _filterByItemType();
-      // statistics.value = connectionModel.statistics ?? Statistics();
       isLoader.value = false;
     } catch (e) {
       if (kDebugMode) {
@@ -66,15 +64,10 @@ class ConnectionInboxController extends GetxController {
       }
       final response = await apiManager.get(
         url: APIConstants.outgoingConnectionInbox,
-        // url: myPref.role.val == "connector"
-        //     ? APIConstants.connectionConnectorInbox
-        //     : APIConstants.connectionInbox,
-        // params: params.isNotEmpty ? params : null,
       );
-      final connectionModel = ConnectionsModel.fromJson(response);
+      final connectionModel = OutgoingConnectionsResponse.fromJson(response);
       outgoingConnections.assignAll(connectionModel.connections ?? []);
       _filterByItemType();
-      // statistics.value = connectionModel.statistics ?? Statistics();
       isLoader.value = false;
     } catch (e) {
       if (kDebugMode) {
@@ -103,7 +96,7 @@ class ConnectionInboxController extends GetxController {
       // filteredConnections.clear();
       // filteredConnections.addAll(typeFiltered);
     } else {
-      filteredConnections.clear();
+      // filteredConnections.clear();
       //   filteredConnections.value = typeFiltered.where((connection) {
       //     return (connection.connectorName ?? '').toLowerCase().contains(
       //           value.toLowerCase(),
@@ -131,11 +124,11 @@ class ConnectionInboxController extends GetxController {
 
   void _filterByItemType() {
     if (selectedTabIndex.value == 0) {
-      filteredConnections.clear();
-      filteredConnections.addAll(incomingConnections);
+      // filteredConnections.clear();
+      // filteredConnections.addAll(incomingConnections);
     } else {
-      filteredConnections.clear();
-      filteredConnections.addAll(outgoingConnections);
+      // filteredConnections.clear();
+      // filteredConnections.addAll(outgoingConnections);
       // final filterType = selectedTabIndex.value == 1 ? 'product' : 'service';
       // filteredConnections.clear();
       // filteredConnections.value = connections.where((connection) {

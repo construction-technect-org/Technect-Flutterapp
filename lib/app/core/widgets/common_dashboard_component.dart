@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 
 class CommonDashboard extends StatelessWidget {
   CommonDashboard({super.key});
@@ -359,8 +358,11 @@ class CommonDashboardController extends GetxController {
     }
     switch (value) {
       case "marketplace":
-        Get.lazyPut(() => BottomController());
-        Get.find<BottomController>().currentIndex.value = 1;
+        if (myPref.role.val == "connector") {
+          Get.toNamed(Routes.CONNECTOR_MARKET_PLACE);
+        } else {
+          Get.toNamed(Routes.PROJECTS);
+        }
         break;
       case "crm":
         Get.find<CommonController>().switchToCrmMain();

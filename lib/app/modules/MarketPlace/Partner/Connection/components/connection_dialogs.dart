@@ -1,10 +1,10 @@
-
-
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/controllers/connection_inbox_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/incoming_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/outgoing_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class ConnectionDialogs {
@@ -518,7 +518,12 @@ class ConnectionDialogs {
     );
   }
 
-  static void showRemoveConnectionDialog(BuildContext context, Connection connection) {
+  static void showRemoveConnectionDialog(
+    BuildContext context,
+    IncomingConnection connection,
+    String? text,
+    IconData? icons,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -532,6 +537,7 @@ class ConnectionDialogs {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // ClipRRect(
                     //   borderRadius: BorderRadius.circular(100),
@@ -545,62 +551,56 @@ class ConnectionDialogs {
                     // ),
                     const Gap(12),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "connection.merchantName",
-                          style: MyTexts.medium14.copyWith(color: MyColors.black),
-                          textAlign: TextAlign.center,
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on_rounded,
-                              size: 14,
-                              color: MyColors.veryDarkGray,
-                            ),
-                            const Gap(4),
-                            Text(
-                              "connection.productName",
-                              style: MyTexts.regular13.copyWith(color: MyColors.black),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                        Icon(icons, size: 25),
+                        // Text(
+                        //   "${connection.merchantProfile?.businessName}",
+                        //   style: MyTexts.medium14.copyWith(color: MyColors.black),
+                        //   textAlign: TextAlign.center,
+                        // ),
+                        // Row(
+                        //   children: [
+                        //     const Icon(
+                        //       Icons.location_on_rounded,
+                        //       size: 14,
+                        //       color: MyColors.veryDarkGray,
+                        //     ),
+                        //     const Gap(4),
+                        //     Text(
+                        //       "${connection.merchantProfile?.businessName}",
+                        //       style: MyTexts.regular13.copyWith(color: MyColors.black),
+                        //       textAlign: TextAlign.center,
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ],
                 ),
                 SizedBox(height: 2.h),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: const Color(0xFFFEF7E8),
-                    border: Border.all(color: const Color(0xFFFDEBC8)),
-                  ),
-                  child: Text(
-                    "Do you really want to connect\nfrom this manufacturer?",
-                    style: MyTexts.medium14.copyWith(color: MyColors.black),
-                    textAlign: TextAlign.center,
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: MyTexts.medium15.copyWith(color: MyColors.black),
+                    children: [
+                      const TextSpan(text: "Are you sure you want to "),
+                      TextSpan(
+                        text: "$text ",
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.green, // 🔴 Red Color Here
+                        ),
+                      ),
+                      TextSpan(
+                        text: "${connection.connectorProfile?.verificationDetails?.name ?? "N/A"}?",
+                        style: MyTexts.medium15.copyWith(color: MyColors.black),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 2.h),
                 Row(
                   children: [
-                    Expanded(
-                      child: RoundedButton(
-                        onTap: () => Navigator.pop(context),
-                        buttonName: 'Cancel',
-                        borderRadius: 12,
-                        verticalPadding: 0,
-                        height: 45,
-                        fontColor: MyColors.white,
-                        color: MyColors.grayCD,
-                      ),
-                    ),
-                    SizedBox(width: 2.w),
                     Expanded(
                       child: RoundedButton(
                         onTap: () {
@@ -616,6 +616,19 @@ class ConnectionDialogs {
                         color: MyColors.primary,
                       ),
                     ),
+                    SizedBox(width: 2.w),
+
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () => Navigator.pop(context),
+                        buttonName: 'Cancel',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        fontColor: MyColors.primary,
+                        color: MyColors.white,
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -626,7 +639,12 @@ class ConnectionDialogs {
     );
   }
 
-  static void showBlockDialog(BuildContext context, Connection connection, String? text) {
+  static void showBlockDialog(
+    BuildContext context,
+    IncomingConnection connection,
+    String? text,
+    IconData? icons,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -640,6 +658,7 @@ class ConnectionDialogs {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // ClipRRect(
                     //   borderRadius: BorderRadius.circular(100),
@@ -653,62 +672,56 @@ class ConnectionDialogs {
                     // ),
                     const Gap(12),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "connection.merchantName",
-                          style: MyTexts.medium14.copyWith(color: MyColors.black),
-                          textAlign: TextAlign.center,
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on_rounded,
-                              size: 14,
-                              color: MyColors.veryDarkGray,
-                            ),
-                            const Gap(4),
-                            Text(
-                              "connection.productName",
-                              style: MyTexts.regular13.copyWith(color: MyColors.black),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                        Icon(icons, size: 25),
+                        // Text(
+                        //   "${connection.merchantProfile?.businessName}",
+                        //   style: MyTexts.medium14.copyWith(color: MyColors.black),
+                        //   textAlign: TextAlign.center,
+                        // ),
+                        // Row(
+                        //   children: [
+                        //     const Icon(
+                        //       Icons.location_on_rounded,
+                        //       size: 14,
+                        //       color: MyColors.veryDarkGray,
+                        //     ),
+                        //     const Gap(4),
+                        //     Text(
+                        //       "${connection.merchantProfile?.businessName}",
+                        //       style: MyTexts.regular13.copyWith(color: MyColors.black),
+                        //       textAlign: TextAlign.center,
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ],
                 ),
                 SizedBox(height: 2.h),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: const Color(0xFFFCECE9),
-                    border: Border.all(color: const Color(0xFFF9D0CB)),
-                  ),
-                  child: Text(
-                    "Do you really want to $text this\nHouse owner?",
-                    style: MyTexts.medium14.copyWith(color: MyColors.black),
-                    textAlign: TextAlign.center,
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: MyTexts.medium15.copyWith(color: MyColors.black),
+                    children: [
+                      const TextSpan(text: "Are you sure you want to "),
+                      TextSpan(
+                        text: "$text ",
+                        style: MyTexts.medium16.copyWith(
+                          color: Colors.red, // 🔴 Red Color Here
+                        ),
+                      ),
+                      TextSpan(
+                        text: "${connection.connectorProfile?.verificationDetails?.name ?? "N/A"}?",
+                        style: MyTexts.medium15.copyWith(color: MyColors.black),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 2.h),
                 Row(
                   children: [
-                    Expanded(
-                      child: RoundedButton(
-                        onTap: () => Navigator.pop(context),
-                        buttonName: 'Cancel',
-                        borderRadius: 12,
-                        verticalPadding: 0,
-                        height: 45,
-                        fontColor: MyColors.white,
-                        color: MyColors.grayCD,
-                      ),
-                    ),
-                    SizedBox(width: 2.w),
                     Expanded(
                       child: RoundedButton(
                         onTap: () {
@@ -734,6 +747,155 @@ class ConnectionDialogs {
                         verticalPadding: 0,
                         height: 45,
                         color: MyColors.red,
+                      ),
+                    ),
+                    SizedBox(width: 2.w),
+
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () => Navigator.pop(context),
+                        buttonName: 'No',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        fontColor: MyColors.white,
+                        color: MyColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static void showBlockDialogOutgoing(
+    BuildContext context,
+    OutgoingConnection connection,
+    String? text,
+    IconData? icons,
+  ) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // ClipRRect(
+                    //   borderRadius: BorderRadius.circular(100),
+                    //   child: getImageView(
+                    //     finalUrl:
+                    //         APIConstants.bucketUrl + (connection.merchantProfileImageUrl ?? ""),
+                    //     height: 36,
+                    //     width: 36,
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    // ),
+                    const Gap(12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(icons, size: 25),
+                        // Text(
+                        //   "${connection.merchantProfile?.businessName}",
+                        //   style: MyTexts.medium14.copyWith(color: MyColors.black),
+                        //   textAlign: TextAlign.center,
+                        // ),
+                        // Row(
+                        //   children: [
+                        //     const Icon(
+                        //       Icons.location_on_rounded,
+                        //       size: 14,
+                        //       color: MyColors.veryDarkGray,
+                        //     ),
+                        //     const Gap(4),
+                        //     Text(
+                        //       "${connection.merchantProfile?.businessName}",
+                        //       style: MyTexts.regular13.copyWith(color: MyColors.black),
+                        //       textAlign: TextAlign.center,
+                        //     ),
+                        //   ],
+                        // ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 2.h),
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: MyTexts.medium15.copyWith(color: MyColors.black),
+                    children: [
+                      const TextSpan(text: "Are you sure you want to "),
+                      TextSpan(
+                        text: "$text ",
+                        style: MyTexts.medium16.copyWith(
+                          color: Colors.red, // 🔴 Red Color Here
+                        ),
+                      ),
+                      TextSpan(
+                        text: "${connection.merchantProfile?.businessName ?? "N/A"}?",
+                        style: MyTexts.medium15.copyWith(color: MyColors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () {
+                          if (text == "Block") {
+                            // Get.find<ConnectionInboxController>().blockConnection(
+                            //   connection.id ?? "",
+                            // );
+                            Navigator.pop(context);
+                          } else if (text == "Decline") {
+                            Get.find<ConnectionInboxController>().rejectConnection(
+                              connection.id ?? "",
+                            );
+                            Navigator.pop(context);
+                          } else if (text == "Withdraw") {
+                            // Get.find<ConnectionInboxController>().withdrawRequest(connection.id ?? "");
+                            Navigator.pop(context);
+                          } else {
+                            Get.find<ConnectionInboxController>().removeConnection(
+                              connection.id ?? "",
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                        buttonName: "Yes" ?? "",
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        color: MyColors.primary,
+                      ),
+                    ),
+                    SizedBox(width: 2.w),
+
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () => Navigator.pop(context),
+                        buttonName: 'No',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        fontColor: MyColors.primary,
+                        color: MyColors.white,
                       ),
                     ),
                   ],

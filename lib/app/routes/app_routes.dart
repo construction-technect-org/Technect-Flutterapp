@@ -106,6 +106,7 @@ abstract class Routes {
   static const TEAM_EDIT = _Paths.TEAM_EDIT;
   static const ADD_INVENTORY_PRODUCT = _Paths.ADD_INVENTORY_PRODUCT;
   static const ADD_INVENTORY_GENERIC = _Paths.ADD_INVENTORY_GENERIC;
+  static const PROJECT_DETAIL = _Paths.PROJECT_DETAIL;
 }
 
 abstract class _Paths {
@@ -213,4 +214,5 @@ abstract class _Paths {
   static const TEAM_EDIT = '/team-edit';
   static const ADD_INVENTORY_PRODUCT = '/add-inventory-product';
   static const ADD_INVENTORY_GENERIC = '/add-inventory-generic';
+  static const PROJECT_DETAIL = '/project-detail';
 }

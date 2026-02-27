@@ -4,47 +4,57 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDe
 class DeliveryAddressService {
   static final ApiManager _apiManager = ApiManager();
 
-  static Future submitDeliveryAddress(Object deliveryAddress) async {
+  static Future createAddress(Object addressPayload) async {
     try {
       final response = await _apiManager.postObject(
-        url: APIConstants.connectorSiteAddress,
-        body: deliveryAddress,
+        url: APIConstants.address,
+        body: addressPayload,
       );
       return response;
     } catch (e) {
-      throw Exception('Error adding delivery address: $e');
+      throw Exception('Error adding address: $e');
     }
   }
 
-  static Future updateDeliveryAddress(String addressId, Object deliveryAddress) async {
+  static Future updateAddress(String addressId, Object addressPayload) async {
     try {
-      final response = await _apiManager.putObject(
-        url: '${APIConstants.connectorSiteAddress}/$addressId',
-        body: deliveryAddress,
+      final response = await _apiManager.patchObject(
+        url: '${APIConstants.address}/$addressId',
+        body: addressPayload,
       );
       return response;
     } catch (e) {
-      throw Exception('Error updating delivery address: $e');
+      throw Exception('Error updating address: $e');
     }
   }
 
-  static Future<DeliveryAddressModel> deleteDeliveryAddress(String addressId) async {
+  static Future deleteAddress(String addressId) async {
     try {
-      final response = await _apiManager.delete(
-        url: '${APIConstants.connectorSiteAddress}/$addressId',
+      final response = await _apiManager.delete(url: '${APIConstants.address}/$addressId');
+      return response;
+    } catch (e) {
+      throw Exception('Error deleting address: $e');
+    }
+  }
+
+  static Future<DeliveryAddressModel> getAddresses() async {
+    try {
+      final response = await _apiManager.get(url: APIConstants.address);
+      return DeliveryAddressModel.fromJson(response);
+    } catch (e) {
+      throw Exception('Error fetching addresses: $e');
+    }
+  }
+
+  static Future setDefaultAddress(String addressId) async {
+    try {
+      final response = await _apiManager.patchObject(
+        url: '${APIConstants.address}/$addressId',
+        body: {"isDefault": true},
       );
-      return DeliveryAddressModel.fromJson(response);
+      return response;
     } catch (e) {
-      throw Exception('Error deleting delivery address: $e');
-    }
-  }
-
-  static Future<DeliveryAddressModel> getDeliveryAddresses() async {
-    try {
-      final response = await _apiManager.get(url: APIConstants.connectorSiteAddress);
-      return DeliveryAddressModel.fromJson(response);
-    } catch (e) {
-      throw Exception('Error fetching delivery addresses: $e');
+      throw Exception('Error setting default address: $e');
     }
   }
 }

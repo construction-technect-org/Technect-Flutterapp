@@ -136,31 +136,45 @@ class CustomDrawer extends StatelessWidget {
                       ),
                     ),
                     const Gap(8),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: MyColors.whiteBlue,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            size: 16,
-                            color: MyColors.black.withAlpha(128),
-                          ),
-                          const Gap(4),
-                          Expanded(
-                            child: Text(
-                              'Jp nagar 7th phase rbi layout',
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.black.withAlpha(128),
+                    Obx(() {
+                      final addresses = commonController.addresses;
+                      String displayAddress = 'Add your address';
+                      if (addresses.isNotEmpty) {
+                        final defaultAddr = addresses.firstWhere(
+                          (e) => e.isDefault == true,
+                          orElse: () => addresses[0],
+                        );
+                        displayAddress = defaultAddr.fullAddress;
+                      }
+
+                      return Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: MyColors.whiteBlue,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on_outlined,
+                              size: 16,
+                              color: MyColors.black.withAlpha(128),
+                            ),
+                            const Gap(4),
+                            Expanded(
+                              child: Text(
+                                displayAddress,
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.black.withAlpha(128),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                          ),
-                        ],
-                      ).paddingSymmetric(horizontal: 4),
-                    ),
+                          ],
+                        ).paddingSymmetric(horizontal: 4),
+                      );
+                    }),
                     const Gap(16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,21 +233,27 @@ class CustomDrawer extends StatelessWidget {
                       ],
                     ),
                     const Gap(12),
-                    _buildLocationItem(
-                      'Manufacturing unit | 2 km',
-                      'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
-                      Colors.green,
-                    ),
-                    _buildLocationItem(
-                      'Stockyard | 2 km',
-                      'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
-                      Colors.blue,
-                    ),
-                    _buildLocationItem(
-                      'Billing Address | 2 km',
-                      'Garuda Bhive, BMTC Complex, Outer Ring Rd, Old Madiwala, Ku...',
-                      Colors.blue,
-                    ),
+                    Obx(() {
+                      final addresses = commonController.addresses;
+                      if (addresses.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Text(
+                            "No saved locations yet",
+                            style: MyTexts.medium14.copyWith(color: MyColors.grey),
+                          ),
+                        );
+                      }
+                      return Column(
+                        children: addresses.take(3).map((addr) {
+                          return _buildLocationItem(
+                            addr.label ?? 'Address',
+                            addr.fullAddress,
+                            addr.isDefault == true ? Colors.green : Colors.blue,
+                          );
+                        }).toList(),
+                      );
+                    }),
                   ],
                 ),
               ),

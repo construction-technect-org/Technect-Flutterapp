@@ -100,6 +100,7 @@ class Asset {
 
   static const String connFlow = '${newPng}conn_flow.png';
   static const String connGraph = '${newPng}conn_graph.png';
+  static const String activeCategoryBg = '${png}active_category_bg.png';
   static const String googleIcon = 'assets/images/google.png';
   static const String facebookIcon = 'assets/images/facebook.png';
   static const String eyeIcon = 'assets/images/eye.svg';
