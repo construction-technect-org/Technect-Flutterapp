@@ -1,5 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/views/connector_profile_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/bindings/profile_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/profile_view.dart';
 
@@ -34,7 +36,12 @@ class MyProfileView extends StatelessWidget {
                 icon: Icons.manage_accounts_outlined,
                 label: "Manage Profile",
                 onTap: () {
-                  Get.to(() => ProfileView(), binding: ProfileBinding());
+                  if(myPref.role.val=="connector"){
+                    Get.to(() => ConnectorProfileView(), binding: ConnectorProfileBinding());
+                  }
+                  else {
+                    Get.to(() => ProfileView(), binding: ProfileBinding());
+                  }
                 },
               ),
               _buildMenuItem(

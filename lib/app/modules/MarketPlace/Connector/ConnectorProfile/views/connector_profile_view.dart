@@ -32,7 +32,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: const Text('Profile summary view'),
+                  title: const Text('Manage Profile'),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () {
@@ -41,7 +41,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
                     child: const Padding(
                       padding: EdgeInsets.zero,
                       child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
+                        Icons.arrow_back_sharp,
                         color: Colors.black,
                         size: 20,
                       ),
@@ -52,99 +52,99 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 1.h),
-                      Container(
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: MyColors.grayF7,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 12,
-                        ),
-                        child: Obx(() {
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                GestureDetector(
-                                  onTap: () =>
-                                      controller.selectedTabIndex.value = 0,
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.easeInOut,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
-                                        alpha:
-                                            controller.selectedTabIndex.value ==
-                                                0
-                                            ? 1
-                                            : 0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 4,
-                                        horizontal: 16,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Info",
-                                          style: MyTexts.medium15.copyWith(
-                                            color: MyColors.gray2E,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const Gap(10),
-                                GestureDetector(
-                                  onTap: () =>
-                                      controller.selectedTabIndex.value = 1,
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.easeInOut,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
-                                        alpha:
-                                            controller.selectedTabIndex.value ==
-                                                1
-                                            ? 1
-                                            : 0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 4,
-                                        horizontal: 16,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Metrics",
-                                          style: MyTexts.medium15.copyWith(
-                                            color: MyColors.gray2E,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                      ),
+                      // SizedBox(height: 1.h),
+                      // Container(
+                      //   height: 48,
+                      //   decoration: BoxDecoration(
+                      //     color: MyColors.grayF7,
+                      //     borderRadius: BorderRadius.circular(24),
+                      //   ),
+                      //   margin: const EdgeInsets.symmetric(horizontal: 16),
+                      //   padding: const EdgeInsets.symmetric(
+                      //     vertical: 8,
+                      //     horizontal: 12,
+                      //   ),
+                      //   child: Obx(() {
+                      //     return SingleChildScrollView(
+                      //       scrollDirection: Axis.horizontal,
+                      //       child: Row(
+                      //         mainAxisSize: MainAxisSize.min,
+                      //         children: [
+                      //           GestureDetector(
+                      //             onTap: () =>
+                      //                 controller.selectedTabIndex.value = 0,
+                      //             child: AnimatedContainer(
+                      //               duration: const Duration(milliseconds: 250),
+                      //               curve: Curves.easeInOut,
+                      //               decoration: BoxDecoration(
+                      //                 color: Colors.white.withValues(
+                      //                   alpha:
+                      //                       controller.selectedTabIndex.value ==
+                      //                           0
+                      //                       ? 1
+                      //                       : 0,
+                      //                 ),
+                      //                 borderRadius: BorderRadius.circular(24),
+                      //               ),
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.symmetric(
+                      //                   vertical: 4,
+                      //                   horizontal: 16,
+                      //                 ),
+                      //                 child: Center(
+                      //                   child: Text(
+                      //                     "Info",
+                      //                     style: MyTexts.medium15.copyWith(
+                      //                       color: MyColors.gray2E,
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           const Gap(10),
+                      //           GestureDetector(
+                      //             onTap: () =>
+                      //                 controller.selectedTabIndex.value = 1,
+                      //             child: AnimatedContainer(
+                      //               duration: const Duration(milliseconds: 250),
+                      //               curve: Curves.easeInOut,
+                      //               decoration: BoxDecoration(
+                      //                 color: Colors.white.withValues(
+                      //                   alpha:
+                      //                       controller.selectedTabIndex.value ==
+                      //                           1
+                      //                       ? 1
+                      //                       : 0,
+                      //                 ),
+                      //                 borderRadius: BorderRadius.circular(24),
+                      //               ),
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.symmetric(
+                      //                   vertical: 4,
+                      //                   horizontal: 16,
+                      //                 ),
+                      //                 child: Center(
+                      //                   child: Text(
+                      //                     "Metrics",
+                      //                     style: MyTexts.medium15.copyWith(
+                      //                       color: MyColors.gray2E,
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     );
+                      //   }),
+                      // ),
                       SizedBox(height: 1.h),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: _buildTabContent(),
+                          child: ConnectorInfoMetricsComponent(),
                         ),
                       ),
                     ],

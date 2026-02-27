@@ -258,97 +258,100 @@ class SubCategoryScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: SizedBox(
-              height: 120,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: categoryData.length,
-                itemBuilder: (context, index) {
-                  final category = categoryData[index];
+              height: 95,
+              child: Obx(() {
+                if (controller.subCategoryList.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                  return Obx(() {
-                    final isSelected = controller.selectedIndex.value == index;
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.subCategoryList.length,
+                  itemBuilder: (context, index) {
+                    final subCategory = controller.subCategoryList[index];
 
-                    return InkWell(
-                      onTap: () => {
-                        controller.loadSubCategory(
-                          categoryId: category.id ?? "",
-                          index: index,
-                          categoryName: category.name ?? "",
-                        ),
-                      },
-                      child: AnimatedContainer(
-                        width: 85,
-                        duration: const Duration(milliseconds: 150),
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4,
-                          horizontal: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          // color:  Colors.white, // optional highlight
-                          border: isSelected
-                              ? const Border(
-                                  top: BorderSide(
-                                    color: Colors.amber,
-                                    width: 2,
-                                  ),
-                                  left: BorderSide(
-                                    color: Colors.amber,
-                                    width: 2,
-                                  ),
-                                  right: BorderSide(
-                                    color: Colors.amber,
-                                    width: 2,
-                                  ),
-                                  bottom:
-                                      BorderSide.none, // bottom always hidden
+                    return Obx(() {
+                      final isSelected =
+                          controller.selectedSubCategoryIndex.value == index;
+
+                      return ClipRect(
+                        child: InkWell(
+                          onTap: () {
+                            controller.selectedSubCategoryIndex.value = index;
+                            controller.loadProductCategory(
+                              subCategoryId: subCategory.id ?? "",
+                              index: 0,
+                            );
+                          },
+                          child: AnimatedScale(
+                            scale: isSelected ? 1.1 : 1.0,
+                            duration: const Duration(milliseconds: 200),
+                            child: Container(
+                              width: 105,
+                              height: 95,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8, // ✅ padding se text andar rahega
+                                vertical: 15,
+                              ),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                image: isSelected
+                                    ? const DecorationImage(
+                                  image: AssetImage(Asset.activeCategoryBg),
+                                  fit: BoxFit.fitWidth,
+                                  alignment: Alignment.center,
+                                  scale: 1,
                                 )
-                              : null, // no border when not selected
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12), // ✅ top left
-                            topRight: Radius.circular(12), // ✅ top right
-                            bottomLeft: Radius.zero, // ✅ bottom flat
-                            bottomRight: Radius.zero, // ✅ bottom flat
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ClipOval(
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    category.image?.url ??
-                                    "https://via.placeholder.com/150",
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(
-                                      Icons.category,
-                                      color: MyColors.primary,
-                                      size: 50,
+                                    : null,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl: subCategory.image?.url ??
+                                          "https://via.placeholder.com/150",
+                                      width: 30,
+                                      height: 30,
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) => const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                      const Icon(
+                                        Icons.category,
+                                        color: MyColors.primary,
+                                        size: 30,
+                                      ),
                                     ),
+                                  ),
+                                  const SizedBox(height: 2),
+
+                                  // ✅ Text constrained
+                                  SizedBox(
+                                    width: 76, // ✅ container se thoda kam
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                                      child: Text(
+                                        subCategory.name ?? '',
+                                        style: MyTexts.medium13,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              category.name ?? '',
-                              style: MyTexts.medium14,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  });
-                },
-              ),
+                      );
+                    });
+                  },
+                );
+              }),
             ),
           ),
           SizedBox(height: 5),
@@ -360,87 +363,121 @@ class SubCategoryScreen extends StatelessWidget {
                 /// LEFT CATEGORY LIST (🔥 FIXED)
                 SizedBox(
                   width: 90,
-                  child: ListView.builder(
-                    itemCount: categoryData.length,
-                    itemBuilder: (context, index) {
-                      final category = categoryData[index];
+                  child: Obx(() {
+                    // ✅ Loading check
+                    if (controller.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                      return Obx(() {
-                        final isSelected =
-                            controller.selectedIndex.value == index;
+                    // ✅ Empty check
+                    if (controller.productList.isEmpty) {
+                      return const Center(
+                        child: Icon(
+                          Icons.category_outlined,
+                          color: Colors.grey,
+                          size: 30,
+                        ),
+                      );
+                    }
 
-                        return InkWell(
-                          onTap: () => {
-                            controller.loadSubCategory(
-                              categoryId: category.id ?? "",
-                              index: index,
-                              categoryName: category.name ?? "",
-                            ),
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 150),
-                            height: 90,
-                            margin: const EdgeInsets.symmetric(vertical: 2),
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? Colors.blue.shade50
-                                  : Colors.transparent,
+                    return ListView.builder(
+                      itemCount: controller.productList.length,
+                      itemBuilder: (context, index) {
+                        final category = controller.productList[index];
 
-                              border: Border(
-                                left: BorderSide(
-                                  color: isSelected
-                                      ? MyColors.primary
-                                      : Colors.transparent,
-                                  width: 7,
+                        return Obx(() {
+                          final isSelected =
+                              controller.selectedProductIndex.value == index;
+
+                          return InkWell(
+                            onTap: () {
+                              controller.selectedProductIndex.value = index;
+                              // controller.loadSubCategory(
+                              //   categoryId: category.id ?? "",
+                              //   index: index,
+                              //   categoryName: category.name ?? "",
+                              // );
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 150),
+                              height: 90,
+                              margin: const EdgeInsets.symmetric(vertical: 2),
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Colors.blue.shade50
+                                    : Colors.transparent,
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
                                 ),
                               ),
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(8),    // ✅
-                                  bottomRight: Radius.circular(8), // ✅
-                                )
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0,
+                              child: Stack(
+                                children: [
+                                  /// ✅ Rounded left border
+                                  if (isSelected)
+                                    Positioned(
+                                      left: 0,
+                                      top: 0,
+                                      bottom: 0,
+                                      child: Container(
+                                        width: 7,
+                                        decoration: const BoxDecoration(
+                                          color: MyColors.primary,
+                                          borderRadius: const BorderRadius.only(
+                                            topRight: Radius.circular(10),    // ✅
+                                            bottomRight: Radius.circular(10), // ✅
+                                          ), // ✅ rounded
+                                        ),
+                                      ),
                                     ),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          category.image?.url ??
-                                          "https://via.placeholder.com/150",
-                                      // fallback image
-                                      fit: BoxFit.fill,
-                                      placeholder: (context, url) =>
-                                          const Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(
-                                            Icons.category,
-                                            color: MyColors.primary,
-                                          ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  category.name ?? '',
-                                  style: MyTexts.medium14,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      });
-                    },
-                  ),
-                ),
 
+                                  /// ✅ Content
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0,
+                                          ),
+                                          child: CachedNetworkImage(
+                                            imageUrl: category.image?.url ??
+                                                "https://via.placeholder.com/150",
+                                            fit: BoxFit.fill,
+                                            placeholder: (context, url) => const Center(
+                                              child: CircularProgressIndicator(),
+                                            ),
+                                            errorWidget: (context, url, error) =>
+                                            const Icon(
+                                              Icons.category,
+                                              color: MyColors.primary,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8,right: 5),
+                                        child: Text(
+                                          category.name ?? '',
+                                          style: MyTexts.medium14,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                      },
+                    );
+                  }),
+                ),
                 /// RIGHT GRID
                 Expanded(
                   child: Padding(
@@ -451,59 +488,48 @@ class SubCategoryScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
-                              child: Container(
-                                width: 40.w,
-
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: MyColors.grayEA.withValues(
-                                        alpha: 0.32,
-                                      ),
-                                      blurRadius: 4,
+                            Expanded( // ✅ yah add karo
+                              child: SizedBox(
+                                height: 35,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: "Search for",
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 8,
                                     ),
-                                  ],
-                                ),
-                                child: CommonTextField(
-                                  // contentPadding: const EdgeInsets.symmetric(
-                                  //   horizontal: 12,
-                                  //   vertical: 2, // 👈 Default value
-                                  // ),
-                                  onChange: (value) {
-                                    //controller.onSearchChanged(value ?? "");
-                                  },
-                                  borderRadius: 10,
-                                  hintText: 'Search',
-                                  prefixIcon: SvgPicture.asset(
-                                    Asset.searchIcon,
-                                    height: 16,
-                                    width: 16,
+                                    prefixIcon: Icon(
+                                      Icons.search,
+                                      color: Colors.grey.shade500,
+                                      size: 18,
+                                    ),
+                                    suffixIcon: Icon(
+                                      Icons.filter_alt_outlined,
+                                      color: Colors.grey.shade500,
+                                      size: 18,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Colors.grey.shade300),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(color: Colors.grey.shade300),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(color: MyColors.primary),
+                                    ),
                                   ),
-                                  suffixIcon: const Icon(
-                                    Icons.filter_alt,
-                                    size: 18,
-                                  ),
-                                  //controller: controller.searchController,
-                                  /*suffixIcon: Obx(
-                                  () => controller.searchQuery.value.isNotEmpty
-                                      ? GestureDetector(
-                                          onTap: controller.clearSearch,
-                                          child: const Icon(
-                                            Icons.clear,
-                                            color: MyColors.gray54,
-                                          ),
-                                        )
-                                      : const SizedBox.shrink(),
-                                ), */
                                 ),
                               ),
                             ),
                             // const Spacer(),
+                            const Gap(2),
+
                             GestureDetector(
                               onTap: () {
                                 //Get.toNamed(Routes.NEWS);
@@ -588,60 +614,63 @@ class SubCategoryScreen extends StatelessWidget {
                           ],
                         ),
                         // ✅ Agar parent SingleChildScrollView hai
-                        Obx(() => controller.isGridView.value
-                            ? GridView.builder(
-                          padding: EdgeInsets.all(2.w),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, // ✅ 2 columns
-                            crossAxisSpacing: 2.w,
-                            mainAxisSpacing: 1.h,
-                            childAspectRatio:
-                            0.5, // ✅ height adjust karo
-                          ),
-                          itemCount: productList.length,
-                          itemBuilder: (context, index) {
-                            final product = productList[index];
-                            return _buildGridCard(
-                              companyName: product["companyName"],
-                              address: product["address"],
-                              price: product["price"],
-                              unit: product["unit"],
-                              distance: product["distance"],
-                              rating: product["rating"],
-                              imageUrl: product["imageUrl"],
-                              logoUrl: product["logoUrl"],
-                              onConnect: () {
-                                Get.to(ProductDetailScreen());
-                              },
-                            );
-                          },
-                        )
-                            : ListView.builder(
-                          padding: EdgeInsets.only(top: 1.h, bottom: 8.h),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: productList.length,
-                          itemBuilder: (context, index) {
-                            final product = productList[index];
-                            return _buildProductCard(
-                              companyName: product["companyName"],
-                              address: product["address"],
-                              price: product["price"],
-                              unit: product["unit"],
-                              distance: product["distance"],
-                              rating: product["rating"],
-                              imageUrl: product["imageUrl"],
-                              logoUrl: product["logoUrl"],
-                              onConnect: () {
-                                Get.to(ProductDetailScreen());
-
-                              },
-                            );
-                          },
-                        ),
+                        Obx(
+                          () => controller.isGridView.value
+                              ? GridView.builder(
+                                  padding: EdgeInsets.all(2.w),
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2, // ✅ 2 columns
+                                        crossAxisSpacing: 2.w,
+                                        mainAxisSpacing: 1.h,
+                                        childAspectRatio:
+                                            0.5, // ✅ height adjust karo
+                                      ),
+                                  itemCount: productList.length,
+                                  itemBuilder: (context, index) {
+                                    final product = productList[index];
+                                    return _buildGridCard(
+                                      companyName: product["companyName"],
+                                      address: product["address"],
+                                      price: product["price"],
+                                      unit: product["unit"],
+                                      distance: product["distance"],
+                                      rating: product["rating"],
+                                      imageUrl: product["imageUrl"],
+                                      logoUrl: product["logoUrl"],
+                                      onConnect: () {
+                                        Get.to(ProductDetailScreen());
+                                      },
+                                    );
+                                  },
+                                )
+                              : ListView.builder(
+                                  padding: EdgeInsets.only(
+                                    top: 1.h,
+                                    bottom: 8.h,
+                                  ),
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: productList.length,
+                                  itemBuilder: (context, index) {
+                                    final product = productList[index];
+                                    return _buildProductCard(
+                                      companyName: product["companyName"],
+                                      address: product["address"],
+                                      price: product["price"],
+                                      unit: product["unit"],
+                                      distance: product["distance"],
+                                      rating: product["rating"],
+                                      imageUrl: product["imageUrl"],
+                                      logoUrl: product["logoUrl"],
+                                      onConnect: () {
+                                        Get.to(ProductDetailScreen());
+                                      },
+                                    );
+                                  },
+                                ),
                         ),
                         // if (controller.selectedCategoryName.isNotEmpty)
                         //   Padding(

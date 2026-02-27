@@ -361,42 +361,42 @@ class ConnectorHomeView extends StatelessWidget {
                     ),
 
                     // Divider(color: Colors.red, height: 2),
-                    const Gap(10),
+                    // const Gap(10),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 8, 16, 0),
-                                child: Container(
-                                  width: 88.w,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(50),
-                                    // boxShadow: [
-                                    //   BoxShadow(
-                                    //     color: MyColors.grayEA.withValues(
-                                    //         alpha: 0.32),
-                                    //     blurRadius: 4,
-                                    //   ),
-                                    // ],
-                                  ),
-                                  child: CommonTextField(
-                                    onChange: (value) {},
-                                    borderRadius: 50,
-                                    hintText: 'Search for',
-                                    prefixIcon: SvgPicture.asset(
-                                      Asset.searchIcon,
-                                      height: 16,
-                                      width: 16,
-                                    ),
-                                    suffixIcon: const Icon(Icons.filter_alt, size: 20),
-                                  ),
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.fromLTRB(0, 8, 16, 0),
+                              //   child: Container(
+                              //     width: 88.w,
+                              //     decoration: BoxDecoration(
+                              //       color: Colors.white,
+                              //       borderRadius: BorderRadius.circular(50),
+                              //       // boxShadow: [
+                              //       //   BoxShadow(
+                              //       //     color: MyColors.grayEA.withValues(
+                              //       //         alpha: 0.32),
+                              //       //     blurRadius: 4,
+                              //       //   ),
+                              //       // ],
+                              //     ),
+                              //     child: CommonTextField(
+                              //       onChange: (value) {},
+                              //       borderRadius: 50,
+                              //       hintText: 'Search for',
+                              //       prefixIcon: SvgPicture.asset(
+                              //         Asset.searchIcon,
+                              //         height: 16,
+                              //         width: 16,
+                              //       ),
+                              //       suffixIcon: const Icon(Icons.filter_alt, size: 20),
+                              //     ),
+                              //   ),
+                              // ),
                               // Row(
                               //   children: [
                               //
@@ -579,92 +579,87 @@ class ConnectorHomeView extends StatelessWidget {
                               //     ),
                               //   ),
                               // ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Obx(() {
-                                    if (Get.find<ConnectorHomeController>().marketPlace.value ==
-                                        0) {
-                                      /// ------------------- MATERIAL MARKETPLACE -------------------
-                                      final materialList = controller.mainCategories;
+                              Obx(() {
+                                if (Get.find<ConnectorHomeController>().marketPlace.value ==
+                                    0) {
+                                  /// ------------------- MATERIAL MARKETPLACE -------------------
+                                  final materialList = controller.mainCategories;
 
-                                      if (materialList.isEmpty) {
-                                        return _buildComingSoon(context);
-                                      }
-                                      return ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        itemCount: controller.mainCategories.length,
-                                        itemBuilder: (context, index) {
-                                          final mainCategory = controller.mainCategories[index];
-                                          final categories =
-                                              controller.categoryMap[mainCategory.id] ?? [];
+                                  if (materialList.isEmpty) {
+                                    return _buildComingSoon(context);
+                                  }
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: controller.mainCategories.length,
+                                    itemBuilder: (context, index) {
+                                      final mainCategory = controller.mainCategories[index];
+                                      final categories =
+                                          controller.categoryMap[mainCategory.id] ?? [];
 
-                                          return _buildCategorySection(
-                                            context,
-                                            mainCategory,
-                                            categories,
-                                            route: Routes.SELECT_PRODUCT,
-                                          );
-                                        },
+                                      return _buildCategorySection(
+                                        context,
+                                        mainCategory,
+                                        categories,
+                                        route: Routes.SELECT_PRODUCT,
                                       );
-                                    } else if (Get.find<CommonController>().marketPlace.value ==
-                                        1) {
-                                      /// ------------------- CONSTRUCTION MARKETPLACE -------------------
-                                      final materialList = controller.mainCategories;
+                                    },
+                                  );
+                                } else if (Get.find<CommonController>().marketPlace.value ==
+                                    1) {
+                                  /// ------------------- CONSTRUCTION MARKETPLACE -------------------
+                                  final materialList = controller.mainCategories;
 
-                                      if (materialList.isEmpty) {
-                                        return _buildComingSoon(context);
-                                      }
-                                      return ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        itemCount: controller.mainCategories.length,
-                                        itemBuilder: (context, index) {
-                                          final mainCategory = controller.mainCategories[index];
-                                          final categories =
-                                              controller.categoryMap[mainCategory.id] ?? [];
+                                  if (materialList.isEmpty) {
+                                    return _buildComingSoon(context);
+                                  }
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: controller.mainCategories.length,
+                                    itemBuilder: (context, index) {
+                                      final mainCategory = controller.mainCategories[index];
+                                      final categories =
+                                          controller.categoryMap[mainCategory.id] ?? [];
 
-                                          return _buildCategorySection(
-                                            context,
-                                            mainCategory,
-                                            categories,
-                                            route: Routes.SELECT_PRODUCT,
-                                          );
-                                        },
+                                      return _buildCategorySection(
+                                        context,
+                                        mainCategory,
+                                        categories,
+                                        route: Routes.SELECT_PRODUCT,
                                       );
-                                      // final serviceList = controller
-                                      //     .categoryHierarchyData
-                                      //     .value
-                                      //     .data;
-                                      //
-                                      // if (serviceList == null ||
-                                      //     serviceList.isEmpty) {
-                                      //   return _buildComingSoon(context);
-                                      // }
-                                      // return const Text(
-                                      //   "CONSTRUCTION MARKETPLACE",
-                                      // );
+                                    },
+                                  );
+                                  // final serviceList = controller
+                                  //     .categoryHierarchyData
+                                  //     .value
+                                  //     .data;
+                                  //
+                                  // if (serviceList == null ||
+                                  //     serviceList.isEmpty) {
+                                  //   return _buildComingSoon(context);
+                                  // }
+                                  // return const Text(
+                                  //   "CONSTRUCTION MARKETPLACE",
+                                  // );
 
-                                      // return _buildServiceList(
-                                      //   context,
-                                      //   serviceList,
-                                      // );
-                                    } else {
-                                      /// ------------------- TOOLS MARKETPLACE -------------------
-                                      final toolsList =
-                                          controller.categoryHierarchyData2.value.data;
+                                  // return _buildServiceList(
+                                  //   context,
+                                  //   serviceList,
+                                  // );
+                                } else {
+                                  /// ------------------- TOOLS MARKETPLACE -------------------
+                                  final toolsList =
+                                      controller.categoryHierarchyData2.value.data;
 
-                                      if (toolsList == null || toolsList.isEmpty) {
-                                        return _buildComingSoon(context);
-                                      }
-                                      return const Text("TOOLS MARKETPLACE");
+                                  if (toolsList == null || toolsList.isEmpty) {
+                                    return _buildComingSoon(context);
+                                  }
+                                  return const Text("TOOLS MARKETPLACE");
 
-                                      // return _buildToolsList(context, toolsList);
-                                    }
-                                  }),
-                                ],
-                              ),
+                                  // return _buildToolsList(context, toolsList);
+                                }
+                              }),
                             ],
                           ),
                         ),
@@ -718,14 +713,13 @@ class ConnectorHomeView extends StatelessWidget {
             //     return;
             //   }
             // }
-
-            Get.toNamed(
-              route,
-              arguments: {
-                "mainCategoryId": mainCategory.id ?? 0,
-                "mainCategoryName": mainCategory.name ?? '',
-              },
-            );
+            // Get.toNamed(
+            //   route,
+            //   arguments: {
+            //     "mainCategoryId": mainCategory.id ?? 0,
+            //     "mainCategoryName": mainCategory.name ?? '',
+            //   },
+            // );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -814,8 +808,8 @@ class ConnectorHomeView extends StatelessWidget {
                             subCategory.name ?? '',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
                               color: Colors.black87,
                             ),
                             maxLines: 2,

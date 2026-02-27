@@ -23,6 +23,9 @@ class Asset {
   static const String locationImage = '${bg}location_img.png';
 
   static const String appLogo = '${png}appLogo.png';
+  static const String appLogo1 = '${png}appLogo1.png';
+  static const String appLogo2 = '${png}appLogo2.png';
+  static const String appLogo3 = '${png}appLogo3.png';
   static const String ob1 = '${png}ob1.png';
   static const String auth = '${png}auth.png';
   static const String role1 = '${png}role1.png';
@@ -106,6 +109,7 @@ class Asset {
   static const String eyeIcon = 'assets/images/eye.svg';
   static const String delete = 'assets/images/delete.svg';
   static const String logoWithoutBack = 'assets/images/logoWithoutBack.png';
+  static const String splashImg = 'assets/images/splash_img.png';
 
   static const String profil = 'assets/images/profil.png';
   static const String certificateIcon = 'assets/images/certificate.svg';

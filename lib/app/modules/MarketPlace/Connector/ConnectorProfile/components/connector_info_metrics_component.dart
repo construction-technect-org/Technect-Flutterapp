@@ -23,30 +23,57 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        /// ✅ My Information Header
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Information', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
+              Text(
+                'My Information',
+                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
+              ),
               const Spacer(),
               GestureDetector(
                 onTap: () {
                   Get.to(() => EditProfile());
                 },
                 behavior: HitTestBehavior.translucent,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SvgPicture.asset(Asset.edit),
-                ),
+                child: Icon(Icons.edit, size: 18, color: Colors.black54),
               ),
             ],
           ),
         ),
+
         SizedBox(height: 1.h),
 
-        _buildInfoMetricsContent(),
-        SizedBox(height: 2.h),
+        /// ✅ Info Rows
+        _buildInfoRow(
+          icon: Icons.phone_outlined,
+          label: "Phone Number",
+          value: connectorProfile?.panNumber ?? "",
+        ),
+
+        Divider(color: Colors.grey.shade100, height: 1),
+
+        _buildInfoRow(
+          icon: Icons.badge_outlined,
+          label: "Designation",
+          value: connectorProfile?.aadhaarNumber ?? "",
+        ),
+
+        Divider(color: Colors.grey.shade100, height: 1),
+
+        _buildInfoRow(
+          icon: Icons.mail_outline_rounded,
+          label: "Email ID",
+          value: connectorProfile?.teamMembers?.name ?? "",
+        ),
+
+        // SizedBox(height: 2.h),
+        // SizedBox(height: 1.h),
+        // _buildInfoMetricsContent(),
+        // SizedBox(height: 2.h),
 
         // ---------- KYC Section ----------
         Padding(
@@ -60,7 +87,21 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         SizedBox(height: 1.h),
         if (connectorProfile != null &&
             (connectorProfile.aadhaarNumber != null || connectorProfile.panNumber != null)) ...[
-          _buildExistingKycDetails(connectorProfile),
+          _buildInfoRow(
+            icon: Icons.phone_outlined,
+            label: "Phone Number",
+            value: connectorProfile.panNumber ?? "",
+          ),
+
+          Divider(color: Colors.grey.shade100, height: 1),
+
+          _buildInfoRow(
+            icon: Icons.badge_outlined,
+            label: "Designation",
+            value: connectorProfile.aadhaarNumber ?? "",
+          ),
+
+          // _buildExistingKycDetails(connectorProfile),
         ] else ...[
           GestureDetector(
             onTap: () {
@@ -79,30 +120,28 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         ],
         SizedBox(height: 2.h),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Point of contact', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
-
-              const Spacer(),
-
-              GestureDetector(
-                onTap: () {
-                  final isNew = controller.profileDatas.value == null;
-
-                  Get.to(() => EditPocProfile(), arguments: isNew);
-                },
-                behavior: HitTestBehavior.translucent,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SvgPicture.asset(Asset.edit),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(vertical: 10),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text('Point of contact', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
+        //
+        //       const Spacer(),
+        //
+        //       GestureDetector(
+        //         onTap: () {
+        //
+        //         },
+        //         behavior: HitTestBehavior.translucent,
+        //         child: Padding(
+        //           padding: const EdgeInsets.all(4.0),
+        //           child: SvgPicture.asset(Asset.edit),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         SizedBox(height: 1.h),
         Obx(() {
           if (controller.profileDatas.value?.success != true) {
@@ -112,17 +151,72 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           final profile = controller.profileDatas.value;
 
           if (profile == null) {
-            return const Text("No Data Found");
+            return const Center(child: Text("No Data Found"));
           }
 
           final poc = profile.connector?.pocDetails;
-          return _buildProjectDetailsPoint([
-            {"title": "POC Name", "value": poc?.pocName ?? "Null"},
-            {"title": "Designation", "value": poc?.pocDesignation ?? "Null"},
-            {"title": "Phone Number", "value": poc?.pocPhone ?? "Null"},
-            {"title": "Alternative Number", "value": poc?.pocAlternatePhone ?? "Null"},
-            {"title": "Email", "value": poc?.pocEmail ?? "Null"},
-          ]);
+
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 8),
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              // color: const Color(0xffF2F2F2), // light grey background
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                /// 🔹 Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:  [
+                    Text(
+                      "Point of Contact",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    GestureDetector(onTap: () {
+                      final isNew = controller.profileDatas.value == null;
+
+                      Get.to(() => EditPocProfile(), arguments: isNew);
+                    }, child: Icon(Icons.edit, size: 18, color: Colors.black54)),
+                  ],
+                ),
+
+                const SizedBox(height: 15),
+
+                _buildInfoRow(
+                  icon: Icons.badge_outlined,
+                  label: "POC Name",
+                  value: poc?.pocName ?? "N/A",
+                ),
+                _buildInfoRow(
+                  icon: Icons.work_outline,
+                  label: "Designation",
+                  value: poc?.pocDesignation ?? "N/A",
+                ),
+                _buildInfoRow(
+                  icon: Icons.phone_outlined,
+                  label: "Phone Number",
+                  value: poc?.pocPhone ?? "N/A",
+                ),
+                _buildInfoRow(
+                  icon: Icons.phone,
+                  label: "Alternate Number",
+                  value: poc?.pocAlternatePhone ?? "N/A",
+                ),
+                _buildInfoRow(
+                  icon: Icons.email_outlined,
+                  label: "Email ID",
+                  value: poc?.pocEmail ?? "N/A",
+                ),
+              ],
+            ),
+          );
         }),
         // SizedBox(height: 2.h),
         // ---------- Project Section ----------
@@ -138,11 +232,8 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                   Get.to(() => EditProjectView());
                 },
                 behavior: HitTestBehavior.translucent,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SvgPicture.asset(Asset.edit),
+                child: Icon(Icons.edit, size: 18, color: Colors.black54),
                 ),
-              ),
             ],
           ),
         ),
@@ -171,6 +262,59 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
 
         SizedBox(height: 2.h),
       ],
+    );
+  }
+  Widget _buildInfoRow({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          /// Icon
+          Icon(icon, size: 18, color: Colors.grey.shade500),
+
+          const SizedBox(width: 12),
+
+          /// Label
+          SizedBox(
+            width: 110,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ),
+
+          /// Value
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -348,6 +492,190 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           // buildRow(title: "Project Status", data: "Ongoing" ?? "-"),
         ],
       ),
+    );
+  }
+}
+
+class ProfileInfoWidget extends StatelessWidget {
+  const ProfileInfoWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        /// ✅ Top — Avatar + Name
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          color: Colors.white,
+          child: Row(
+            children: [
+              /// Avatar
+              Container(
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: MyColors.primary,
+                    width: 2,
+                  ),
+                ),
+                child: const CircleAvatar(
+                  radius: 28,
+                  backgroundImage: NetworkImage(
+                    "https://img.freepik.com/free-photo/construction-site-sunset_23-2152006125.jpg",
+                  ),
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              /// Name + Verified
+              const Row(
+                children: [
+                  Text(
+                    "Full Name",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                  Icon(
+                    Icons.verified_rounded,
+                    color: Colors.green,
+                    size: 18,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        /// ✅ Divider
+        Divider(color: Colors.grey.shade200, height: 1),
+
+        /// ✅ My Information Section
+        Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Column(
+            children: [
+              /// Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "My Information",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  /// Edit Icon
+                  GestureDetector(
+                    onTap: () {},
+                    child: Icon(
+                      Icons.edit_outlined,
+                      size: 18,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              /// ✅ Phone Number
+              _buildInfoRow(
+                icon: Icons.phone_outlined,
+                label: "Phone Number",
+                value: "+91 8798798709",
+              ),
+
+              _buildDivider(),
+
+              /// ✅ Designation
+              _buildInfoRow(
+                icon: Icons.badge_outlined,
+                label: "Designation",
+                value: "Manufacturer",
+              ),
+
+              _buildDivider(),
+
+              /// ✅ Email ID
+              _buildInfoRow(
+                icon: Icons.mail_outline_rounded,
+                label: "Email ID",
+                value: "Fullname@gmail.com",
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// ✅ Info Row
+  Widget _buildInfoRow({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          /// Icon
+          Icon(icon, size: 18, color: Colors.grey.shade500),
+
+          const SizedBox(width: 12),
+
+          /// Label
+          SizedBox(
+            width: 110,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ),
+
+          /// Value
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// ✅ Divider
+  Widget _buildDivider() {
+    return Divider(
+      color: Colors.grey.shade100,
+      height: 1,
     );
   }
 }

@@ -41,9 +41,9 @@ class SplashView extends GetView<SplashController> {
       return Scaffold(
         body: Stack(
           children: [
-            Positioned.fill(
-              child: Image.asset(Asset.splashBg, fit: BoxFit.cover),
-            ),
+            // Positioned.fill(
+            //   child: Image.asset(Asset.splashBg, fit: BoxFit.cover),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Center(
@@ -51,14 +51,14 @@ class SplashView extends GetView<SplashController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      Asset.appLogo,
+                      Asset.appLogo3,
                       fit: BoxFit.contain,
-                      width: 192,
-                      height: 206,
+                      width: 393,
+                      height: 399,
                     ),
-                    const Gap(20),
+                    const Gap(5),
                     Text(
-                      "Connecting Construction Worldwide",
+                      "",
                       style: MyTexts.medium18.copyWith(color: MyColors.gray2E),
                       textAlign: TextAlign.center,
                     ),
