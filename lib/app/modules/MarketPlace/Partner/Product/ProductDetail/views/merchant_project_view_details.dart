@@ -17,9 +17,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
         shape: BoxShape.circle,
         color: const Color(0xFFFACC80).withAlpha(50),
       ),
-      child: const Center(
-        child: CircleAvatar(radius: 4, backgroundColor: Color(0xFFFFED29)),
-      ),
+      child: const Center(child: CircleAvatar(radius: 4, backgroundColor: Color(0xFFFFED29))),
     );
   }
 
@@ -36,14 +34,10 @@ class MerchantProjectViewDetails extends StatelessWidget {
           onTap: () {
             Get.back();
           },
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.black,
-            size: 24,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 24),
         ),
         title: Text("Project Details", style: MyTexts.medium20),
-        action: [
+        actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.more_horiz, size: 24, color: Colors.black),
@@ -101,9 +95,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(3.w),
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 10, color: Colors.black26),
-                          ],
+                          boxShadow: const [BoxShadow(blurRadius: 10, color: Colors.black26)],
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,10 +103,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "Luna's Tranquil Escape",
-                                  style: MyTexts.medium16,
-                                ),
+                                Text("Luna's Tranquil Escape", style: MyTexts.medium16),
                                 Container(
                                   width: 58,
                                   height: 19,
@@ -132,9 +121,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                                       ),
                                       Text(
                                         " 18 KM",
-                                        style: MyTexts.regular12.copyWith(
-                                          fontSize: 12.sp,
-                                        ),
+                                        style: MyTexts.regular12.copyWith(fontSize: 12.sp),
                                       ),
                                     ],
                                   ),
@@ -165,9 +152,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                             const Gap(5),
                             Text(
                               "Estimated Value",
-                              style: MyTexts.regular14.copyWith(
-                                color: const Color(0xFF1B2F62),
-                              ),
+                              style: MyTexts.regular14.copyWith(color: const Color(0xFF1B2F62)),
                             ),
                             const Gap(13),
                             Row(
@@ -196,16 +181,11 @@ class MerchantProjectViewDetails extends StatelessWidget {
               ),
               SizedBox(height: 18.h),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 24,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
-                  border: Border.all(
-                    color: const Color(0xFFE7E7E7),
-                  ),
+                  border: Border.all(color: const Color(0xFFE7E7E7)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,11 +196,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                         Text("Builder Information", style: MyTexts.medium16),
                         IconButton(
                           onPressed: () {},
-                          icon: const Icon(
-                            Icons.more_horiz,
-                            size: 24,
-                            color: Colors.black,
-                          ),
+                          icon: const Icon(Icons.more_horiz, size: 24, color: Colors.black),
                         ),
                       ],
                     ),
@@ -260,11 +236,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                   const SizedBox(width: 12),
                   const Expanded(
                     child: Column(
-                      children: [
-                        ActivePhaseCard(),
-                        SizedBox(height: 24),
-                        CompletedPhaseCard(),
-                      ],
+                      children: [ActivePhaseCard(), SizedBox(height: 24), CompletedPhaseCard()],
                     ),
                   ),
                 ],
@@ -297,12 +269,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      child: Image.asset(
-                        Asset.building,
-                        width: 72,
-                        height: 72,
-                        fit: BoxFit.cover,
-                      ),
+                      child: Image.asset(Asset.building, width: 72, height: 72, fit: BoxFit.cover),
                     ),
                     const Gap(18),
                     Expanded(
@@ -332,9 +299,7 @@ class MerchantProjectViewDetails extends StatelessWidget {
                 GestureDetector(
                   child: Text(
                     "View Categories >",
-                    style: MyTexts.medium13.copyWith(
-                      color: const Color(0xFF2E2E2E),
-                    ),
+                    style: MyTexts.medium13.copyWith(color: const Color(0xFF2E2E2E)),
                   ),
                 ),
               ],
@@ -387,10 +352,7 @@ class CompletedPhaseCard extends StatelessWidget {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 4),
-                Text(
-                  "Dec 10 · completed",
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
+                Text("Dec 10 · completed", style: TextStyle(fontSize: 12, color: Colors.grey)),
               ],
             ),
           ),
@@ -474,8 +436,7 @@ class ActivePhaseCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: Image.asset(asset, width: 80, height: 65, fit: BoxFit.cover),
           ),
-          if (showPlay)
-            const Icon(Icons.play_circle_fill, color: Colors.white, size: 24),
+          if (showPlay) const Icon(Icons.play_circle_fill, color: Colors.white, size: 24),
         ],
       ),
     );

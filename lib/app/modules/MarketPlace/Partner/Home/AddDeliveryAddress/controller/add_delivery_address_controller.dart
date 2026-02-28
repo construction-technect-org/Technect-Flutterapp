@@ -212,7 +212,7 @@ class AddDeliveryAddressController extends GetxController {
         "isDefault": false,
       };
 
-      log("Address Payload: ${payload.toString()}");
+      log("Address Payload: $payload");
 
       if (isEditMode.value) {
         await DeliveryAddressService.updateAddress(editAddressId.value, payload);

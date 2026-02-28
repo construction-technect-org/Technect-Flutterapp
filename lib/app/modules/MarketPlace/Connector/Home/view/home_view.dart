@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart' hide Category;
-import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
@@ -363,7 +362,7 @@ class ConnectorHomeView extends StatelessWidget {
                     Expanded(
                       child: SingleChildScrollView(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -869,9 +868,9 @@ class ConnectorHomeView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (iconUrl != null && iconUrl!.isNotEmpty)
+              if (iconUrl != null && iconUrl.isNotEmpty)
                 CachedNetworkImage(
-                  imageUrl: iconUrl!,
+                  imageUrl: iconUrl,
                   height: 24,
                   width: 24,
                   fit: BoxFit.cover,

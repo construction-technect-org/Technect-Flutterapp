@@ -2,7 +2,6 @@ import "dart:developer";
 
 
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/incoming_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/outgoing_model.dart';
 

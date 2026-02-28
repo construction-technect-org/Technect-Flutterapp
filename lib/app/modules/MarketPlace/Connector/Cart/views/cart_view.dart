@@ -36,7 +36,7 @@ class CartListView extends GetView<CartListController> {
                         child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
-                    action: [Obx(() => _buildStatusDropdown(controller))],
+                    actions: [Obx(() => _buildStatusDropdown(controller))],
                   ),
                   Expanded(
                     child: SingleChildScrollView(

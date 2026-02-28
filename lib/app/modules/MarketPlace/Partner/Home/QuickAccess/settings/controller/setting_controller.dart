@@ -58,14 +58,12 @@ class SettingController extends GetxController {
           message: response["message"] ?? "Your account has been deactivated",
           backgroundColor: Colors.orange,
           icon: const Icon(Icons.pause_circle_filled, color: Colors.white),
-          duration: const Duration(seconds: 3),
         );
       } else {
         Get.rawSnackbar(
           title: "Error",
           message: response["message"] ?? "Something went wrong",
           backgroundColor: Colors.red,
-          duration: const Duration(seconds: 3),
         );
       }
     } catch (e) {

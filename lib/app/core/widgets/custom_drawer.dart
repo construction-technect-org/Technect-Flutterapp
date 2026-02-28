@@ -1,9 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/models/delivery_address_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -11,15 +9,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CommonController commonController = Get.find<CommonController>();
-    final DashBoardController _controller = Get.find<DashBoardController>();
-
-    final isTeamLogin = myPref.getIsTeamLogin();
-    final profileImage = isTeamLogin
-        ? commonController.profileData.value.data?.teamMember?.profilePhoto ?? ''
-        : commonController.profileData.value.data?.user?.image ?? '';
-
-    final userName =
-        '${_controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${_controller.userMainModel?.lastName?.capitalizeFirst ?? ''}';
+    final DashBoardController controller = Get.find<DashBoardController>();
 
     return Drawer(
       width: 85.w,
@@ -29,7 +19,7 @@ class CustomDrawer extends StatelessWidget {
           bottomRight: Radius.circular(30),
         ),
       ),
-      child: Container(
+      child: ColoredBox(
         color: Colors.white,
         child: Column(
           children: [
@@ -42,101 +32,153 @@ class CustomDrawer extends StatelessWidget {
                     const Gap(50),
                     Text('My Profile', style: MyTexts.bold18.copyWith(color: MyColors.lightBlue)),
                     Text(
-                      'Today\'s task progress - 64%',
+                      "Today's task progress - 64%",
                       style: MyTexts.medium12.copyWith(color: MyColors.lightBlue.withOpacity(0.6)),
                     ),
                     const Gap(20),
-                    Center(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: Transform.scale(
-                                    scaleX: -1,
-                                    child: CircularProgressIndicator(
-                                      value: 0.64,
-                                      strokeWidth: 4,
+                    Obx(() {
+                      final userEmail = commonController.userEmail;
+                      final userPhone = commonController.userPhone;
+                      final profileImage = commonController.userImage;
+                      final designation = commonController.userDesignation;
 
-                                      backgroundColor: MyColors.grayEA,
-                                      valueColor: const AlwaysStoppedAnimation<Color>(
-                                        MyColors.yellow,
+                      return Center(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: Transform.scale(
+                                      scaleX: -1,
+                                      child: const CircularProgressIndicator(
+                                        value: 0.64,
+                                        strokeWidth: 4,
+                                        backgroundColor: MyColors.grayEA,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          MyColors.yellow,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                ClipOval(
-                                  child: profileImage.isEmpty
-                                      ? const Icon(
-                                          Icons.account_circle,
-                                          size: 100,
-                                          color: MyColors.grey,
-                                        )
-                                      : getImageView(
-                                          finalUrl: "${APIConstants.bucketUrl}$profileImage",
-                                          fit: BoxFit.cover,
-                                          height: 100,
-                                          width: 100,
-                                        ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Gap(10),
-                          Text(userName, style: MyTexts.bold20.copyWith(color: MyColors.black)),
-                          Text(
-                            'Designation', // Use actual designation if available
-                            style: MyTexts.medium14.copyWith(color: MyColors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Gap(16),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: MyColors.whiteBlue,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 48,
-                            width: 48,
-                            decoration: const BoxDecoration(
-                              color: MyColors.yellow,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(Icons.business, color: MyColors.primary),
-                          ),
-                          const Gap(12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Company Name',
-                                  style: MyTexts.bold16.copyWith(color: MyColors.black),
-                                ),
-                                Text(
-                                  '#54351316546',
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.lightBlue.withOpacity(0.6),
+                                  ClipOval(
+                                    child: profileImage.isEmpty
+                                        ? const Icon(
+                                            Icons.account_circle,
+                                            size: 100,
+                                            color: MyColors.grey,
+                                          )
+                                        : getImageView(
+                                            finalUrl: profileImage.startsWith('http')
+                                                ? profileImage
+                                                : "${APIConstants.bucketUrl}$profileImage",
+                                            fit: BoxFit.cover,
+                                            height: 100,
+                                            width: 100,
+                                          ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios, size: 16, color: MyColors.grey),
-                        ],
-                      ),
-                    ),
+                            const Gap(10),
+                            RichText(
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        '${controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${controller.userMainModel?.lastName?.capitalizeFirst ?? ''}',
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.fontBlack,
+                                      fontFamily: MyTexts.SpaceGrotesk,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (designation.isNotEmpty)
+                              Text(
+                                designation,
+                                style: MyTexts.medium14.copyWith(color: MyColors.grey),
+                              ),
+                            if (userEmail.isNotEmpty)
+                              Text(
+                                userEmail,
+                                style: MyTexts.medium12.copyWith(color: MyColors.grey),
+                              ),
+                            if (userPhone.isNotEmpty)
+                              Text(
+                                userPhone,
+                                style: MyTexts.medium12.copyWith(color: MyColors.grey),
+                              ),
+                          ],
+                        ),
+                      );
+                    }),
+                    const Gap(16),
+                    Obx(() {
+                      final bizName = commonController.bizName;
+                      final bizLogo = commonController.bizLogo;
+                      final bizGst = commonController.bizGst;
+
+                      return Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: MyColors.whiteBlue,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 48,
+                              width: 48,
+                              decoration: const BoxDecoration(
+                                color: MyColors.yellow,
+                                shape: BoxShape.circle,
+                              ),
+                              child: bizLogo.isEmpty
+                                  ? const Icon(Icons.business, color: MyColors.primary)
+                                  : ClipOval(
+                                      child: getImageView(
+                                        finalUrl: bizLogo.startsWith('http')
+                                            ? bizLogo
+                                            : "${APIConstants.bucketUrl}$bizLogo",
+                                        fit: BoxFit.cover,
+                                        height: 48,
+                                        width: 48,
+                                      ),
+                                    ),
+                            ),
+                            const Gap(12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    bizName.isNotEmpty ? bizName : 'Company Name',
+                                    style: MyTexts.bold16.copyWith(color: MyColors.black),
+                                  ),
+                                  if (bizGst.isNotEmpty)
+                                    Text(
+                                      'GST: $bizGst',
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.lightBlue.withOpacity(0.6),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            const Icon(Icons.arrow_forward_ios, size: 16, color: MyColors.grey),
+                          ],
+                        ),
+                      );
+                    }),
                     const Gap(8),
                     Obx(() {
                       final addresses = commonController.addresses;
@@ -249,16 +291,8 @@ class CustomDrawer extends StatelessWidget {
                       return Column(
                         children: addresses.take(3).map((addr) {
                           String addressId = '';
-                          if (addr is DeliveryAddressData) {
-                            addressId = addr.id ?? "";
-                          } else if (addr is SiteLocation) {
-                            addressId = addr.id?.toString() ?? "";
-                          } else {
-                            try {
-                              addressId = addr.id?.toString() ?? "";
-                            } catch (_) {}
-                          }
-
+                          addressId = addr.id ?? "";
+                        
                           return GestureDetector(
                             onTap: () async {
                               if (addr.isDefault != true && addressId.isNotEmpty) {

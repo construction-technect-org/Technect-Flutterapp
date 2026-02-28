@@ -193,7 +193,18 @@ class CommonController extends GetxController {
         log('🌐profileData : ${profileData.value.data}');
 
         myPref.setProfileData(profileResponse.toJson());
-        //myPref.setUserModel(profileResponse.data!.user!);
+        if (profileResponse.data?.user != null) {
+          final user = profileResponse.data!.user!;
+          myPref.setUserModel(
+            UserMainModel(
+              id: user.id?.toString(),
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phone: user.mobileNumber,
+            ),
+          );
+        }
         log("profileData.value.data?.isTeamLogin: ${profileData.value.data?.isTeamLogin}");
         if (profileData.value.data?.isTeamLogin == true) {
           myPref.setIsTeamLogin(true);
@@ -230,6 +241,18 @@ class CommonController extends GetxController {
         log('🌐profileData : ${profileDataM.value.merchantProfile != null}');
 
         myPref.setProfileData(profileResponse.toJson());
+        if (profileResponse.user != null) {
+          final user = profileResponse.user!;
+          myPref.setUserModel(
+            UserMainModel(
+              id: user.id?.toString(),
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phone: user.phone?.toString(),
+            ),
+          );
+        }
 
         // Ensure we check the current profileData (which is of type ProfileModel) or
         // the connector profileResponse for team login logic if applicable.
@@ -618,6 +641,110 @@ class CommonController extends GetxController {
       log('Error fetching addresses: $e');
     } finally {
       isLoadingAddresses.value = false;
+    }
+  }
+
+  bool get isPartner => myPref.role.val == "partner";
+
+  // Unified Profile Getters
+  String get userName {
+    if (myPref.getIsTeamLogin()) {
+      final team = profileData.value.data?.teamMember;
+      if (team != null) {
+        return "${team.firstName ?? ""} ${team.lastName ?? ""}".trim();
+      }
+    }
+    if (myPref.role.val == "partner") {
+      final user = profileData.value.data?.user;
+      return "${user?.firstName ?? ""} ${user?.lastName ?? ""}".trim();
+    } else {
+      final user = profileDataM.value.user;
+      return "${user?.firstName ?? ""} ${user?.lastName ?? ""}".trim();
+    }
+  }
+
+  String get userFirstName {
+    if (myPref.getIsTeamLogin()) {
+      return profileData.value.data?.teamMember?.firstName ?? "";
+    }
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.user?.firstName ?? "";
+    } else {
+      return profileDataM.value.user?.firstName ?? "";
+    }
+  }
+
+  String get userLastName {
+    if (myPref.getIsTeamLogin()) {
+      return profileData.value.data?.teamMember?.lastName ?? "";
+    }
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.user?.lastName ?? "";
+    } else {
+      return profileDataM.value.user?.lastName ?? "";
+    }
+  }
+
+  String get userImage {
+    if (myPref.getIsTeamLogin()) {
+      return profileData.value.data?.teamMember?.profilePhoto ?? "";
+    }
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.user?.image ?? "";
+    } else {
+      return profileDataM.value.user?.image ?? "";
+    }
+  }
+
+  String get userEmail {
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.user?.email ?? "";
+    } else {
+      return profileDataM.value.user?.email ?? "";
+    }
+  }
+
+  String get userPhone {
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.user?.mobileNumber ?? "";
+    } else {
+      return profileDataM.value.user?.phone?.toString() ?? "";
+    }
+  }
+
+  String get userDesignation {
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.user?.roleName ?? "";
+    } else {
+      // For connectors, we don't have roleName in UserM, but maybe we can get it from somewhere else
+      // or just return empty for now if not available.
+      return "";
+    }
+  }
+
+  String get bizName {
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.merchantProfile?.businessName ?? "";
+    } else {
+      return profileDataM.value.merchantProfile?.businessName ?? "";
+    }
+  }
+
+  String get bizLogo {
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.merchantProfile?.merchantLogo?.toString() ?? "";
+    } else {
+      return profileDataM.value.merchantProfile?.logo?.toString() ?? "";
+    }
+  }
+
+  String get bizGst {
+    if (myPref.role.val == "partner") {
+      return profileData.value.data?.merchantProfile?.gstinNumber ?? "";
+    } else {
+      // For connectors, it's called gstinHash or something else?
+      // MerchantProfileM has gstinHash.
+      return "";
     }
   }
 

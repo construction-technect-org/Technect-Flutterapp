@@ -37,7 +37,7 @@ class SalesScreen extends GetView<SalesController> {
                         child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
-                    action: [
+                    actions: [
                       GestureDetector(
                         onTap: () {
                           Get.back();
@@ -50,7 +50,10 @@ class SalesScreen extends GetView<SalesController> {
                             border: Border.all(color: MyColors.custom('EAEAEA')),
                             shape: BoxShape.circle,
                           ),
-                          child: SvgPicture.asset(Asset.chat, width: 24, height: 24,
+                          child: SvgPicture.asset(
+                            Asset.chat,
+                            width: 24,
+                            height: 24,
                             colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                           ),
                         ),
@@ -67,7 +70,10 @@ class SalesScreen extends GetView<SalesController> {
                             border: Border.all(color: MyColors.custom('EAEAEA')),
                             shape: BoxShape.circle,
                           ),
-                          child: SvgPicture.asset(Asset.info, width: 24, height: 24,
+                          child: SvgPicture.asset(
+                            Asset.info,
+                            width: 24,
+                            height: 24,
                             colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                           ),
                         ),
@@ -88,7 +94,6 @@ class SalesScreen extends GetView<SalesController> {
                         ),
                       ),
                       const Gap(10),
-
                     ],
                   ),
                   // const TopBarHeader(),

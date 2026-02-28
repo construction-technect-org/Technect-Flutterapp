@@ -1,9 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Projects/controllers/projects_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
-
-import '../controllers/projects_controller.dart';
 
 class ProjectsView extends GetView<ProjectsController> {
   const ProjectsView({super.key});
@@ -167,8 +166,6 @@ class ProjectsView extends GetView<ProjectsController> {
                             ? const DecorationImage(
                                 image: AssetImage(Asset.activeCategoryBg),
                                 fit: BoxFit.fitWidth,
-                                alignment: Alignment.center,
-                                scale: 1,
                               )
                             : null,
                         // color: isSelected ? Colors.transparent : Colors.grey.shade100,
@@ -395,7 +392,6 @@ class ProjectsView extends GetView<ProjectsController> {
           ),
           const SizedBox(height: 12),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -652,15 +648,15 @@ class ProjectsBottomNavBar extends StatelessWidget {
 class ProjectsBNBPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    final Paint paint = Paint()
       ..color = MyColors.tertiary
       ..style = PaintingStyle.fill;
 
-    double cornerRadius = 40.0;
-    double notchWidth = 80.0;
-    double topY = 25.0;
+    const double cornerRadius = 40.0;
+    const double notchWidth = 80.0;
+    const double topY = 25.0;
 
-    Path path = Path();
+    final Path path = Path();
     path.moveTo(0, size.height);
     path.lineTo(0, topY + cornerRadius);
     path.quadraticBezierTo(0, topY, cornerRadius, topY); // Top-left rounded edge
@@ -678,7 +674,7 @@ class ProjectsBNBPainter extends CustomPainter {
     // The notch circle cutout
     path.arcToPoint(
       Offset(size.width / 2 + notchWidth / 2, topY + 8),
-      radius: Radius.circular(notchWidth / 2.2),
+      radius: const Radius.circular(notchWidth / 2.2),
       clockwise: false,
     );
 

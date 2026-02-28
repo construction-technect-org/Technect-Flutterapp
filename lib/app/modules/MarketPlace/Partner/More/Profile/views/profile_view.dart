@@ -4,7 +4,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/certifications_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/info_metrics_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/metrics_screen.dart';
 
 class ProfileView extends GetView<ProfileController> {
   @override
@@ -20,7 +19,7 @@ class ProfileView extends GetView<ProfileController> {
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: const Text('Profile summary view'),
+                  title: const Text('Manage Profile'),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () => Get.back(),
@@ -32,7 +31,6 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // _buildProfileBanner(),
                       SizedBox(height: 1.h),
@@ -42,8 +40,8 @@ class ProfileView extends GetView<ProfileController> {
                           color: MyColors.grayF7,
                           borderRadius: BorderRadius.circular(24),
                         ),
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                         child: Obx(() {
                           return SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -68,7 +66,7 @@ class ProfileView extends GetView<ProfileController> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          "Info",
+                                          "Info & Metrics",
                                           style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                         ),
                                       ),
@@ -101,44 +99,13 @@ class ProfileView extends GetView<ProfileController> {
                                     ),
                                   ),
                                 ),
-                                const Gap(10),
-                                GestureDetector(
-                                  onTap: () => controller.selectedTabIndex.value = 2,
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.easeInOut,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
-                                        alpha: controller.selectedTabIndex.value == 2 ? 1 : 0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 4,
-                                        horizontal: 16,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Metrics",
-                                          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           );
                         }),
                       ),
                       SizedBox(height: 1.h),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: _buildTabContent(),
-                        ),
-                      ),
+                      Expanded(child: _buildTabContent()),
                     ],
                   ),
                 ),
@@ -146,34 +113,31 @@ class ProfileView extends GetView<ProfileController> {
             ),
           ],
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Obx(() {
-            return RoundedButton(
-              buttonName: controller.selectedTabIndex.value == 2 ? "Save" : "Continue",
-              onTap: () async {
-                if (controller.selectedTabIndex.value == 0) {
-                  if ((controller.businessModel.value.businessEmail ?? "").isEmpty) {
-                    SnackBars.errorSnackBar(content: "Please fill business metrics");
-                  } else if (controller.businessHoursData1.isEmpty) {
-                    SnackBars.errorSnackBar(content: "Please fill business hours");
-                  } else {
-                    controller.selectedTabIndex.value = 1;
-                  }
-                } else if (controller.selectedTabIndex.value == 1) {
-                  // Upload any newly-added certificate files, then advance
-                  final success = await controller.uploadPendingCertificates();
-                  if (success) {
-                    controller.selectedTabIndex.value = 2;
-                  }
-                } else {
-                  controller.handleMerchantData();
-                  // controller.selectedTabIndex.value = 0;
-                }
-              },
-            );
-          }),
-        ),
+        // bottomNavigationBar: Padding(
+        //   padding: const EdgeInsets.all(24.0),
+        //   child: Obx(() {
+        //     return RoundedButton(
+        //       buttonName: controller.selectedTabIndex.value == 1 ? "Save" : "Continue",
+        //       onTap: () async {
+        //         if (controller.selectedTabIndex.value == 0) {
+        //           if ((controller.businessModel.value.businessEmail ?? "").isEmpty) {
+        //             SnackBars.errorSnackBar(content: "Please fill business metrics");
+        //           } else if (controller.businessHoursData1.isEmpty) {
+        //             SnackBars.errorSnackBar(content: "Please fill business hours");
+        //           } else {
+        //             controller.selectedTabIndex.value = 1;
+        //           }
+        //         } else {
+        //           // Upload any newly-added certificate files, then Save
+        //           final success = await controller.uploadPendingCertificates();
+        //           if (success) {
+        //             controller.handleMerchantData();
+        //           }
+        //         }
+        //       },
+        //     );
+        //   }),
+        // ),
       ),
     );
   }
@@ -185,10 +149,8 @@ class ProfileView extends GetView<ProfileController> {
 
       if (index == 0) {
         content = InfoMetricsComponent();
-      } else if (index == 1) {
-        content = CertificationsComponent();
       } else {
-        content = MetricsScreen();
+        content = CertificationsComponent();
       }
 
       return SingleChildScrollView(child: content);

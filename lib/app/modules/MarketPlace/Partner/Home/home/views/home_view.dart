@@ -831,9 +831,9 @@ class HomeView extends StatelessWidget {
                                 : "https://via.placeholder.com/150",
                             fit: BoxFit.fill,
                             placeholder: (context, url) =>
-                            const Center(child: CircularProgressIndicator()),
+                                const Center(child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) =>
-                            const Icon(Icons.category, color: MyColors.primary),
+                                const Icon(Icons.category, color: MyColors.primary),
                           ),
                         ),
                       ),
@@ -951,7 +951,7 @@ class HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium17.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
+      style: MyTexts.medium16.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:construction_technect/app/core/utils/globals.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/complete_signup_model.dart';
-import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
@@ -256,15 +255,25 @@ class ProfileController extends GetxController {
   final DocumentService _documentService = DocumentService();
   final Rx<MerchantBusninessHours?> _merBizHours = Rx<MerchantBusninessHours?>(null);
 
-  CommonController get homeController => Get.find<CommonController>();
+  CommonController get commonController => Get.find<CommonController>();
 
   DashBoardController get dashboardController => Get.find<DashBoardController>();
 
-  ProfileModel get profileData => homeController.profileData.value;
+  // Unified Getters from CommonController
+  String get userName => commonController.userName;
+  String get userFirstName => commonController.userFirstName;
+  String get userLastName => commonController.userLastName;
+  String get userEmail => commonController.userEmail;
+  String get userPhone => commonController.userPhone;
+  String get userImage => commonController.userImage;
+  String get userDesignation => commonController.userDesignation;
 
-  MerchantProfile? get merchantProfile => profileData.data?.merchantProfile;
+  // Keep userData for legacy/Partner-specific needs if any, but mark as dynamic
+  dynamic get userData => commonController.isPartner
+      ? commonController.profileData.value.data?.user
+      : commonController.profileDataM.value.user;
 
-  UserModel? get userData => profileData.data?.user;
+  MerchantProfile? get merchantProfile => commonController.profileData.value.data?.merchantProfile;
 
   int get profileCompletionPercentage => merchantProfile?.profileCompletionPercentage ?? 0;
 
@@ -273,7 +282,7 @@ class ProfileController extends GetxController {
   List<Documents> get documents => merchantProfile?.documents ?? [];
 
   List<SiteLocation> get addressData =>
-      Get.find<CommonController>().profileData.value.data?.siteLocations ?? [];
+      commonController.profileData.value.data?.siteLocations ?? [];
 
   String? get businessWebsite => merchantProfile?.businessWebsite;
 
@@ -317,9 +326,8 @@ class ProfileController extends GetxController {
       }
 
       if (merchantID != null && merchantID.isNotEmpty) {
-        if(myPref.role.val!="connector") {
-          profileResponse1.value =
-          await _homeService.getMerchantProfile(merchantID);
+        if (myPref.role.val != "connector") {
+          profileResponse1.value = await _homeService.getMerchantProfile(merchantID);
         }
       }
     } catch (e) {
@@ -414,7 +422,7 @@ class ProfileController extends GetxController {
 
       if (response.success == true) {
         SnackBars.successSnackBar(content: response.message ?? 'Document deleted successfully');
-        await homeController.fetchProfileData();
+        await commonController.fetchProfileData();
       } else {
         SnackBars.errorSnackBar(content: response.message ?? 'Failed to delete document');
       }

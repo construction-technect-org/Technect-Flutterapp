@@ -10,7 +10,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
 
 class AddRoleController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -182,8 +181,6 @@ class AddRoleController extends GetxController {
         title: "Error",
         message: "Please select at least one permission",
         backgroundColor: Colors.red,
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 3),
       );
       return;
     }
@@ -207,8 +204,6 @@ class AddRoleController extends GetxController {
             message: result.message ?? "Role updated successfully",
             backgroundColor: Colors.green,
             icon: const Icon(Icons.check_circle, color: Colors.white),
-            snackPosition: SnackPosition.BOTTOM,
-            duration: const Duration(seconds: 3),
           );
         }
       } else {
@@ -226,8 +221,6 @@ class AddRoleController extends GetxController {
             message: result.message ?? "Role created successfully",
             backgroundColor: Colors.green,
             icon: const Icon(Icons.check_circle, color: Colors.white),
-            snackPosition: SnackPosition.BOTTOM,
-            duration: const Duration(seconds: 3),
           );
         }
       }
@@ -237,8 +230,6 @@ class AddRoleController extends GetxController {
         title: "Error",
         message: "Something went wrong",
         backgroundColor: Colors.red,
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 3),
       );
     } finally {
       isLoading.value = false;

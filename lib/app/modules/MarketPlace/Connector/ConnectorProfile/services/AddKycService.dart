@@ -19,7 +19,7 @@ class AddKycService {
 
   Future<PersonaResponse> getProfileId() async {
     try {
-      final response = await apiManager.get(url: '${APIConstants.getPersonaList}');
+      final response = await apiManager.get(url: APIConstants.getPersonaList);
       // Access personas list
       final data = PersonaResponse.fromJson(response);
       return data;
@@ -30,7 +30,7 @@ class AddKycService {
 
   Future<PocModel> getPointOfContact(String profileId) async {
     try {
-      final response = await apiManager.get(url: "${APIConstants.getConnectorProfile}");
+      final response = await apiManager.get(url: APIConstants.getConnectorProfile);
       final PocModel data = PocModel.fromJson(response);
       return data;
     } catch (e) {

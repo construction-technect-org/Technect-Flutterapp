@@ -66,7 +66,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                             padding: const EdgeInsets.all(12),
                             child: Row(
                               children: [
-                                Icon(Icons.search, color: MyColors.gray2E),
+                                const Icon(Icons.search, color: MyColors.gray2E),
                                 const Gap(8),
                                 Text(
                                   "Search",
@@ -74,7 +74,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                 ),
                                 const Spacer(),
                                 // microphone icon
-                                Icon(Icons.mic, color: MyColors.gray2E),
+                                const Icon(Icons.mic, color: MyColors.gray2E),
                               ],
                             ),
                           ),
@@ -96,7 +96,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                               padding: const EdgeInsets.all(16),
                               child: Row(
                                 children: [
-                                  Icon(Icons.gps_not_fixed_rounded, color: MyColors.gray2E),
+                                  const Icon(Icons.gps_not_fixed_rounded, color: MyColors.gray2E),
                                   const Gap(8),
                                   Text(
                                     "Use my Current Location",
@@ -204,7 +204,7 @@ class CommonAddressList extends StatelessWidget {
           padding: const EdgeInsets.all(32.0),
           child: Column(
             children: [
-              Icon(Icons.location_off_outlined, size: 48, color: MyColors.gray54),
+              const Icon(Icons.location_off_outlined, size: 48, color: MyColors.gray54),
               const Gap(8),
               Text(
                 "No saved addresses found",

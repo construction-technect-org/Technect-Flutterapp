@@ -1,9 +1,12 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/views/connector_profile_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/bindings/profile_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/profile_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/customer_support_view.dart';
 
 class MyProfileView extends StatelessWidget {
   const MyProfileView({super.key});
@@ -11,23 +14,22 @@ class MyProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CommonController commonController = Get.find<CommonController>();
+    final DashBoardController controller = Get.find<DashBoardController>();
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: Obx(() {
-        final user = commonController.profileData.value.data?.user;
-        final name = user?.fullName.isNotEmpty == true ? user!.fullName : "Full Name";
-        final email = user?.email ?? "Fullname@gmail.com";
-        final roleName = user?.roleName ?? "Designation";
-        final imageUrl = user?.image;
+        final userEmail = commonController.userEmail;
+        final profileImage = commonController.userImage;
+        final designation = commonController.userDesignation;
 
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ─── Profile Header ───────────────────────────
-              _buildProfileHeader(name, email, roleName, imageUrl),
+              _buildProfileHeader(userEmail, designation, profileImage, controller),
               const SizedBox(height: 8),
 
               // ─── Account ──────────────────────────────────
@@ -36,10 +38,9 @@ class MyProfileView extends StatelessWidget {
                 icon: Icons.manage_accounts_outlined,
                 label: "Manage Profile",
                 onTap: () {
-                  if(myPref.role.val=="connector"){
-                    Get.to(() => ConnectorProfileView(), binding: ConnectorProfileBinding());
-                  }
-                  else {
+                  if (myPref.role.val == "connector") {
+                    Get.to(() => const ConnectorProfileView(), binding: ConnectorProfileBinding());
+                  } else {
                     Get.to(() => ProfileView(), binding: ProfileBinding());
                   }
                 },
@@ -118,7 +119,7 @@ class MyProfileView extends StatelessWidget {
               _buildMenuItem(
                 icon: Icons.headset_mic_outlined,
                 label: "Help Center",
-                onTap: () => Get.toNamed(Routes.SUPPORT_REQUEST),
+                onTap: () => Get.to(() => CustomerSupportView()),
               ),
               _buildMenuItem(
                 icon: Icons.privacy_tip_outlined,
@@ -161,7 +162,12 @@ class MyProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader(String name, String email, String roleName, String? imageUrl) {
+  Widget _buildProfileHeader(
+    String email,
+    String roleName,
+    String? imageUrl,
+    DashBoardController controller,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Row(
@@ -175,11 +181,21 @@ class MyProfileView extends StatelessWidget {
                 Row(
                   children: [
                     Flexible(
-                      child: Text(
-                        name,
-                        style: MyTexts.bold18.copyWith(color: Colors.black),
-                        maxLines: 1,
+                      child: RichText(
                         overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  '${controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${controller.userMainModel?.lastName?.capitalizeFirst ?? ''}',
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.fontBlack,
+                                fontFamily: MyTexts.SpaceGrotesk,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -212,8 +228,13 @@ class MyProfileView extends StatelessWidget {
         border: Border.all(color: const Color(0xFFD4AF37), width: 2.5),
       ),
       child: ClipOval(
-        child: imageUrl != null && imageUrl.isNotEmpty
-            ? Image.network(imageUrl, fit: BoxFit.cover)
+        child: (imageUrl != null && imageUrl.isNotEmpty)
+            ? getImageView(
+                finalUrl: imageUrl.startsWith('http')
+                    ? imageUrl
+                    : "${APIConstants.bucketUrl}$imageUrl",
+                fit: BoxFit.cover,
+              )
             : Image.asset(Asset.profil, fit: BoxFit.cover),
       ),
     );
@@ -235,7 +256,7 @@ class MyProfileView extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Color(0xFFF5F5F5), width: 1)),
+          border: Border(bottom: BorderSide(color: Color(0xFFF5F5F5))),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class BottomBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<BottomController>(() => BottomController());
+    Get.put<BottomController>(BottomController());
     Get.lazyPut<DashBoardController>(() => DashBoardController());
   }
 }

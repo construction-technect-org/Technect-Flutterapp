@@ -38,7 +38,7 @@ class MarketingScreen extends GetView<MarketingController> {
                         child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
-                    action: [
+                    actions: [
                       GestureDetector(
                         onTap: () {
                           Get.back();
@@ -51,7 +51,10 @@ class MarketingScreen extends GetView<MarketingController> {
                             border: Border.all(color: MyColors.custom('EAEAEA')),
                             shape: BoxShape.circle,
                           ),
-                          child: SvgPicture.asset(Asset.chat, width: 24, height: 24,
+                          child: SvgPicture.asset(
+                            Asset.chat,
+                            width: 24,
+                            height: 24,
                             colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                           ),
                         ),
@@ -68,7 +71,10 @@ class MarketingScreen extends GetView<MarketingController> {
                             border: Border.all(color: MyColors.custom('EAEAEA')),
                             shape: BoxShape.circle,
                           ),
-                          child: SvgPicture.asset(Asset.info, width: 24, height: 24,
+                          child: SvgPicture.asset(
+                            Asset.info,
+                            width: 24,
+                            height: 24,
                             colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                           ),
                         ),
@@ -89,7 +95,6 @@ class MarketingScreen extends GetView<MarketingController> {
                         ),
                       ),
                       const Gap(10),
-
                     ],
                   ),
                   // const TopBarHeader(),

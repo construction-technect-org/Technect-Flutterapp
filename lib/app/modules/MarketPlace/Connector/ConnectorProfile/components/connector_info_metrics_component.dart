@@ -39,7 +39,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                   Get.to(() => EditProfile());
                 },
                 behavior: HitTestBehavior.translucent,
-                child: Icon(Icons.edit, size: 18, color: Colors.black54),
+                child: const Icon(Icons.edit, size: 18, color: Colors.black54),
               ),
             ],
           ),
@@ -171,7 +171,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:  [
-                    Text(
+                    const Text(
                       "Point of Contact",
                       style: TextStyle(
                         fontSize: 14,
@@ -183,7 +183,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                       final isNew = controller.profileDatas.value == null;
 
                       Get.to(() => EditPocProfile(), arguments: isNew);
-                    }, child: Icon(Icons.edit, size: 18, color: Colors.black54)),
+                    }, child: const Icon(Icons.edit, size: 18, color: Colors.black54)),
                   ],
                 ),
 
@@ -232,7 +232,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                   Get.to(() => EditProjectView());
                 },
                 behavior: HitTestBehavior.translucent,
-                child: Icon(Icons.edit, size: 18, color: Colors.black54),
+                child: const Icon(Icons.edit, size: 18, color: Colors.black54),
                 ),
             ],
           ),

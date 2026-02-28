@@ -5,7 +5,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final Widget? title;
   final Widget? leading;
-  final List<Widget>? action;
+  final List<Widget>? actions;
   final bool automaticallyImplyLeading;
   final TextStyle? textStyle;
   final bool? isCenter;
@@ -20,7 +20,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onTap,
     this.isCenter,
     this.leading,
-    this.action,
+    this.actions,
     this.backgroundColor,
     this.leadingWidth,
     this.reloadOnTap,
@@ -32,7 +32,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      actions: action,
+      actions: actions,
       surfaceTintColor: Colors.white,
       automaticallyImplyLeading: false,
       leadingWidth: leadingWidth ?? 40,
@@ -47,11 +47,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                   behavior: HitTestBehavior.translucent,
                   child: const Padding(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Icon(
-                      Icons.arrow_back_ios_new_sharp,
-                      color: Colors.black,
-                      size: 24,
-                    ),
+                    child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 24),
                   ),
                 )
           : Container(),
@@ -59,8 +55,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       iconTheme: IconThemeData(color: MyColors.black, size: 24),
       centerTitle: isCenter ?? true,
-      titleTextStyle:
-          textStyle ?? MyTexts.medium18.copyWith(color: MyColors.gray2E),
+      titleTextStyle: textStyle ?? MyTexts.medium18.copyWith(color: MyColors.gray2E),
       title: title,
     );
   }

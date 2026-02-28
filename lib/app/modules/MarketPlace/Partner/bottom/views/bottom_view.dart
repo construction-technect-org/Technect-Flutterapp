@@ -6,9 +6,9 @@ import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/views/setting_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
@@ -88,9 +88,9 @@ class BottomBarView extends GetView<BottomController> {
       case 2:
         return ConnectionInboxView();
       case 3:
-        return const MenuView();
+        return const SettingView();
       default:
-        return const MenuView();
+        return const SettingView();
     }
   }
 
@@ -104,7 +104,7 @@ class BottomBarView extends GetView<BottomController> {
           painter: BNBCustomPainter(),
           child: Container(
             height: 100,
-            padding: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -129,7 +129,10 @@ class BottomBarView extends GetView<BottomController> {
                   Asset.setting,
                   'Settings',
                   index: 3, // Menu/Setting index
-                  onTap: () => controller.currentIndex.value = 3,
+                  onTap: () {
+                    // Logic for profile tap
+                    Get.toNamed(Routes.SETTING);
+                  },
                 ),
                 _bottomBar(
                   Asset.person,
@@ -170,7 +173,7 @@ class BottomBarView extends GetView<BottomController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.autorenew, color: Colors.white, size: 20),
+                  const Icon(Icons.autorenew, color: Colors.white, size: 20),
                   Text(
                     'Switch',
                     style: MyTexts.medium10.copyWith(color: Colors.white, fontSize: 8),
@@ -346,7 +349,7 @@ class BottomBarView extends GetView<BottomController> {
               height: 24,
               width: 24,
               colorFilter: ColorFilter.mode(
-                controller.currentIndex.value == index ? Color(0xFF1B2F62) : Color(0xFF555555),
+                controller.currentIndex.value == index ? const Color(0xFF1B2F62) : const Color(0xFF555555),
                 BlendMode.srcIn,
               ),
             ),
@@ -355,7 +358,7 @@ class BottomBarView extends GetView<BottomController> {
           Text(
             name,
             style: MyTexts.medium14.copyWith(
-              color: controller.currentIndex.value == index ? Color(0xFF1B2F62) : Color(0xFF555555),
+              color: controller.currentIndex.value == index ? const Color(0xFF1B2F62) : const Color(0xFF555555),
               fontWeight: controller.currentIndex.value == index
                   ? FontWeight.bold
                   : FontWeight.normal,
@@ -375,15 +378,15 @@ class BottomBarView extends GetView<BottomController> {
 class BNBCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    final Paint paint = Paint()
       ..color = MyColors.tertiary
       ..style = PaintingStyle.fill;
 
-    double cornerRadius = 40.0;
-    double notchWidth = 80.0;
-    double topY = 25.0;
+    const double cornerRadius = 40.0;
+    const double notchWidth = 80.0;
+    const double topY = 25.0;
 
-    Path path = Path();
+    final Path path = Path();
     path.moveTo(0, size.height);
     path.lineTo(0, topY + cornerRadius);
     path.quadraticBezierTo(0, topY, cornerRadius, topY); // Top-left rounded edge
@@ -401,7 +404,7 @@ class BNBCustomPainter extends CustomPainter {
     // The notch circle cutout
     path.arcToPoint(
       Offset(size.width / 2 + notchWidth / 2, topY + 8),
-      radius: Radius.circular(notchWidth / 2.2),
+      radius: const Radius.circular(notchWidth / 2.2),
       clockwise: false,
     );
 
@@ -479,7 +482,6 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
       child: CurvedNavigationBar(
         index: selectedIndex,
-        height: 75,
         backgroundColor: Colors.transparent,
         color: const Color(0xFFE8E1B0),
         buttonBackgroundColor: const Color(0xFF1565C0),
@@ -529,9 +531,9 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
 
   /// 🔹 Center "Switch" button
   Widget _switchItem() {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Icon(Icons.sync, color: Colors.white, size: 28),
         SizedBox(height: 4),
         Text("Switch", style: TextStyle(color: Colors.white, fontSize: 12)),

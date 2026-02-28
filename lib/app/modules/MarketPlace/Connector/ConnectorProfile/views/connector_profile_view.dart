@@ -141,9 +141,9 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
                       //   }),
                       // ),
                       SizedBox(height: 1.h),
-                      Expanded(
+                      const Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: 20),
                           child: ConnectorInfoMetricsComponent(),
                         ),
                       ),

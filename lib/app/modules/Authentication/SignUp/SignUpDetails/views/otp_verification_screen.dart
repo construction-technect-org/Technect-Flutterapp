@@ -37,10 +37,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             const Gap(32),
             /// 🔹 Title
             /// 🔹 Title
-            Text(
+            const Text(
               "Enter OTP to proceed",
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -50,11 +50,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             const SizedBox(height: 8),
 
             /// 🔹 OTP Sent Text (Single Line)
-            SizedBox(
+            const SizedBox(
               width: double.infinity,
               child: Text.rich(
                 TextSpan(
-                  children: const [
+                  children: [
                     TextSpan(
                       text: "OTP sent to ",
                       style: TextStyle(
@@ -209,7 +209,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             //Gap(MediaQuery.of(context).size.height / 3),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
 
                 /// 🔹 Resend OTP Text

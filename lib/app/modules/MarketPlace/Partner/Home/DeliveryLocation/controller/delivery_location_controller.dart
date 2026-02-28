@@ -73,7 +73,7 @@ class DeliveryLocationController extends GetxController {
 
         // Duplicate Check: Look for existing address with same street and pincode
         DeliveryAddressData? existingAddress;
-        for (var addr in commonController.addresses) {
+        for (final addr in commonController.addresses) {
           if (addr.addressLine1 == street && addr.pincode == pincode) {
             existingAddress = addr;
             break;

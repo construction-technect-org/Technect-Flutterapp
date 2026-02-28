@@ -551,7 +551,6 @@ class ConnectionDialogs {
                     // ),
                     const Gap(12),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(icons, size: 25),
                         // Text(
@@ -672,7 +671,6 @@ class ConnectionDialogs {
                     // ),
                     const Gap(12),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(icons, size: 25),
                         // Text(
@@ -805,7 +803,6 @@ class ConnectionDialogs {
                     // ),
                     const Gap(12),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(icons, size: 25),
                         // Text(

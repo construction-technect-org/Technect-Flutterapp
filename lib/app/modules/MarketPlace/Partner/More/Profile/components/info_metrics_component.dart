@@ -1,396 +1,159 @@
-import "dart:developer";
-
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/merchant_profile_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/point_of_contact.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:readmore/readmore.dart';
 
 class InfoMetricsComponent extends StatelessWidget {
   InfoMetricsComponent({super.key});
 
-  final List<String> items = ["Manufacturer", "Service Provider", "Trader"];
-
   final ProfileController controller = Get.find<ProfileController>();
+  final DashBoardController _dashBoardController = Get.find<DashBoardController>();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 1.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Information', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
-            GestureDetector(
-              onTap: () => Get.to(() => EditProfile()),
+        // Personal Information Section
+        Obx(() {
+          final name = controller.userName;
+          return _buildSectionHeader(
+            imageUrl: controller.userImage,
+            title: name.isNotEmpty ? name : "User Information",
+            isUser: true,
+          );
+        }),
+        _buildInfoCard("Information", [
+          _buildInfoRow("Full Name", controller.userName),
+          _buildInfoRow("Email", controller.userEmail),
+          _buildInfoRow("Phone", controller.userPhone),
+          Obx(
+            () => _buildInfoRow(
+              "Designation",
+              controller.userDesignation.isNotEmpty
+                  ? controller.userDesignation
+                  : controller.selectedValue.value,
+            ),
+          ),
+        ], onEdit: () => Get.to(() => EditProfile())),
+        const Gap(16),
 
-              behavior: HitTestBehavior.translucent,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: SvgPicture.asset(Asset.edit),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 2.h),
-        _buildInfoMetricsContent(),
-        SizedBox(height: 2.h),
-        Row(
-          children: [
-            Text('Business Metrics', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
-            const Spacer(),
-            GestureDetector(
-              onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
-              behavior: HitTestBehavior.translucent,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: SvgPicture.asset(Asset.edit),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 1.h),
+        // Business Metrics Section
+        Obx(() {
+          return _buildSectionHeader(
+            imageUrl: controller.businessModel.value.image,
+            title: controller.businessModel.value.businessName ?? "Business Metrics",
+          );
+        }),
         _buildBusinessMetricsContent(),
-        SizedBox(height: 2.h),
-        Row(
-          children: [
-            Text(
-              'Business Hours',
-              style: MyTexts.medium16.copyWith(
-                color: MyColors.fontBlack,
-                fontFamily: MyTexts.SpaceGrotesk,
-              ),
-            ),
-            const Spacer(),
-            GestureDetector(
-              onTap: () async {
-                //final previousData = controller.businessHoursData.toList();
-                final result = await Get.toNamed(
-                  Routes.BUSINESS_HOURS,
-                  //arguments: previousData.isNotEmpty ? previousData : null,
-                );
-                if (result != null && result == true) {
-                  log("Result, $result");
-                  controller.handleBusinessHoursData();
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: SvgPicture.asset(Asset.edit),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 1.h),
-        _buildBusinessHourContent(),
+        const Gap(16),
 
-        SizedBox(height: 4.h),
+        // Point of Contact Section
+        _buildPointOfContactContent(),
+        const Gap(16),
+
+        // Business Hours Section
+        _buildBusinessHoursSection(),
+        const Gap(32),
       ],
     );
   }
 
-  Widget _buildInfoMetricsContent() {
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: MyColors.white,
-          border: Border.all(color: MyColors.grayEA),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          buildRow(
-                            title: "Name",
-                            data:
-                                // '${(userData?.firstName ?? '').capitalizeFirst} ${(userData?.lastName ?? '').capitalizeFirst}'
-                                //     .trim()
-                                //     .isEmpty
-                                '${controller.userMainModel?.firstName?.capitalizeFirst ?? ''} ${controller.userMainModel?.lastName?.capitalizeFirst ?? ''}!',
-                          ),
-                          const Gap(6),
-                          buildRow(
-                            title: "Mobile Number",
-                            data: controller.userMainModel?.phone ?? "",
-                          ),
-                          const Gap(6),
-                          buildRow(title: "Email ID", data: controller.userMainModel?.email ?? ""),
-                          const Gap(8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Role",
-                                style: MyTexts.medium14.copyWith(color: MyColors.grayA5),
-                              ),
-                              const SizedBox(width: 20),
-                              Obx(() {
-                                return DropdownButtonHideUnderline(
-                                  child: ButtonTheme(
-                                    alignedDropdown: true,
-                                    child: DropdownButton<String>(
-                                      value: controller.selectedValue.value,
-                                      items: const [
-                                        DropdownMenuItem(
-                                          value: 'Manufacturer',
-                                          child: Text('Manufacturer'),
-                                        ),
-                                        DropdownMenuItem(
-                                          value: 'Service Provider',
-                                          child: Text('Service Provider'),
-                                        ),
-                                        DropdownMenuItem(value: 'Trader', child: Text('Trader')),
-                                      ],
-                                      onChanged: (value) {
-                                        controller.selectedValue.value = value!;
-                                      },
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ],
-                          ),
-                          //buildRow(title: "Role", data: userData?.roleName ?? "-"),
-                          SizedBox(height: 0.5.h),
-                        ],
-                      ),
+  Widget _buildSectionHeader({String? imageUrl, required String title, bool isUser = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: MyColors.grayEA,
+            child: (imageUrl != null && imageUrl.isNotEmpty)
+                ? ClipOval(
+                    child: getImageView(
+                      finalUrl: imageUrl.startsWith('http')
+                          ? imageUrl
+                          : "${APIConstants.bucketUrl}$imageUrl",
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
+                  )
+                : const Icon(Icons.person, color: MyColors.grayA5, size: 30),
+          ),
+          const Gap(12),
+          Expanded(
+            child: isUser
+                ? RichText(
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text:
+                              '${_dashBoardController.userMainModel?.firstName?.capitalizeFirst ?? ''} ${_dashBoardController.userMainModel?.lastName?.capitalizeFirst ?? ''}',
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.fontBlack,
+                            fontFamily: MyTexts.SpaceGrotesk,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Text(title, style: MyTexts.bold18.copyWith(color: MyColors.gray2E)),
+          ),
+        ],
+      ),
+    );
   }
 
-  Widget _buildBusinessMetricsContent() {
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      log("Bussiness Model -> ${controller.businessModel.value.gstinNumber}");
-
-      if (controller.businessModel.value.gstinNumber == null) {
-        return GestureDetector(
-          onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: MyColors.white,
-              border: Border.all(color: MyColors.grayEA),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(
-                " + Add Business Details",
-                style: MyTexts.bold16.copyWith(color: MyColors.grey),
-              ),
-            ),
-          ),
-        );
-      } else if (controller.businessModel.value.gstinNumber!.isEmpty) {
-        return GestureDetector(
-          onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: MyColors.white,
-              border: Border.all(color: MyColors.grayEA),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(
-                " + Add Business Details",
-                style: MyTexts.bold16.copyWith(color: MyColors.grey),
-              ),
-            ),
-          ),
-        );
-      } else {
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: MyColors.white,
-            border: Border.all(color: MyColors.grayEA),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildRow(title: "Company name", data: controller.businessModel.value.businessName),
-              const Gap(6),
-              buildRow(title: "GSTIN", data: controller.businessModel.value.gstinNumber ?? ''),
-              const Gap(6),
-
-              buildRow(
-                title: "Mobile Number",
-                data: controller.businessModel.value.businessContactNumber ?? '',
-              ),
-              const Gap(6),
-              buildRow(title: "Website", data: controller.businessModel.value.website ?? ''),
-              const Gap(6),
-              buildRow(title: "Email id", data: controller.businessModel.value.businessEmail ?? ''),
-              const Gap(6),
-              buildRow(
-                title: "Alternative number",
-                data: controller.businessModel.value.alternativeBusinessEmail ?? '',
-              ),
-              const Gap(6),
-              buildRow(title: "Year of establish", data: controller.businessModel.value.year ?? ''),
-
-              const Gap(6),
-              Obx(() {
-                return buildAddressRow(
-                  title: "Address",
-                  data: Get.find<CommonController>().getCurrentAddress().value,
-                );
-              }),
-              const Gap(6),
-            ],
-          ),
-        );
-      }
-    });
-  }
-
-  Widget _buildBusinessHourContent() {
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (controller.businessHoursData1.isEmpty || controller.businessHoursData1.length < 7) {
-        return Text(
-          "No business hours set",
-          style: MyTexts.medium16.copyWith(color: MyColors.gray54),
-        );
-      }
-      controller.businessHoursData1.sort((a, b) {
-        final keyA = a.keys.first;
-        final keyB = b.keys.first;
-        return keyA.compareTo(keyB);
-      });
-      if (controller.businessHoursData1[0].keys.first == 0) {
-        // log( "Values ${controller.businessHoursData1[0].values}");
-      }
-      /*data.sort(
-        (a, b) => (a['day_of_week'] as int).compareTo(b['day_of_week'] as int),
-      );
-
-      final openDays = data.where((d) => d['is_open'] == true).toList();
-      final closedDays = data.where((d) => d['is_open'] == false).toList(); */
-
-      final List<Widget> items = [];
-      items.add(_buildBusinessHourItem("Monday", controller.businessHoursData1[0][0]!));
-      items.add(_buildBusinessHourItem("Tuesday", controller.businessHoursData1[1][1]!));
-      items.add(_buildBusinessHourItem("Wednesday", controller.businessHoursData1[2][2]!));
-      items.add(_buildBusinessHourItem("Thursday", controller.businessHoursData1[3][3]!));
-      items.add(_buildBusinessHourItem("Friday", controller.businessHoursData1[4][4]!));
-      items.add(_buildBusinessHourItem("Saturday", controller.businessHoursData1[5][5]!));
-      items.add(_buildBusinessHourItem("Sunday", controller.businessHoursData1[6][6]!));
-      /*for (final day in openDays) {
-        items.add(_buildBusinessHourItem([day], isOpen: true));
-      }
-
-      if (closedDays.isNotEmpty) {
-        items.add(_buildBusinessHourItem(closedDays, isOpen: false));
-      } */
-
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: MyColors.grayEA),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Working Hours", style: MyTexts.medium15.copyWith(color: MyColors.grayA5)),
-            const Gap(12),
-            Column(children: items),
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _buildBusinessHourItem(String dayofWeek, MerchantDay days) {
-    final String dayLabel = dayofWeek;
-    final bool isClosed = days.closed ?? true;
-
-    final String openTime = !isClosed ? (days.open ?? "") : "";
-    final String closeTime = !isClosed ? (days.close ?? "") : "";
-
+  Widget _buildInfoCard(String title, List<Widget> children, {VoidCallback? onEdit}) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: !isClosed ? const Color(0xFFEAF0FF) : const Color(0xFFFFEEEE),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: !isClosed ? const Color(0xFFCAD6FF) : const Color(0xFFF5C8C8)),
+        color: Colors.white,
+        border: Border.all(color: MyColors.grayEA),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Gap(16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    !isClosed
-                        ? "$dayLabel ${openTime.isNotEmpty ? '$openTime - $closeTime' : ''}"
-                        : dayLabel,
-                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-                  ),
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
+              if (onEdit != null)
+                GestureDetector(onTap: onEdit, child: SvgPicture.asset(Asset.edit, height: 18)),
+            ],
           ),
-          Align(
-            alignment: AlignmentGeometry.bottomRight,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(32),
-                  bottomLeft: Radius.circular(32),
-                  bottomRight: Radius.circular(32),
-                ),
-              ),
-              child: Text(
-                !days.closed! ? "Open" : "Closed",
-                style: MyTexts.medium14.copyWith(
-                  color: MyColors.gray2E,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+          const Gap(12),
+          ...children,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(label, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
+          ),
+          const Text(":  "),
+          Expanded(
+            flex: 3,
+            child: Text(
+              (value == null || value.isEmpty) ? "N/A" : value,
+              style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
             ),
           ),
         ],
@@ -398,48 +161,127 @@ class InfoMetricsComponent extends StatelessWidget {
     );
   }
 
-  Widget buildRow({String? data, required String title}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
-        const SizedBox(width: 20),
-        Flexible(
-          child: Text(
-            data ?? "",
-            textAlign: TextAlign.right,
-            overflow: TextOverflow.ellipsis,
-            style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+  Widget _buildBusinessMetricsContent() {
+    return Obx(() {
+      final bm = controller.businessModel.value;
+      if (bm.gstinNumber == null || bm.gstinNumber!.isEmpty) {
+        return _buildInfoCard("Business Metrics", [
+          Center(
+            child: GestureDetector(
+              onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
+              child: Text(
+                "+ Add Business Details",
+                style: MyTexts.bold16.copyWith(color: MyColors.grey),
+              ),
+            ),
           ),
-        ),
-      ],
+        ]);
+      }
+      return _buildInfoCard("Business Metrics", [
+        _buildInfoRow("Company Name", bm.businessName),
+        _buildInfoRow("GSTIN", bm.gstinNumber),
+        _buildInfoRow("Website", bm.website),
+        _buildInfoRow("Business Email", bm.businessEmail),
+        _buildInfoRow("Contact Number", bm.businessContactNumber),
+        _buildInfoRow("Establishment Year", bm.year),
+        Obx(() {
+          return _buildAddressRow(
+            "Address",
+            Get.find<CommonController>().getCurrentAddress().value,
+          );
+        }),
+      ], onEdit: () => Get.toNamed(Routes.EDIT_PROFILE));
+    });
+  }
+
+  Widget _buildAddressRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(label, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
+          ),
+          const Text(":  "),
+          Expanded(
+            flex: 3,
+            child: ReadMoreText(
+              value ?? "N/A",
+              trimMode: TrimMode.Line,
+              colorClickableText: MyColors.primary,
+              trimCollapsedText: 'View More',
+              trimExpandedText: ' Show less',
+              style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget buildAddressRow({String? data, required String title}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flexible(
-          child: Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
-        ),
-        Flexible(
-          flex: 2,
-          child: ReadMoreText(
-            data ?? "",
-            trimMode: TrimMode.Line,
-            trimLines: 1,
-            colorClickableText: const Color.fromRGBO(33, 150, 243, 1),
-            trimCollapsedText: 'View More',
-            style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-            trimExpandedText: '  Show less',
-            textAlign: TextAlign.right,
-            moreStyle: MyTexts.medium15.copyWith(color: const Color.fromRGBO(33, 150, 243, 1)),
-          ),
-        ),
-      ],
-    );
+  Widget _buildPointOfContactContent() {
+    return Obx(() {
+      final poc = controller.profileResponse1.value.merchant?.pocDetails;
+      return _buildInfoCard("Point of Contact", [
+        _buildInfoRow("Name", poc?.pocName),
+        _buildInfoRow("Designation", poc?.pocDesignation),
+        _buildInfoRow("Email", poc?.pocEmail),
+        _buildInfoRow("Contact Number", poc?.pocPhone),
+      ], onEdit: () => Get.to(() => PointOfContentScreen()));
+    });
+  }
+
+  Widget _buildBusinessHoursSection() {
+    return Obx(() {
+      return _buildInfoCard(
+        "Business Hours",
+        [
+          if (controller.businessHoursData1.isEmpty)
+            const Center(child: Text("No business hours set"))
+          else
+            Column(
+              children: controller.businessHoursData1.map((data) {
+                final dayIndex = data.keys.first;
+                final dayData = data.values.first;
+                final dayNames = [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday",
+                  "Sunday",
+                ];
+                final dayName = dayIndex < dayNames.length ? dayNames[dayIndex] : "Unknown";
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(dayName, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
+                      Text(
+                        (dayData?.closed == false)
+                            ? "${dayData?.open} - ${dayData?.close}"
+                            : "Closed",
+                        style: MyTexts.medium14.copyWith(
+                          color: (dayData?.closed == false) ? MyColors.gray2E : MyColors.red33,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+        ],
+        onEdit: () async {
+          final result = await Get.toNamed(Routes.BUSINESS_HOURS);
+          if (result == true) {
+            controller.fetchProfileSummaryData();
+          }
+        },
+      );
+    });
   }
 }

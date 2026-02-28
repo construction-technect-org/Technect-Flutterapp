@@ -6,7 +6,6 @@ import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/controller/setting_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
-import 'package:flutter/cupertino.dart';
 
 class SettingView extends GetView<SettingController> {
   const SettingView({super.key});
@@ -22,7 +21,7 @@ class SettingView extends GetView<SettingController> {
             children: [
               CommonAppBar(
                 backgroundColor: Colors.transparent,
-                title: const Text('Settings'),
+                title: const Text('Password & Security'),
                 isCenter: false,
                 leading: GestureDetector(
                   onTap: () {
@@ -34,166 +33,112 @@ class SettingView extends GetView<SettingController> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Gap(20),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: MyColors.white,
-                        boxShadow: [
-                          BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4),
-                        ],
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: MyColors.grayEA.withValues(alpha: 0.32)),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Notifications",
-                                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-                              ),
-                              const Spacer(),
-                              Obx(() {
-                                return CupertinoSwitch(
-                                  activeTrackColor: MyColors.primary,
-                                  value: controller.isNotification.value,
-                                  onChanged: (val) {
-                                    controller.isNotification.value = val;
-                                    controller.notificationToggle(
-                                      isNotification: controller.isNotification.value,
-                                    );
-                                  },
-                                );
-                              }),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Gap(24),
-                    const HeaderText(text: "Account"),
-                    const Gap(16),
-                    _buildSettingAction(
-                      context,
-                      icon: Icons.logout,
-                      text: "Log Out",
-                      color: MyColors.red,
-                      onTap: () {
-                        _showConfirmDialog(
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Gap(20),
+                        const HeaderText(text: "Log in & Recovery"),
+                        const Gap(16),
+                        _buildSettingAction(
                           context,
-                          title: "Are you sure you want to log out?",
-                          confirmText: "Log Out",
-                          onConfirm: () async {
-                            await myPref.logout();
-                            Get.offAllNamed(Routes.ON_BOARDING);
+                          icon: Icons.lock_outline,
+                          text: "Change Password",
+                          onTap: () {
+                            // TODO: Implement Change Password navigation
                           },
-                        );
-                      },
-                    ),
-                    // Deactivate
-                    _buildSettingAction(
-                      context,
-                      icon: Icons.pause_circle_filled,
-                      text: "Deactivate my Account",
-                      color: MyColors.red,
-                      onTap: () {
-                        _showConfirmDialog(
+                        ),
+                        _buildSettingAction(
                           context,
-                          title: "Deactivate Account",
-                          message:
-                              "Are you sure to deactivate your account ? you can reactivate it anytime by  back in.",
-                          confirmText: "Deactivate",
-                          onConfirm: () {
-                            controller.deactivateAccount();
-                            // Get.to(() => AccountActionScreen(actionType: "deactivate"));
+                          icon: Icons.refresh,
+                          text: "Saved Login",
+                          onTap: () {
+                            // TODO: Implement Saved Login navigation
                           },
-                        );
-                      },
-                    ),
-
-                    // Delete
-                    _buildSettingAction(
-                      context,
-                      icon: Icons.delete_forever,
-                      text: "Delete my Account",
-                      color: MyColors.red,
-                      onTap: () {
-                        _showConfirmDialog(
+                        ),
+                        const Gap(24),
+                        const HeaderText(text: "Accounts"),
+                        const Gap(16),
+                        _buildSettingAction(
                           context,
-                          title: "Delete Account",
-                          message:
-                              "This action cannot be undone are you sure you want to delete your account permanently",
-                          confirmText: "Delete",
-                          onConfirm: () {
-                            Get.back();
-                            Get.to(() => AccountActionScreen(actionType: "delete"));
+                          icon: Icons.logout,
+                          text: "Log Out",
+                          color: MyColors.red,
+                          onTap: () {
+                            _showConfirmDialog(
+                              context,
+                              title: "Are you sure you want to log out?",
+                              confirmText: "Log Out",
+                              onConfirm: () async {
+                                await myPref.logout();
+                                Get.offAllNamed(Routes.ON_BOARDING);
+                              },
+                            );
                           },
-                        );
-                      },
+                        ),
+                        _buildSettingAction(
+                          context,
+                          icon: Icons.delete_outline,
+                          text: "Delete My Account",
+                          color: MyColors.red,
+                          onTap: () {
+                            _showConfirmDialog(
+                              context,
+                              title: "Delete Account",
+                              message:
+                                  "This action cannot be undone are you sure you want to delete your account permanently",
+                              confirmText: "Delete",
+                              onConfirm: () {
+                                Get.back();
+                                Get.to(() => AccountActionScreen(actionType: "delete"));
+                              },
+                            );
+                          },
+                        ),
+                        _buildSettingAction(
+                          context,
+                          icon: Icons.delete_forever_rounded,
+                          text: "Deactivate My Account",
+                          color: MyColors.red,
+                          onTap: () {
+                            _showConfirmDialog(
+                              context,
+                              title: "Deactivate Account",
+                              message:
+                                  "Are you sure to deactivate your account ? you can reactivate it anytime by  back in.",
+                              confirmText: "Deactivate",
+                              onConfirm: () {
+                                controller.deactivateAccount();
+                              },
+                            );
+                          },
+                        ),
+                        const Gap(24),
+                        const HeaderText(text: "Security Checks"),
+                        const Gap(16),
+                        _buildSettingAction(
+                          context,
+                          icon: Icons.info_outline,
+                          text: "Where you are Logged In",
+                          onTap: () {
+                            // TODO: Implement navigation
+                          },
+                        ),
+                        _buildSettingAction(
+                          context,
+                          icon: Icons.email_outlined,
+                          text: "Recent emails",
+                          onTap: () {
+                            // TODO: Implement navigation
+                          },
+                        ),
+                        const Gap(32),
+                      ],
                     ),
-                    Visibility(
-                      visible: false,
-                      child: Column(
-                        children: [
-                          const Divider(),
-                          const Gap(5),
-                          const HeaderText(text: "Theme"),
-                          const Gap(3),
-                          Row(
-                            children: [
-                              Text(
-                                "Dark Mode",
-                                style: MyTexts.regular16.copyWith(
-                                  color: Colors.black,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                              const Spacer(),
-                              Obx(() {
-                                return CupertinoSwitch(
-                                  activeTrackColor: MyColors.primary,
-                                  value: controller.isDarkMode.value,
-                                  onChanged: (val) {
-                                    controller.isDarkMode.value = val;
-                                    controller.isLightMode.value = !controller.isLightMode.value;
-                                  },
-                                );
-                              }),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Light Mode",
-                                style: MyTexts.regular16.copyWith(
-                                  color: Colors.black,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                              const Spacer(),
-                              Obx(() {
-                                return CupertinoSwitch(
-                                  activeTrackColor: MyColors.primary,
-                                  value: controller.isLightMode.value,
-                                  onChanged: (val) {
-                                    controller.isLightMode.value = val;
-                                    controller.isDarkMode.value = !controller.isDarkMode.value;
-                                  },
-                                );
-                              }),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ],
@@ -224,6 +169,8 @@ class SettingView extends GetView<SettingController> {
           ),
           child: Row(
             children: [
+              Icon(icon, color: MyColors.gray2E, size: 18),
+              const Gap(16),
               Expanded(
                 child: Text(
                   text,
@@ -354,55 +301,57 @@ class AccountActionScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Obx(
-                      () => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Gap(16),
-                          CommonPhoneField(
-                            headerText: "Mobile Number",
-                            controller: controller.mobileController,
-                            focusNode: FocusNode(),
-                            isValid: controller.isValid,
-                            onCountryCodeChanged: (code) => controller.countryCode.value = code,
-                          ),
-                          const SizedBox(height: 16),
-                          CommonTextField(
-                            headerText: "Password",
-                            controller: controller.passwordController,
-                            obscureText: !controller.isPasswordVisible.value,
-                            hintText: "Enter your password",
-                            suffixIcon: GestureDetector(
-                              onTap: () => controller.isPasswordVisible.value =
-                                  !controller.isPasswordVisible.value,
-                              child: Icon(
-                                controller.isPasswordVisible.value
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: MyColors.primary,
-                              ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Obx(
+                        () => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Gap(16),
+                            CommonPhoneField(
+                              headerText: "Mobile Number",
+                              controller: controller.mobileController,
+                              focusNode: FocusNode(),
+                              isValid: controller.isValid,
+                              onCountryCodeChanged: (code) => controller.countryCode.value = code,
                             ),
-                          ),
-                          const SizedBox(height: 20),
-
-                          /// Info text
-                          Row(
-                            children: [
-                              const Icon(Icons.info, color: MyColors.red),
-                              const Gap(12),
-                              Expanded(
-                                child: Text(
-                                  isDelete
-                                      ? "Deleting your account will remove all stored data and connections permanently."
-                                      : "Deactivating will disable your account temporarily. You can log back in to reactivate.",
-                                  style: MyTexts.regular14.copyWith(color: MyColors.red),
+                            const SizedBox(height: 16),
+                            CommonTextField(
+                              headerText: "Password",
+                              controller: controller.passwordController,
+                              obscureText: !controller.isPasswordVisible.value,
+                              hintText: "Enter your password",
+                              suffixIcon: GestureDetector(
+                                onTap: () => controller.isPasswordVisible.value =
+                                    !controller.isPasswordVisible.value,
+                                child: Icon(
+                                  controller.isPasswordVisible.value
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: MyColors.primary,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            const SizedBox(height: 20),
+
+                            /// Info text
+                            Row(
+                              children: [
+                                const Icon(Icons.info, color: MyColors.red),
+                                const Gap(12),
+                                Expanded(
+                                  child: Text(
+                                    isDelete
+                                        ? "Deleting your account will remove all stored data and connections permanently."
+                                        : "Deactivating will disable your account temporarily. You can log back in to reactivate.",
+                                    style: MyTexts.regular14.copyWith(color: MyColors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

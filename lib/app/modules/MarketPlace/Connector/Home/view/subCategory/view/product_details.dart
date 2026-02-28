@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({super.key});
@@ -203,10 +203,10 @@ class ProductDetailScreen extends StatelessWidget {
             Center(
               child: Row(
                 children: [
-                  Icon(Icons.bar_chart_outlined, size: 16, color: const Color(0xFF1B2F62)),
-                  Text(
+                  const Icon(Icons.bar_chart_outlined, size: 16, color: Color(0xFF1B2F62)),
+                  const Text(
                     "Bar-Code",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       color: Colors.black87,
                       fontWeight: FontWeight.w600,

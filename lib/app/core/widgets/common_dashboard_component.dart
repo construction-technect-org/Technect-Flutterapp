@@ -337,13 +337,10 @@ class CommonDashboardController extends GetxController {
     switch (value) {
       case "marketplace":
         Get.offAllNamed(Routes.MAIN);
-        break;
       case "crm":
         Get.offAllNamed(Routes.CRM_MAIN);
-        break;
       default:
         Get.snackbar("Coming Soon", "This feature is not yet available");
-        break;
     }
   }
 
@@ -363,13 +360,10 @@ class CommonDashboardController extends GetxController {
         } else {
           Get.toNamed(Routes.PROJECTS);
         }
-        break;
       case "crm":
         Get.find<CommonController>().switchToCrmMain();
-        break;
       default:
         Get.snackbar("Coming Soon", "This feature is not yet available");
-        break;
     }
   }
 }

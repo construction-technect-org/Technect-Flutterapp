@@ -1,5 +1,3 @@
-
-
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -25,10 +23,7 @@ class AddTeamView extends GetView<AddTeamController> {
                 width: double.infinity,
                 height: double.infinity,
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.moreIBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
                 ),
               ),
 
@@ -36,9 +31,7 @@ class AddTeamView extends GetView<AddTeamController> {
                 children: [
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
-                    title: Text(
-                      controller.isEdit.value ? "Edit Team" : "Add Team",
-                    ),
+                    title: Text(controller.isEdit.value ? "Edit Team" : "Add Team"),
                     isCenter: false,
                     leading: GestureDetector(
                       onTap: () {
@@ -46,14 +39,10 @@ class AddTeamView extends GetView<AddTeamController> {
                       },
                       child: const Padding(
                         padding: EdgeInsets.zero,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_sharp,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
-                    action: controller.isEdit.value
+                    actions: controller.isEdit.value
                         ? [
                             GestureDetector(
                               onTap: () {
@@ -91,8 +80,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                     controller.pickImageBottomSheet(context);
                                   },
                                   child: Obx(() {
-                                    if (controller.selectedImage.value !=
-                                        null) {
+                                    if (controller.selectedImage.value != null) {
                                       return ClipOval(
                                         child: Image.file(
                                           controller.selectedImage.value!,
@@ -104,24 +92,14 @@ class AddTeamView extends GetView<AddTeamController> {
                                     }
 
                                     final imagePath =
-                                        controller
-                                            .teamDetailsModel
-                                            .value
-                                            .profilePhotoUrl ??
-                                        "";
-                                    final imageUrl = imagePath.isNotEmpty
-                                        ? imagePath
-                                        : null;
+                                        controller.teamDetailsModel.value.profilePhotoUrl ?? "";
+                                    final imageUrl = imagePath.isNotEmpty ? imagePath : null;
 
                                     if (imageUrl == null) {
                                       return CircleAvatar(
                                         radius: 50,
                                         backgroundColor: MyColors.grayEA,
-                                        child: SvgPicture.asset(
-                                          Asset.add,
-                                          height: 24,
-                                          width: 24,
-                                        ),
+                                        child: SvgPicture.asset(Asset.add, height: 24, width: 24),
                                       );
                                     }
 
@@ -153,11 +131,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
-                                        child: SvgPicture.asset(
-                                          Asset.edit,
-                                          height: 12,
-                                          width: 12,
-                                        ),
+                                        child: SvgPicture.asset(Asset.edit, height: 12, width: 12),
                                       ),
                                     ),
                                   ),
@@ -174,8 +148,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                 LengthLimitingTextInputFormatter(30),
                                 NameInputFormatter(),
                               ],
-                              validator: (value) =>
-                                  validateName(value, fieldName: "first name"),
+                              validator: (value) => validateName(value, fieldName: "first name"),
                             ),
                             SizedBox(height: 2.h),
                             CommonTextField(
@@ -187,18 +160,14 @@ class AddTeamView extends GetView<AddTeamController> {
                                 LengthLimitingTextInputFormatter(30),
                                 NameInputFormatter(),
                               ],
-                              validator: (value) =>
-                                  validateName(value, fieldName: "last name"),
+                              validator: (value) => validateName(value, fieldName: "last name"),
                             ),
                             SizedBox(height: 2.h),
                             Focus(
                               onFocusChange: (hasFocus) {
                                 if (!hasFocus) {
-                                  final email =
-                                      controller.emialIdController.text;
-                                  final formatError = Validate.validateEmail(
-                                    email,
-                                  );
+                                  final email = controller.emialIdController.text;
+                                  final formatError = Validate.validateEmail(email);
                                   if (formatError == null) {
                                     controller.validateEmailAvailability(email);
                                   } else {
@@ -216,8 +185,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                   LengthLimitingTextInputFormatter(150),
                                   EmailInputFormatter(),
                                 ],
-                                validator: (value) =>
-                                    Validate.validateEmail(value),
+                                validator: (value) => Validate.validateEmail(value),
                                 onChange: (value) {
                                   controller.emailError.value = "";
                                 },
@@ -229,10 +197,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
                                     controller.emailError.value,
-                                    style: const TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 12,
-                                    ),
+                                    style: const TextStyle(color: Colors.red, fontSize: 12),
                                   ),
                                 );
                               }
@@ -248,8 +213,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(10),
                               ],
-                              validator: (val) =>
-                                  Validate.validateMobileNumber(val),
+                              validator: (val) => Validate.validateMobileNumber(val),
                             ),
 
                             SizedBox(height: 2.h),
@@ -289,9 +253,7 @@ class AddTeamView extends GetView<AddTeamController> {
                 onTap: () {
                   if (!controller.formKey.currentState!.validate()) return;
                   if (controller.emailError.value.isNotEmpty) return;
-                  controller.validateEmailAvailability(
-                    controller.emialIdController.text,
-                  );
+                  controller.validateEmailAvailability(controller.emialIdController.text);
                   controller.filedValidation();
                 },
               ),

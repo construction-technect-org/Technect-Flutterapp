@@ -5,20 +5,13 @@ class ProjectResponse {
   final int? page;
   final int? limit;
 
-  ProjectResponse({
-    this.success,
-    this.data,
-    this.total,
-    this.page,
-    this.limit,
-  });
+  ProjectResponse({this.success, this.data, this.total, this.page, this.limit});
 
   factory ProjectResponse.fromJson(Map<String, dynamic> json) {
     return ProjectResponse(
       success: json['success'],
       data: json['data'] != null
-          ? List<Project>.from(
-          json['data'].map((x) => Project.fromJson(x)))
+          ? List<Project>.from(json['data'].map((x) => Project.fromJson(x)))
           : [],
       total: json['total'],
       page: json['page'],
@@ -82,9 +75,7 @@ class Project {
       projectType: json['projectType'],
       status: json['status'],
       description: json['description'],
-      images: json['images'] != null
-          ? List<String>.from(json['images'])
-          : [],
+      images: json['images'] != null ? List<String>.from(json['images']) : [],
       isActive: json['isActive'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],

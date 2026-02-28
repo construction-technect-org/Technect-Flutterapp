@@ -53,7 +53,7 @@ class MerchantHomeView extends StatelessWidget {
               ),
             ),
             isCenter: false,
-            action: [
+            actions: [
               GestureDetector(
                 onTap: () {
                   //Get.toNamed(Routes.NOTIFICATIONS);
@@ -426,7 +426,6 @@ class MerchantHomeView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                         color: isSelected ? MyColors.primary : Colors.grey[300]!,
-                        width: 1,
                       ),
                       boxShadow: isSelected
                           ? [
@@ -1088,13 +1087,13 @@ class MerchantHomeView extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
                                 child: CachedNetworkImage(
-                                  imageUrl: category.image?.url ??
-                                      "https://via.placeholder.com/150",
+                                  imageUrl:
+                                      category.image?.url ?? "https://via.placeholder.com/150",
                                   fit: BoxFit.fill,
                                   placeholder: (context, url) =>
-                                  const Center(child: CircularProgressIndicator()),
+                                      const Center(child: CircularProgressIndicator()),
                                   errorWidget: (context, url, error) =>
-                                  const Icon(Icons.category, color: MyColors.primary),
+                                      const Icon(Icons.category, color: MyColors.primary),
                                 ),
                               ),
                             ),

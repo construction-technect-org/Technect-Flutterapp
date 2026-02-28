@@ -1,21 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:construction_technect/app/core/apiManager/api_constants.dart';
-import 'package:construction_technect/app/core/utils/colors.dart';
-import 'package:construction_technect/app/core/utils/common_fun.dart';
-import 'package:construction_technect/app/core/utils/constants.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/utils/text_theme.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/controller/sub_category_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/view/product_details.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/view/sub_category_item_view.dart';
-import 'package:construction_technect/app/routes/app_pages.dart';
-import 'package:construction_technect/main.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 class SubCategoryScreen extends StatelessWidget {
   SubCategoryScreen({super.key});
@@ -299,8 +287,6 @@ class SubCategoryScreen extends StatelessWidget {
                                     ? const DecorationImage(
                                   image: AssetImage(Asset.activeCategoryBg),
                                   fit: BoxFit.fitWidth,
-                                  alignment: Alignment.center,
-                                  scale: 1,
                                 )
                                     : null,
                               ),
@@ -354,7 +340,7 @@ class SubCategoryScreen extends StatelessWidget {
               }),
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
 
           /// 🔥 MAIN CONTENT (LEFT LIST + RIGHT GRID)
           Expanded(
@@ -424,7 +410,7 @@ class SubCategoryScreen extends StatelessWidget {
                                         width: 7,
                                         decoration: const BoxDecoration(
                                           color: MyColors.primary,
-                                          borderRadius: const BorderRadius.only(
+                                          borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(10),    // ✅
                                             bottomRight: Radius.circular(10), // ✅
                                           ), // ✅ rounded
@@ -484,7 +470,6 @@ class SubCategoryScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Row(
                           children: [
@@ -641,7 +626,7 @@ class SubCategoryScreen extends StatelessWidget {
                                       imageUrl: product["imageUrl"],
                                       logoUrl: product["logoUrl"],
                                       onConnect: () {
-                                        Get.to(ProductDetailScreen());
+                                        Get.to(const ProductDetailScreen());
                                       },
                                     );
                                   },
@@ -666,7 +651,7 @@ class SubCategoryScreen extends StatelessWidget {
                                       imageUrl: product["imageUrl"],
                                       logoUrl: product["logoUrl"],
                                       onConnect: () {
-                                        Get.to(ProductDetailScreen());
+                                        Get.to(const ProductDetailScreen());
                                       },
                                     );
                                   },
@@ -836,7 +821,6 @@ class SubCategoryScreen extends StatelessWidget {
           GestureDetector(
             onTap: onConnect,
             child: ClipRRect(
-              borderRadius: BorderRadius.zero,
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
                 width: double.infinity,

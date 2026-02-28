@@ -1,7 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/otp_verification_screen.dart';
 //import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/OnBoarding/controller/on_boarding_controller.dart';
 import 'package:flutter/scheduler.dart';
@@ -23,7 +21,7 @@ class OnboardingScreen extends GetView<OnBoardingController> {
           child: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(top: 0.0),
+                padding: const EdgeInsets.only(),
                 child: Column(
                   children: [
                     /* Align(

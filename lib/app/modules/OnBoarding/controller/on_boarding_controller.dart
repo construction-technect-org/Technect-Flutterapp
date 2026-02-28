@@ -8,11 +8,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
-
 class OnBoardingController extends GetxController {
 
   bool hasShownInitialPermission = false;
@@ -29,10 +24,10 @@ class OnBoardingController extends GetxController {
   Future<void> _handleInitialPermission() async {
     await Future.delayed(const Duration(seconds: 2));
 
-    PermissionStatus status = await Permission.locationWhenInUse.status;
+    final PermissionStatus status = await Permission.locationWhenInUse.status;
 
     if (status.isDenied) {
-      PermissionStatus result =
+      final PermissionStatus result =
       await Permission.locationWhenInUse.request();
 
       if (result.isDenied) {
@@ -50,7 +45,7 @@ class OnBoardingController extends GetxController {
   /// WHEN USER TRIES FEATURE AGAIN
   /// ==============================
   Future<void> checkLocationAndProceed() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
       Get.snackbar(
@@ -113,7 +108,7 @@ class OnBoardingController extends GetxController {
               onPressed: () async {
                 Get.back();
 
-                PermissionStatus result =
+                final PermissionStatus result =
                 await Permission.locationWhenInUse.request();
 
                 if (result.isGranted) {

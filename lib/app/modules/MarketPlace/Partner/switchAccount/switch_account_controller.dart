@@ -95,7 +95,7 @@ class SwitchAccountController extends GetxController {
       log("body $body");
 
       final switchResponse = await apiManager.postObject(
-        url: "${APIConstants.switchAccount}",
+        url: APIConstants.switchAccount,
         body: body,
       );
       final String? token = switchResponse["token"];

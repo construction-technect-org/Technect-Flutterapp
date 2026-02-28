@@ -64,7 +64,7 @@ class HomeService extends GetxService {
     }
 
     final response = await _manageApi.postMultipart(
-      url: "${APIConstants.projectAdd}",
+      url: APIConstants.projectAdd,
       fields: fields,
       files: files,
     );

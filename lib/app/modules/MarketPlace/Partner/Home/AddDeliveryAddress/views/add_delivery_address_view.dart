@@ -67,7 +67,6 @@ class AddDeliveryAddressView extends GetView<AddDeliveryAddressController> {
                     zoom: controller.mapZoom.value,
                   ),
                   myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
                   mapToolbarEnabled: false,
                   zoomControlsEnabled: false,
                   padding: EdgeInsets.only(bottom: 30.h, top: 120),
@@ -114,7 +113,6 @@ class AddDeliveryAddressView extends GetView<AddDeliveryAddressController> {
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    debounceTime: 600,
                     countries: const ["in"],
                     getPlaceDetailWithLatLng: (Prediction prediction) {
                       if (prediction.lat != null && prediction.lng != null) {

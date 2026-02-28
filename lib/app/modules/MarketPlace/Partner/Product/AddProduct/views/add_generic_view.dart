@@ -300,7 +300,6 @@ class AddGenericView extends GetView<MainHomeController> {
               headerText: 'Brand Name',
               hintText: 'Enter product brand name',
               controller: controller.brandNameController,
-              bgColor: MyColors.grayF7,
               borderRadius: 12,
               validator: (val) =>
                   (val == null || val.trim().isEmpty) ? 'Please enter brand name' : null,
@@ -372,7 +371,6 @@ class AddGenericView extends GetView<MainHomeController> {
                     hintText: "ENTER PRICE",
                     controller: controller.priceController,
                     keyboardType: TextInputType.number,
-                    bgColor: MyColors.grayF7,
                     borderRadius: 12,
                     validator: (val) {
                       if (val == null || val.isEmpty) return "Please enter price";
@@ -436,7 +434,6 @@ class AddGenericView extends GetView<MainHomeController> {
               hintText: "GST PRICE",
               controller: controller.gstPriceController,
               keyboardType: TextInputType.number,
-              bgColor: MyColors.grayF7,
               borderRadius: 12,
             ),
             const Gap(12),
@@ -450,7 +447,6 @@ class AddGenericView extends GetView<MainHomeController> {
                     hintText: "ENTER AMOUNT",
                     controller: controller.amountController,
                     keyboardType: TextInputType.number,
-                    bgColor: MyColors.grayF7,
                     borderRadius: 12,
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
@@ -526,8 +522,8 @@ class AddGenericView extends GetView<MainHomeController> {
               height: 120,
               child: Obx(() {
                 // Determine how many images are picked to show the correct number of slots + 1 for Add
-                int addedImagesCount = controller.imageSlots.where((img) => img != null).length;
-                int displayCount = addedImagesCount < 10 ? addedImagesCount + 1 : 10;
+                final int addedImagesCount = controller.imageSlots.where((img) => img != null).length;
+                final int displayCount = addedImagesCount < 10 ? addedImagesCount + 1 : 10;
 
                 return ListView.separated(
                   scrollDirection: Axis.horizontal,
@@ -572,7 +568,7 @@ class AddGenericView extends GetView<MainHomeController> {
 
                     // Otherwise, show the actual uploaded image
                     // We need to find the non-null paths
-                    List<String> validPaths = controller.imageSlots.whereType<String>().toList();
+                    final List<String> validPaths = controller.imageSlots.whereType<String>().toList();
                     final path = validPaths[index];
 
                     // We also need the original index to remove the exact slot
@@ -636,7 +632,6 @@ class AddGenericView extends GetView<MainHomeController> {
               hintText: "Enter terms & conditions",
               maxLine: 3,
               controller: controller.termsController,
-              bgColor: MyColors.grayF7,
               borderRadius: 12,
               validator: (val) =>
                   (val == null || val.trim().isEmpty) ? "Please enter terms & conditions" : null,
@@ -647,7 +642,6 @@ class AddGenericView extends GetView<MainHomeController> {
               hintText: "Write a note",
               maxLine: 3,
               controller: controller.noteController,
-              bgColor: MyColors.grayF7,
               borderRadius: 12,
             ),
           ],
@@ -814,8 +808,8 @@ class AddGenericView extends GetView<MainHomeController> {
                           Container(
                             height: 40,
                             width: 120,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
                                 image: AssetImage(Asset.inprog),
                                 fit: BoxFit.cover,
                               ),
@@ -935,7 +929,7 @@ class AddGenericView extends GetView<MainHomeController> {
             () => CupertinoSwitch(
               value: !controller.isOutStock.value,
               onChanged: (val) => controller.isOutStock.value = !val,
-              activeColor: MyColors.primary.withOpacity(0.3),
+              activeTrackColor: MyColors.primary.withOpacity(0.3),
               thumbColor: !controller.isOutStock.value ? MyColors.primary : MyColors.grayEA,
             ),
           ),
