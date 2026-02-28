@@ -349,7 +349,9 @@ class BottomBarView extends GetView<BottomController> {
               height: 24,
               width: 24,
               colorFilter: ColorFilter.mode(
-                controller.currentIndex.value == index ? const Color(0xFF1B2F62) : const Color(0xFF555555),
+                controller.currentIndex.value == index
+                    ? const Color(0xFF1B2F62)
+                    : const Color(0xFF555555),
                 BlendMode.srcIn,
               ),
             ),
@@ -358,7 +360,9 @@ class BottomBarView extends GetView<BottomController> {
           Text(
             name,
             style: MyTexts.medium14.copyWith(
-              color: controller.currentIndex.value == index ? const Color(0xFF1B2F62) : const Color(0xFF555555),
+              color: controller.currentIndex.value == index
+                  ? const Color(0xFF1B2F62)
+                  : const Color(0xFF555555),
               fontWeight: controller.currentIndex.value == index
                   ? FontWeight.bold
                   : FontWeight.normal,

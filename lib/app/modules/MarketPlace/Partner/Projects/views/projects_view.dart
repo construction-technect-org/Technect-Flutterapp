@@ -503,69 +503,80 @@ class ProjectsBottomNavBar extends StatelessWidget {
     final isConnector = myPref.role.val == "connector";
 
     return Container(
-      height: 100,
-      decoration: const BoxDecoration(color: Colors.transparent),
+      height: 75,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: Colors.white,
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [MyColors.tertiary, MyColors.tertiary],
+        ),
+      ),
+      // decoration: const BoxDecoration(color: Colors.transparent),
       child: Stack(
         alignment: Alignment.bottomCenter,
         clipBehavior: Clip.none,
         children: [
-          CustomPaint(
-            size: Size(100.w, 100),
-            painter: ProjectsBNBPainter(),
-            child: Container(
-              height: 100,
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: isConnector
-                    ? [
-                        _buildNavItem(
-                          Asset.home,
-                          Asset.home1,
-                          "Home",
-                          isSelected: false,
-                          onTap: () => Get.offAllNamed(Routes.MAIN, arguments: {'index': 0}),
-                        ),
-                        _buildNavItem(
-                          Asset.category,
-                          Asset.category1,
-                          "Category",
-                          isSelected: true,
-                        ),
-                        const SizedBox(width: 40),
-                        _buildNavItem(Asset.setting, Asset.setting, "Manage", isSelected: false),
-                        _buildNavItem(
-                          Asset.connection,
-                          Asset.connection1,
-                          "Connect",
-                          isSelected: false,
-                        ),
-                      ]
-                    : [
-                        _buildNavItem(
-                          Asset.home,
-                          Asset.home1,
-                          "Home",
-                          isSelected: false,
-                          onTap: () => Get.back(),
-                        ),
-                        _buildNavItem(
-                          Asset.category,
-                          Asset.category1,
-                          "Category",
-                          isSelected: true,
-                        ),
-                        const SizedBox(width: 40),
-                        _buildNavItem(Asset.setting, Asset.setting, "Manage", isSelected: false),
-                        _buildNavItem(
-                          Asset.connection,
-                          Asset.connection1,
-                          "Connect",
-                          isSelected: false,
-                        ),
-                      ],
-              ),
+          Container(
+            height: 75,
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: isConnector
+                  ? [
+                      _buildNavItem(
+                        Asset.home,
+                        Asset.home1,
+                        "Home",
+                        isSelected: false,
+                        onTap: () => Get.offAllNamed(Routes.MAIN, arguments: {'index': 0}),
+                      ),
+                      _buildNavItem(Asset.category, Asset.category1, "Category", isSelected: true),
+                      const SizedBox(width: 40),
+                      _buildNavItem(
+                        Asset.setting,
+                        Asset.setting,
+                        "Settings",
+                        isSelected: false,
+                        onTap: () => Get.toNamed(Routes.SETTING),
+                      ),
+                      // _buildNavItem(Asset.setting, Asset.setting, "Manage", isSelected: false),
+                      _buildNavItem(
+                        Asset.connection,
+                        Asset.connection1,
+                        "Connect",
+                        isSelected: false,
+                        onTap: () => Get.toNamed(Routes.CONNECTION_INBOX),
+                      ),
+                    ]
+                  : [
+                      _buildNavItem(
+                        Asset.home,
+                        Asset.home1,
+                        "Home",
+                        isSelected: false,
+                        onTap: () => Get.back(),
+                      ),
+                      _buildNavItem(Asset.category, Asset.category1, "Category", isSelected: true),
+                      const SizedBox(width: 40),
+                      _buildNavItem(
+                        Asset.setting,
+                        Asset.setting,
+                        "Settings",
+                        isSelected: false,
+                        onTap: () => Get.toNamed(Routes.SETTING),
+                      ),
+                      // _buildNavItem(Asset.setting, Asset.setting, "Manage", isSelected: false),
+                      _buildNavItem(
+                        Asset.connection,
+                        Asset.connection1,
+                        "Connect",
+                        isSelected: false,
+                        onTap: () => Get.toNamed(Routes.CONNECTION_INBOX),
+                      ),
+                    ],
             ),
           ),
           Positioned(
@@ -652,9 +663,9 @@ class ProjectsBNBPainter extends CustomPainter {
       ..color = MyColors.tertiary
       ..style = PaintingStyle.fill;
 
-    const double cornerRadius = 40.0;
-    const double notchWidth = 80.0;
-    const double topY = 25.0;
+    const double cornerRadius = 20.0;
+    const double notchWidth = 60.0;
+    const double topY = 15.0;
 
     final Path path = Path();
     path.moveTo(0, size.height);

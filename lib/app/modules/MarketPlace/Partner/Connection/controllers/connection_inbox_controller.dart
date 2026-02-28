@@ -1,6 +1,5 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/incoming_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/outgoing_model.dart';
@@ -30,6 +29,11 @@ class ConnectionInboxController extends GetxController {
     });
   }
 
+  Future<void> refreshData() async {
+    await fetchIncomingConnections(isLoad: true);
+    await fetchOutgoingConnections(isLoad: true);
+  }
+
   Future<void> fetchIncomingConnections({String? status, bool? isLoad}) async {
     try {
       isLoader.value = isLoad ?? true;
@@ -39,10 +43,10 @@ class ConnectionInboxController extends GetxController {
       }
       final response = await apiManager.get(
         url: APIConstants.incomingConnectionInbox,
-
+        params: params,
       );
       final connectionModel = IncomingConnectionsResponse.fromJson(response);
-      incomingConnections.assignAll(connectionModel.connections ?? []);
+      incomingConnections.assignAll(connectionModel.connections);
       _filterByItemType();
       isLoader.value = false;
     } catch (e) {
@@ -63,9 +67,10 @@ class ConnectionInboxController extends GetxController {
       }
       final response = await apiManager.get(
         url: APIConstants.outgoingConnectionInbox,
+        params: params,
       );
       final connectionModel = OutgoingConnectionsResponse.fromJson(response);
-      outgoingConnections.assignAll(connectionModel.connections ?? []);
+      outgoingConnections.assignAll(connectionModel.connections);
       _filterByItemType();
       isLoader.value = false;
     } catch (e) {
@@ -146,7 +151,7 @@ class ConnectionInboxController extends GetxController {
 
   Future<void> acceptConnection(String connectionId) async {
     try {
-      isLoading.value = true;
+      isLoader.value = true;
       final response = await apiManager.postObject(
         url: "${APIConstants.acceptReject}/accept",
         body: {"connectionId": connectionId},
@@ -159,37 +164,36 @@ class ConnectionInboxController extends GetxController {
         SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to accept connection');
       }
     } catch (e) {
-      // No need to show error
+      log("Error accepting connection: $e");
     } finally {
-      isLoading.value = false;
+      isLoader.value = false;
     }
   }
 
   Future<void> rejectConnection(String connectionId) async {
     try {
-      isLoading.value = true;
+      isLoader.value = true;
       final response = await apiManager.postObject(
-        url: "${APIConstants.acceptReject}/reject",
+        url: "${APIConstants.acceptReject}/decline",
         body: {"connectionId": connectionId},
       );
 
       if (response['success'] == true) {
-        SnackBars.successSnackBar(content: 'Connection rejected successfully');
+        SnackBars.successSnackBar(content: 'Connection declined successfully');
         await fetchIncomingConnections();
       } else {
-        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to reject connection');
+        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to decline connection');
       }
     } catch (e) {
-      // No need to show error
+      log("Error declining connection: $e");
     } finally {
-      isLoading.value = false;
+      isLoader.value = false;
     }
   }
 
   Future<void> removeConnection(String connectionId) async {
     try {
-      isLoading.value = true;
-
+      isLoader.value = true;
       final response = await apiManager.postObject(
         url: "${APIConstants.acceptReject}/remove",
         body: {"connectionId": connectionId},
@@ -197,22 +201,21 @@ class ConnectionInboxController extends GetxController {
 
       if (response['success'] == true) {
         SnackBars.successSnackBar(content: 'Connection removed successfully');
-
         await fetchIncomingConnections();
+        await fetchOutgoingConnections();
       } else {
         SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to remove connection');
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Something went wrong');
     } finally {
-      isLoading.value = false;
+      isLoader.value = false;
     }
   }
 
   Future<void> blockConnection(String connectionId) async {
     try {
-      isLoading.value = true;
-
+      isLoader.value = true;
       final response = await apiManager.postObject(
         url: "${APIConstants.acceptReject}/block",
         body: {"connectionId": connectionId},
@@ -220,36 +223,36 @@ class ConnectionInboxController extends GetxController {
 
       if (response['success'] == true) {
         SnackBars.successSnackBar(content: 'User blocked successfully');
-
         await fetchIncomingConnections();
+        await fetchOutgoingConnections();
       } else {
         SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to block user');
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Something went wrong');
     } finally {
-      isLoading.value = false;
+      isLoader.value = false;
     }
   }
 
   Future<void> withdrawRequest(String connectionId) async {
     try {
-      isLoading.value = true;
+      isLoader.value = true;
       final response = await apiManager.postObject(
         url: APIConstants.connectionWithdrawRequest,
         body: {"connectionId": connectionId},
       );
 
       if (response['success'] == true) {
-        SnackBars.successSnackBar(content: 'Connection withdraw  successfully');
+        SnackBars.successSnackBar(content: 'Connection withdrawn successfully');
         await fetchOutgoingConnections();
       } else {
         SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to withdraw connection');
       }
     } catch (e) {
-      // No need to show error
+      log("Error withdrawing connection: $e");
     } finally {
-      isLoading.value = false;
+      isLoader.value = false;
     }
   }
 }

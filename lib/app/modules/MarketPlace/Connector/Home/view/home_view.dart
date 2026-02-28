@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart' hide Category;
+import 'package:construction_technect/app/core/widgets/custom_drawer.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/controller/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/module_models.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/view/subCategory/view/sub_category_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Projects/views/projects_view.dart';
 
@@ -56,6 +56,7 @@ class ConnectorHomeView extends StatelessWidget {
         onTap: () => hideKeyboard(),
         child: Scaffold(
           backgroundColor: MyColors.lightWhite,
+          drawer: CustomDrawer(),
           bottomNavigationBar: const ProjectsBottomNavBar(),
           body: Stack(
             children: [
@@ -77,248 +78,255 @@ class ConnectorHomeView extends StatelessWidget {
                   ),*/
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.ACCOUNT);
-                            },
-                            behavior: HitTestBehavior.translucent,
-                            child: Obx(() {
-                              final isTeamLogin = myPref.getIsTeamLogin();
+                      child: Builder(
+                        builder: (context) {
+                          return Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // I want the drawer to open
+                                  Scaffold.of(context).openDrawer();
+                                },
+                                behavior: HitTestBehavior.translucent,
+                                child: Obx(() {
+                                  final isTeamLogin = myPref.getIsTeamLogin();
 
-                              final profileImage = isTeamLogin
-                                  ? Get.find<CommonController>()
-                                            .profileData
-                                            .value
-                                            .data
-                                            ?.teamMember
-                                            ?.profilePhoto ??
-                                        ''
-                                  : commonController.profileData.value.data?.user?.image ?? '';
+                                  final profileImage = isTeamLogin
+                                      ? Get.find<CommonController>()
+                                                .profileData
+                                                .value
+                                                .data
+                                                ?.teamMember
+                                                ?.profilePhoto ??
+                                            ''
+                                      : commonController.profileData.value.data?.user?.image ?? '';
 
-                              if (profileImage.isEmpty) {
-                                return const Icon(
-                                  Icons.account_circle_sharp,
-                                  color: Colors.black,
-                                  size: 48,
-                                );
-                              }
+                                  if (profileImage.isEmpty) {
+                                    return const Icon(
+                                      Icons.account_circle_sharp,
+                                      color: Colors.black,
+                                      size: 48,
+                                    );
+                                  }
 
-                              return ClipOval(
-                                child: getImageView(
-                                  finalUrl: "${APIConstants.bucketUrl}$profileImage",
-                                  fit: BoxFit.cover,
-                                  height: 48,
-                                  width: 48,
-                                ),
-                              );
-                            }),
-                          ),
-
-                          SizedBox(width: 1.h),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Obx(() {
-                                  final userProfile = commonController.profileDataM.value;
-                                  return RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${userProfile.user?.firstName?.capitalizeFirst ?? ''} ${userProfile.user?.lastName?.capitalizeFirst ?? ''}',
-                                          // '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}! Connector',
-                                          style: MyTexts.medium16.copyWith(
-                                            color: MyColors.fontBlack,
-                                            fontFamily: MyTexts.SpaceGrotesk,
-                                          ),
-                                        ),
-                                      ],
+                                  return ClipOval(
+                                    child: getImageView(
+                                      finalUrl: "${APIConstants.bucketUrl}$profileImage",
+                                      fit: BoxFit.cover,
+                                      height: 48,
+                                      width: 48,
                                     ),
                                   );
                                 }),
+                              ),
 
-                                GestureDetector(
-                                  onTap: myPref.getIsTeamLogin()
-                                      ? null
-                                      : () {
-                                          if (myPref.role.val == "partner") {
-                                            Get.toNamed(Routes.MANUFACTURER_ADDRESS);
-                                          } else {
-                                            Get.toNamed(Routes.DELIVERY_LOCATION);
-                                          }
-                                        },
-                                  child: Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        Asset.location,
-                                        width: 9,
-                                        height: 12.22,
-                                        color: MyColors.custom('545454'),
-                                      ),
-                                      SizedBox(width: 0.4.h),
-                                      Expanded(
-                                        child: Obx(() {
-                                          return RichText(
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            text: TextSpan(
-                                              style: MyTexts.medium14.copyWith(
-                                                color: MyColors.custom('545454'),
+                              SizedBox(width: 1.h),
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Obx(() {
+                                      final userProfile = commonController.profileDataM.value;
+                                      return RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  '${userProfile.user?.firstName?.capitalizeFirst ?? ''} ${userProfile.user?.lastName?.capitalizeFirst ?? ''}',
+                                              // '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}! Connector',
+                                              style: MyTexts.medium16.copyWith(
+                                                color: MyColors.fontBlack,
+                                                fontFamily: MyTexts.SpaceGrotesk,
                                               ),
-                                              children: [
-                                                TextSpan(
-                                                  text: commonController.getCurrentAddress().value,
-                                                ),
-                                                const WidgetSpan(
-                                                  alignment: PlaceholderAlignment.middle,
-                                                  child: Padding(
-                                                    padding: EdgeInsets.only(left: 4),
-                                                    child: Icon(
-                                                      Icons.keyboard_arrow_down,
-                                                      size: 16,
-                                                      color: Colors.black54,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
                                             ),
-                                          );
-                                        }),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Gap(10),
+                                          ],
+                                        ),
+                                      );
+                                    }),
 
-                          /* if (myPref.getIsTeamLogin() == false)
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.put<SwitchAccountController>(SwitchAccountController());
-                                    showSwitchAccountBottomSheet();
-                                    // Get.to(() => const ExploreView());
-                                  },
-                                  child: Stack(
-                                    alignment: AlignmentGeometry.center,
-                                    children: [
-                                      Image.asset(Asset.explore, width: 18.w),
-                                      Text(
-                                        "Switch",
-                                        style: MyTexts.medium14.copyWith(color: MyColors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ), */
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.NOTIFICATIONS);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: MyColors.white,
-                                border: Border.all(color: MyColors.custom('EAEAEA')),
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                Asset.notification,
-                                width: 24,
-                                height: 24,
-                                colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
-                              ),
-                            ),
-                          ),
-                          const Gap(10),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.NEWS);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: MyColors.white,
-                                border: Border.all(color: MyColors.custom('EAEAEA')),
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                Asset.info,
-                                width: 24,
-                                height: 24,
-                                colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
-                              ),
-                            ),
-                          ),
-                          const Gap(10),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.NEWS);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: MyColors.white,
-                                border: Border.all(color: MyColors.custom('EAEAEA')),
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                Asset.chat,
-                                width: 24,
-                                height: 24,
-                                colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
-                              ),
-                            ),
-                          ),
-
-                          //const Gap(10),
-                          /*  Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                          child: Container(
-                            width: 15.h,
-
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: MyColors.grayEA.withValues(alpha: 0.32),
-                                  blurRadius: 4,
-                                ),
-                              ],
-                            ),
-                            child: CommonTextField(
-                              onChange: (value) {
-                                //controller.onSearchChanged(value ?? "");
-                              },
-                              borderRadius: 50,
-                              hintText: 'Search',
-                              prefixIcon: SvgPicture.asset(
-                                Asset.searchIcon,
-                                height: 16,
-                                width: 16,
-                              ),
-                              //controller: controller.searchController,
-                              /*suffixIcon: Obx(
-                                  () => controller.searchQuery.value.isNotEmpty
-                                      ? GestureDetector(
-                                          onTap: controller.clearSearch,
-                                          child: const Icon(
-                                            Icons.clear,
-                                            color: MyColors.gray54,
+                                    GestureDetector(
+                                      onTap: myPref.getIsTeamLogin()
+                                          ? null
+                                          : () {
+                                              if (myPref.role.val == "partner") {
+                                                Get.toNamed(Routes.DELIVERY_LOCATION);
+                                              } else {
+                                                Get.toNamed(Routes.DELIVERY_LOCATION);
+                                              }
+                                            },
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            Asset.location,
+                                            width: 9,
+                                            height: 12.22,
+                                            color: MyColors.custom('545454'),
                                           ),
-                                        )
-                                      : const SizedBox.shrink(),
-                                ), */
+                                          SizedBox(width: 0.4.h),
+                                          Expanded(
+                                            child: Obx(() {
+                                              return RichText(
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                text: TextSpan(
+                                                  style: MyTexts.medium14.copyWith(
+                                                    color: MyColors.custom('545454'),
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: commonController
+                                                          .getCurrentAddress()
+                                                          .value,
+                                                    ),
+                                                    const WidgetSpan(
+                                                      alignment: PlaceholderAlignment.middle,
+                                                      child: Padding(
+                                                        padding: EdgeInsets.only(left: 4),
+                                                        child: Icon(
+                                                          Icons.keyboard_arrow_down,
+                                                          size: 16,
+                                                          color: Colors.black54,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Gap(10),
+
+                              /* if (myPref.getIsTeamLogin() == false)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.put<SwitchAccountController>(SwitchAccountController());
+                                      showSwitchAccountBottomSheet();
+                                      // Get.to(() => const ExploreView());
+                                    },
+                                    child: Stack(
+                                      alignment: AlignmentGeometry.center,
+                                      children: [
+                                        Image.asset(Asset.explore, width: 18.w),
+                                        Text(
+                                          "Switch",
+                                          style: MyTexts.medium14.copyWith(color: MyColors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ), */
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.NOTIFICATIONS);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: MyColors.white,
+                                    border: Border.all(color: MyColors.custom('EAEAEA')),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    Asset.notification,
+                                    width: 24,
+                                    height: 24,
+                                    colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                                  ),
+                                ),
+                              ),
+                              const Gap(10),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.NEWS);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: MyColors.white,
+                                    border: Border.all(color: MyColors.custom('EAEAEA')),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    Asset.info,
+                                    width: 24,
+                                    height: 24,
+                                    colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                                  ),
+                                ),
+                              ),
+                              const Gap(10),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.NEWS);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: MyColors.white,
+                                    border: Border.all(color: MyColors.custom('EAEAEA')),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    Asset.chat,
+                                    width: 24,
+                                    height: 24,
+                                    colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                                  ),
+                                ),
+                              ),
+
+                              //const Gap(10),
+                              /*  Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                            child: Container(
+                              width: 15.h,
+  
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(50),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: MyColors.grayEA.withValues(alpha: 0.32),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                              child: CommonTextField(
+                                onChange: (value) {
+                                  //controller.onSearchChanged(value ?? "");
+                                },
+                                borderRadius: 50,
+                                hintText: 'Search',
+                                prefixIcon: SvgPicture.asset(
+                                  Asset.searchIcon,
+                                  height: 16,
+                                  width: 16,
+                                ),
+                                //controller: controller.searchController,
+                                /*suffixIcon: Obx(
+                                    () => controller.searchQuery.value.isNotEmpty
+                                        ? GestureDetector(
+                                            onTap: controller.clearSearch,
+                                            child: const Icon(
+                                              Icons.clear,
+                                              color: MyColors.gray54,
+                                            ),
+                                          )
+                                        : const SizedBox.shrink(),
+                                  ), */
+                              ),
                             ),
-                          ),
-                        ), */
-                        ],
+                          ), */
+                            ],
+                          );
+                        },
                       ),
                     ),
                     const Gap(16),
@@ -577,8 +585,7 @@ class ConnectorHomeView extends StatelessWidget {
                               //   ),
                               // ),
                               Obx(() {
-                                if (Get.find<ConnectorHomeController>().marketPlace.value ==
-                                    0) {
+                                if (Get.find<ConnectorHomeController>().marketPlace.value == 0) {
                                   /// ------------------- MATERIAL MARKETPLACE -------------------
                                   final materialList = controller.mainCategories;
 
@@ -602,8 +609,7 @@ class ConnectorHomeView extends StatelessWidget {
                                       );
                                     },
                                   );
-                                } else if (Get.find<CommonController>().marketPlace.value ==
-                                    1) {
+                                } else if (Get.find<CommonController>().marketPlace.value == 1) {
                                   /// ------------------- CONSTRUCTION MARKETPLACE -------------------
                                   final materialList = controller.mainCategories;
 
@@ -646,8 +652,7 @@ class ConnectorHomeView extends StatelessWidget {
                                   // );
                                 } else {
                                   /// ------------------- TOOLS MARKETPLACE -------------------
-                                  final toolsList =
-                                      controller.categoryHierarchyData2.value.data;
+                                  final toolsList = controller.categoryHierarchyData2.value.data;
 
                                   if (toolsList == null || toolsList.isEmpty) {
                                     return _buildComingSoon(context);
@@ -895,27 +900,6 @@ class ConnectorHomeView extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _getIconFromModule(ModuleModel? module) {
-    switch (module?.name?.toLowerCase()) {
-      case 'material':
-        return Asset.MM;
-      case 'construction':
-        return Asset.CM;
-      case 'design':
-        return Asset.design1;
-      case 'fleet':
-        return Asset.fleet;
-      case 'tools':
-        return Asset.TEM;
-      case 'equipment':
-        return Asset.equipment;
-      case 'ppe':
-        return Asset.ppe;
-      default:
-        return Asset.add;
-    }
   }
 }
 

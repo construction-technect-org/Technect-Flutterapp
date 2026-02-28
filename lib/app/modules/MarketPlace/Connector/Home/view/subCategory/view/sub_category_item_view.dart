@@ -217,9 +217,8 @@ class SubCategoryItemScreen extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                          APIConstants.bucketUrl +
-                                          (category.image?.url ??
-                                              'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
+                                          category.image?.url ??
+                                          'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
                                       fit: BoxFit.fill,
                                       placeholder: (context, url) =>
                                           const Center(child: CircularProgressIndicator()),
@@ -231,7 +230,9 @@ class SubCategoryItemScreen extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 Text(
                                   category.name ?? '',
-                                  style: MyTexts.medium14,
+                                  style: MyTexts.medium14.copyWith(
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -271,6 +272,9 @@ class SubCategoryItemScreen extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final item = controller.subCategoryItemList[index];
 
+                                // final isSelected =
+                                //     controller.selectedCategoryItemIndex.value == index;
+
                                 return GestureDetector(
                                   onTap: () {
                                     Get.to(SelectedProductView());
@@ -284,9 +288,8 @@ class SubCategoryItemScreen extends StatelessWidget {
                                           child: ClipOval(
                                             child: CachedNetworkImage(
                                               imageUrl:
-                                                  APIConstants.bucketUrl +
-                                                  (item.image?.url ??
-                                                      'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
+                                                  item.image?.url ??
+                                                  'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
                                               fit: BoxFit.cover,
                                               placeholder: (context, url) =>
                                                   const Center(child: CircularProgressIndicator()),
@@ -301,7 +304,9 @@ class SubCategoryItemScreen extends StatelessWidget {
                                       const SizedBox(height: 8),
                                       Text(
                                         item.name ?? '',
-                                        style: MyTexts.medium14,
+                                        style: MyTexts.medium14.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                         textAlign: TextAlign.center,
                                       ),
                                     ],

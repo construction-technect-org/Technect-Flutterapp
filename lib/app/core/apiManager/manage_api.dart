@@ -159,9 +159,9 @@ class ManageApi extends GetxService {
   /// POST method for JSON body requests
   Future<dynamic> postObjectBeforeSignUp({required String url, required Object body}) async {
     try {
-      final token = myPref.getToken();
-      log("Auth Token: $token");
-      final headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
+      // final token = myPref.getToken();
+      // log("Auth Token: $token");
+      final headers = {'Content-Type': 'application/json'};
 
       log('🌐 API POST Request:');
       log('   URL: ${baseUrl + url}');

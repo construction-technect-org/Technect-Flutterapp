@@ -1,11 +1,11 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
+import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/sign_up_service.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
 
@@ -61,12 +61,7 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
 
             const SizedBox(height: 20),
 
-            Text(
-              "Sign Up",
-              style: MyTexts.medium16.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text("Sign Up", style: MyTexts.medium16.copyWith(fontWeight: FontWeight.bold)),
 
             const SizedBox(height: 25),
             CommonPhoneField(
@@ -151,19 +146,46 @@ class _SignUpDetailsViewState extends State<SignUpDetailsView> {
             ),
 
             SizedBox(height: 1.8.h),
-            CommonTextField(
-              headerText: "What's your Designation",
-              hintText: "Enter designation",
-              // isRed: true,
-              controller: controller.designationController,
-              focusNode: FocusNode(),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return "Please enter Designation";
-                }
-                return null;
-              },
-            ),
+            Obx(() {
+              return Column(
+                children: [
+                  CommonDropdown<String>(
+                    headerText: "What's your Designation",
+                    hintText: "Select designation",
+                    items: controller.designationOptions,
+                    selectedValue: controller.selectedDesignation,
+                    itemLabel: (item) => item,
+                    onChanged: (value) {
+                      if (value != 'Others') {
+                        controller.designationController.text = value ?? "";
+                      } else {
+                        controller.designationController.clear();
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please select Designation";
+                      }
+                      return null;
+                    },
+                  ),
+                  if (controller.selectedDesignation.value == 'Others') ...[
+                    const Gap(15),
+                    CommonTextField(
+                      hintText: "Enter designation",
+                      controller: controller.designationController,
+                      focusNode: FocusNode(),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return "Please enter Designation";
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ],
+              );
+            }),
 
             SizedBox(height: 1.8.h),
             RoundedButton(

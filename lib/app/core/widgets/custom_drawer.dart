@@ -60,9 +60,7 @@ class CustomDrawer extends StatelessWidget {
                                         value: 0.64,
                                         strokeWidth: 4,
                                         backgroundColor: MyColors.grayEA,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          MyColors.yellow,
-                                        ),
+                                        valueColor: AlwaysStoppedAnimation<Color>(MyColors.yellow),
                                       ),
                                     ),
                                   ),
@@ -292,7 +290,7 @@ class CustomDrawer extends StatelessWidget {
                         children: addresses.take(3).map((addr) {
                           String addressId = '';
                           addressId = addr.id ?? "";
-                        
+
                           return GestureDetector(
                             onTap: () async {
                               if (addr.isDefault != true && addressId.isNotEmpty) {
@@ -346,7 +344,7 @@ class CustomDrawer extends StatelessWidget {
                   const Gap(12),
                   InkWell(
                     onTap: () {
-                      // Get.toNamed(Routes.SETTINGS);
+                      Get.toNamed(Routes.SETTING);
                     },
                     borderRadius: BorderRadius.circular(12),
                     child: Container(

@@ -15,6 +15,9 @@ class OtpVerificationView extends StatefulWidget {
   final Function? onFinished;
   final CountdownController countdownController;
 
+  final String? mobileNumber;
+  final String? email;
+
   const OtpVerificationView({
     super.key,
     required this.isLoading,
@@ -25,6 +28,8 @@ class OtpVerificationView extends StatefulWidget {
     required this.onFinished,
     required this.onTap,
     required this.countdownController,
+    this.mobileNumber,
+    this.email,
   });
 
   @override
@@ -44,10 +49,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
       isLoading: widget.isLoading,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: const CommonAppBar(
-          title: Text("OTP Verification"),
-          isCenter: false,
-        ),
+        appBar: const CommonAppBar(title: Text("OTP Verification"), isCenter: false),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
@@ -64,9 +66,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                     controller: widget.otpController,
                     onCompleted: widget.onCompleted,
                     keyboardType: TextInputType.number,
-                    textStyle: MyTexts.extraBold16.copyWith(
-                      color: MyColors.primary,
-                    ),
+                    textStyle: MyTexts.extraBold16.copyWith(color: MyColors.primary),
                     pinTheme: PinTheme(
                       shape: PinCodeFieldShape.box,
                       borderRadius: BorderRadius.circular(8),
@@ -87,10 +87,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
               ),
               const Gap(20),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
@@ -98,9 +95,36 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                   border: Border.all(color: MyColors.grayC2),
                 ),
                 child: Center(
-                  child: Text(
-                    "Enter the OTP sent to your email and mobile number",
-                    style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "OTP sent to ",
+                          style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
+                        ),
+                        if (widget.mobileNumber != null)
+                          TextSpan(
+                            text: widget.mobileNumber,
+                            style: MyTexts.bold16.copyWith(color: MyColors.primary),
+                          ),
+                        if (widget.mobileNumber != null && widget.email != null)
+                          TextSpan(
+                            text: " and ",
+                            style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
+                          ),
+                        if (widget.email != null)
+                          TextSpan(
+                            text: widget.email,
+                            style: MyTexts.bold16.copyWith(color: MyColors.primary),
+                          ),
+                        if (widget.mobileNumber == null && widget.email == null)
+                          TextSpan(
+                            text: "your email and mobile number",
+                            style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
+                          ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
@@ -114,9 +138,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                           children: [
                             Text(
                               "Didn’t receive the OTP?  ",
-                              style: MyTexts.regular16.copyWith(
-                                fontFamily: MyTexts.SpaceGrotesk,
-                              ),
+                              style: MyTexts.regular16.copyWith(fontFamily: MyTexts.SpaceGrotesk),
                             ),
                             Text(
                               " Resend OTP",
@@ -135,9 +157,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                         build: (_, double time) {
                           return Text(
                             "Resend in 00:${time.ceil().toString().padLeft(2, '0')}",
-                            style: MyTexts.bold16.copyWith(
-                              color: MyColors.green,
-                            ),
+                            style: MyTexts.bold16.copyWith(color: MyColors.green),
                           );
                         },
                         onFinished: widget.onFinished,
@@ -157,10 +177,8 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                       color: MyColors.lightBlueSecond,
                       fontFamily: "SpaceGrotesk",
                       decoration: TextDecoration.underline,
-                      decorationColor: MyColors
-                          .lightBlueSecond, // Optional: Color of the underline
-                      decorationThickness:
-                          2, // Optional: Thickness of the underline
+                      decorationColor: MyColors.lightBlueSecond, // Optional: Color of the underline
+                      decorationThickness: 2, // Optional: Thickness of the underline
                       decorationStyle: TextDecorationStyle.solid,
                     ),
                   ),

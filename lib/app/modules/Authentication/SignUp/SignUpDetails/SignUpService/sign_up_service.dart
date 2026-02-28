@@ -1,6 +1,5 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
@@ -17,7 +16,7 @@ class MainSignUpService extends GetxService {
 
   Future<void> tempSignUp(String mobileNumber, String email, String countryCode) async {
     try {
-      final response = await _manageApi.postObject(
+      final response = await _manageApi.postObjectBeforeSignUp(
         url: Endpoints.signUpUserPhone,
         body: {
           if (email.isNotEmpty) "email": email,
@@ -53,7 +52,7 @@ class MainSignUpService extends GetxService {
     required String otp,
   }) async {
     try {
-      final response = await _manageApi.postObject(
+      final response = await _manageApi.postObjectBeforeSignUp(
         url: Endpoints.verifyOTP,
         body: {"countryCode": countryCode, "phone": mobileNumber, "otp": otp},
       );
@@ -125,7 +124,7 @@ class MainSignUpService extends GetxService {
 
   Future<AadharSendOTPModel> sendAadharOTP({required String aadharNumber}) async {
     try {
-      final response = await _manageApi.postObject(
+      final response = await _manageApi.postObjectBeforeSignUp(
         url: Endpoints.aadharVerify,
         body: {"aadharNumber": aadharNumber},
       );
@@ -138,7 +137,7 @@ class MainSignUpService extends GetxService {
 
   Future<AadharDetailsModel> veriAadharOTP({required String otp}) async {
     try {
-      final response = await _manageApi.postObject(
+      final response = await _manageApi.postObjectBeforeSignUp(
         url: Endpoints.aadharOTPVerify,
         body: {"otp": otp},
       );

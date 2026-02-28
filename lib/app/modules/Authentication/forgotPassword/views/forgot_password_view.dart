@@ -5,8 +5,7 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/controllers/forgot_password_controller.dart';
-import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/forgot_otp_verification_view.dart';
-//import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
 
 class ForgotPasswordView extends GetView<ForgotPasswordController> {
   ForgotPasswordView({super.key});
@@ -25,10 +24,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.loginBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.loginBg), fit: BoxFit.cover),
                 ),
               ),
 
@@ -107,17 +103,14 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                                 LengthLimitingTextInputFormatter(254),
                                 EmailInputFormatter(),
                               ],
-                              validator: (value) =>
-                                  Validate.validateEmail(value),
+                              validator: (value) => Validate.validateEmail(value),
                               onChange: (value) {
                                 controller.emailError.value = "";
                               },
                               onFieldSubmitted: (value) {
                                 if (value != null) {
                                   // Only validate availability if format is valid
-                                  final formatError = Validate.validateEmail(
-                                    value,
-                                  );
+                                  final formatError = Validate.validateEmail(value);
                                   if (formatError == null) {
                                     controller.validateEmailAvailability(value);
                                   } else {
@@ -133,9 +126,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
                                     controller.emailError.value,
-                                    style: MyTexts.medium13.copyWith(
-                                      color: MyColors.red33,
-                                    ),
+                                    style: MyTexts.medium13.copyWith(color: MyColors.red33),
                                   ),
                                 );
                               }
@@ -176,22 +167,28 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                     await controller.sendOtp().then((val) {
                       if (controller.otpSend.value) {
                         Get.to(
-                          () => ForgotOtpVerificationView(
+                          () => OtpVerificationView(
                             isLoading: controller.isLoading,
                             onTap: () async {
                               await controller.sendOtp().then((val) {
                                 controller.startTimer();
                               });
                             },
+                            onCompleted: (value) {
+                              controller.otpController.text = value;
+                              controller.verifyOtp();
+                            },
                             countdownController: controller.countdownController,
                             isResendVisible: controller.isResendVisible,
                             otpController: controller.otpController,
-                            /* onCompleted: (value) {
-                            controller.verifyOtp();
-                          }, */
                             onFinished: () {
                               controller.onCountdownFinish();
                             },
+                            mobileNumber:
+                                "${controller.countryCode.value} ${controller.phoneEmailController.text}",
+                            email: controller.emailController.text.isNotEmpty
+                                ? controller.emailController.text
+                                : null,
                           ),
                         );
                         controller.startTimer();

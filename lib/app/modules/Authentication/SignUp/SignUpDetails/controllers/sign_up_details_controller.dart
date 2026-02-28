@@ -25,6 +25,18 @@ class SignUpDetailsController extends GetxController {
   final gstController = TextEditingController();
   final aadhaarController = TextEditingController();
   final designationController = TextEditingController();
+
+  final List<String> designationOptions = [
+    'manufacturer',
+    'Architect',
+    'designer',
+    'Company',
+    'Contractors',
+    'Civil engineer',
+    'House owner',
+    'Others',
+  ];
+  RxnString selectedDesignation = RxnString();
   SignUpService signUpService = SignUpService();
   final MainSignUpService _mainSignUpService = Get.find<MainSignUpService>();
   final otpSend = false.obs;

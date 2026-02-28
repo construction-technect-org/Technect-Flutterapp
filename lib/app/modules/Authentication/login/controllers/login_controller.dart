@@ -56,7 +56,13 @@ class LoginController extends GetxController {
       if (phonTap.value < 2) {
         result = await _phoneNumberHintPlugin.requestHint() ?? '';
         if (result.isNotEmpty) {
-          mobileController.text = result.substring(3);
+          // Robust parsing: strip all non-digits and take last 10 digits
+          String cleaned = result.replaceAll(RegExp(r'\D'), '');
+          if (cleaned.length >= 10) {
+            mobileController.text = cleaned.substring(cleaned.length - 10);
+          } else {
+            mobileController.text = cleaned;
+          }
         }
       }
     } on PlatformException {

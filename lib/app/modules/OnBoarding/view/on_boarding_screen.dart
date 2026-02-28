@@ -4,11 +4,13 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/OnBoarding/controller/on_boarding_controller.dart';
 import 'package:flutter/scheduler.dart';
 
-class OnboardingScreen extends GetView<OnBoardingController> {
+class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(OnBoardingController());
+
     return GestureDetector(
       onTap: hideKeyboard,
       child: Scaffold(
@@ -51,10 +53,7 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                         Positioned.fill(
                           child: Opacity(
                             opacity: 0.4,
-                            child: Image.asset(
-                              Asset.locationImage,
-                              fit: BoxFit.cover,
-                            ),
+                            child: Image.asset(Asset.locationImage, fit: BoxFit.cover),
                           ),
                         ),
 
@@ -64,47 +63,32 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                             Gap(3.h),
 
                             const AutoScrollRow(
-                              images: [
-                                Asset.role1,
-                                Asset.houseOwner,
-                                Asset.architect,
-                              ],
+                              images: [Asset.role1, Asset.houseOwner, Asset.architect],
                             ),
 
                             Gap(1.h),
 
                             const AutoScrollRow(
-                              images: [
-                                Asset.design,
-                                Asset.contractor,
-                                Asset.other,
-                              ],
+                              images: [Asset.design, Asset.contractor, Asset.other],
                               reverse: true, // opposite direction
                             ),
 
                             Gap(1.h),
 
                             const AutoScrollRow(
-                              images: [
-                                Asset.role1,
-                                Asset.houseOwner,
-                                Asset.architect,
-                              ],
+                              images: [Asset.role1, Asset.houseOwner, Asset.architect],
                             ),
 
                             Gap(6.h),
                           ],
-                        )
+                        ),
                       ],
                     ),
                     Padding(
                       padding: const EdgeInsets.all(22.0),
                       child: Column(
                         children: [
-                          Text(
-                            "Connecting Construction Worldwide",
-                            style: MyTexts.medium16,
-                          ),
+                          Text("Connecting Construction Worldwide", style: MyTexts.medium16),
                           Gap(1.5.h),
                           RoundedButton(
                             buttonName: 'Login',
@@ -112,7 +96,7 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                               // final bool isLocationReady = await controller
                               //     .checkLocation();
                               // if (isLocationReady) {
-                                controller.showLoginBottomSheet();
+                              controller.showLoginBottomSheet();
                               // }
                             },
                           ),
@@ -120,11 +104,7 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                           Row(
                             children: [
                               Expanded(
-                                child: Divider(
-                                  color: MyColors.grayD4,
-                                  indent: 10.sw,
-                                  thickness: 1,
-                                ),
+                                child: Divider(color: MyColors.grayD4, indent: 10.sw, thickness: 1),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 2.w),
@@ -190,7 +170,7 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                               // final bool isLocationReady = await controller
                               //     .checkLocation();
                               // if (isLocationReady) {
-                                controller.showBottomSheet();
+                              controller.showBottomSheet();
                               // }
 
                               // Get.toNamed(Routes.OTP_Verification);
@@ -216,14 +196,15 @@ class OnboardingScreen extends GetView<OnBoardingController> {
                           ),
                         ],
                       ),
-                    )
+                    ),
 
                     //const Gap(32),
                   ],
                 ),
               ),
             ),
-          ))
+          ),
+        ),
       ),
     );
   }
@@ -244,7 +225,7 @@ class OnboardingScreen extends GetView<OnBoardingController> {
           child: Center(
             child: Image.asset(
               imagePath,
-              width: 20.w,  // ✅ responsive
+              width: 20.w, // ✅ responsive
               height: 20.h, // ✅ responsive
               fit: BoxFit.contain,
             ),
@@ -252,24 +233,20 @@ class OnboardingScreen extends GetView<OnBoardingController> {
         ),
       ),
     );
-  }}
+  }
+}
 
 class AutoScrollRow extends StatefulWidget {
   final List<String> images;
   final bool reverse;
 
-  const AutoScrollRow({
-    super.key,
-    required this.images,
-    this.reverse = false,
-  });
+  const AutoScrollRow({super.key, required this.images, this.reverse = false});
 
   @override
   State<AutoScrollRow> createState() => _AutoScrollRowState();
 }
 
-class _AutoScrollRowState extends State<AutoScrollRow>
-    with SingleTickerProviderStateMixin {
+class _AutoScrollRowState extends State<AutoScrollRow> with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
   final ScrollController _controller = ScrollController();
 
@@ -283,8 +260,7 @@ class _AutoScrollRowState extends State<AutoScrollRow>
       final maxScroll = _controller.position.maxScrollExtent;
       final minScroll = _controller.position.minScrollExtent;
 
-      double newOffset =
-          _controller.offset + (widget.reverse ? -1.1 : 1.4); // 👈 slow speed
+      double newOffset = _controller.offset + (widget.reverse ? -1.1 : 1.4); // 👈 slow speed
 
       if (newOffset >= maxScroll) {
         newOffset = minScroll;
@@ -316,10 +292,9 @@ class _AutoScrollRowState extends State<AutoScrollRow>
         physics: const NeverScrollableScrollPhysics(),
         itemCount: widget.images.length * 20,
         itemBuilder: (context, index) {
-          final image =
-          widget.images[index % widget.images.length];
+          final image = widget.images[index % widget.images.length];
 
-          return  Padding(
+          return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Container(
               width: 30.w,
@@ -331,12 +306,7 @@ class _AutoScrollRowState extends State<AutoScrollRow>
               ),
               child: Padding(
                 padding: EdgeInsets.all(1.h),
-                child: Center(
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                child: Center(child: Image.asset(image, fit: BoxFit.contain)),
               ),
             ),
           );
@@ -345,6 +315,7 @@ class _AutoScrollRowState extends State<AutoScrollRow>
     );
   }
 }
+
 /*
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/OnBoarding/controller/on_boarding_controller.dart';

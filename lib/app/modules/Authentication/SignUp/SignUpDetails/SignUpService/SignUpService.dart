@@ -1,6 +1,5 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/OtpModel.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPassword/model/SignUpModel.dart';
@@ -16,7 +15,7 @@ class SignUpService {
     String? website,
   }) async {
     try {
-      final response = await apiManager.postObject(
+      final response = await apiManager.postObjectWithoutToken(
         url: APIConstants.checkAvailability,
         body: {
           if ((email ?? "").isNotEmpty) "email": email,
@@ -94,7 +93,7 @@ class SignUpService {
 
   Future<OtpModel> teamSendOtp({required String mobileNumber}) async {
     try {
-      final response = await apiManager.postObject(
+      final response = await apiManager.postObjectWithoutToken(
         url: APIConstants.teamSendOtp,
         body: {"mobileNumber": mobileNumber},
       );
@@ -106,7 +105,7 @@ class SignUpService {
 
   Future<OtpModel> resendOtp({required String mobileNumber, String? code}) async {
     try {
-      final response = await apiManager.postObject(
+      final response = await apiManager.postObjectWithoutToken(
         url: APIConstants.resendOtp,
         body: {"countryCode": code, "mobileNumber": mobileNumber},
       );
@@ -118,7 +117,7 @@ class SignUpService {
 
   Future<OtpModel> teamResendOtp({required String mobileNumber, String? code}) async {
     try {
-      final response = await apiManager.postObject(
+      final response = await apiManager.postObjectWithoutToken(
         url: APIConstants.teamResendOtp,
         body: {"mobileNumber": mobileNumber},
       );
@@ -130,7 +129,7 @@ class SignUpService {
 
   Future<OtpModel> verifyOtp({required String mobileNumber, required String otp}) async {
     try {
-      final response = await apiManager.postObject(
+      final response = await apiManager.postObjectWithoutToken(
         url: APIConstants.verifyOtp,
         body: {"countryCode": "+91", "mobileNumber": mobileNumber, "otp": otp},
       );
@@ -182,7 +181,10 @@ class SignUpService {
         body["deviceType"] = deviceType;
       }
 
-      final response = await apiManager.postObject(url: APIConstants.signup, body: body);
+      final response = await apiManager.postObjectWithoutToken(
+        url: APIConstants.signup,
+        body: body,
+      );
       return SignUpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in signup: $e , $st');

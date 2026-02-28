@@ -1,6 +1,5 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/core/apiManager/endpoints.dart';
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
@@ -18,13 +17,9 @@ class ForgotPasswordService extends GetxService {
     required String email,
   }) async {
     try {
-      final response = await _manageAPI.postObject(
+      final response = await _manageAPI.postObjectBeforeSignUp(
         url: Endpoints.forgotPwdApi,
-        body: {
-          "countryCode": countryCode,
-          "phone": mobileNumber,
-          "email": email,
-        },
+        body: {"countryCode": countryCode, "phone": mobileNumber, "email": email},
       );
 
       return ForgotPasswordOtpModel.fromJson(response);
@@ -39,7 +34,7 @@ class ForgotPasswordService extends GetxService {
     required String otp,
   }) async {
     try {
-      final response = await _manageAPI.postObject(
+      final response = await _manageAPI.postObjectBeforeSignUp(
         url: Endpoints.verifyPwdApi,
         body: {"countryCode": countryCode, "phone": mobileNumber, "otp": otp},
       );
@@ -57,7 +52,7 @@ class ForgotPasswordService extends GetxService {
     required String confirmPassword,
   }) async {
     try {
-      final response = await _manageAPI.postObject(
+      final response = await _manageAPI.postObjectBeforeSignUp(
         url: Endpoints.resetPwdApi,
         body: {
           "countryCode": countryCode,

@@ -60,7 +60,7 @@ class LoginService extends GetxService {
         body["deviceType"] = deviceType;
       }
 
-      final response = await apiManager.postObject(url: APIConstants.teamLogIn, body: body);
+      final response = await apiManager.postObjectWithoutToken(url: APIConstants.teamLogIn, body: body);
 
       final result = LoginModel.fromJson(response);
 
@@ -109,7 +109,7 @@ class LoginService extends GetxService {
         body['deviceType'] = deviceType;
       }
 
-      final response = await apiManager.postObject(url: 'auth/social-login', body: body);
+      final response = await apiManager.postObjectWithoutToken(url: 'auth/social-login', body: body);
 
       return LoginModel.fromJson(response);
     } catch (e, st) {

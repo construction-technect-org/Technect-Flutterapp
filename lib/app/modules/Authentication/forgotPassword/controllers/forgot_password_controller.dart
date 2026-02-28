@@ -1,6 +1,5 @@
 import "dart:developer";
 
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
@@ -23,7 +22,7 @@ class ForgotPasswordController extends GetxController {
   final _phoneNumberHintPlugin = PhoneNumberHint();
 
   RxInt isValid = (-1).obs;
-  RxString countryCode = "".obs;
+  RxString countryCode = "+91".obs;
 
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
@@ -45,8 +44,7 @@ class ForgotPasswordController extends GetxController {
   final isConfirmPasswordVisible = false.obs;
   FocusNode emailFocusNode = FocusNode();
 
-  final ForgotPasswordService forgotPasswordService =
-      Get.find<ForgotPasswordService>();
+  final ForgotPasswordService forgotPasswordService = Get.find<ForgotPasswordService>();
 
   Future<void> validateEmailAvailability(String email) async {
     // First check format validation - if format is invalid, don't check API
@@ -84,9 +82,7 @@ class ForgotPasswordController extends GetxController {
         SnackBars.successSnackBar(content: 'OTP sent successfully');
       } else {
         otpSend.value = false;
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to send OTP',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
       }
     } catch (e) {
       otpSend.value = false;
@@ -132,9 +128,7 @@ class ForgotPasswordController extends GetxController {
               header: "Verifying the OTP",
               onTap: () {
                 otpVerify.value = true;
-                SnackBars.successSnackBar(
-                  content: 'OTP verified successfully!',
-                );
+                SnackBars.successSnackBar(content: 'OTP verified successfully!');
 
                 Get.back();
 
@@ -153,9 +147,7 @@ class ForgotPasswordController extends GetxController {
           );
         }
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'OTP verification failed',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'OTP verification failed');
       }
     } catch (e) {
       // Error is already shown by ApiManager
@@ -163,6 +155,23 @@ class ForgotPasswordController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // Future<void> getPhoneNumber() async {
+  //   String? result;
+  //   phonTap.value++;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   // We also handle the message potentially returning null.
+  //   try {
+  //     if (phonTap.value < 2) {
+  //       result = await _phoneNumberHintPlugin.requestHint() ?? '';
+  //       if (result.isNotEmpty) {
+  //         phoneEmailController.text = result.substring(3);
+  //       }
+  //     }
+  //   } on PlatformException {
+  //     result = 'Failed to get hint.';
+  //   }
+  // }
 
   Future<void> getPhoneNumber() async {
     String? result;
@@ -173,12 +182,22 @@ class ForgotPasswordController extends GetxController {
       if (phonTap.value < 2) {
         result = await _phoneNumberHintPlugin.requestHint() ?? '';
         if (result.isNotEmpty) {
-          phoneEmailController.text = result.substring(3);
+          // Robust parsing: strip all non-digits and take last 10 digits
+          String cleaned = result.replaceAll(RegExp(r'\D'), '');
+          if (cleaned.length >= 10) {
+            phoneEmailController.text = cleaned.substring(cleaned.length - 10);
+          } else {
+            phoneEmailController.text = cleaned;
+          }
         }
       }
     } on PlatformException {
       result = 'Failed to get hint.';
     }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
   }
 
   bool _validateOtp() {
@@ -213,10 +232,7 @@ class ForgotPasswordController extends GetxController {
 
       if (resetResponse.success == true) {
         if (rememberMe.value) {
-          myPref.saveCredentials(
-            phoneEmailController.text,
-            newPasswordController.text,
-          );
+          myPref.saveCredentials(phoneEmailController.text, newPasswordController.text);
         } else {
           myPref.clearCredentials();
         }
@@ -232,9 +248,7 @@ class ForgotPasswordController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(
-          content: resetResponse.message ?? 'Password reset failed',
-        );
+        SnackBars.errorSnackBar(content: resetResponse.message ?? 'Password reset failed');
       }
     } catch (e) {
       if (kDebugMode) {

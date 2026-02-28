@@ -1,7 +1,9 @@
 import 'package:construction_technect/app/core/apiManager/manage_api.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/connector_product_detail_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/main_category_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/marketplace_products_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/module_models.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/profile_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Home/models/sub_category_item_model.dart';
@@ -15,7 +17,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 
 class ConnectorHomeService extends GetxService {
   final ApiManager _apiManager = ApiManager();
-  final ManageApi _manageApi = Get.find<ManageApi>();
 
   Future<dynamic> createProject({
     required Map<String, dynamic> fields,
@@ -42,15 +43,12 @@ class ConnectorHomeService extends GetxService {
 
   Future<ProjectListModel> getProjects() async {
     try {
-      final response = await _apiManager.get(
-        url:APIConstants.projectGet,
-      );
+      final response = await _apiManager.get(url: APIConstants.projectGet);
       return ProjectListModel.fromJson(response);
     } catch (e) {
       rethrow;
     }
   }
-
 
   Future<AddressModel> getAddress() async {
     try {
@@ -157,6 +155,60 @@ class ConnectorHomeService extends GetxService {
     try {
       final response = await _apiManager.get(url: '/v1/api/business/service-categories/hierarchy');
       return ServiceCategoryModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<MarketplaceProductsResponse> getProducts({
+    String? search,
+    int page = 1,
+    int limit = 20,
+    required String categoryProductId,
+    required String inventoryType,
+    String? minPrice,
+    String? maxPrice,
+    bool? inStockOnly,
+  }) async {
+    try {
+      String url =
+          '/v1/api/marketplace/products?page=$page&limit=$limit&categoryProductId=$categoryProductId&inventoryType=$inventoryType';
+      if (search != null && search.isNotEmpty) {
+        url += '&search=$search';
+      }
+      if (minPrice != null && minPrice.isNotEmpty) {
+        url += '&minPrice=$minPrice';
+      }
+      if (maxPrice != null && maxPrice.isNotEmpty) {
+        url += '&maxPrice=$maxPrice';
+      }
+      if (inStockOnly != null && inStockOnly) {
+        url += '&inStockOnly=$inStockOnly';
+      }
+      final response = await _apiManager.get(url: url);
+      return MarketplaceProductsResponse.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ConnectorProductDetail> getInventoryDetails(String inventoryId) async {
+    try {
+      final url = '/v1/api/marketplace/inventory-details/$inventoryId';
+      final response = await _apiManager.get(url: url);
+      return ConnectorProductDetail.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> requestConnection(String merchantProfileId) async {
+    try {
+      final response = await _apiManager.postObject(
+        url: '/v1/api/marketplace/connection/request',
+        body: {"targetProfileId": merchantProfileId},
+      );
+      return response;
     } catch (e) {
       rethrow;
     }

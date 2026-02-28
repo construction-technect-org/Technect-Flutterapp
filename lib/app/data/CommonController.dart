@@ -489,31 +489,31 @@ class CommonController extends GetxController {
         retries++;
       }
 
-      final connectorProfileId = profileDataM.value.connectorProfile?.id?.toString();
+      final connectorProfileId = profileData.value.data?.connectorProfile?.id?.toString();
       debugPrint("🔍 [WishlistSync] Syncing for connectorProfileId: $connectorProfileId");
       if (connectorProfileId == null) {
         debugPrint("🔍 [WishlistSync] Connector profile ID still not found, skipping sync.");
         return;
       }
 
-      final res = await WishListServices().allWishList(connectorProfileId: connectorProfileId);
-      debugPrint(
-        "🔍 [WishlistSync] API Response - Success: ${res.success}, Data Count: ${res.data?.length}",
-      );
+      // final res = await WishListServices().allWishList(connectorProfileId: connectorProfileId);
+      // debugPrint(
+      //   "🔍 [WishlistSync] API Response - Success: ${res.success}, Data Count: ${res.data?.length}",
+      // );
 
-      if (res.success == true) {
-        final Set<String> collectedIds = {};
-        for (final p in (res.data ?? [])) {
-          final pid = p.id?.toString();
-          if (pid != null) collectedIds.add(pid);
-        }
-        if (res.wishlistItemIds != null) {
-          collectedIds.addAll(res.wishlistItemIds!);
-        }
+      // if (res.success == true) {
+      //   final Set<String> collectedIds = {};
+      //   for (final p in (res.data ?? [])) {
+      //     final pid = p.id?.toString();
+      //     if (pid != null) collectedIds.add(pid);
+      //   }
+      //   if (res.wishlistItemIds != null) {
+      //     collectedIds.addAll(res.wishlistItemIds!);
+      //   }
 
-        wishlistedProductIds.assignAll(collectedIds);
-        debugPrint("🔍 [WishlistSync] Updated wishlistedProductIds: $wishlistedProductIds");
-      }
+      //   wishlistedProductIds.assignAll(collectedIds);
+      //   debugPrint("🔍 [WishlistSync] Updated wishlistedProductIds: $wishlistedProductIds");
+      // }
     } catch (e) {
       debugPrint("🔍 [WishlistSync] Error during sync: $e");
     }
@@ -783,9 +783,13 @@ class CommonController extends GetxController {
       if (savedToken.isNotEmpty) {
         Future.delayed(const Duration(seconds: 1), () async {
           if (_appHiveService.token.isNotEmpty && myPref.role.val == "connector") {
+            await fetchProfileData();
+            await fetchAddresses();
+            // await syncWishlistIds();
+          } else if (_appHiveService.token.isNotEmpty && myPref.role.val == "partner") {
             await fetchProfileDataM();
             await fetchAddresses();
-            await syncWishlistIds();
+            // await syncWishlistIds();
           }
           // fetchProfileData();
         });
