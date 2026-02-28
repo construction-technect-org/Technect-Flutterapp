@@ -53,12 +53,12 @@ class MyProfileView extends StatelessWidget {
               _buildMenuItem(
                 icon: Icons.lock_outline,
                 label: "Accounts & Password",
-                onTap: () => Get.toNamed(Routes.ACCOUNT),
+                onTap: () => Get.toNamed(Routes.SETTING),
               ),
               _buildMenuItem(
                 icon: Icons.location_on_outlined,
                 label: "Shipping Location",
-                onTap: () => Get.toNamed(Routes.MANUFACTURER_ADDRESS),
+                onTap: () => Get.toNamed(Routes.DELIVERY_LOCATION),
               ),
               _buildMenuItem(
                 icon: Icons.notifications_outlined,
